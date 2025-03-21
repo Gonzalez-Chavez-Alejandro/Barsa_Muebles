@@ -1,5 +1,5 @@
 """
-ASGI config for Backend_Mueblera_Sahuayense project.
+ASGI config for Backend_BarsaMuebles project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Backend_Mueblera_Sahuayense.settings.local.py')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Backend_BarsaMuebles.settings.local.py')
 
 application = get_asgi_application()

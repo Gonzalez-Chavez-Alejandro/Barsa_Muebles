@@ -1,5 +1,5 @@
 """
-WSGI config for Backend_Mueblera_Sahuayense project.
+WSGI config for Backend_BarsaMuebles project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Backend_Mueblera_Sahuayense.settings.local.py')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Backend_BarsaMuebles.settings.local.py')
 
 application = get_wsgi_application()

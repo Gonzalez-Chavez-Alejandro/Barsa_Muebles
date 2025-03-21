@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f$ofpg8#9%o@=-tq^-&7$ob1lw2wfw9u3v!y5%^ra+v8tu=m!*'
+SECRET_KEY = 'django-insecure-$4flx2yzof%19ir&*=j5pc%%$s@%o1tb97c=3r9z(q9$(#e%mm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -19,18 +19,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 BASE_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'categorias'
+]
 
 THIRD_APPS = [
-    'rest_framework',
+
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
@@ -45,7 +45,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Backend_Mueblera_Sahuayense.urls'
+ROOT_URLCONF = 'Backend_BarsaMuebles.urls'
 
 TEMPLATES = [
     {
@@ -64,10 +64,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Backend_Mueblera_Sahuayense.wsgi.application'
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+WSGI_APPLICATION = 'Backend_BarsaMuebles.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
