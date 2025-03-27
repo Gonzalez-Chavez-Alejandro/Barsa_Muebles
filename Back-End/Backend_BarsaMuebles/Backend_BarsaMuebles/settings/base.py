@@ -26,7 +26,11 @@ BASE_APPS = [
     'django.contrib.staticfiles',
 ]
 LOCAL_APPS = [
-    'categorias'
+    'categorias',
+    'ventas',
+    'muebles',
+    'contenido',
+    'calificaciones'
 ]
 
 THIRD_APPS = [
