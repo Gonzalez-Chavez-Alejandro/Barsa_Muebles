@@ -30,8 +30,9 @@ LOCAL_APPS = [
     'categorias',
     'ventas',
     'muebles',
-    'contenido',
     'calificaciones',
+    'comentarios',
+    'autenticacion',
 ]
 
 THIRD_APPS = [
@@ -40,6 +41,8 @@ THIRD_APPS = [
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS
+
+AUTH_USER_MODEL = 'autenticacion.CustomUser'
 
 # Configuration of Django REST Framework
 REST_FRAMEWORK = {
