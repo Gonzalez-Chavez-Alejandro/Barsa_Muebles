@@ -11,38 +11,51 @@
 </head>
 <body>
   <div class="Content-Login">
-    <div class="imgPrincipal">
-      <img class="img-Usuario" src="img/Usuario.svg" />
-    </div>
-
     <div class="form-group">
-        <input type="email" name="email" id="email" class="form-input" placeholder=" " />
-        <label for="email" class="form-label">Correo</label>
-        <span class="error-message" id="email-error"></span>
-      </div>
-      
-      <div class="form-group">
-        <input type="password" name="password" id="password" class="form-input" placeholder=" " />
-        <label for="password" class="form-label">Contraseña</label>
-        <span class="error-message" id="password-error"></span>
-      </div>
-      
-      
-
-    <button type="button">Iniciar sesión</button>
-
-    <button type="button" class="google-btn">
-        <img src="img/Gogle-Icon.svg" alt="Google icon" class="google-icon">
-        Iniciar sesión con Google
-      </button>
-      
-      
-
-    <div class="register-text">
-        ¿No tienes una cuenta? <a href="#">Regístrate aquí</a>
+      <img src="img/Logo-Negro-B.png" alt="Google icon" class="google-icon">
     </div>
-      
-  </div>
+    
+    <div class="group2-content">
+      <div class="form-wrapper">
+        <div class="form-group">
+          <input type="text" name="text" id="text" class="form-input" placeholder=" " />
+          <label for="text" class="form-label">Usuario</label>
+          <span class="error-message" id="text-error"></span>
+        </div>
+    
+        <div class="form-group">
+          <input type="email" name="email" id="email" class="form-input" placeholder=" " />
+          <label for="email" class="form-label">Correo</label>
+          <span class="error-message" id="email-error"></span>
+        </div>
+    
+        <div class="form-group">
+          <input type="password" name="password" id="password" class="form-input" placeholder=" " />
+          <label for="password" class="form-label">Contraseña</label>
+          <span class="error-message" id="password-error"></span>
+        </div>
+
+        <div class="form-group">
+          <input type="Repit-password" name="repit-password" id="repit-password" class="form-input" placeholder=" " />
+          <label for="Repit-password" class="form-label">Repetir Contraseñas</label>
+          <span class="error-message" id="password-error"></span>
+        </div>
+    
+        <div class="form-group">
+          <input type="checkbox" class="FormControl-checkbox" id="user_signup[marketing_consent]">
+          <label class="text-normal FormControl-label" for="user_signup[marketing_consent]">
+            Acepta términos y condiciones
+          </label>
+        </div>
+    
+        <button type="button">Regístrate</button>
+    
+        <div class="register-text">
+          ¿Ya tienes cuenta? <a href="#">Entra aquí</a>
+        </div>
+      </div>
+    </div>
+    
 
   <script src="js/Registro.js"></script>
 
