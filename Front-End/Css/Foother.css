@@ -1,9 +1,11 @@
-html, body {   
+html, body {
     margin: 0;
     padding: 0;
+    
     width: 100%;
     height: 100%;
 }
+
 
 /* Estilos generales del footer */
 footer {
@@ -126,20 +128,22 @@ footer {
 }
 
 /* Íconos de redes sociales */
+/* Estilos para los íconos de redes sociales */
 .social-icons {
-    grid-column: span 3;
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    justify-content: center; /* Centrado horizontal */
+    gap: 15px; /* Espaciado entre los iconos */
+    margin-top: 20px;
 }
 
 .social-icons a {
-    color: white;
-    font-size: 24px;
+    color: white; 
+    font-size: 30px; 
+    transition: color 0.3s;
 }
 
 .social-icons a:hover {
-    color: #ff6347;
+    color: #ff6347; /* Color al pasar el mouse sobre los iconos */
 }
 
 /* Sección de Ubicación (ajustada como Teléfono) */
