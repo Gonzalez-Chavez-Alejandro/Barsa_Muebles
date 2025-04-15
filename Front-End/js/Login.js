@@ -6,28 +6,29 @@ const passwordError = document.getElementById("password-error");
 document.querySelector("button[type='button']").addEventListener("click", () => {
   let isValid = true;
 
-  // Validar email
-  const emailValue = emailInput.value.trim();
-  if (emailValue === "") {
-    emailError.textContent = "Por favor ingrese una dirección de correo electrónico.";
-    emailInput.classList.add("invalid");
-    emailInput.classList.remove("valid");
-    isValid = false;
-  } else if (!emailValue.includes("@")) {
-    emailError.textContent = "El correo electrónico debe contener un '@'.";
-    emailInput.classList.add("invalid");
-    emailInput.classList.remove("valid");
-    isValid = false;
-  } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
-    emailError.textContent = "El correo electrónico no es válido.";
-    emailInput.classList.add("invalid");
-    emailInput.classList.remove("valid");
-    isValid = false;
-  } else {
-    emailError.textContent = "";
-    emailInput.classList.add("valid");
-    emailInput.classList.remove("invalid");
-  }
+// Validar email
+const emailValue = emailInput.value.trim();
+if (emailValue === "") {
+  emailError.textContent = "Por favor ingrese una dirección de correo electrónico.";
+  emailInput.classList.add("invalid");
+  emailInput.classList.remove("valid");
+  isValid = false;
+} else if (!emailValue.includes("@")) {
+  emailError.textContent = "El correo electrónico debe contener un '@'.";
+  emailInput.classList.add("invalid");
+  emailInput.classList.remove("valid");
+  isValid = false;
+} else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailValue)) {
+  emailError.textContent = "El correo electrónico no es válido. Ejemplo: usuario@dominio.com";
+  emailInput.classList.add("invalid");
+  emailInput.classList.remove("valid");
+  isValid = false;
+} else {
+  emailError.textContent = "";
+  emailInput.classList.add("valid");
+  emailInput.classList.remove("invalid");
+}
+
 
   // Validar contraseña
   const passwordValue = passwordInput.value.trim();

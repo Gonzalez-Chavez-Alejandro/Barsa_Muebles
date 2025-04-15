@@ -1,17 +1,33 @@
-
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-  }
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal del login */
 .Content-Login {
-    width: 300px;
-    margin: 100px auto;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-  }
-/* Lado izquierdo con la imagen */
+  width: 300px;
+  margin: 100px auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+/* Contenedor de login general en modo flexible */
+.login-container {
+  display: flex;
+  flex-direction: row;
+  max-width: 800px;
+  margin: 50px auto;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Lado izquierdo con la imagen o diseño */
 .group1-content {
   flex: 1;
   display: flex;
@@ -22,14 +38,13 @@ body {
 }
 
 .google-icon {
-    display: block;
-    margin: -72px auto 10px auto; /* Centra horizontalmente y deja un pequeño margen abajo */
-    max-width: 60%;
-    height: 100px;
-    background-color: aliceblue;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-  }
-  
+  display: block;
+  margin: -72px auto 10px auto;
+  max-width: 60%;
+  height: 100px;
+  background-color: aliceblue;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
 
 /* Lado derecho con el formulario */
 .group2-content {
@@ -40,23 +55,23 @@ body {
   padding: 20px;
 }
 
-/* Contenedor más chico del formulario */
+/* Contenedor interno del formulario */
 .form-wrapper {
   width: 100%;
   max-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 7px;
 }
 
-/* Estilos para los inputs y etiquetas */
+/* Inputs y etiquetas flotantes */
 .form-group {
   position: relative;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px;
+  padding: 12px 1px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -82,7 +97,7 @@ body {
   font-weight: bold;
 }
 
-/* Botón de registro */
+/* Botón */
 button {
   width: 100%;
   padding: 10px;
@@ -95,17 +110,82 @@ button {
 }
 
 button:hover {
-    background-color: #333333;
-  }
+  background-color: #333333;
+}
 
-/* Texto inferior */
+/* Texto de registro */
 .register-text {
   font-size: 14px;
   text-align: center;
 }
 
 .register-text a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Validación visual */
+.form-input.invalid {
+  border: 1.8px solid #d93025;
+  background-color: #fce8e6;
+  box-shadow: 0 0 0 2px rgba(217, 48, 37, 0.2);
+}
+
+.form-input.valid {
+  border: 1.8px solid #137333;
+  background-color: #e6f4ea;
+  box-shadow: 0 0 0 2px rgba(19, 115, 51, 0.2);
+}
+
+/* Animación para los mensajes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mensajes de error y éxito */
+.error-message {
+  font-size: 13px;
+  color: #d93025;
+  margin-top: 6px;
+  padding-left: 4px;
+  font-weight: 500;
+  display: block;
+  transition: all 0.2s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.success-message {
+  font-size: 13px;
+  color: #137333;
+  margin-top: 6px;
+  padding-left: 4px;
+  font-weight: 500;
+  display: block;
+  transition: all 0.2s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Responsive para tablets y móviles */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    margin: 20px;
+    border-radius: 12px;
   }
+
+  .group1-content {
+    border-radius: 12px 12px 0 0;
+    padding: 20px;
+  }
+
+  .group2-content {
+    padding: 20px;
+  }
+
+  .google-icon {
+    margin-top: 0;
+    height: 80px;
+  }
+}

@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  header {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    position: fixed; /* Opcional: para que quede fijo al hacer scroll */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+
+  body {
+    padding-top: 60px; /* Deja espacio para el header fijo */
+    font-family: Arial, sans-serif;
+  }
+
+  

@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Barsa-Login</title>
   <link rel="stylesheet" href="Css/Registro.css">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 <body>
   <div class="Content-Login">
@@ -19,7 +17,7 @@
       <div class="form-wrapper">
         <div class="form-group">
           <input type="text" name="text" id="text" class="form-input" placeholder=" " />
-          <label for="text" class="form-label">Usuario</label>
+          <label for="text" class="form-label">Nombre Completo</label>
           <span class="error-message" id="text-error"></span>
         </div>
     
@@ -36,11 +34,17 @@
         </div>
 
         <div class="form-group">
-          <input type="Repit-password" name="repit-password" id="repit-password" class="form-input" placeholder=" " />
-          <label for="Repit-password" class="form-label">Repetir Contraseñas</label>
-          <span class="error-message" id="password-error"></span>
+          <input type="password" name="repit-password" id="repit-password" class="form-input" placeholder=" " />
+          <label for="repit-password" class="form-label">Repetir Contraseña</label>
+          <span class="error-message" id="repit-password-error"></span>
         </div>
-    
+        
+        <div class="form-group">
+          <input type="tel" name="telefono" id="telefono" class="form-input" placeholder=" " pattern="[0-9]{10}" />
+          <label for="telefono" class="form-label">Teléfono</label>
+          <span class="error-message" id="telefono-error"></span>
+        </div>        
+
         <div class="form-group">
           <input type="checkbox" class="FormControl-checkbox" id="user_signup[marketing_consent]">
           <label class="text-normal FormControl-label" for="user_signup[marketing_consent]">
@@ -51,13 +55,17 @@
         <button type="button">Regístrate</button>
     
         <div class="register-text">
-          ¿Ya tienes cuenta? <a href="#">Entra aquí</a>
+          ¿Ya tienes cuenta? <a href="Login.html">Entra aquí</a>
         </div>
       </div>
     </div>
-    
-
+  </div>
+  <script>
+    window.addEventListener("load", () => {
+      window.dispatchEvent(new Event("resize"));
+    });
+  </script>
+  
   <script src="js/Registro.js"></script>
-
 </body>
 </html>
