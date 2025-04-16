@@ -1,24 +1,300 @@
+/* Reset de márgenes y padding */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-
+  
+  /* Estilo general */
+  body {
+    padding-top: 80px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  /* Estilo para el header */
   header {
     width: 100%;
     background-color: #333;
     color: white;
-    padding: 15px;
-    text-align: center;
-    position: fixed; /* Opcional: para que quede fijo al hacer scroll */
+    padding: 30px 0;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
+    text-align: center;
   }
-
-  body {
-    padding-top: 60px; /* Deja espacio para el header fijo */
-    font-family: Arial, sans-serif;
+  
+  /* Contenedor de la página */
+  .container {
+    display: flex;
   }
-
+  
+  /* Menú lateral */
+  .menu-lateral {
+    width: 200px;
+    background-color: #222;
+    padding-top: 20px;
+    height: calc(100vh - 80px);
+    position: fixed;
+    top: 80px;
+    left: 0;
+  }
+  
+  /* Estilo de los botones del menú lateral */
+  .menu-lateral button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .menu-lateral button:hover {
+    background-color: #666;
+    transform: translateX(10px);
+  }
+  
+  /* Contenido principal */
+  .contenido {
+    margin-left: 200px;
+    padding: 20px;
+    width: calc(100% - 200px);
+  }
+  
+  /* Estilo de las secciones */
+  .seccion {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  /* Panel principal */
+  .admin-panel {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo del título */
+  .admin-panel h2 {
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Contenedor de la tabla */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  /* Estilo de la tabla */
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  
+  /* Estilo de las celdas de la tabla */
+  .admin-table th, .admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .admin-table th {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+  
+  .admin-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilo de los botones de acción */
+  .edit-btn, .delete-btn {
+    padding: 8px 15px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .edit-btn {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .edit-btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  }
+  
+  .delete-btn {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  }
+  
+  /* Iconos en los botones */
+  .edit-btn i, .delete-btn i {
+    margin-right: 8px; /* Espacio entre el icono y el texto */
+  }
+  
+  /* Filtros de búsqueda */
+  .filtros {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  /* Estilo del campo de búsqueda */
+  .filtros input {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 250px;
+  }
+  
+  /* Estilo de los botones de filtro */
+  .filtros button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filtros button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Mensaje de error */
+  .error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    z-index: 1000;
+  }
+  /* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-contenido {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .modal-contenido h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .modal-contenido input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .modal-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .modal-acciones button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .modal-acciones button:first-child {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  .modal-acciones button:last-child {
+    background-color: #e74c3c;
+    color: white;
+  }
+  .error {
+    display: block;
+    color: #e74c3c;
+    font-size: 0.9em;
+    text-align: center;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .invalid {
+    border: 2px solid #e74c3c;
+    background-color: #ffe6e6;
+  }
+  /* Estilos para el campo de error */
+.error {
+    color: red;
+    font-size: 12px;
+    display: none;
+  }
+  
+  input.invalid {
+    border: 2px solid red;
+  }
+  
+  /* Mostrar el mensaje de error cuando el campo está inválido */
+  input:invalid + .error {
+    display: block;
+  }
   
