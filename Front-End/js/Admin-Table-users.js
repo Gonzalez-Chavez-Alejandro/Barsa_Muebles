@@ -185,12 +185,3 @@ document.getElementById('btnCancelarEliminar').addEventListener('click', () => {
   document.getElementById('modalConfirmacion').style.display = 'none';
   indicePendienteEliminar = null;
 });
-function mostrarSeccion(id) {
-  const secciones = document.querySelectorAll('.seccion');
-  secciones.forEach(seccion => {
-    seccion.classList.remove('activa');
-  });
-
-  const seccionMostrada = document.getElementById(id);
-  seccionMostrada.classList.add('activa');
-}
