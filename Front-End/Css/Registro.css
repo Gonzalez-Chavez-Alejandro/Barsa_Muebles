@@ -166,7 +166,14 @@ button:hover {
   transition: all 0.2s ease-in-out;
   animation: fadeIn 0.3s ease-in-out;
 }
-
+.google-icon {
+  display: block;
+  margin: -72px auto -50px auto;
+  max-width: 82%;
+  height: 170px;
+  background-color: aliceblue;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
 /* Responsive para tablets y móviles */
 @media (max-width: 768px) {
   .login-container {
@@ -186,6 +193,7 @@ button:hover {
 
   .google-icon {
     margin-top: 0;
-    height: 80px;
-  }
+    margin: 0;
+    height: 82px;
+}
 }

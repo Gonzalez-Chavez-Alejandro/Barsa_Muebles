@@ -10,8 +10,8 @@
 
 <body>
   <header>
-    <h2>Administrador</h2>
-    <button class="menu-toggle" onclick="toggleMenu()">
+    
+    <button class="menu-toggle" id="toggleMenu">
       <i class="fas fa-bars"></i>
     </button>
   </header>
@@ -46,13 +46,13 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- Los usuarios se mostrarán aquí -->
+                
               </tbody>
             </table>
           </div>
           <div class="paginacion">
             <button id="paginaAnterior" onclick="cambiarPagina(-1)">Anterior</button>
-            <span id="paginaActual">Página 1</span> de <span id="totalPaginas">de 2</span>
+            <span id="paginaActual">Página 1 </span>   <span id="totalPaginas"> 2 </span>
             <button id="paginaSiguiente" onclick="cambiarPagina(1)">Siguiente</button>
           </div>
         </div>
@@ -102,6 +102,10 @@
     </div>
   </div>
   
-  <script src="js/Admin.js"></script>
+  <script src="js/Admin.js">
+    
+  </script>
+ 
+  
 </body>
 </html>

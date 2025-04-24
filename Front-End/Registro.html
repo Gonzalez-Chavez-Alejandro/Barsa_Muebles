@@ -3,69 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Barsa-Login</title>
+  <title>Barsa - Registro</title>
+  <link rel="stylesheet" href="Css/Header.css">
   <link rel="stylesheet" href="Css/Registro.css">
+  <link rel="stylesheet" href="Css/Foother.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <div class="Content-Login">
-    <div class="form-group">
-      <img src="img/Logo-Negro-B.png" alt="Google icon" class="google-icon">
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="img/Logo-Negro.png" alt="Barsa Muebles">
     </div>
-    
+
+    <div class="usuario-carrito">
+      <div class="usuario-container">
+        <div class="icono-usuario" onclick="toggleMenuUsuario()">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div id="menu-usuario" class="menu-usuario">
+          <button class="btn-identificarse">Identificarse</button>
+          <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="#">Empieza aquí.</a></p>
+        </div>
+      </div>
+
+      <button class="btn-carrito" onclick="toggleMenu()">
+        <img src="img/Carrito.svg" alt="Carrito" class="icono-carrito-svg">
+        <span>Carrito</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor del login -->
+  <div class="login-container">
+    <!-- Parte izquierda -->
+    <div class="group1-content">
+      <img src="img/Logo_B_Blanco_Fnd.png" alt="Logo Barsa" class="google-icon">
+    </div>
+
+    <!-- Parte derecha con el formulario -->
     <div class="group2-content">
       <div class="form-wrapper">
+        <!-- Campo Nombre -->
         <div class="form-group">
-          <input type="text" name="text" id="text" class="form-input" placeholder=" " />
+          <input type="text" id="text" class="form-input" placeholder=" " />
           <label for="text" class="form-label">Nombre Completo</label>
           <span class="error-message" id="text-error"></span>
         </div>
-    
+
+        <!-- Campo Correo -->
         <div class="form-group">
-          <input type="email" name="email" id="email" class="form-input" placeholder=" " />
+          <input type="email" id="email" class="form-input" placeholder=" " />
           <label for="email" class="form-label">Correo</label>
           <span class="error-message" id="email-error"></span>
         </div>
-    
+
+        <!-- Campo Contraseña -->
         <div class="form-group">
-          <input type="password" name="password" id="password" class="form-input" placeholder=" " />
+          <input type="password" id="password" class="form-input" placeholder=" " />
           <label for="password" class="form-label">Contraseña</label>
           <span class="error-message" id="password-error"></span>
         </div>
 
+        <!-- Campo Repetir Contraseña -->
         <div class="form-group">
-          <input type="password" name="repit-password" id="repit-password" class="form-input" placeholder=" " />
+          <input type="password" id="repit-password" class="form-input" placeholder=" " />
           <label for="repit-password" class="form-label">Repetir Contraseña</label>
           <span class="error-message" id="repit-password-error"></span>
         </div>
-        
+
+        <!-- Campo Teléfono -->
         <div class="form-group">
-          <input type="tel" name="telefono" id="telefono" class="form-input" placeholder=" " pattern="[0-9]{10}" />
+          <input type="tel" id="telefono" class="form-input" placeholder=" " pattern="[0-9]{10}" />
           <label for="telefono" class="form-label">Teléfono</label>
           <span class="error-message" id="telefono-error"></span>
-        </div>        
+        </div>
 
+        <!-- Aceptar Términos -->
         <div class="form-group">
-          <input type="checkbox" class="FormControl-checkbox" id="user_signup[marketing_consent]">
-          <label class="text-normal FormControl-label" for="user_signup[marketing_consent]">
+          <input type="checkbox" id="terms" class="FormControl-checkbox">
+          <label for="terms" class="FormControl-label">
             Acepta términos y condiciones
           </label>
         </div>
-    
+
+        <!-- Botón -->
         <button type="button">Regístrate</button>
-    
+
+        <!-- Texto registro -->
         <div class="register-text">
           ¿Ya tienes cuenta? <a href="Login.html">Entra aquí</a>
         </div>
       </div>
     </div>
   </div>
+  <footer>
+    <div class="logo-container">
+        <img src="img/1.png" alt="Logo Barsa Muebles" class="logo">
+    <p class="p-Muebles-Barsa">Muebles Barsa ©2025</p>
+    </div>
+    <!--<hr>-->
+    <div class="footer-container">
+        
+        <div class="footer-section-left">
+            <ul>
+                <li><span class="dot"></span><a href="#">Contacto</a></li>
+                <li><span class="dot"></span><a href="#">Nosotros</a></li>
+                <li><span class="dot"></span><a href="#">Preguntas frecuentes</a></li>
+                <li><span class="dot"></span><a href="#">Aviso legal</a></li>
+                <li><span class="dot"></span><a href="#">Términos y condiciones</a></li>
+            </ul>
+        </div>
+
+        <!-- Sección de Información de Contacto -->
+        <div class="contact-info">
+            <p class="p-Correo"><i class="fas fa-envelope"></i> <strong>Correo: </strong>  BarsaMuebles@gmail.com</p>
+            <p class="p-telefono"><i class="fas fa-phone-alt"></i> <strong>Teléfonos:</strong></p>
+            <ul class="phone-list">
+                <li>353-53-5-17-50</li>
+                <li>353-57-2-00-55</li>
+            </ul>
+        </div>
+
+        <!-- Sección de Ubicación -->
+        <div class="footer-section-right">
+            <p class="p-Ubicacion"><strong>Ubicación</strong></p>
+            <ul>
+                <li>Carretera Sahuayo la Barca km. 5.4 en Venustiano Carranza</li>
+                <li>Carretera Sahuayo la Barca km. 5.4 en Venustiano Carranza</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Redes Sociales -->
+    <div class="social-icons">
+        <a href="#"><i class="fas fa-envelope"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    <div class="footer-block">
+        <div class="vertical-line"></div>
+        <p>Muebles Barsa ©2025</p>
+    </div>
+    <button >  <a href="Admin.html">Entra aquí</a></button>
+</footer>
+  <!-- Scripts -->
   <script>
+    function toggleMenuUsuario() {
+      const menu = document.getElementById("menu-usuario");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    window.addEventListener('click', function(e) {
+      const usuario = document.querySelector('.usuario-container');
+      const menu = document.getElementById("menu-usuario");
+      if (!usuario.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+
     window.addEventListener("load", () => {
       window.dispatchEvent(new Event("resize"));
     });
   </script>
-  
   <script src="js/Registro.js"></script>
 </body>
 </html>
