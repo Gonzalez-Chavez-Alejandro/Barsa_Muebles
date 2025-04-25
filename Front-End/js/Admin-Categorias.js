@@ -1,11 +1,13 @@
+let idCounterCategoria = 1;
+
 let categorias = [
-    { id: "1",nombre: "Sofás", descripcion: "Sofás modernos y clásicos" },
-    { nombre: "Comedores", descripcion: "Comedores de 4, 6 y 8 plazas" },
-    { nombre: "Recámaras", descripcion: "Recámaras completas y modulares" },
-    { nombre: "Salas", descripcion: "Salas en L, modulares, esquineras" },
-    { nombre: "Escritorios", descripcion: "Escritorios para oficina y hogar" },
-    { nombre: "Closets", descripcion: "Closets armables y empotrables" },
-    { nombre: "Muebles TV", descripcion: "Muebles para centro de entretenimiento" }
+    { id: idCounterCategoria++, nombre: "Sofás", descripcion: "Sofás modernos y clásicos" },
+    { id: idCounterCategoria++, nombre: "Comedores", descripcion: "Comedores de 4, 6 y 8 plazas" },
+    { id: idCounterCategoria++, nombre: "Recámaras", descripcion: "Recámaras completas y modulares" },
+    { id: idCounterCategoria++, nombre: "Salas", descripcion: "Salas en L, modulares, esquineras" },
+    { id: idCounterCategoria++, nombre: "Escritorios", descripcion: "Escritorios para oficina y hogar" },
+    { id: idCounterCategoria++, nombre: "Closets", descripcion: "Closets armables y empotrables" },
+    { id: idCounterCategoria++, nombre: "Muebles TV", descripcion: "Muebles para centro de entretenimiento" }
   ];
   
   let categoriasPorPagina = 6;
@@ -13,6 +15,7 @@ let categorias = [
   let categoriaEditando = null;
   let categoriaAEliminar = null;
   
+
   function mostrarCategorias() {
     const tbody = document.getElementById('tablaCategorias');
     tbody.innerHTML = '';
@@ -24,6 +27,7 @@ let categorias = [
     categoriasAMostrar.forEach((cat, index) => {
       const fila = document.createElement('tr');
       fila.innerHTML = `
+      <td>${cat.id}</td>
         <td>${cat.nombre}</td>
         <td>${cat.descripcion}</td>
         <td>
@@ -129,55 +133,4 @@ function abrirModal(index) {
 // Función para cerrar el modal de edición
 function cerrarModal() {
   document.getElementById('modalEditar').style.display = 'none'; // Cerrar el modal
-}
-
-// Función para guardar los cambios realizados en un usuario
-function guardarCambios() {
-  if (indiceUsuarioEditando === null) return;
-
-  // Actualizar los datos del usuario
-  usuarios[indiceUsuarioEditando] = {
-    nombre: document.getElementById("nombreEditar").value,
-    correo: document.getElementById("correoEditar").value,
-    telefono: document.getElementById("telefonoEditar").value,
-    contrasena: document.getElementById("contrasenaEditar").value,
-  };
-
-  usuariosFiltrados = [...usuarios]; // Asegura que se actualice la lista filtrada
-  mostrarUsuarios(paginaActual); // Refrescar la tabla
-  cerrarModal(); // Cerrar el modal
-}
-
-// Función para agregar un nuevo usuario a la tabla
-function agregarUsuarioATabla(usuario) {
-  const tabla = document.querySelector('.admin-table tbody');
-  const fila = document.createElement('tr');
-
-  fila.innerHTML = `
-    <td>${usuario.nombre}</td>
-    <td>${usuario.correo}</td>
-    <td>${usuario.telefono}</td>
-    <td>${usuario.contrasena}</td>
-    <td>
-       <button class="edit-btn"><i class="fas fa-edit"></i> <a class="button-table">Editar</a></button>
-       <button class="delete-btn"><i class="fas fa-trash-alt"></i><a class="button-table">Eliminar</a></button>
-    </td>
-  `;
-
-  fila.querySelector('.edit-btn').addEventListener('click', () => abrirModal(usuarios.indexOf(usuario)));
-  fila.querySelector('.delete-btn').addEventListener('click', () => eliminarUsuario(usuarios.indexOf(usuario)));
-
-  tabla.appendChild(fila);
-}
-
-// Función para eliminar un usuario
-function eliminarUsuario(index) {
-  const usuario = usuarios[index];
-  const confirmar = confirm(`¿Estás seguro de que deseas eliminar a ${usuario.nombre}?`);
-
-  if (confirmar) {
-    usuarios.splice(index, 1); // Eliminar el usuario del array
-    usuariosFiltrados = [...usuarios]; // Asegurar que la lista filtrada esté actualizada
-    mostrarUsuarios(paginaActual); // Refrescar la tabla
-  }
 }

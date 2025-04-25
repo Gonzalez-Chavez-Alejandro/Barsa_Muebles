@@ -116,6 +116,28 @@
     <!-- Sección de Productos -->
 <!-- Sección de Productos -->
 
+<section id="productos" class="seccion">
+  <h2 id="categoria-titulo">Selecciona una categoría</h2>
+  <div id="formulario-producto" class="seccion">
+    <form id="agregar-producto-form">
+      <input type="hidden" id="categoria-id">
+      <label>Nombre del producto:
+        <input type="text" id="nombre-producto" required>
+      </label>
+      <button type="submit">Agregar</button>
+    </form>
+
+    <table id="tabla-productos">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del producto</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
 
 
 
@@ -286,6 +308,8 @@ function guardarNuevoUsuario() {
   <script src="js/Admin.js"></script>
   <script src="js/submenu-categorias.js"></script>
   <script src="js/Admin-Menu.js"></script>
+  <script src="js/Admin-Table-users.js"></script>
+  <script src="js/Admin-Productos.js"></script>
   
 </body>
 </html>

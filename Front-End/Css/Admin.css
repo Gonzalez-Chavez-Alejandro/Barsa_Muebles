@@ -9,6 +9,9 @@
 }
 
 /* Estilo general */
+li.activo > .submenu {
+  display: block;
+}
 body {
   padding-top: 80px;
   font-family: Arial, sans-serif;
