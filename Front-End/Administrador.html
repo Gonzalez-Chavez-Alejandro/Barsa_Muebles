@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="Css/Administrador.css"> 
   <link rel="stylesheet" href="Css/Admin-Lista-Usuarios.css">
   <link rel="stylesheet" href="Css/categoria.css">
+  <link rel="stylesheet" href="Css/Admin-Producto.css">
 </head>
 <body>
 
@@ -113,34 +114,6 @@
       </div>
     </section>
 
-    <!-- Sección de Productos -->
-<!-- Sección de Productos -->
-
-<section id="productos" class="seccion">
-  <h2 id="categoria-titulo">Selecciona una categoría</h2>
-  <div id="formulario-producto" class="seccion">
-    <form id="agregar-producto-form">
-      <input type="hidden" id="categoria-id">
-      <label>Nombre del producto:
-        <input type="text" id="nombre-producto" required>
-      </label>
-      <button type="submit">Agregar</button>
-    </form>
-
-    <table id="tabla-productos">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre del producto</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</section>
-
-
-
 
     <section id="categorias" class="seccion">
       <div class="admin-panel">
@@ -173,6 +146,53 @@
         </div>
       </div>
     </section>
+
+        <!-- Sección de Productos -->
+
+
+        <section id="productos" class="seccion">
+          <div class="admin-panel"> 
+          <h2 id="categoria-titulo">Selecciona una categoría</h2>
+          <div id="formulario-producto" class="seccion">
+            <form id="agregar-producto-form">
+              <input type="hidden" id="categoria-id">
+              <label>Nombre del producto:
+                <input type="text" id="nombre-producto" required>
+              </label>
+              <button type="submit">Agregar</button>
+            </form>
+    
+            <div class="table-container">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>
+                      <select id="filtroOferta" onchange="filtrarPorOferta()">
+                        <option value="todos">Ofertas</option>
+                        <option value="oferta">Con</option>
+                        <option value="sinOferta">Sin</option>
+                      </select>
+                    </th>
+                    <th>Precio Oferta</th>
+                    <th>imagenes</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tablaProductos">
+                  <!-- Las categorías se insertan con JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        </section>
+    
+
+
   
   </main>
   <!--Todo lo de dentro de section termina aqui en main -->
@@ -306,10 +326,9 @@ function guardarNuevoUsuario() {
   </script>
   <script src="js/Admin-Categorias.js"> </script>
   <script src="js/Admin.js"></script>
-  <script src="js/submenu-categorias.js"></script>
   <script src="js/Admin-Menu.js"></script>
   <script src="js/Admin-Table-users.js"></script>
   <script src="js/Admin-Productos.js"></script>
-  
+  <script src="js/Ofertas.js"></script>
 </body>
 </html>
