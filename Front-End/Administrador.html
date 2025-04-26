@@ -159,7 +159,7 @@
     </section>
 
  <!-- ----------------------------------------------- -->
-            <!-- Sección de Productos -->
+              <!-- Sección de Productos -->
  <!-- ----------------------------------------------- -->
 
         <section id="productos" class="seccion">
@@ -168,10 +168,8 @@
           <div id="formulario-producto" class="seccion">
             <form id="agregar-producto-form">
               <input type="hidden" id="categoria-id">
-              <label>Nombre del producto:
-                <input type="text" id="nombre-producto" required>
-              </label>
-              <button type="submit">Agregar</button>
+              
+              <button type="button" onclick="abrirModalAgregarProductos()">Agregar</button>
             </form>
     
             <div class="table-container">
@@ -345,9 +343,64 @@
   </div>
 </div>
 
+<!-- ------------------------------------------------ -->
+             <!--Empieza Productos Modal-->
+<!-- ------------------------------------------------ -->
+
+
+  
+<!-- ------------------------------------------------ -->
+        <!-- Modal para agregar nuevo usuario -->
+<!-- ------------------------------------------------ -->
+  
+<div id="Modal-Agregar-Producto" class="modal">
+  <div class="modal-contenido">
+    <h3>Agregar Producto</h3>
+    
+    <!-- Aquí puedes cambiar los campos para productos si quieres -->
+
+    <label>Nombre del Producto:</label>
+    <input type="text" id="nombreProducto">
+    <span id="errorNombreProducto" class="error"></span>
+
+    <label>Descripción:</label>
+    <input type="text" id="descripcionProducto">
+    <span id="errorDescripcionProducto" class="error"></span>
+
+    <label>Precio:</label>
+    <input type="number" id="precioProducto">
+    <span id="errorPrecioProducto" class="error"></span>
+
+    <div class="checkbox-linea">
+      <input type="checkbox" id="ofertaProducto">
+      <label class="Oferta" for="ofertaProducto">Oferta:</label>
+    </div>
+    
+    <div class="descuento-opciones" style="margin-top: 10px;">
+      <label for="descuentoSeleccionado">Descuento (%):</label>
+      <input type="number" id="descuentoSeleccionado" min="0" max="100" oninput="aplicarDescuento()" disabled>
+    </div>
+    <label>Precio Descuento:</label>
+    <input type="number" id="precioProductoDescuento">
+    <span id="errorPrecioDescuentoProducto" class="error"></span>
+
+    <div class="modal-acciones">
+      <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
+      <button class="btn-cancelar" onclick="cerrarModalAgregar()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
 
 <!-- ---------------------------------------------------------------------- -->
+
 
 
 <!-- ------------------------------------------------ -->
@@ -376,6 +429,7 @@
   <script src="js/Admin-Table-users.js"></script>
   <script src="js/Admin-Productos.js"></script>
   <script src="js/Ofertas.js"></script>
+  <script src="js/Admin-Modal-Productos.js"></script>
   
 </body>
 </html>

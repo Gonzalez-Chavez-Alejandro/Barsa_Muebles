@@ -31,8 +31,8 @@ const productos = [
         <td>${producto.nombre}</td>
         <td>${producto.descripcion}</td>
         <td>$${producto.precio}</td>
-        <td>${producto.oferta ? 'Sí' : 'No'}</td>
-        <td>${producto.oferta ? '$' + producto.precioOferta : '-'}</td>
+        <td class="td-centrado">${producto.oferta ? 'Sí' : 'No'}</td>
+        <td class="td-centrado">${producto.oferta ? '$' + producto.precioOferta : '-'}</td>
         <td>
           <button onclick="AgregarImagenes(${producto.id})">Imagenes</button>
         </td>
