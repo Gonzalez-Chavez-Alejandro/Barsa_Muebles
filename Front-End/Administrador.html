@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panel Administrativo</title>
+<!-- ----------------------------------------------- -->
+                 <!-- Link Css -->
+<!-- ----------------------------------------------- -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="Css/Administrador.css"> 
@@ -12,13 +15,17 @@
   <link rel="stylesheet" href="Css/Admin-Producto.css">
 </head>
 <body>
-
-  <!-- Botón de menú para móvill -->
+<!-- ----------------------------------------------- -->
+           <!-- Botón de menú para móvill -->
+<!-- ----------------------------------------------- -->
   <button id="botonMenu" class="boton-menu">
     <i class="fas fa-bars"></i>
   </button>
 
-  <!-- Menú lateral -->
+
+<!-- ----------------------------------------------- -->
+                <!-- Menú lateral -->
+<!-- ----------------------------------------------- -->
   <div id="menuLateral" class="menu-lateral">
     <button id="cerrarMenu" class="cerrar-menu">
       <i class="fas fa-times"></i>
@@ -72,8 +79,10 @@
 
 
     </section>
-
-    <!-- Sección de Usuarios -->
+ <!-- ----------------------------------------------- -->
+             <!-- Sección de Usuarios -->
+ <!-- ----------------------------------------------- -->
+    
     <section id="usuarios" class="seccion">
       <div class="admin-panel">
         <h2>Lista de Usuarios Registrados</h2>
@@ -134,7 +143,9 @@
               </tr>
             </thead>
             <tbody id="tablaCategorias">
-              <!-- Las categorías se insertan con JS -->
+              <!-- ----------------------------------------------- -->
+                    <!-- Las categorías se insertan con JS -->
+              <!-- ----------------------------------------------- -->
             </tbody>
           </table>
         </div>
@@ -147,8 +158,9 @@
       </div>
     </section>
 
-        <!-- Sección de Productos -->
-
+ <!-- ----------------------------------------------- -->
+            <!-- Sección de Productos -->
+ <!-- ----------------------------------------------- -->
 
         <section id="productos" class="seccion">
           <div class="admin-panel"> 
@@ -183,7 +195,9 @@
                   </tr>
                 </thead>
                 <tbody id="tablaProductos">
-                  <!-- Las categorías se insertan con JS -->
+                  <!-- ----------------------------------------------- -->
+                        <!-- Las categorías se insertan con JS -->
+                  <!-- ----------------------------------------------- -->
                 </tbody>
               </table>
             </div>
@@ -191,13 +205,24 @@
         </div>
         </section>
     
-
-
-  
   </main>
-  <!--Todo lo de dentro de section termina aqui en main -->
+          <!--Todo lo de dentro de section termina aqui en main -->
+<!-- ---------------------------------------------------------------------- -->
 
-  <!-- Modal para editar usuario -->
+
+<!-- ---------------------------------------------------------------------- -->
+<!------------------------------ Empieza Modal ------------------------------->
+<!-- ---------------------------------------------------------------------- -->
+
+<!-- ------------------------------------------------ -->
+             <!--Empieza Usuario Modal-->
+<!-- ------------------------------------------------ -->
+
+
+<!-- ----------------------------------------------- -->
+          <!-- Modal para editar usuario -->
+<!-- ----------------------------------------------- -->
+  
   <div id="modalEditar" class="modal">
     <div class="modal-contenido">
       <h3>Editar Usuario</h3>
@@ -224,7 +249,10 @@
     </div>
   </div>
 
-  <!-- Modal de confirmación -->
+<!-- ----------------------------------------------- -->
+            <!-- Modal de confirmación Usuario -->
+<!-- ----------------------------------------------- -->
+  
   <div id="modalConfirmacion" class="modal-confirm">
     <div class="modal-content-confirm">
       <p id="mensajeConfirmacion">¿Estás seguro de que deseas eliminar?</p>
@@ -235,7 +263,10 @@
     </div>
   </div>
   
-  <!-- Modal para agregar nuevo usuario -->
+<!-- ------------------------------------------------ -->
+        <!-- Modal para agregar nuevo usuario -->
+<!-- ------------------------------------------------ -->
+  
 <div id="modalAgregar" class="modal">
   <div class="modal-contenido">
     <h3>Agregar Usuario</h3>
@@ -265,8 +296,15 @@
   </div>
 </div>
 
-<!--Categoria Modal-->
-<!-- Modal Agregar Categoría -->
+
+<!-- ------------------------------------------------ -->
+             <!--Empieza Categoria Modal-->
+<!-- ------------------------------------------------ -->
+
+<!-- ------------------------------------------------ -->
+             <!-- Modal Agregar Categoría -->
+<!-- ------------------------------------------------ -->
+
 <div id="modalAgregarCategoria" class="modal">
   <div class="modal-contenido-agregar">
     <span class="cerrar" onclick="cerrarModalAgregarCategoria()">&times;</span>
@@ -278,7 +316,9 @@
   </div>
 </div>
 
-<!-- Modal Editar Categoría -->
+<!-- ------------------------------------------------ -->
+              <!-- Modal Editar Categoría -->
+<!-- ------------------------------------------------ -->
 <div id="modalEditarCategoria" class="modal">
   <div class="modal-contenido">
     <span class="cerrar" onclick="cerrarModalEditarCategoria()">&times;</span>
@@ -292,7 +332,10 @@
   </div>
 </div>
 
-<!-- Modal Eliminar Categoría -->
+<!-- ------------------------------------------------ -->
+            <!-- Modal Eliminar Categoría -->
+<!-- ------------------------------------------------ -->
+
 <div id="modalEliminarCategoria" class="modal">
   <div class="modal-contenido-categoria">
     <span class="cerrar" onclick="cerrarModalEliminarCategoria()">&times;</span>
@@ -304,24 +347,27 @@
 
 
 
-  <!-- Scripts -->
+<!-- ---------------------------------------------------------------------- -->
+
+
+<!-- ------------------------------------------------ -->
+                <!----- Scripts ----->
+<!-- ------------------------------------------------ -->
   <script>
    
-function abrirModalAgregar() {
-  document.getElementById('modalAgregar').style.display = 'block';
-}
+    function abrirModalAgregar() {
+      document.getElementById('modalAgregar').style.display = 'block';
+    }
 
-function cerrarModalAgregar() {
-  document.getElementById('modalAgregar').style.display = 'none';
-}
+    function cerrarModalAgregar() {
+      document.getElementById('modalAgregar').style.display = 'none';
+    }
 
-function guardarNuevoUsuario() {
-  // Aquí va tu lógica para validar y guardar
-  alert('Usuario agregado correctamente');
-  cerrarModalAgregar();
-}
-
-
+    function guardarNuevoUsuario() {
+      // Aquí va tu lógica para validar y guardar
+      alert('Usuario agregado correctamente');
+      cerrarModalAgregar();
+    }
 
   </script>
   <script src="js/Admin-Categorias.js"> </script>
@@ -330,5 +376,6 @@ function guardarNuevoUsuario() {
   <script src="js/Admin-Table-users.js"></script>
   <script src="js/Admin-Productos.js"></script>
   <script src="js/Ofertas.js"></script>
+  
 </body>
 </html>
