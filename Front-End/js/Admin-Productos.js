@@ -1,7 +1,7 @@
-let idCounterProductos = 1;
+let idCounterProducto = 1;
 const productos = [
   {
-    id: idCounterProductos++,
+    id: idCounterProducto++,
     nombre: "Silla moderna",
     descripcion: "Silla de madera con respaldo",
     precio: 1200,
@@ -10,7 +10,97 @@ const productos = [
     categoriaId: 1
   },
   {
-    id: idCounterProductos++,
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
     nombre: "Mesa redonda",
     descripcion: "Mesa para comedor",
     precio: 3500,
@@ -20,12 +110,26 @@ const productos = [
   }
 ];
 
-// Función para llenar la tabla de productos
-function llenarTablaProductos(productos) {
-  const tabla = document.getElementById('tablaProductos');
-  tabla.innerHTML = ''; // Limpia la tabla antes de llenar
+// Almacenar la categoría seleccionada
+let categoriaSeleccionada = null;
+let productosFiltrados = [...productos];
+let productosPorPagina = 10; // Cantidad de productos por página
+let paginaActual = 1; // Página inicial
+let totalPaginas = Math.ceil(productos.length / productosPorPagina); // Calcular el total de páginas
 
-  productos.forEach(producto => {
+
+// Función para llenar la tabla de productos
+function llenarTablaProductos(listaProductos) {
+  const tabla = document.getElementById('tablaProductos');
+  tabla.innerHTML = ''; // Limpiar la tabla antes de llenarla
+
+  // Filtrar los productos por página actual
+  const inicio = (paginaActual - 1) * productosPorPagina;
+  const fin = inicio + productosPorPagina;
+  const productosPagina = listaProductos.slice(inicio, fin); // Tomar solo los productos de la página actual
+
+  // Recorrer los productos y agregar cada uno a la tabla
+  productosPagina.forEach(producto => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${producto.id}</td>
@@ -46,26 +150,182 @@ function llenarTablaProductos(productos) {
     `;
     tabla.appendChild(tr);
   });
+
+  // Actualizar la paginación en la UI
+  document.getElementById('paginaActualProductos').textContent = `Página ${paginaActual}`;
+  document.getElementById('totalPaginasProductos').textContent = totalPaginas;
 }
 
-// Función para mostrar productos de una categoría
-function mostrarProductosCategoria(idCategoria, nombreCategoria) {
-  ocultarTodasLasSecciones();
-  document.getElementById('productos').classList.add('activa');
-  document.getElementById('categoria-titulo').textContent = `Productos de ${nombreCategoria}`;
-  document.getElementById('categoria-id').value = idCategoria;
-  document.getElementById('formulario-producto').classList.add('activa');
-  menuLateral.classList.remove("mostrar-menu");
-  
-  // Filtrar productos por categoría
-  const productosDeCategoria = productos.filter(p => p.categoriaId === idCategoria);
-  llenarTablaProductos(productosDeCategoria);
+
+// Función para guardar un nuevo producto
+function guardarNuevoProducto() {
+  // Obtener los valores de los inputs
+  const nombre = document.getElementById('nombreProducto').value.trim();
+  const descripcion = document.getElementById('descripcionProducto').value.trim();
+  const precio = parseFloat(document.getElementById('precioProducto').value.trim());
+  const oferta = document.getElementById('ofertaProducto').checked;
+  const precioOferta = oferta ? parseFloat(document.getElementById('precioProductoDescuento').value.trim()) : 0;
+
+  // Verificar que los campos esenciales no estén vacíos
+  if (nombre && descripcion && !isNaN(precio)) {
+    // Crear un nuevo objeto producto
+    const nuevoProducto = {
+      id: idCounterProducto++, // Asignar un ID único
+      nombre,
+      descripcion,
+      precio,
+      oferta,
+      precioOferta,
+      categoriaId: categoriaSeleccionada // Asignar categoría seleccionada
+    };
+
+    // Agregar el producto al arreglo
+    productos.push(nuevoProducto);
+
+    // Llamar a la función para mostrar los productos de la categoría seleccionada
+    if (categoriaSeleccionada !== null) {
+      mostrarProductosCategoria(categoriaSeleccionada); // Actualizar tabla con productos de la categoría seleccionada
+    } else {
+      mostrarProductos(); // Mostrar todos los productos si no hay categoría activa
+    }
+
+    // Cerrar el modal
+    cerrarModalAgregarProducto();
+  } else {
+    alert("Por favor, complete todos los campos correctamente.");
+  }
 }
 
-// Función para cargar las categorías en el submenú
+// Función para mostrar los productos de una categoría específica
+function mostrarProductosCategoria(categoriaId) {
+  categoriaSeleccionada = categoriaId; // Guardar la categoría seleccionada
+  const productosDeCategoria = productos.filter(p => p.categoriaId === categoriaId); // Filtrar los productos por categoría
+  llenarTablaProductos(productosDeCategoria); // Llenar la tabla con los productos de esa categoría
+}
+
+// Función para mostrar todos los productos
+function mostrarProductos() {
+  // Mostrar todos los productos si no hay categoría seleccionada
+  llenarTablaProductos(productos);
+}
+
+// Función para eliminar un producto
+function eliminarProducto(productoId) {
+  const indice = productos.findIndex(p => p.id === productoId);
+  if (indice !== -1) {
+    productos.splice(indice, 1);
+
+    // Si estamos mostrando productos de una categoría, actualizamos la tabla
+    if (categoriaSeleccionada !== null) {
+      mostrarProductosCategoria(categoriaSeleccionada);
+    } else {
+      mostrarProductos(); // Mostrar todos los productos si no hay categoría activa
+    }
+  }
+}
+
+
+
+
+// Función de búsqueda de productos
+function buscarProductos() {
+  const filtro = document.getElementById('buscadorProducto').value.toLowerCase();
+
+  productosFiltrados = productos.filter(producto => 
+    producto.nombre.toLowerCase().includes(filtro) || 
+    producto.descripcion.toLowerCase().includes(filtro)
+  );
+
+  // Si hay una categoría seleccionada, mostrar solo los productos de esa categoría
+  if (categoriaSeleccionada !== null) {
+    mostrarProductosCategoria(categoriaSeleccionada);
+  } else {
+    llenarTablaProductos(productosFiltrados); // Mostrar productos filtrados
+  }
+}
+
+
+
+
+
+
+
+
+function ordenarPorNombreProducto() {
+  productos.sort((a, b) => {
+      if (a.nombre < b.nombre) return ordenAscendente ? -1 : 1;
+      if (a.nombre > b.nombre) return ordenAscendente ? 1 : -1;
+      return 0;
+  });
+
+  // Cambiar el texto del botón
+  const boton = document.getElementById("ordenarBtn");
+  if (ordenAscendente) {
+      boton.innerHTML = "Ordenar Z-A";
+  } else {
+      boton.innerHTML = "Ordenar A-Z";
+  }
+
+  // Cambiar el estado del orden
+  ordenAscendente = !ordenAscendente;
+
+  // Mostrar los productos ordenados
+  mostrarProductos();
+}
+
+// Función para filtrar productos por nombre
+function filtrarProductos() {
+  const filtro = document.getElementById('filtroNombre').value.toLowerCase();
+  const productosFiltrados = productos.filter(producto => producto.nombre.toLowerCase().includes(filtro));
+
+  // Mostrar los productos filtrados
+  const tabla = document.getElementById('tablaProductos').getElementsByTagName('tbody')[0];
+  tabla.innerHTML = ''; // Limpiar la tabla
+
+  productosFiltrados.forEach(producto => {
+      const row = tabla.insertRow();
+      row.insertCell(0).textContent = producto.nombre;
+      row.insertCell(1).textContent = producto.precio;
+      row.insertCell(2).textContent = producto.categoria;
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+function cambiarPaginaProductos(incremento) {
+  const nuevaPagina = paginaActual + incremento;
+  if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+    paginaActual = nuevaPagina;
+    mostrarProductos(); // Actualizar la tabla con la nueva página
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Función para cargar el submenú de categorías
 function cargarSubmenuCategorias() {
   const submenu = document.getElementById('submenu-categorias');
-  submenu.innerHTML = '';
+  submenu.innerHTML = ''; // Limpiar el submenú
 
   categorias.forEach(categoria => {
     const li = document.createElement('li');
@@ -79,94 +339,12 @@ function cargarSubmenuCategorias() {
   });
 }
 
-// Función para guardar un nuevo producto
-function guardarNuevoProducto() {
-  const nombreProducto = document.getElementById('nombreProducto') ? document.getElementById('nombreProducto').value : '';
-  const descripcionProducto = document.getElementById('descripcionProducto') ? document.getElementById('descripcionProducto').value : '';
-  const precioProducto = parseFloat(document.getElementById('precioProducto') ? document.getElementById('precioProducto').value : '0');
-  const ofertaProducto = document.getElementById('ofertaProducto') ? document.getElementById('ofertaProducto').checked : false;
-  const descuentoSeleccionado = parseFloat(document.getElementById('descuentoSeleccionado') ? document.getElementById('descuentoSeleccionado').value : '0');
-  
-  const precioOferta = ofertaProducto ? (precioProducto - (precioProducto * (descuentoSeleccionado / 100))) : 0;
 
-  // Validaciones
-  if (!nombreProducto || !descripcionProducto || isNaN(precioProducto) || precioProducto <= 0) {
-    alert('Por favor, llena todos los campos correctamente.');
-    return;
-  }
-
-  // Crear un nuevo producto
-  const nuevoProducto = {
-    id: idCounterProductos++, // Incrementar el contador de IDs
-    nombre: nombreProducto,
-    descripcion: descripcionProducto,
-    precio: precioProducto,
-    oferta: ofertaProducto,
-    precioOferta: precioOferta,
-    categoriaId: parseInt(document.getElementById('categoria-id') ? document.getElementById('categoria-id').value : '0')
-  };
-
-  // Agregar el producto al array de productos
-  productos.push(nuevoProducto);
-
-  // Actualizar la tabla de productos
-  llenarTablaProductos(productos);
-
-  // Cerrar el modal
-  cerrarModalAgregarProducto();
-}
-
-// Función para cerrar el modal de agregar producto
-function cerrarModalAgregarProducto() {
-  const modal = document.getElementById('Modal-Agregar-Producto');
-  modal.style.display = 'none'; // Ocultar el modal
-}
-
-// Función para aplicar descuento
-function aplicarDescuento() {
-  const oferta = document.getElementById('ofertaProducto').checked;
-  const descuentoSeleccionado = parseFloat(document.getElementById('descuentoSeleccionado').value);
-  const precioProducto = parseFloat(document.getElementById('precioProducto').value);
-  const precioProductoDescuento = document.getElementById('precioProductoDescuento');
-
-  if (oferta && !isNaN(descuentoSeleccionado) && descuentoSeleccionado > 0) {
-    const precioOferta = precioProducto - (precioProducto * (descuentoSeleccionado / 100));
-    precioProductoDescuento.value = precioOferta;
-    precioProductoDescuento.disabled = false;
-  } else {
-    precioProductoDescuento.value = '';
-    precioProductoDescuento.disabled = true;
-  }
-}
-
-// Función para eliminar un producto
-function eliminarProducto(productoId) {
-  const indice = productos.findIndex(p => p.id === productoId);
-  if (indice !== -1) {
-    productos.splice(indice, 1); // Eliminar el producto del array
-    llenarTablaProductos(productos); // Actualizar la tabla
-  }
-}
-
-// Función para editar un producto (esto puede ser expandido según lo que necesites)
-function editarProducto(productoId) {
-  alert(`Editar producto con ID: ${productoId}`);
-}
-
-// Función para agregar imágenes (esto puede ser expandido según lo que necesites)
-function AgregarImagenes(productoId) {
-  alert(`Agregar imágenes para el producto con ID: ${productoId}`);
-}
-
-// Función para ocultar todas las secciones (esto puede depender de tu implementación de ocultación de secciones)
-function ocultarTodasLasSecciones() {
-  const secciones = document.querySelectorAll('.seccion');
-  secciones.forEach(seccion => {
-    seccion.classList.remove('activa');
-  });
-}
-
-// Ejecutar al cargar la página
+// Ejecutar cuando se cargue la página
+// Ejecutar cuando se cargue la página
 window.addEventListener('DOMContentLoaded', () => {
-  cargarSubmenuCategorias();
+  cargarSubmenuCategorias(); // Cargar las categorías al iniciar
+  mostrarProductos(); // Mostrar todos los productos al iniciar (sin filtro)
 });
+
+

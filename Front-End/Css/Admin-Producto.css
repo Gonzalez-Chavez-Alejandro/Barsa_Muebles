@@ -142,4 +142,7 @@ input#precioProductoDescuento {
   margin: 0 auto; /* Centra el div horizontalmente */
 }
 
-
+td.td-centrado {
+  margin: 1px;
+  padding: 0;
+}
