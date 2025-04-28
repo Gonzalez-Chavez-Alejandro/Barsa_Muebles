@@ -9,7 +9,10 @@
     margin: 7px 25px 5px 106px;
     text-transform: uppercase;
 }
-  
+button.editar-btn-categoria {
+  max-width: 88px;
+  max-height: 36px;
+}
   .btn-agregar-categoria i {
     font-size: 16px;
   }
@@ -134,4 +137,9 @@
         font-size: 16px; /* texto más legible en móviles */
         padding: 12px;
     }
+    button.editar-btn-categoria {
+      max-width: 426px;
+      max-height: 36px;
+      margin-top: -30px;
+  }
 }

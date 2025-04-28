@@ -91,7 +91,7 @@ let categorias = [
     const descripcion = document.getElementById('descripcionCategoria').value.trim();
   
     if (nombre && descripcion) {
-      categorias.push({ nombre, descripcion });
+      categorias.push({id: idCounterCategoria++, nombre, descripcion });
       cerrarModalAgregarCategoria();
       mostrarCategorias();
     }
@@ -119,16 +119,7 @@ let categorias = [
   // Mostrar al cargar
   window.onload = mostrarCategorias;
   // Función para abrir el modal de edición
-function abrirModal(index) {
-  const usuario = usuarios[index];
-  document.getElementById('nombreEditar').value = usuario.nombre;
-  document.getElementById('correoEditar').value = usuario.correo;
-  document.getElementById('telefonoEditar').value = usuario.telefono;
-  document.getElementById('contrasenaEditar').value = usuario.contrasena;
 
-  indiceUsuarioEditando = index; // Guardar el índice del usuario que estamos editando
-  document.getElementById('modalEditar').style.display = 'block'; // Abrir el modal de edición
-}
 
 // Función para cerrar el modal de edición
 function cerrarModal() {

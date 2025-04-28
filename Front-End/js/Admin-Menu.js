@@ -41,34 +41,3 @@ function ocultarTodasLasSecciones() {
   });
 }
 
-// Cargar dinámicamente las categorías en el submenú
-function cargarSubmenuCategorias() {
-  const submenu = document.getElementById('submenu-categorias');
-  submenu.innerHTML = '';
-
-  categorias.forEach(categoria => {
-    const li = document.createElement('li');
-    li.classList.add('submenu-item');
-    li.innerHTML = `
-      <a href="#" onclick="mostrarProductosCategoria(${categoria.id}, '${categoria.nombre}')">
-        ${categoria.nombre}
-      </a>
-    `;
-    submenu.appendChild(li);
-  });
-}
-
-// Mostrar la sección de productos con la categoría seleccionada
-function mostrarProductosCategoria(idCategoria, nombreCategoria) {
-  ocultarTodasLasSecciones();
-  document.getElementById('productos').classList.add('activa');
-  document.getElementById('categoria-titulo').textContent = `Productos de ${nombreCategoria}`;
-  document.getElementById('categoria-id').value = idCategoria;
-  document.getElementById('formulario-producto').classList.add('activa');
-  menuLateral.classList.remove("mostrar-menu");
-}
-
-// Ejecutar al cargar la página
-window.addEventListener('DOMContentLoaded', () => {
-  cargarSubmenuCategorias();
-});

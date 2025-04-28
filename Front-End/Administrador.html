@@ -265,7 +265,7 @@
         <!-- Modal para agregar nuevo usuario -->
 <!-- ------------------------------------------------ -->
   
-<div id="modalAgregar" class="modal">
+<div id="modalAgregarUsuario" class="modal">
   <div class="modal-contenido">
     <h3>Agregar Usuario</h3>
     
@@ -286,13 +286,14 @@
     <span id="errorContrasenaNuevo" class="error"></span>
 
     <div class="modal-acciones">
-      <button class="btn-guardar" onclick="guardarNuevoUsuario()">
+      <button class="btn-guardar" onclick="guardarNuevo()">
         <i class="fas fa-user-plus"></i> Guardar
       </button>
-      <button class="btn-cancelar" onclick="cerrarModalAgregar()">Cancelar</button>
+      <button class="btn-cancelar" onclick="cerrarModalAgregarUsuario()">Cancelar</button>
     </div>
   </div>
 </div>
+
 
 
 <!-- ------------------------------------------------ -->
@@ -350,7 +351,7 @@
 
   
 <!-- ------------------------------------------------ -->
-        <!-- Modal para agregar nuevo usuario -->
+        <!-- Modal para agregar nuevo Productos -->
 <!-- ------------------------------------------------ -->
   
 <div id="Modal-Agregar-Producto" class="modal">
@@ -360,42 +361,56 @@
     <!-- Aquí puedes cambiar los campos para productos si quieres -->
 
     <label>Nombre del Producto:</label>
-    <input type="text" id="nombreProducto">
+    <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
     <span id="errorNombreProducto" class="error"></span>
 
     <label>Descripción:</label>
-    <input type="text" id="descripcionProducto">
+    
+    <textarea id="descripcionCategoria" placeholder="Descripción"></textarea>
     <span id="errorDescripcionProducto" class="error"></span>
 
     <label>Precio:</label>
-    <input type="number" id="precioProducto">
+    <input type="number" id="precioProducto" placeholder="Precio">
     <span id="errorPrecioProducto" class="error"></span>
 
-    <div class="checkbox-linea">
-      <input type="checkbox" id="ofertaProducto">
-      <label class="Oferta" for="ofertaProducto">Oferta:</label>
-    </div>
+    <div class="linea%Oferta"> 
+    <div class="contenedor-linea">
+      <div class="checkbox-linea">
+        <input type="checkbox" id="ofertaProducto">
+        <label class="Oferta" for="ofertaProducto" placeholder="Precio">Oferta</label>
+      </div>
     
-    <div class="descuento-opciones" style="margin-top: 10px;">
-      <label for="descuentoSeleccionado">Descuento (%):</label>
-      <input type="number" id="descuentoSeleccionado" min="0" max="100" oninput="aplicarDescuento()" disabled>
+      <div class="descuento-opciones">
+        <label class="lbl-descuento-productos" for="descuentoSeleccionado">Descuento (%):</label>
+        <div class="input-con-simbolo">
+          <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0" max="100" oninput="aplicarDescuento()" disabled>
+          <span class="simbolo">%</span>
+        </div>
+      </div>
     </div>
-    <label>Precio Descuento:</label>
-    <input type="number" id="precioProductoDescuento">
-    <span id="errorPrecioDescuentoProducto" class="error"></span>
-
+    </div>
+      <div class="campo-precio-descuento">
+        <label class="lbl-descuento-productos">Precio Descuento:</label>
+        <input type="number" placeholder="Precio Descuento" id="precioProductoDescuento" disabled>
+        <span id="errorPrecioDescuentoProducto" class="error"></span>
+      </div>
+      
+  
     <div class="modal-acciones">
       <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
-      <button class="btn-cancelar" onclick="cerrarModalAgregar()">Cancelar</button>
+      <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
     </div>
   </div>
 </div>
 
+<!-- ------------------------------------------------ -->
+        <!-- Modal para Editar un Producto -->
+<!-- ------------------------------------------------ -->
 
 
-
-
-
+<!-- ------------------------------------------------ -->
+        <!-- Modal para Editar Imagenes Producto -->
+<!-- ------------------------------------------------ -->
 
 
 
@@ -408,28 +423,16 @@
 <!-- ------------------------------------------------ -->
   <script>
    
-    function abrirModalAgregar() {
-      document.getElementById('modalAgregar').style.display = 'block';
-    }
 
-    function cerrarModalAgregar() {
-      document.getElementById('modalAgregar').style.display = 'none';
-    }
-
-    function guardarNuevoUsuario() {
-      // Aquí va tu lógica para validar y guardar
-      alert('Usuario agregado correctamente');
-      cerrarModalAgregar();
-    }
 
   </script>
   <script src="js/Admin-Categorias.js"> </script>
-  <script src="js/Admin.js"></script>
-  <script src="js/Admin-Menu.js"></script>
+  
   <script src="js/Admin-Table-users.js"></script>
   <script src="js/Admin-Productos.js"></script>
   <script src="js/Ofertas.js"></script>
   <script src="js/Admin-Modal-Productos.js"></script>
-  
+  <script src="js/Admin-Productos-Ofertas.js"></script>
+  <script src="js/Admin-Menu.js"></script>
 </body>
 </html>

@@ -27,9 +27,119 @@
   text-align: center !important;    /*Con !important! Gana siempre este estilo, pase lo que pase.*/
 }
 
-.checkbox-linea {
-  display: flex;
-  margin: 0 423px 0 0;
-  align-items: center;
-  gap: 10px; /* Espacio entre checkbox y texto */
+
+
+.delete-btn-producto {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 11px;
+  margin-top: 5px;
 }
+.edit-btn-producto {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 10px;
+}
+
+.delete-btn-producto,.edit-btn-producto {
+ 
+  margin-right: 0px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex
+;
+  align-items: center;
+  gap: 0px;
+  transition: transform 0.2sease, box-shadow 0.3sease;
+}
+.delete-btn-producto {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px 11px;
+}
+/* Estilo para el botón */
+.btn-agregar-imagenes {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  gap: 8px;  /* Espacio entre el ícono y el texto */
+}
+
+/* Estilo para el ícono */
+.icono-imagen {
+  font-size: 16px;  /* Ajusta el tamaño del ícono si es necesario */
+}
+
+.descuento-opciones {
+ 
+  display: flex; /* Pone el label y el input en la misma línea */
+  align-items: center; /* Centra verticalmente */
+  gap: 10px; /* Espacio entre el label y el input */
+}
+
+/* Opcional: puedes darle estilos al input para que no sea tan pequeño */
+#descuentoSeleccionado {
+  width: 80px;
+  padding: 4px;
+}
+.contenedor-linea {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* <- ¡Esto evita que se salga! */
+  max-width: 100%; /* <- ¡Esto lo obliga a respetar el ancho del modal! */
+  box-sizing: border-box; /* <- Asegura que padding/margin no lo haga más grande */
+}
+
+
+.checkbox-linea, .descuento-opciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-descuento-escribir-productos {
+  width: 80px; /* Puedes ajustar el ancho del input */
+  padding: 4px;
+}
+label.lbl-descuento-productos {
+  margin: 0;
+}
+.input-con-simbolo {
+  position: relative;
+  display: inline-block;
+}
+
+.input-con-simbolo input {
+  padding-right: 20px; /* Espacio para el % */
+}
+
+
+.simbolo {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-right: 8px;
+  transform: translateY(-50%);
+  color: #555; /* Color gris suave */
+  pointer-events: none; /* Para que no bloquee el input */
+}
+
+input#precioProductoDescuento {
+  max-width: 396px;
+  margin-left: 3px;
+}
+.descuento-opciones {
+  width: 300px; /* O el tamaño que prefieras */
+  margin: 0 auto; /* Centra el div horizontalmente */
+}
+
+

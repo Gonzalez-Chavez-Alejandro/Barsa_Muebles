@@ -17,17 +17,6 @@ let usuarios = [
 
 let usuariosFiltrados = [...usuarios];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("toggleMenu");
-  const menuLateral = document.getElementById("menuLateral");
-
-  toggleBtn.addEventListener("click", () => {
-    menuLateral.classList.toggle("hidden");
-  });
-
-  mostrarUsuarios(paginaActual);
-});
-
 function mostrarSeccion(id) {
   const secciones = document.querySelectorAll('.seccion');
   secciones.forEach(seccion => seccion.classList.remove('activa'));
@@ -166,8 +155,8 @@ function ordenarPorNombre() {
   mostrarUsuarios(paginaActual);
 }
 
-// Guardar nuevo usuario
-function guardarNuevoUsuario() {
+
+function guardarNuevo() {
   const nombre = document.getElementById('nombreNuevo').value;
   const correo = document.getElementById('correoNuevo').value;
   const telefono = document.getElementById('telefonoNuevo').value;
@@ -178,38 +167,72 @@ function guardarNuevoUsuario() {
     return;
   }
 
+  // Crear el nuevo usuario
   const nuevoUsuario = {
-    id: idCounter++,
+    id: idCounter++,  // Asegúrate de que idCounter esté actualizado
     nombre,
     correo,
     telefono,
     contrasena
   };
 
+  // Agregar el nuevo usuario al arreglo
   usuarios.push(nuevoUsuario);
-  usuariosFiltrados = [...usuarios];
+  usuariosFiltrados = [...usuarios];  // Actualizar la lista de usuarios filtrados
+
+  // Mostrar los usuarios en la tabla
   mostrarUsuarios(paginaActual);
+
+  // Cerrar el modal de agregar usuario
   cerrarModalAgregar();
+  cerrarModalAgregarUsuario();
+  // Mostrar mensaje de éxito
   alert("Usuario agregado correctamente");
 }
 
 function cerrarModalAgregar() {
-  document.getElementById('modalAgregar').style.display = 'none';
+  const modal = document.getElementById('modalAgregarUsuario');
+  if (modal) {
+    modal.style.display = 'none'; // Cerrar el modal si el elemento existe
+  } else {
+    console.error('No se encontró el modal con id "modalAgregarUsuario"');
+  }
 }
+
+
+function abrirModalAgregar() {
+  document.getElementById('modalAgregarUsuario').style.display = 'block';
+}
+
+function cerrarModalAgregarUsuario() {
+  const modal = document.getElementById('modalAgregarUsuario');
+  if (modal) {
+    modal.style.display = 'none'; // Cierra el modal si el elemento existe
+  } else {
+    console.error('No se encontró el modal con id "modalAgregarUsuario"');
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Ahora, el DOM está completamente cargado, por lo que puedes manipular los elementos
   const toggleBtn = document.getElementById("toggleMenu");
   const menuLateral = document.getElementById("menuLateral");
 
-  toggleBtn.addEventListener("click", () => {
-    menuLateral.classList.toggle("hidden");
-  });
+  if (toggleBtn && menuLateral) {
+    toggleBtn.addEventListener("click", () => {
+      menuLateral.classList.toggle("hidden");
+    });
+  } else {
+    
+  }
 
   mostrarUsuarios(paginaActual);
-
-  // ✅ Mostrar la sección de usuarios al cargar
-  mostrarSeccion('usuarios');
 });
-
+function guardarNuevoUsuario() {
+  // Aquí va tu lógica para validar y guardar
+  alert('Usuario agregado correctamente');
+  cerrarModalAgregar();
+}
 
 
 mostrarUsuarios(paginaActual);
