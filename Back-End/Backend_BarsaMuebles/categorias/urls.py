@@ -1,7 +1,8 @@
 from django.urls import path
 
-from comentarios.views import CommentView
+from categorias.views import CategoryView, CategoryListView
 
 urlpatterns=[
-    path('registro/', CommentView.as_view(), name='comentarios'),
+    path('registro/', CategoryView.as_view(), name='categoria'),
+    path('consulta/', CategoryListView.as_view(), name='categoriasList')
 ]
