@@ -107,6 +107,302 @@ const productos = [
     oferta: false,
     precioOferta: 0,
     categoriaId: 1
+  },{
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Mesa redonda",
+    descripcion: "Mesa para comedor",
+    precio: 3500,
+    oferta: false,
+    precioOferta: 0,
+    categoriaId: 1
+  },
+  {
+    id: idCounterProducto++,
+    nombre: "Silla moderna",
+    descripcion: "Silla de madera con respaldo",
+    precio: 1200,
+    oferta: true,
+    precioOferta: 999,
+    categoriaId: 1
   }
 ];
 
@@ -305,9 +601,12 @@ function cambiarPaginaProductos(incremento) {
   const nuevaPagina = paginaActual + incremento;
   if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
     paginaActual = nuevaPagina;
+    // Recalcular las páginas
+    totalPaginas = Math.ceil(productos.length / productosPorPagina);
     mostrarProductos(); // Actualizar la tabla con la nueva página
   }
 }
+mostrarProductos(); // Actualizar la tabla con la nueva página
 
 
 
