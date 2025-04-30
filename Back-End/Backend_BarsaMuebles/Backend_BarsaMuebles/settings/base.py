@@ -23,7 +23,6 @@ LOCAL_APPS = [
     'categorias',
     'ventas',
     'muebles',
-    'calificaciones',
     'comentarios',
     'autenticacion',
 ]
