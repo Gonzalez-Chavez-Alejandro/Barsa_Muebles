@@ -1,20 +1,20 @@
 let idCounterproductos = 1;
 const productos = [
-  {id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  {id: idCounterproductos++, nombre: "aSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "bSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "cMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "dSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "fMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "gSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "hMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "jSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "lMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "mSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "mMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "oSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "pSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "qMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
+  { id: idCounterproductos++, nombre: "rSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
   { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
   { id: idCounterproductos++, nombre: "Silla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
   { id: idCounterproductos++, nombre: "Mesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
@@ -24,7 +24,8 @@ const productos = [
 
 let paginaActualProductos = 1;
 const productosPorPagina = 10;
-let productoEliminar = null;
+let ordenAscendentep = true; 
+let productosFiltradosGlobal = [...productos]; // Comienza mostrando todos
 
 
 function cambiarPaginaProductos(direccion) {
@@ -103,4 +104,65 @@ function confirmarEliminarProducto() {
       cambiarPaginaProductos(0); // refrescar productos
     }
   }
+}
+
+function buscarProductos() {
+  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
+  const productosFiltrados = productos.filter(p =>
+    p.nombre.toLowerCase().includes(termino) ||
+    p.descripcion.toLowerCase().includes(termino)
+  );
+  paginaActualProductos = 1;
+  llenarTablaProductos(productosFiltrados.slice(0, productosPorPagina));
+  document.getElementById('paginaActualProductos').textContent = `Página 1`;
+  document.getElementById('totalPaginasProductos').textContent = `de ${Math.ceil(productosFiltrados.length / productosPorPagina)}`;
+}
+
+
+function cambiarPaginaProductos(direccion) {
+  const totalProductos = productosFiltradosGlobal.length;
+  const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
+
+  paginaActualProductos += direccion;
+
+  if (paginaActualProductos < 1) paginaActualProductos = 1;
+  if (paginaActualProductos > totalPaginas) paginaActualProductos = totalPaginas;
+
+  const inicio = (paginaActualProductos - 1) * productosPorPagina;
+  const fin = inicio + productosPorPagina;
+  const productosPaginados = productosFiltradosGlobal.slice(inicio, fin);
+
+  llenarTablaProductos(productosPaginados);
+
+  document.getElementById('paginaActualProductos').textContent = `Página ${paginaActualProductos}`;
+  document.getElementById('totalPaginasProductos').textContent = `de ${totalPaginas}`;
+}
+
+function buscarProductos() {
+  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
+  productosFiltradosGlobal = productos.filter(p =>
+    p.nombre.toLowerCase().includes(termino) ||
+    p.descripcion.toLowerCase().includes(termino)
+  );
+  paginaActualProductos = 1;
+  cambiarPaginaProductos(0); // Recargar la tabla con los resultados filtrados
+}
+ // Usamos tu variable en lugar de "ordenAscendente"
+
+function ordenarPorNombreProducto() {
+  ordenAscendentep = !ordenAscendentep;  // Alternar entre verdadero y falso
+
+  // Ordenar los productos alfabéticamente, alternando entre ascendente y descendente
+  productosFiltradosGlobal.sort((a, b) => {
+    if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) return ordenAscendentep ? -1 : 1;
+    if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) return ordenAscendentep ? 1 : -1;
+    return 0;
+  });
+
+  // Mostrar los productos ordenados en la página actual
+  cambiarPaginaProductos(0);  // Esto recarga la página actual con los productos ordenados
+
+  // Actualizar el texto del botón según el orden
+  const boton = document.getElementById('ordenarBtn');
+  boton.textContent = ordenAscendentep ? 'Ordenar Z-A' : 'Ordenar A-Z';  // Cambiar el texto del botón
 }

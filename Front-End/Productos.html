@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subir Imagen a Cloudinary</title>
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+</head>
+<body>
+  <h2>Subir Imagen a Cloudinary</h2>
+  <button id="upload_widget" class="cloudinary-button">Subir Imagen</button>
+
+  <script>
+    const widget = cloudinary.createUploadWidget({
+      cloudName: 'dacrpsl5p',  // Tu Cloud Name
+      uploadPreset: 'formulario',  // El preset de carga que has configurado
+      sources: ['local', 'url', 'camera'],  // Opciones de origen
+      multiple: false,  // Si permites solo una imagen a la vez
+    }, (error, result) => {
+      if (error) {
+        console.log('Error al subir la imagen: ', error);
+      } else {
+        console.log('Imagen subida con éxito: ', result);
+        if (result.event === 'success') {
+          console.log('URL de la imagen: ', result.info.secure_url);
+          alert('Imagen subida con éxito!');
+
+          // Después de la carga exitosa, enviamos la URL al backend
+          fetch('http://localhost:5000/guardar_url', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              url: result.info.secure_url,  // Aquí envías la URL de la imagen subida
+            }),
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log('URL guardada:', data);
+          })
+          .catch(err => console.error('Error al enviar la URL al backend:', err));
+        }
+      }
+    });
+
+    // Asocia el evento al botón
+    document.getElementById("upload_widget").addEventListener("click", function () {
+      widget.open();  // Abre el widget de carga
+    }, false);
+  </script>
+</body>
+</html>

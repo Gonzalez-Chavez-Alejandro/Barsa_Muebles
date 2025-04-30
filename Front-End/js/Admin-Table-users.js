@@ -16,6 +16,7 @@ let usuarios = [
 ];
 
 let usuariosFiltrados = [...usuarios];
+let productosBusqueda = [];
 
 function mostrarSeccion(id) {
   const secciones = document.querySelectorAll('.seccion');
