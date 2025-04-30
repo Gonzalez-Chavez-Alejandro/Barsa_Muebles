@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Subir Imagen a Cloudinary</title>
+  <style>
+    /* Scroll suave */
+    .scroll-suave {
+      scroll-behavior: smooth;
+    }
+
+    /* Menú */
+    .menu {
+      background-color: #333;
+      padding: 10px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .menu-link {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding-bottom: 5px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .menu-link:hover {
+      text-decoration: none;
+      border-bottom: 2px solid white;
+    }
+
+    .menu-link.active {
+      border-bottom: 2px solid white;
+    }
+
+    /* Secciones */
+    .seccion {
+      min-height: 100vh;
+      padding: 50px;
+      display: none; /* Ocultas por defecto */
+    }
+
+    .seccion.active {
+      display: block;
+    }
+
+    /* Área de preview */
+    .preview {
+      width: 300px;
+      height: 300px;
+      border: 2px dashed #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin-top: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    /* Cuando está activo después de subir */
+    .preview.subido {
+      border: 2px solid #4CAF50;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Flecha girando */
+    .spinner {
+      font-size: 50px;
+      color: #666;
+      animation: girar 1s linear infinite;
+    }
+
+    @keyframes girar {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Imagen ajustada */
+    .preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+  </style>
+</head>
+
+<body class="scroll-suave">
+
+  <!-- Menú principal -->
+  <nav class="menu">
+    <a id="linkSubir" class="menu-link active">Subir Imagen</a>
+    <a id="linkOtro" class="menu-link">Otro Menú</a>
+  </nav>
+
+  <!-- Sección de Subir Imagen -->
+  <section id="subir" class="seccion active">
+    <h1>Subir Imagen</h1>
+
+    <input type="file" id="fileInput">
+    <button id="uploadButton">Subir Imagen</button>
+
+    <div id="preview" class="preview">
+      <!-- Loader o imagen aparecerán aquí -->
+    </div>
+
+    <h2>Enlace de la Imagen</h2>
+    <textarea id="imageUrl" rows="4" cols="50" readonly placeholder="Aquí aparecerá el enlace de la imagen..."></textarea>
+  </section>
+
+  <!-- Otra sección -->
+  <section id="otro" class="seccion">
+    <h1>Otro Menú</h1>
+    <p>Este es otro menú que puedes usar para agregar más contenido en el futuro.</p>
+  </section>
+
+  <script>
+    const cloudName = 'dacrpsl5p'; // Tu nombre de Cloudinary
+    const uploadPreset = 'prueba'; // Tu upload preset
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadButton = document.getElementById('uploadButton');
+    const preview = document.getElementById('preview');
+    const imageUrl = document.getElementById('imageUrl');
+
+    const linkSubir = document.getElementById('linkSubir');
+    const linkOtro = document.getElementById('linkOtro');
+    const sectionSubir = document.getElementById('subir');
+    const sectionOtro = document.getElementById('otro');
+
+    let lastUploadedFileName = null;
+
+    // Cambiar entre menús
+    linkSubir.addEventListener('click', () => {
+      sectionSubir.classList.add('active');
+      sectionOtro.classList.remove('active');
+      linkSubir.classList.add('active');
+      linkOtro.classList.remove('active');
+    });
+
+    linkOtro.addEventListener('click', () => {
+      sectionSubir.classList.remove('active');
+      sectionOtro.classList.add('active');
+      linkOtro.classList.add('active');
+      linkSubir.classList.remove('active');
+    });
+
+    // Subir imagen
+    uploadButton.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Por favor selecciona una imagen');
+        return;
+      }
+
+      if (file.name === lastUploadedFileName) {
+        const confirmacion = confirm('¿Estás seguro de subir la misma imagen otra vez?');
+        if (!confirmacion) {
+          return;
+        }
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', uploadPreset);
+
+      try {
+        preview.innerHTML = `<div class="spinner">🔄</div>`;
+        preview.classList.remove('subido');
+        imageUrl.value = '';
+
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        console.log('Respuesta completa:', data);
+
+        if (data.secure_url) {
+          preview.innerHTML = `<img src="${data.secure_url}" alt="Imagen subida">`;
+          preview.classList.add('subido');
+          imageUrl.value = data.secure_url;
+          lastUploadedFileName = file.name;
+        } else {
+          preview.innerHTML = `<p>Error al subir: ${data.error.message}</p>`;
+          preview.classList.remove('subido');
+          console.error('Error de Cloudinary:', data.error.message);
+        }
+
+      } catch (error) {
+        console.error('Error de red o de JavaScript:', error);
+        preview.innerHTML = `<p>Error al subir imagen</p>`;
+        preview.classList.remove('subido');
+        imageUrl.value = '';
+      }
+    });
+  </script>
+
+</body>
+</html>

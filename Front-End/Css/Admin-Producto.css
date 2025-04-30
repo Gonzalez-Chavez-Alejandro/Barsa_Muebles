@@ -146,3 +146,34 @@ td.td-centrado {
   margin: 1px;
   padding: 0;
 }
+
+.modal-contenido-producto {
+  background-color: #fff0f0;
+  border: 2px solid red;
+  color: #a70000;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+}
+
+.cancelar-btn-producto-Modal {
+  padding: 9px 19px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #aaa;
+  color: white;
+  max-width: 105px;
+  text-transform: uppercase;
+}
+
+.delete-btn-producto-Modal {
+  background-color: red;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 27px 0px 0px;
+}

@@ -62,10 +62,6 @@ let categorias = [
     document.getElementById('modalAgregarCategoria').style.display = 'flex';
   }
   
-  function cerrarModalAgregarCategoria() {
-    document.getElementById('modalAgregarCategoria').style.display = 'none';
-  }
-  
   function abrirModalEditarCategoria(index) {
     categoriaEditando = index;
     document.getElementById('editarNombreCategoria').value = categorias[index].nombre;
@@ -76,16 +72,21 @@ let categorias = [
   function cerrarModalEditarCategoria() {
     document.getElementById('modalEditarCategoria').style.display = 'none';
   }
+  function cerrarModalEliminarCategoria() {
+    document.getElementById('modalEliminarCategoria').style.display = 'none';
+  }
   
   function abrirModalEliminarCategoria(index) {
     categoriaAEliminar = index;
     document.getElementById('modalEliminarCategoria').style.display = 'flex';
   }
-  
-  function cerrarModalEliminarCategoria() {
-    document.getElementById('modalEliminarCategoria').style.display = 'none';
+
+  function cerrarModalAgregarCategoria() {
+    document.getElementById('modalAgregarCategoria').style.display = 'none';
   }
   
+  
+
   function guardarCategoria() {
     const nombre = document.getElementById('nombreCategoria').value.trim();
     const descripcion = document.getElementById('descripcionCategoria').value.trim();

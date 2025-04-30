@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="Css/Admin-Lista-Usuarios.css">
   <link rel="stylesheet" href="Css/categoria.css">
   <link rel="stylesheet" href="Css/Admin-Producto.css">
+
 </head>
 <body>
 <!-- ----------------------------------------------- -->
@@ -116,7 +117,7 @@
         </div>
         <div class="paginacion">
           <button id="paginaAnterior" onclick="cambiarPagina(-1)">Anterior</button>
-          <span id="paginaActual">Página 1</span>
+          <span id="paginaActual">Página 1 de</span>
           <span id="totalPaginas">2</span>
           <button id="paginaSiguiente" onclick="cambiarPagina(1)">Siguiente</button>
         </div>
@@ -205,10 +206,10 @@
               </table>
               <div class="paginacion">
                 <button onclick="cambiarPaginaProductos(-1)">Anterior</button>
-                <span id="paginaActualProductos">Página 1</span>
-                <span id="totalPaginasProductos">1</span>
+                <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginasProductos">de 0</span>
                 <button onclick="cambiarPaginaProductos(1)">Siguiente</button>
               </div>
+              
             </div>
           </div>
         </div>
@@ -422,6 +423,19 @@
 <!-- ------------------------------------------------ -->
 
 
+<!-- ----------------------------------------------- -->
+            <!-- Modal de confirmación Producto eliminar -->
+<!-- ----------------------------------------------- -->
+  
+<div id="modalEliminarProducto" class="modal" style="display: none;">
+  <div class="modal-contenido-producto">
+    <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
+    <h3>¿Estás seguro que deseas eliminar este producto?</h3>
+    <button class="delete-btn-producto-Modal" onclick="confirmarEliminarProducto()">Sí, eliminar</button>
+    <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
+  </div>
+</div>
+
 
 <!-- ---------------------------------------------------------------------- -->
 
@@ -431,31 +445,13 @@
                 <!----- Scripts ----->
 <!-- ------------------------------------------------ -->
   <script>
-   
-   let ordenAscendente = true; // Variable para controlar el orden
-
-function ordenarPorNombreProducto() {
-    // Aquí va tu código para ordenar los productos (A-Z o Z-A)
     
-    // Cambiar el texto del botón
-    const boton = document.getElementById("ordenarBtn");
-    if (ordenAscendente) {
-        boton.innerHTML = "Ordenar Z-A";
-    } else {
-        boton.innerHTML = "Ordenar A-Z";
-    }
-
-    // Cambiar el estado del orden
-    ordenAscendente = !ordenAscendente;
-
-    // Llama a tu función de ordenamiento aquí
-    // Por ejemplo: ordenarProductos(ordenAscendente);
-}
-
+    
   </script>
+   <script src="js/Admin-Table-users.js"></script>
   <script src="js/Admin-Categorias.js"> </script>
-  
-  <script src="js/Admin-Table-users.js"></script>
+  <script src="js/submenu.js"></script>
+ 
   <script src="js/Admin-Productos.js"></script>
   <script src="js/Ofertas.js"></script>
   <script src="js/Admin-Modal-Productos.js"></script>

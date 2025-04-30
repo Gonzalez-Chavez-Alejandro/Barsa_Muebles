@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Subir Imagen Cloudinary</title>
+</head>
+<body>
+
+  <h1>Subir y Borrar Imagen (Versión Simple)</h1>
+
+  <input type="file" id="fileInput">
+  <button id="uploadButton">Subir Imagen</button>
+
+  <div id="resultado"></div>
+
+  <button id="deleteButton" style="display:none;">Borrar Imagen</button>
+
+  <script>
+    const cloudName = 'dacrpsl5p'; // Tu usuario
+    const uploadPreset = 'formulario'; // Tu preset
+
+    let imagenSubidaUrl = ''; // Guardar URL subida
+
+    document.getElementById('uploadButton').addEventListener('click', async () => {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Selecciona un archivo primero');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', uploadPreset);
+
+      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+      try {
+        const response = await fetch(cloudinaryUrl, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        imagenSubidaUrl = data.secure_url;
+
+        document.getElementById('resultado').innerHTML = `
+          <h2>Imagen subida:</h2>
+          <img src="${imagenSubidaUrl}" width="300">
+        `;
+
+        document.getElementById('deleteButton').style.display = 'inline-block';
+
+      } catch (error) {
+        console.error('Error subiendo:', error);
+        alert('Error subiendo imagen');
+      }
+    });
+
+    document.getElementById('deleteButton').addEventListener('click', () => {
+      if (!imagenSubidaUrl) {
+        alert('No hay imagen para borrar');
+        return;
+      }
+
+      if (confirm('¿Seguro que quieres borrar la imagen de la página? (No se borra de Cloudinary todavía)')) {
+        document.getElementById('resultado').innerHTML = '';
+        document.getElementById('deleteButton').style.display = 'none';
+        imagenSubidaUrl = '';
+      }
+    });
+  </script>
+
+</body>
+</html>
