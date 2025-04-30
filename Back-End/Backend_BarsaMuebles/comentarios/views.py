@@ -1,10 +1,12 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from comentarios.serializers import CommentSerializer
 
 class CommentView(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
