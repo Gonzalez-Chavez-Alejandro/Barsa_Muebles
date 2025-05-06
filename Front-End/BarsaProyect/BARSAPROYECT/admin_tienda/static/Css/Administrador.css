@@ -1,0 +1,178 @@
+/* Estilos generales */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  /* Menú lateral */
+  .menu-lateral {
+    width: 250px;
+    height: 100vh;
+    background-color: #1e272e;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    padding-top: 52px;
+    transition: left 0.3s ease;
+    z-index: 999;
+  }
+  
+  /* Botón de cerrar en la esquina derecha */
+  .cerrar-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+  .cerrar-menu:hover {
+    background-color: transparent;
+  }
+  
+  /* Menú oculto por defecto en pantallas pequeñas */
+  @media (max-width: 768px) {
+    .menu-lateral {
+      left: -260px !important;
+    }
+  
+    .menu-lateral.mostrar-menu {
+      left: 0 !important;
+    }
+  }
+  
+  .menu-lateral .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu-lateral .menu-item {
+    position: relative;
+  }
+  
+  .menu-lateral .menu-button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 2;
+  }
+  
+  .menu-lateral .menu-button:hover {
+    background-color: #485460;
+  }
+  
+  .menu-lateral .menu-button i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  /* Submenús */
+  .submenu {
+    background-color: #2f3640;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .submenu-item {
+    padding: 10px 40px;
+    font-size: 14px;
+    color: #dcdde1;
+    cursor: pointer;
+  }
+  
+  .submenu-item:hover {
+    background-color: #353b48;
+  }
+  
+  .menu-item.activo .submenu {
+    display: block;
+    z-index: 2;
+  }
+  
+  /* Contenido principal */
+  .contenido {
+    margin-left: 250px;
+    padding: 43px 30px 0 30px;
+  }
+  
+  h1 {
+    color: #2c3e50;
+  }
+  
+  /* Botón de menú (solo visible en móvil) */
+  .boton-menu {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background-color: #1e272e;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+   .fa-times:before {
+    color: #1e272e;
+}
+
+  /* Estilos responsive */
+  @media (max-width: 768px) {
+    .menu-lateral {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      position: fixed;
+      z-index: 1000;
+      height: 100%;
+    }
+  
+    .menu-lateral.mostrar-menu {
+      transform: translateX(0);
+      padding: 45px 0 0px 0px;
+    }
+  
+    .contenido {
+      margin-left: 0;
+    }
+  
+    .boton-menu {
+      display: block;
+    }
+  
+    .submenu {
+      padding-left: 30px;
+      position: relative;
+      z-index: 1;
+    }
+  
+    .menu-lateral .menu-button {
+      z-index: 2;
+    }
+    .fa-times:before {
+      color: #f4f4f4;
+  }
+  }

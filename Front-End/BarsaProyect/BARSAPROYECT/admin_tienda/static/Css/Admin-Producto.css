@@ -161,15 +161,7 @@ td.td-centrado {
   padding: 0;
 }
 
-.modal-contenido-producto {
-  background-color: #fff0f0;
-  border: 2px solid red;
-  color: #a70000;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-}
+
 
 .cancelar-btn-producto-Modal {
   padding: 9px 19px;

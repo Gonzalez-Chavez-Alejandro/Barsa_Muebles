@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,13 +9,16 @@
 <!-- ----------------------------------------------- -->
                  <!-- Link Css -->
 <!-- ----------------------------------------------- -->
+
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link rel="stylesheet" href="Css/Administrador.css"> 
-  <link rel="stylesheet" href="Css/Admin-Lista-Usuarios.css">
-  <link rel="stylesheet" href="Css/categoria.css">
-  <link rel="stylesheet" href="Css/Admin-Producto.css">
-  <link rel="stylesheet" href="Css/Admin-Producto-Imagen.css">
+  <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Lista-Usuarios.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/categoria.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Producto.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Producto-Imagen.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
 </head>
 <body>
 <!-- ----------------------------------------------- -->
@@ -82,12 +87,72 @@
   <!-- Contenido principal -->
   <main class="contenido" id="contenidoPrincipal">
     <!-- Sección de inicio -->
-    <section id="inicio" class="seccion activa">
-      <h1>Panel  Administrativo </h1>
-      <p>Selecciona una opción del menú lateral para comenzar.</p>
+    <section id="inicio" class="seccion activa"> 
+      <h1 class="h1-Panel-Administrativo">Panel Administrativo</h1>
+      <p class="descripcion-opcion">Selecciona una opción.</p>
+
+    
+      <div class="contenedor-cards">
+        <!-- Tarjeta de Usuarios -->
+        <div class="card-usuario">
+          <div class="icono-top">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h3>Gestión de Usuarios</h3>
+          <p>Administra los usuarios del sistema: agrega, edita o elimina fácilmente.</p>
+          <button class="card-btn" onclick="mostrarSeccion('usuarios')">
+            <i class="fas fa-users-cog"></i> Ver Usuarios
+          </button>
+        </div>
+    
+        <!-- Tarjeta de Categorías -->
+        <div class="card-categoria">
+          <i class="fas fa-tags icono-top"></i>
+          <h3>Categorías</h3>
+          <p>Administra las categorías de tus productos fácilmente.</p>
+          <button class="card-btn" onclick="mostrarSeccion('categorias')">
+            <i class="fas fa-eye"></i> Ir a Categorías
+          </button>
+        </div>
+    
+        <!-- Tarjeta de Productos -->
+        <div class="card-producto">
+          <i class="fas fa-box-open icono-top"></i>
+          <h3>Productos</h3>
+          <p>Administra los productos disponibles en tu catálogo: crea, edita y elimina fácilmente.</p>
+          <button class="card-btn"  onclick="mostrarSeccion('productos')">
+            <i class="fas fa-eye"></i> Ir a Productos
+          </button>
+        </div>
+      </div>
+
+
+      <div class="botones-muebles">
+        <button onclick="mostrarMueble('sofa')">Sofá</button>
+        <button onclick="mostrarMueble('sala')">Sala</button>
+        <button onclick="mostrarMueble('comedor')">Comedor</button>
+        <button onclick="mostrarMueble('espejo')">Espejo</button>
+        <button onclick="mostrarMueble('otros')">Otros</button>
+      </div>
+      
+      <div id="area-visualizacion">
+        <img id="imagen-mueble"  alt="Sofá" style="max-width:90%; border-radius:20px;" />
+        <div id="nombre-mueble">Sofá</div>
+
+
+
+
+
+
 
 
     </section>
+    
+    
+
+
+
+
  <!-- ----------------------------------------------- -->
              <!-- Sección de Usuarios -->
  <!-- ----------------------------------------------- -->
@@ -186,7 +251,7 @@
               </div>
             </form>
     
-            <div class="table-container">
+            <div id="tablaContainer" class="scroll-container">
               <table class="admin-table">
                 <thead>
                   <tr>
@@ -202,8 +267,8 @@
                       </select>
                     </th>
                     <th>Precio Oferta</th>
-                    <th>Img Home</th>
-                    <th>imagenes</th>
+                    <th>Carpetas</th>
+                    <th>Nombre Imagenes</th>
                     <th>  Acciones  </th>
                   </tr>
                 </thead>
@@ -411,50 +476,89 @@
 <!-- ------------------------------------------------ -->
   
 <!-- Modal para agregar nuevo Producto -->
+
 <div id="Modal-Agregar-Producto" class="modal">
   <div class="modal-contenido">
-    <h3>Agregar Producto</h3>
-    
-    <label>Nombre del Producto:</label>
-    <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
-    <span id="errorNombreProducto" class="error"></span>
+    <div class="campo-descripcion-agregar-producto">
+      <h3>Agregar Producto</h3>
+      <!-- Nombre -->
+      <label for="nombreProducto">Nombre del Producto:</label>
+      <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
+      <span id="errorNombreProducto" class="error"></span>
+      <!-- Descripción -->
+      <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
+      <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
+      <span id="errorDescripcionProducto" class="error"></span>
+    </div>
 
-    <label>Descripción:</label>
-    <input type="text" id="descripcionProducto" placeholder="Descripción del producto">
-    <span id="errorDescripcionProducto" class="error"></span>
+    <hr>
 
-    <label>Precio:</label>
-    <input type="number" id="precioProducto" placeholder="Precio">
-    <span id="errorPrecioProducto" class="error"></span>
-
-    <div class="lineaOferta">
-      <div class="contenedor-linea">
-        <div class="checkbox-linea">
-          <input type="checkbox" id="ofertaProducto">
-          <label class="Oferta" for="ofertaProducto">Oferta</label>
-        </div>
-        <div class="descuento-opciones">
-          <label class="lbl-descuento-productos" for="descuentoSeleccionado">Descuento (%):</label>
-          <div class="input-con-simbolo">
-            <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0" max="100" oninput="aplicarDescuento()" disabled>
+    <div class="precio-oferta-campopreciodescuento-agregar-producto">
+      <!-- Precio -->
+      <label for="precioProducto">Precio:</label>
+      <input type="number" id="precioProducto" placeholder="Precio">
+      <span id="errorPrecioProducto" class="error"></span>
+      
+      <!-- Oferta -->
+      <div class="lineaOferta">
+        <div class="contenedor-linea">
+          <div class="checkbox-linea">
+            <input type="checkbox" id="ofertaProducto">
+            <label class="Oferta" for="ofertaProducto">Oferta</label>
+          </div>
+          <div class="descuento-opciones">
+            <label for="descuentoSeleccionado">Descuento (%):</label>
+            <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0" max="100" disabled>
             <span class="simbolo">%</span>
           </div>
         </div>
       </div>
+      <!-- Campo de Precio Descuento -->
+      <div class="campo-precio-descuento">
+        <label for="precioProductoDescuento">Precio con Descuento:</label>
+        <input type="number" id="precioProductoDescuento" disabled>
+        <span id="errorPrecioDescuentoProducto" class="error"></span>
+      </div>
     </div>
 
-    <div class="campo-precio-descuento">
-      <label class="lbl-descuento-productos">Precio Descuento:</label>
-      <input type="number" placeholder="Precio Descuento" id="precioProductoDescuento" disabled>
-      <span id="errorPrecioDescuentoProducto" class="error"></span>
+    <hr>
+
+    <div class="formularios-carpeta-agregar-producto">
+      <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
+        {% csrf_token %}
+        <div class="campo-formulario">
+          <label for="select-carpetas">Seleccionar carpeta existente:</label>
+          <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
+            {% for carpeta in carpetas %}
+              <option value="{{ carpeta }}">{{ carpeta }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="campo-formulario">
+          <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
+          <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
+          <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
+          <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
+        </div>
+      </form>
+      
+      <div class="campo-subir-imagen">
+        <div class="div-campo-subir-imagen"> 
+          <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
+          <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
+            <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+          </button>
+        </div>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
+        <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+
+        <label for="textareaImagenes">URLs de imágenes:</label>
+        <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
+      </div>
     </div>
-    <div class="campo-subir-imagen">
-      <label>Imagen del Producto:</label>
-      <button type="button" onclick="subirImagenACloudinary()">Subir Imagen</button>
-      <input type="file" id="inputImagenProducto" accept="image/*" style="display: none;">
-      <span id="nombreArchivoImagen" style="font-size: 0.9em;"></span>
-    </div>
-    
+
     <div class="modal-acciones">
       <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
       <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
@@ -466,9 +570,47 @@
 <!-- ------------------------------------------------ -->
         <!-- Modal para Editar un Producto -->
 <!-- ------------------------------------------------ -->
+<!-- Modal de Edición de Producto -->
+ 
+<div id="modalEditarProducto" class="modal">
+  <div class="modal-contenido">
+    <h3>Editar Producto</h3>
+    <form id="formEditarProducto">
+      <input type="hidden" id="editarId">
 
+      <label>Nombre:</label>
+      <input type="text" id="editarNombre" required><br>
 
-<!-- ------------------------------------------------ -->
+      <label>Descripción:</label>
+      <input type="text" id="editarDescripcion" required><br>
+
+      <label>Precio:</label>
+      <input type="number" id="editarPrecio" required><br>
+
+      <label>¿Está en oferta?</label>
+      <select id="editarOferta">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select><br>
+
+      <label>Precio en oferta:</label>
+      <input type="number" id="editarPrecioOferta"><br>
+
+      <label>Carpeta:</label>
+      <input type="text" id="editarCarpeta"><br>
+
+      <label>URL Imagen:</label>
+      <textarea id="editarNombreImagenes"></textarea><br>
+
+      <label>Categoría ID:</label>
+      <input type="number" id="editarCategoriaId"><br>
+
+      <button type="button" onclick="guardarEditarProducto()" id="btnGuardarProducto">Guardar Cambios</button>
+ <button type="button" onclick="cerrarModalEditarProducto()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
         <!-- Modal para Editar Imagenes Producto -->
 <!-- ------------------------------------------------ -->
 
@@ -476,15 +618,16 @@
 <!-- ----------------------------------------------- -->
             <!-- Modal de confirmación Producto eliminar -->
 <!-- ----------------------------------------------- -->
-  
-<div id="modalEliminarProducto" class="modal" style="display: none;">
+
+<div id="modalEliminarProducto" class="modal">
   <div class="modal-contenido-producto">
     <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
     <h3>¿Estás seguro que deseas eliminar este producto?</h3>
-    <button class="delete-btn-producto-Modal" onclick="confirmarEliminarProducto()">Sí, eliminar</button>
+    <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
     <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
   </div>
 </div>
+
 
 
 <!-- ---------------------------------------------------------------------- -->
@@ -493,19 +636,108 @@
 
 <!-- ------------------------------------------------ -->
                 <!----- Scripts ----->
-<!-- ------------------------------------------------ -->
+<!-- ------------------------------------------------ --> 
+
 <script>
+  const muebles = {
+    sofa: {
+      nombre: 'Sofá',
+      imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
+    },
+    sala: {
+      nombre: 'Sala',
+      imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
+    },
+    comedor: {
+      nombre: 'Comedor',
+       imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
+    },
+    espejo: {
+      nombre: 'Espejo',
+           imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
+    },
+    otros: {
+      nombre: 'Otros',
+            imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
+    }
+  };
+
+  function mostrarMueble(tipo) {
+    const mueble = muebles[tipo];
+    document.getElementById('imagen-mueble').src = mueble.imagen;
+    document.getElementById('imagen-mueble').alt = mueble.nombre;
+    document.getElementById('nombre-mueble').textContent = mueble.nombre;
+  }
+</script>
+
+
+
+
+
+<script>
+  /****************************************************************************/
+/************** Gestiona y Guarda en carpeta.txt las carpetas  **************/
+/****************************************************************************/
+
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+ document.getElementById('formulario-carpeta').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const nombreCarpeta = document.getElementById('nombre-carpeta').value.trim();
+    const mensajeError = document.getElementById('mensajeError');
+
+    fetch('{% url "gestionar_carpetas" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken  // Asegúrate que tienes csrfToken definido en JS
+        },
+        body: JSON.stringify({ carpeta: nombreCarpeta })
+    })
+    .then(response => response.json().then(data => ({ ok: response.ok, data })))
+    .then(({ ok, data }) => {
+        if (ok && data.carpetas) {
+            // Actualizar el select
+            const select = document.getElementById('select-carpetas');
+            select.innerHTML = '';
+            data.carpetas.forEach(carpeta => {
+                const option = document.createElement('option');
+                option.value = carpeta;
+                option.textContent = carpeta;
+                select.appendChild(option);
+            });
+
+            // Ocultar mensaje de error si todo salió bien
+            mensajeError.style.display = 'none';
+            mensajeError.textContent = '';
+        } else {
+            // Mostrar mensaje de error
+            mensajeError.style.display = 'block';
+            mensajeError.textContent = data.error || 'Error al guardar la carpeta. Inténtalo de nuevo.';
+        }
+    })
+    .catch(error => {
+        console.error('Error de red o inesperado:', error);
+        mensajeError.style.display = 'block';
+        mensajeError.textContent = 'Debes de ingresar una carpeta o Inténtalo más tarde.';
+    });
+});
+
+
 
 </script>
 
-   <script src="js/Admin-Table-users.js"></script>
-  <script src="js/Admin-Categorias.js"> </script>
-  <script src="js/submenu.js"></script>
-  <script src="js/Admin-Productos.js"></script>
-  <script src="js/Ofertas.js"></script>
-  <script src="js/Admin-Modal-Productos.js"></script>
-  <script src="js/Admin-Productos-Ofertas.js"></script>
-  <script src="js/Admin-Menu.js"></script>
-  <script src="js/Admin-Productos-Menu-Imagenes.js"></script>
+  
+
+
+<script src="{% static 'js/Admin-Menu.js' %}"></script>
+<script src="{% static 'js/Admin-Table-users.js' %}"></script>
+<script src="{% static 'js/Admin-Categorias.js' %}"></script>
+<script src="{% static 'js/submenu.js' %}"></script>
+<script src="{% static 'js/Admin-Productos.js' %}"></script>
+<script src="{% static 'js/Ofertas.js' %}"></script>
+<script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
+<script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
+<script src="{% static 'js/Admin-Productos-Table-Manita.js' %}"></script>
 </body>
 </html>

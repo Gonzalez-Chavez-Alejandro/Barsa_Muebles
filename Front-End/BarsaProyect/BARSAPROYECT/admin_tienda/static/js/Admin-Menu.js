@@ -1,0 +1,43 @@
+// Mostrar/ocultar submenús
+function toggleSubmenu(button) {
+  const li = button.parentElement;
+  li.classList.toggle("activo");
+}
+
+// Mostrar/ocultar menú lateral en móviles
+const botonMenu = document.getElementById("botonMenu");
+const menuLateral = document.getElementById("menuLateral");
+
+botonMenu.addEventListener("click", () => {
+  menuLateral.classList.toggle("mostrar-menu");
+});
+
+const botonCerrar = document.getElementById("cerrarMenu");
+botonCerrar.addEventListener("click", () => {
+  menuLateral.classList.remove("mostrar-menu");
+});
+
+// Mostrar secciones y cerrar menú móvil
+function mostrarSeccion(idSeccion) {
+  ocultarTodasLasSecciones();
+  const seccionActiva = document.getElementById(idSeccion);
+  if (seccionActiva) {
+    seccionActiva.classList.add('activa');
+  }
+  menuLateral.classList.remove("mostrar-menu");
+}
+
+// Mostrar la sección de inicio
+function mostrarInicio() {
+  ocultarTodasLasSecciones();
+  const inicio = document.getElementById('inicio');
+  inicio.classList.add('activa');
+}
+
+// Ocultar todas las secciones
+function ocultarTodasLasSecciones() {
+  document.querySelectorAll('.seccion').forEach(seccion => {
+    seccion.classList.remove('activa');
+  });
+}
+

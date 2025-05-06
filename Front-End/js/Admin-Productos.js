@@ -1,4 +1,4 @@
-let idCounterproductos = 1;
+let idCounterproductos = 1; 
 const productos = [
   {id: idCounterproductos++, nombre: "aSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
   { id: idCounterproductos++, nombre: "bSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
@@ -27,98 +27,6 @@ const productosPorPagina = 10;
 let ordenAscendentep = true; 
 let productosFiltradosGlobal = [...productos]; // Comienza mostrando todos
 
-
-function cambiarPaginaProductos(direccion) {
-  const totalProductos = productos.length;
-  const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
-
-  // Cambiar la página según la dirección
-  paginaActualProductos += direccion;
-
-  // Asegurarse de que la página no se salga de los límites
-  if (paginaActualProductos < 1) paginaActualProductos = 1;
-  if (paginaActualProductos > totalPaginas) paginaActualProductos = totalPaginas;
-
-  // Calcular los índices de inicio y fin de los productos a mostrar
-  const inicio = (paginaActualProductos - 1) * productosPorPagina;
-  const fin = inicio + productosPorPagina;
-  const productosPaginados = productos.slice(inicio, fin);
-
-  // Llenar la tabla con los productos correspondientes
-  llenarTablaProductos(productosPaginados);
-
-  // Actualizar la información de la paginación
-  document.getElementById('paginaActualProductos').textContent = `Página ${paginaActualProductos}`;
-  document.getElementById('totalPaginasProductos').textContent = `de ${totalPaginas}`;
-}
-
-// Inicializar la primera página y mostrar solo los productos de la primera página al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-  cambiarPaginaProductos(0); // Esto asegura que se cargue la primera página
-});
-function llenarTablaProductos(listaProductos) {
-  const tabla = document.getElementById('tablaProductos');
-  tabla.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos productos
-
-  // Insertar los productos correspondientes a la página actual
-  listaProductos.forEach(producto => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${producto.id}</td>
-      <td>${producto.nombre}</td>
-      <td>${producto.descripcion}</td>
-      <td>$${producto.precio}</td>
-      <td class="td-centrado">${producto.oferta ? 'Sí' : 'No'}</td>
-      <td class="td-centrado">${producto.oferta ? '$' + producto.precioOferta : '-'}</td>
-      <td class="td-centrado">
-        <button class="btn-agregar-imagenes" onclick="AgregarImagenes(${producto.id})">
-          <i class="fas fa-image icono-imagen"></i> Imágenes
-        </button>
-      </td>
-      <td class="td-centrado">
-        <button class="edit-btn-producto" onclick="editarProducto(${producto.idCounterproductos})"><i class="fas fa-edit"></i></button>
-        <button class="delete-btn-producto" onclick="abrirModalEliminarProducto(${producto.id})">
-  <i class="fas fa-trash-alt"></i>
-</button>
-
-      </td>
-    `;
-    tabla.appendChild(tr);
-  });
-}
-
-
-function abrirModalEliminarProducto(index) {
-  productoAEliminar = index; // ← no categoriaAEliminar si es producto
-  document.getElementById('modalEliminarProducto').style.display = 'flex';
-}
-function cerrarModalEliminarProducto() {
-  document.getElementById('modalEliminarProducto').style.display = 'none';
-}
-function confirmarEliminarProducto() {
-  if (productoAEliminar !== null) {
-    const index = productos.findIndex(p => p.id === productoAEliminar);
-    if (index !== -1) {
-      productos.splice(index, 1);
-      cerrarModalEliminarProducto();
-      cambiarPaginaProductos(0); // refrescar productos
-    }
-  }
-}
-
-function buscarProductos() {
-  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
-  const productosFiltrados = productos.filter(p =>
-    p.nombre.toLowerCase().includes(termino) ||
-    p.descripcion.toLowerCase().includes(termino)
-  );
-  paginaActualProductos = 1;
-  llenarTablaProductos(productosFiltrados.slice(0, productosPorPagina));
-  document.getElementById('paginaActualProductos').textContent = `Página 1`;
-  document.getElementById('totalPaginasProductos').textContent = `de ${Math.ceil(productosFiltrados.length / productosPorPagina)}`;
-}
-
-
 function cambiarPaginaProductos(direccion) {
   const totalProductos = productosFiltradosGlobal.length;
   const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
@@ -138,6 +46,44 @@ function cambiarPaginaProductos(direccion) {
   document.getElementById('totalPaginasProductos').textContent = `de ${totalPaginas}`;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  cambiarPaginaProductos(0); // Esto asegura que se cargue la primera página
+});
+
+function llenarTablaProductos(listaProductos) {
+  const tabla = document.getElementById('tablaProductos');
+  tabla.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos productos
+
+  listaProductos.forEach((producto, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${producto.id}</td>
+      <td>${producto.nombre}</td>
+      <td>${producto.descripcion}</td>
+      <td>$${producto.precio}</td>
+      <td class="td-centrado">${producto.oferta ? 'Sí' : 'No'}</td>
+      <td class="td-centrado">${producto.oferta ? '$' + producto.precioOferta : '-'}</td>
+      <td class="td-centrado">
+        <button class="btn-agregar-imagen-home" onclick="AgregarImagenesHome(${producto.id})">
+          <i class="fas fa-image icono-imagen"></i> Home
+        </button>
+      </td>
+      <td class="td-centrado">
+        <button class="btn-agregar-imagenes" onclick="AgregarImagenes(${producto.id})">
+          <i class="fas fa-image icono-imagen"></i> Imágenes
+        </button>
+      </td>
+      <td class="td-centrado">
+        <button class="edit-btn-producto" onclick="editarProducto(${index})"><i class="fas fa-edit"></i></button>
+        <button class="delete-btn-producto" onclick="abrirModalEliminarProducto(${index})">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    `;
+    tabla.appendChild(tr);
+  });
+}
+
 function buscarProductos() {
   const termino = document.getElementById('buscadorProducto').value.toLowerCase();
   productosFiltradosGlobal = productos.filter(p =>
@@ -145,24 +91,114 @@ function buscarProductos() {
     p.descripcion.toLowerCase().includes(termino)
   );
   paginaActualProductos = 1;
-  cambiarPaginaProductos(0); // Recargar la tabla con los resultados filtrados
+  cambiarPaginaProductos(0); 
 }
- // Usamos tu variable en lugar de "ordenAscendente"
 
 function ordenarPorNombreProducto() {
-  ordenAscendentep = !ordenAscendentep;  // Alternar entre verdadero y falso
+  ordenAscendentep = !ordenAscendentep;
 
-  // Ordenar los productos alfabéticamente, alternando entre ascendente y descendente
   productosFiltradosGlobal.sort((a, b) => {
     if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) return ordenAscendentep ? -1 : 1;
     if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) return ordenAscendentep ? 1 : -1;
     return 0;
   });
 
-  // Mostrar los productos ordenados en la página actual
-  cambiarPaginaProductos(0);  // Esto recarga la página actual con los productos ordenados
+  cambiarPaginaProductos(0); 
 
-  // Actualizar el texto del botón según el orden
   const boton = document.getElementById('ordenarBtn');
-  boton.textContent = ordenAscendentep ? 'Ordenar Z-A' : 'Ordenar A-Z';  // Cambiar el texto del botón
+  boton.textContent = ordenAscendentep ? 'Ordenar Z-A' : 'Ordenar A-Z';  
+}
+
+let productoEditando = null;
+let productoAEliminarId = null; // Guardar el ID real
+
+function abrirModalEditarProducto(index) {
+  productoEditando = index;
+  const producto = productosFiltradosGlobal[index];
+  document.getElementById('editarNombreProducto').value = producto.nombre;
+  document.getElementById('editarDescripcionProducto').value = producto.descripcion;
+  document.getElementById('editarPrecioProducto').value = producto.precio;
+  document.getElementById('editarOfertaProducto').checked = producto.oferta;
+  document.getElementById('editarPrecioOfertaProducto').value = producto.precioOferta;
+  document.getElementById('modalEditarProducto').style.display = 'flex';
+}
+
+function cerrarModalEditarProducto() {
+  document.getElementById('modalEditarProducto').style.display = 'none';
+}
+
+function guardarEdicionProducto() {
+  if (productoEditando !== null) {
+    const nombre = document.getElementById('editarNombreProducto').value.trim();
+    const descripcion = document.getElementById('editarDescripcionProducto').value.trim();
+    const precio = parseFloat(document.getElementById('editarPrecioProducto').value);
+    const oferta = document.getElementById('editarOfertaProducto').checked;
+    const precioOferta = parseFloat(document.getElementById('editarPrecioOfertaProducto').value);
+
+    if (nombre && descripcion && !isNaN(precio)) {
+      productosFiltradosGlobal[productoEditando] = {
+        ...productosFiltradosGlobal[productoEditando],
+        nombre,
+        descripcion,
+        precio,
+        oferta,
+        precioOferta: oferta ? precioOferta : 0
+      };
+      cerrarModalEditarProducto();
+      cambiarPaginaProductos(0);
+    }
+  }
+}
+
+function abrirModalEliminarProducto(index) {
+  // Obtener el ID del producto desde la lista filtrada
+  productoAEliminarId = productosFiltradosGlobal[index].id;
+  document.getElementById('modalEliminarProducto').style.display = 'flex';
+}
+
+function cerrarModalEliminarProducto() {
+  document.getElementById('modalEliminarProducto').style.display = 'none';
+}
+
+function confirmarEliminarProducto() {
+  if (productoAEliminarId !== null) {
+    // Eliminar producto por ID en el array filtrado
+    productosFiltradosGlobal = productosFiltradosGlobal.filter(p => p.id !== productoAEliminarId);
+    
+    // Si estamos en la última página y la cantidad de productos ha cambiado, ajustamos la página actual
+    const totalProductos = productosFiltradosGlobal.length;
+    const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
+    
+    if (paginaActualProductos > totalPaginas) {
+      paginaActualProductos = totalPaginas; // Si eliminamos en una página que ya no existe, volvemos a la última
+    }
+
+    // Volver a mostrar la tabla con los productos actualizados
+    cambiarPaginaProductos(0); 
+    cerrarModalEliminarProducto(); // Cerrar el modal después de la eliminación
+  }
+}
+
+
+function agregarProducto() {
+  const nombre = document.getElementById('nuevoNombreProducto').value.trim();
+  const descripcion = document.getElementById('nuevoDescripcionProducto').value.trim();
+  const precio = parseFloat(document.getElementById('nuevoPrecioProducto').value);
+  const oferta = document.getElementById('nuevoOfertaProducto').checked;
+  const precioOferta = parseFloat(document.getElementById('nuevoPrecioOfertaProducto').value);
+
+  if (nombre && descripcion && !isNaN(precio)) {
+    const nuevoProducto = {
+      id: idCounterproductos++, // Nuevo ID
+      nombre,
+      descripcion,
+      precio,
+      oferta,
+      precioOferta: oferta ? precioOferta : 0,
+      categoriaId: 1 
+    };
+
+    productos.push(nuevoProducto);
+    cambiarPaginaProductos(0);
+  }
 }
