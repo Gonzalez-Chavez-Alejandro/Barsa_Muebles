@@ -1,0 +1,296 @@
+.sidebar {
+    width: 250px;
+    background-color: #fff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar li:hover,
+.sidebar .categoria-activa {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Contenido principal */
+.contenido-principal {
+    flex: 1;
+    padding: 20px;
+}
+
+#buscador {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Tarjetas */
+.contenedor-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta-producto {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-4px);
+}
+
+.tarjeta-producto img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.contenido {
+    padding: 15px;
+}
+
+.nombre {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.descripcion {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.precio {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.precio .oferta {
+    color: red;
+    margin-right: 10px;
+}
+
+.tarjeta-producto button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tarjeta-producto button:hover {
+    background-color: #218838;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .sidebar ul {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+
+    .sidebar li {
+        white-space: nowrap;
+        padding: 8px 12px;
+    }
+}
+.layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: row;
+}
+
+
+#detalle-producto {
+    display: block;
+    }
+
+
+
+/* Sección detalle (oculta inicialmente) */
+.detalle {
+    display: none;
+    padding: 20px;
+}
+
+.detalle.activo {
+    display: block;
+}
+
+/* Contenedor de detalle */
+.detalle-contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detalle-contenedor img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.detalle-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.precio-detalle {
+    font-size: 1.3rem;
+    margin: 15px 0;
+}
+
+.precio-detalle .oferta {
+    color: red;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.precio-detalle .tachado {
+    text-decoration: line-through;
+    color: #777;
+}
+
+#btn-regresar {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#btn-regresar:hover {
+    text-decoration: underline;
+}
+
+#agregar-carrito-detalle {
+    background-color: #28a745;
+    border: none;
+    padding: 12px;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#agregar-carrito-detalle:hover {
+    background-color: #218838;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .detalle-contenedor {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .detalle-info {
+        flex: 1;
+        padding-left: 20px;
+    }
+}
+
+
+/* Estilos para la galería de imágenes */
+.galeria-producto {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+}
+
+.imagen-principal {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagen-principal img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.miniaturas {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.miniaturas img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.miniaturas img:hover, .miniaturas img.activa {
+    border-color: #007bff;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .imagen-principal {
+        height: 300px;
+    }
+    
+    .miniaturas img {
+        width: 60px;
+        height: 60px;
+    }
+}

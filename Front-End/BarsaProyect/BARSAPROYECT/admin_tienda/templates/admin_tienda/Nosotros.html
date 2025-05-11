@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Nosotros.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body><header>
+    <div class="logo">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png" alt="Barsa Muebles">
+    </div>
+
+    <div class="usuario-carrito">
+      <div class="usuario-container">
+        <div class="icono-usuario" onclick="toggleMenuUsuario()">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div id="menu-usuario" class="menu-usuario">
+          <button class="btn-identificarse">Identificarse</button>
+          <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="#">Empieza aquí.</a></p>
+        </div>
+      </div>
+
+      <button class="btn-carrito" onclick="toggleMenu()">
+        <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png" alt="Carrito" class="icono-carrito-svg">
+        <span>Carrito</span>
+      </button>
+
+    </div>
+  </header>
+  
+
+      
+      
+     
+  <main class="fondo-limitado">     
+  <section class="nosotros">
+    <!-- Decoración flotante -->
+    
+    <div class="contenido">
+      
+        <h1 class="fade-in">
+            <i class="fas fa-couch"></i> <!-- Sofá -->
+            Un poco <span>sobre nosotros</span>
+        </h1>
+        
+      <p class="slide-up">Barsa Muebles: <strong>20 años llenando de vida los hogares de México y el mundo.</strong></p>
+      <p class="slide-up delay-1">
+        Fundada en 2004, <strong>Barsa Muebles</strong> cuenta con un equipo de 52 expertos dedicados a la creación de muebles de calidad superior.
+      </p>
+      <p class="slide-up delay-2">
+        Nuestro compromiso es ofrecer excelencia en cada pieza y superar las expectativas de quienes confían en nosotros.
+      </p>
+
+
+      <div class="timeline">
+        <div class="item fade-in">
+          <h3>2025–2026</h3>
+          <p>“Llena de vida tu espacio” – transformamos hogares en lugares vibrantes y llenos de energía.</p>
+        </div>
+        <div class="item fade-in delay-1">
+          <h3>2024–2025</h3>
+          <p><strong>LLENA TU VIDA DE ESPACIO</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+
+
+      <script>
+        const elements = document.querySelectorAll('.fade-in, .slide-up, .mueble-bounce');
+    
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, { threshold: 0.2 });
+    
+        elements.forEach(el => observer.observe(el));
+      </script>
+    
+      
+     
+   
+     
+   
+     
+
+      
+      <script>
+        function toggleMenuUsuario() {
+            const menu = document.getElementById("menu-usuario");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        window.addEventListener('click', function(e) {
+            const usuario = document.querySelector('.usuario-container');
+            const menu = document.getElementById("menu-usuario");
+            if (!usuario.contains(e.target)) {
+                menu.style.display = "none";
+            }
+        });
+    </script>
+      <script src="{% static 'js/Admin-Categorias.js' %}"></script>
+      <script src="{% static 'js/Admin-Home.js' %}"></script>
+    
+    
+</body>
+</html>

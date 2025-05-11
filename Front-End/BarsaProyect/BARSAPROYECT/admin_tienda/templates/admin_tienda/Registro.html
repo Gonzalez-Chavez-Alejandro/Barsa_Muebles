@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barsa - Registro</title>
+  <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Registro.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Foother.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Estilos para la lluvia de muebles -->
+  <style>
+    /* Estilos existentes se mantienen */
+    
+    /* Nuevos estilos para la lluvia de muebles */
+    .furniture-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    filter: blur(5px); /* Aplicamos desenfoque al contenedor */
+    opacity: 0.7; /* Hacemos los muebles semi-transparentes */
+  }
+  
+  .furniture {
+    position: absolute;
+    opacity: 0.6; /* Transparencia adicional para cada mueble */
+    pointer-events: none;
+  }
+  
+  /* Ajustamos los colores para mejor integración */
+  .door {
+    background-color: #8B4513;
+    border: 2px solid #5D2906;
+  }
+  
+  .drawer {
+    background-color: #CD853F;
+    border: 1px solid #8B4513;
+  }
+  
+  .shelf {
+    background-color: #D2B48C;
+    border: 1px dashed #8B4513;
+  }
+  
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotate(180deg);
+    }
+  }
+  </style>
+</head>
+<body>
+  <!-- Contenedor para la lluvia de muebles -->
+  <div class="furniture-rain" id="furnitureRain"></div>
+  
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png" alt="Barsa Muebles">
+    </div>
+
+    <div class="usuario-carrito">
+      <div class="usuario-container">
+        <div class="icono-usuario" onclick="toggleMenuUsuario()">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div id="menu-usuario" class="menu-usuario">
+          <button class="btn-identificarse">Identificarse</button>
+          <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="#">Empieza aquí.</a></p>
+        </div>
+      </div>
+
+      <button class="btn-carrito" onclick="toggleMenu()">
+        <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png" alt="Carrito" class="icono-carrito-svg">
+        <span>Carrito</span>
+      </button>
+    </div>
+    
+  </header>
+  <div class="Elements"> 
+    <nav>
+        <ul id="menu">
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Productos</a></li>
+            <li><a href="#">Nosotros</a></li>
+            <li><a href="#" class="contact">Contacto</a></li>
+        </ul>
+    </nav>
+  </div>
+
+ <!-- Contenedor del login -->
+<div class="login-container">
+  <!-- Parte izquierda -->
+  <div class="group1-content">
+    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo_B_Blanco_Fnd_ccf24k.png" alt="Logo Barsa" class="google-icon">
+  </div>
+
+  <!-- Parte derecha con el formulario -->
+  <div class="group2-content">
+    <div class="form-wrapper">
+      <h2 class="form-title">Registro</h2>
+      
+      <!-- Campo Nombre -->
+      <div class="form-group">
+        <input type="text" id="nombre" class="form-input" placeholder=" " required />
+        <label for="nombre" class="form-label">Nombre Completo</label>
+        <span class="error-message" id="nombre-error"></span>
+      </div>
+
+      <!-- Campo Correo -->
+      <div class="form-group">
+        <input type="email" id="email" class="form-input" placeholder=" " required />
+        <label for="email" class="form-label">Correo Electrónico</label>
+        <span class="error-message" id="email-error"></span>
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div class="form-group">
+        <input type="password" id="password" class="form-input" placeholder=" " required minlength="8" />
+        <label for="password" class="form-label">Contraseña</label>
+        <span class="error-message" id="password-error"></span>
+      </div>
+
+      <!-- Campo Repetir Contraseña -->
+      <div class="form-group">
+        <input type="password" id="repeat-password" class="form-input" placeholder=" " required />
+        <label for="repeat-password" class="form-label">Repetir Contraseña</label>
+        <span class="error-message" id="repeat-password-error"></span>
+      </div>
+
+      <!-- Campo Teléfono -->
+      <div class="form-group">
+        <input type="tel" id="telefono" class="form-input" placeholder=" " pattern="[0-9]{10}" />
+        <label for="telefono" class="form-label">Teléfono (opcional)</label>
+        <span class="error-message" id="telefono-error"></span>
+      </div>
+
+      <!-- Aceptar Términos -->
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="terms" class="form-checkbox" required>
+        <label for="terms" class="checkbox-label">
+          Acepto los <a href="#" class="terms-link">términos y condiciones</a>
+        </label>
+        <span class="error-message" id="terms-error"></span>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="submit-btn">Registrarse</button>
+
+      <!-- Texto registro -->
+      <div class="register-text">
+        ¿Ya tienes cuenta? <a href="Login.html" class="login-link">Inicia sesión aquí</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<footer class="footer-admin">
+  <div class="footer-main-container">
+      <!-- Logo y Copyright (sección superior) -->
+      <div class="footer-top">
+          <div class="footer-logo-container">
+              <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/1_ddu9az.png" alt="Logo Barsa Muebles" class="footer-logo" id="footer-logo">
+          </div>
+          <div class="footer-copyright" id="footer-copyright">
+              Muebles Barsa ©2025
+          </div>
+      </div>
+
+      <!-- Contenido principal del footer (3 columnas) -->
+      <div class="footer-content">
+          <!-- Columna 1: Enlaces rápidos -->
+          <div class="footer-column" id="footer-links-column">
+              <h3 class="footer-column-title" id="links-title">Enlaces rápidos</h3>
+              <ul class="footer-links-list" id="footer-links-list">
+                  <!-- Los enlaces se cargarán dinámicamente desde el admin -->
+              </ul>
+          </div>
+
+          <!-- Columna 2: Información de contacto -->
+          <div class="footer-column" id="footer-contact-column">
+              <h3 class="footer-column-title" id="contact-title">Contacto</h3>
+              <div class="contact-info" id="contact-info-content">
+                  <!-- La información de contacto se cargará dinámicamente -->
+              </div>
+          </div>
+
+          <!-- Columna 3: Ubicación -->
+          <div class="footer-column" id="footer-location-column">
+              <h3 class="footer-column-title" id="location-title">Ubicación</h3>
+              <div class="location-info" id="location-info-content">
+                  <!-- La información de ubicación se cargará dinámicamente -->
+              </div>
+          </div>
+      </div>
+
+      <!-- Redes sociales -->
+      <div class="footer-social">
+          <h3 class="social-title" id="social-title">Síguenos</h3>
+          <div class="social-icons-container" id="social-icons-container">
+              <!-- Los iconos de redes sociales se cargarán dinámicamente -->
+          </div>
+      </div>
+
+      <!-- Copyright inferior -->
+      <div class="footer-bottom">
+          <div class="footer-bottom-copyright" id="footer-bottom-copyright">
+              Muebles Barsa ©2025 - Todos los derechos reservados
+          </div>
+      </div>
+  </div>
+</footer>
+  <!-- Scripts -->
+  <script>
+    function toggleMenuUsuario() {
+      const menu = document.getElementById("menu-usuario");
+      menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    window.addEventListener('click', function(e) {
+      const usuario = document.querySelector('.usuario-container');
+      const menu = document.getElementById("menu-usuario");
+      if (!usuario.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    });
+
+    window.addEventListener("load", () => {
+      window.dispatchEvent(new Event("resize"));
+      
+      // Iniciar la lluvia de muebles
+      startFurnitureRain();
+    });
+    
+   
+  </script>
+  <script>
+    function startFurnitureRain() {
+      // Crear 3 capas de diferente intensidad
+      for (let layer = 1; layer <= 3; layer++) {
+        const layerDiv = document.createElement('div');
+        layerDiv.className = `furniture-layer layer-${layer}`;
+        document.getElementById('furnitureRain').appendChild(layerDiv);
+        
+        // Crear muebles para esta capa
+        for (let i = 0; i < 10; i++) {
+          setTimeout(() => createFurniture(layerDiv, layer), i * 1000 * layer);
+        }
+        
+        setInterval(() => createFurniture(layerDiv, layer), 1000 * layer);
+      }
+      
+      function createFurniture(layer, layerNum) {
+        const furniture = document.createElement('div');
+        const size = Math.random() * (50 + layerNum * 20) + 30;
+        const duration = Math.random() * (5 + layerNum * 2) + 10;
+        
+        furniture.className = 'furniture';
+        furniture.style.width = `${size}px`;
+        furniture.style.height = `${size * (Math.random() * 0.5 + 0.8)}px`;
+        furniture.style.left = `${Math.random() * 100}%`;
+        furniture.style.top = `-100px`;
+        furniture.style.animation = `fall ${duration}s linear infinite`;
+        furniture.style.backgroundColor = `rgba(139, 69, 19, ${0.2 + layerNum * 0.1})`;
+        
+        layer.appendChild(furniture);
+        
+        setTimeout(() => {
+          furniture.remove();
+        }, duration * 1000);
+      }
+    }
+
+  </script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const data = JSON.parse(localStorage.getItem('footerData'));
+    if (data) {
+      document.querySelector('.p-Correo').innerHTML = `<i class="fas fa-envelope"></i> <strong>Correo: </strong> ${data.correo}`;
+      document.querySelector('.phone-list').innerHTML = `
+        <li>${data.telefono1}</li>
+        <li>${data.telefono2}</li>
+      `;
+      document.querySelector('.p-Ubicacion').nextElementSibling.innerHTML = `
+        <li>${data.ubicacion1}</li>
+        <li>${data.ubicacion2}</li>
+      `;
+
+      const socialContainer = document.querySelector('.social-icons');
+      socialContainer.innerHTML = '';
+      data.redes.forEach(red => {
+        const a = document.createElement('a');
+        a.href = red.url;
+        a.innerHTML = `<i class="${red.icono}"></i>`;
+        a.target = "_blank";
+        socialContainer.appendChild(a);
+      });
+    }
+  });
+</script>
+
+  
+  <script src="{% static 'js/Registro.js' %}"></script>
+  <script src="{% static 'js/Footer.js' %}"></script>
+  <script src="{% static 'js/Animacion-caida.js.js' %}"></script>
+</body>
+</html>
