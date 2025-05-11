@@ -16,7 +16,7 @@ class Muebles(models.Model):
         overwrite=True,
         resource_type='image',
     )
-    userID = models.ManyToManyField(CustomUser)
+    userID = models.ForeignKey(CustomUser, on_delete=models.PROTECT, related_name='users')
 
     def save(self, *args, **kwargs):
         if self.imageFurniture:

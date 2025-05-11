@@ -1,6 +1,8 @@
 from pathlib import Path
 from datetime import timedelta
 
+import cloudinary
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-$4flx2yzof%19ir&*=j5pc%%$s@%o1tb97c=3r9z(q9$(#e%mm'
@@ -46,6 +48,12 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+cloudinary.config(
+    cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=CLOUDINARY_STORAGE['API_SECRET']
+)
 
 # Configuration of Django REST Framework
 REST_FRAMEWORK = {
