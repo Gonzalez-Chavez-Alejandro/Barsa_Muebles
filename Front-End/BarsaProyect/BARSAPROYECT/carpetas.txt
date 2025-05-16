@@ -1,1 +1,1 @@
-Selecciona una carpeta,CARPETA1,CARPETA2,CARPETA3,sadsadasdasd,dsa,CARPETA10
+Selecciona una carpeta,CARPETA1,CARPETA2,CARPETA3,sadsadasdasd,dsa,CARPETA10,categorias/prueba,categorias/

@@ -1,138 +1,123 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Subir Imagen a Cloudinary</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Interruptor con Sol y Luna</title>
+  
+  <!-- APLICAR TEMA ANTES DE CARGAR LA PÁGINA -->
+  <script>
+    const userTheme = localStorage.getItem('theme');
+    if (userTheme === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
+
   <style>
-    /* Scroll suave */
-    .scroll-suave {
-      scroll-behavior: smooth;
+    :root {
+      --bg-light: #f9f9f9;
+      --bg-dark: #2d2d2d;
+      --text-light: #000;
+      --text-dark: #fff;
     }
 
-    /* Menú */
-    .menu-imagenes {
-      background-color: #333;
-      padding: 10px;
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .dark-mode body {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .theme-switch-wrapper {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+    }
+
+    .theme-switch-label {
       display: flex;
-      gap: 20px;
-    }
-
-    .menu-link-imagen {
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
+      align-items: center;
+      justify-content: space-between;
+      width: 4.5rem;
+      height: 2.2rem;
+      background: #f0f0f0;
+      border-radius: 2rem;
+      padding: 0.3rem;
       cursor: pointer;
-      padding-bottom: 5px;
-      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+      box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.1);
     }
 
-    .menu-link-imagen:hover {
-      text-decoration: none;
-      border-bottom: 2px solid white;
+    .dark-mode .theme-switch-label {
+      background: #444;
     }
 
-    .menu-link-imagen.active {
-      border-bottom: 2px solid white;
-    }
-
-    /* Secciones */
-    .seccion {
-      min-height: 100vh;
-      padding: 50px;
+    .theme-switch {
       display: none;
     }
 
-    .seccion.active {
-      display: block;
-    }
-
-    /* Área de preview */
-    .preview {
-      width: 300px;
-      height: 300px;
-      border: 2px dashed #ccc;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      margin-top: 20px;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .preview.subido {
-      border: 2px solid #4CAF50;
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .spinner {
-      font-size: 50px;
-      color: #666;
-      animation: girar 1s linear infinite;
-    }
-
-    @keyframes girar {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .preview img {
-      max-width: 100%;
-      max-height: 100%;
+    .sun-img, .moon-img {
+      width: 1.8rem;
+      height: 1.8rem;
       object-fit: contain;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .moon-img {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .dark-mode .sun-img {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .dark-mode .moon-img {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .theme-switch-label:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0.3rem 0.8rem rgba(0,0,0,0.15);
     }
   </style>
 </head>
+<body>
 
-<body class="scroll-suave">
+<!-- Interruptor -->
+<div class="theme-switch-wrapper">
+  <input type="checkbox" id="theme-switch" class="theme-switch">
+  <label for="theme-switch" class="theme-switch-label">
+    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747432276/sun_d652uf.png" alt="Sol" class="sun-img">
+    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747432237/mun_r87qzc.png" alt="Luna" class="moon-img">
+  </label>
+</div>
 
-  <!-- Menú principal -->
-  <nav class="menu-imagenes">
-    <a id="linkSubir-img" class="menu-link-imagen active">Subir Imagen</a>
-    <a id="linkOtro-img" class="menu-link-imagen">Otro Menú</a>
-  </nav>
+<script>
+  const themeSwitch = document.getElementById('theme-switch');
+  const root = document.documentElement;
 
-  <!-- Sección de Subir Imagen -->
-  <section id="subir" class="seccion active">
-    <h1>Subir Imagen</h1>
-    <input type="file" id="fileInput">
-    <button id="uploadButton">Subir Imagen</button>
-    <div id="preview" class="preview"></div>
-    <h2>Enlace de la Imagen</h2>
-    <textarea id="imageUrl" rows="4" cols="50" readonly placeholder="Aquí aparecerá el enlace de la imagen..."></textarea>
-  </section>
+  // Activar interruptor si el tema es oscuro
+  if (localStorage.getItem('theme') === 'dark') {
+    themeSwitch.checked = true;
+  }
 
-  <!-- Otra sección -->
-  <section id="otro" class="seccion">
-    <h1>Otro Menú</h1>
-    <p>Este es otro menú que puedes usar para agregar más contenido en el futuro.</p>
-  </section>
-
-  <!-- Script de interacción -->
-  <script>
-    // Esperar que el DOM esté cargado
-    document.addEventListener("DOMContentLoaded", () => {
-      const linkSubir = document.getElementById('linkSubir-img');
-      const linkOtro = document.getElementById('linkOtro-img');
-      const sectionSubir = document.getElementById('subir');
-      const sectionOtro = document.getElementById('otro');
-
-      linkSubir.addEventListener('click', () => {
-        sectionSubir.classList.add('active');
-        sectionOtro.classList.remove('active');
-        linkSubir.classList.add('active');
-        linkOtro.classList.remove('active');
-      });
-
-      linkOtro.addEventListener('click', () => {
-        sectionSubir.classList.remove('active');
-        sectionOtro.classList.add('active');
-        linkOtro.classList.add('active');
-        linkSubir.classList.remove('active');
-      });
-    });
-  </script>
+  // Cambiar tema al hacer clic
+  themeSwitch.addEventListener('change', () => {
+    const isDark = themeSwitch.checked;
+    root.classList.toggle('dark-mode', isDark);
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
+</script>
 
 </body>
 </html>

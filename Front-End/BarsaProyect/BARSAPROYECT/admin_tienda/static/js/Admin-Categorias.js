@@ -1,16 +1,9 @@
-let idCounterCategoria = 1;
+//--------------------
 
-let categorias = [
-    { id: idCounterCategoria++, nombre: "Sofás", descripcion: "Sofás modernos y clásicos" },
-    { id: idCounterCategoria++, nombre: "Comedores", descripcion: "Comedores de 4, 6 y 8 plazas" },
-    { id: idCounterCategoria++, nombre: "Recámaras", descripcion: "Recámaras completas y modulares" },
-    { id: idCounterCategoria++, nombre: "Salas", descripcion: "Salas en L, modulares, esquineras" },
-    { id: idCounterCategoria++, nombre: "Escritorios", descripcion: "Escritorios para oficina y hogar" },
-    { id: idCounterCategoria++, nombre: "Closets", descripcion: "Closets armables y empotrables" },
-    { id: idCounterCategoria++, nombre: "Muebles TV", descripcion: "Muebles para centro de entretenimiento" }
-  ];
+
+
   
-  let categoriasPorPagina = 6;
+  let categoriasPorPagina = 25;
   let paginaCategoria = 1;
   let categoriaEditando = null;
   let categoriaAEliminar = null;
@@ -26,21 +19,23 @@ let categorias = [
   
     categoriasAMostrar.forEach((cat, index) => {
       const fila = document.createElement('tr');
-      fila.innerHTML = `
+      fila.innerHTML = fila.innerHTML = `
       <td>${cat.id}</td>
-        <td>${cat.nombre}</td>
-        <td>${cat.descripcion}</td>
-        <td>
-          <button class="edit-btn" onclick="abrirModalEditarCategoria(${inicio + index})">
-            <i class="fas fa-edit"></i>
-            <a class="button-table">Editar</a>
-          </button>
-          <button class="delete-btn" onclick="abrirModalEliminarCategoria(${inicio + index})">
-            <i class="fas fa-trash-alt"></i>
-            <a class="button-table">Eliminar</a>
-          </button>
-        </td>
-      `;
+      <td>${cat.nombre}</td>
+      <td>${cat.descripcion}</td>
+      <td><img src="${cat.imagen}" alt="${cat.nombre}" style="width: 80px; height: auto;"/></td>
+      <td>
+        <button class="edit-btn-producto" onclick="abrirModalEditarCategoria(${inicio + index})">
+          <i class="fas fa-edit"></i>
+          <a class="button-table"></a>
+        </button>
+        <button class="delete-btn-producto" onclick="abrirModalEliminarCategoria(${inicio + index})">
+          <i class="fas fa-trash-alt"></i>
+          <a class="button-table"></a>
+        </button>
+      </td>
+    `;
+    
       tbody.appendChild(fila);
     });
   
@@ -63,11 +58,13 @@ let categorias = [
   }
   
   function abrirModalEditarCategoria(index) {
-    categoriaEditando = index;
+    categoriaEditando = index; // Aquí se asigna el índice
     document.getElementById('editarNombreCategoria').value = categorias[index].nombre;
     document.getElementById('editarDescripcionCategoria').value = categorias[index].descripcion;
+    document.getElementById('editarImagenCategoria').value = categorias[index].imagen || '' ; // Si no hay imagen, dejar vacío
     document.getElementById('modalEditarCategoria').style.display = 'flex';
   }
+  
   
   function cerrarModalEditarCategoria() {
     document.getElementById('modalEditarCategoria').style.display = 'none';
@@ -86,28 +83,46 @@ let categorias = [
   }
   
   
-
   function guardarCategoria() {
     const nombre = document.getElementById('nombreCategoria').value.trim();
     const descripcion = document.getElementById('descripcionCategoria').value.trim();
+    const imagen = document.getElementById('imagenCategoria')?.value.trim() || ""; // opcional
   
     if (nombre && descripcion) {
-      categorias.push({id: idCounterCategoria++, nombre, descripcion });
+      categorias.push({
+        id: idCounterCategoria++,
+        nombre,
+        descripcion,
+        imagen
+      });
       cerrarModalAgregarCategoria();
       mostrarCategorias();
     }
   }
   
+  
+  
   function guardarEdicionCategoria() {
     const nombre = document.getElementById('editarNombreCategoria').value.trim();
     const descripcion = document.getElementById('editarDescripcionCategoria').value.trim();
-  
+    
+    // Obtener el valor de la imagen. Si está vacío, mantener la imagen original.
+    const imagen = document.getElementById('editarImagenCategoria')?.value.trim() || categorias[categoriaEditando].imagen;
+    
+    // Validar los campos y editar la categoría
     if (nombre && descripcion && categoriaEditando !== null) {
-      categorias[categoriaEditando] = { nombre, descripcion };
+      categorias[categoriaEditando] = {
+        id: categorias[categoriaEditando].id, // conservar el ID original
+        nombre,
+        descripcion,
+        imagen // mantener o actualizar la imagen
+      };
       cerrarModalEditarCategoria();
       mostrarCategorias();
     }
   }
+  
+  
   
   function confirmarEliminarCategoria() {
     if (categoriaAEliminar !== null) {
@@ -126,3 +141,11 @@ let categorias = [
 function cerrarModal() {
   document.getElementById('modalEditar').style.display = 'none'; // Cerrar el modal
 }
+
+
+
+
+// Selecciona el tbody
+
+
+

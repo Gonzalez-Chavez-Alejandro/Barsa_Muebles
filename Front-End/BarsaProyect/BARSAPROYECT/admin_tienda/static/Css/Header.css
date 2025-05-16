@@ -1,4 +1,4 @@
-/* Reset general */     
+/* Reset general */
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +10,8 @@ body {
     font-family: Arial, sans-serif;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
 }
@@ -27,9 +28,9 @@ main {
 
 /* Estilos del header */
 header {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: white;
     border-bottom: 1px solid #ccc;
     position: relative;
@@ -82,8 +83,8 @@ nav ul li a.contact {
     transition: background-color 0.3s ease;
 }
 
-nav ul li a.contact:hover { 
-    font-weight: bold; 
+nav ul li a.contact:hover {
+    font-weight: bold;
 }
 
 /* Botón menú hamburguesa */
@@ -97,9 +98,9 @@ nav ul li a.contact:hover {
 
 /* Contenedor derecho del header */
 .header-inicio {
-    display: flex; 
+    display: flex;
     align-items: center;
-    gap: 15px; 
+    gap: 15px;
     margin-right: 78px;
 }
 
@@ -236,23 +237,31 @@ nav ul li a.contact:hover {
     height: 24px;
 }
 
-.Elements {
-    display: flex;
-    justify-content: center; 
-    align-items: center;     
-    flex-direction: column;  
-    text-align: center;      
-    height: 50px;            
-    border-bottom: 1px solid #ccc;
+
+
+
+
+img.Barsa-Muebles-Principio-hero {
+    max-width: 342px;
 }
+
+.text-content {
+    margin: 0 0 230px 24px;
+}
+
 
 
 /* Responsive */
 @media (max-width: 768px) {
+
+    nav ul li a.contact {
+        padding: 0px 0px;
+    }
+
     .btn-carrito span {
         display: none;
     }
-    
+
     .btn-carrito {
         background-color: #e6e6e6;
         padding: 7px 7px;
@@ -285,7 +294,7 @@ nav ul li a.contact:hover {
         justify-content: center;
     }
 
-    
+
 
     .logo {
         width: 120px;
@@ -295,9 +304,10 @@ nav ul li a.contact:hover {
         background-repeat: no-repeat;
         background-position: left;
     }
+
     .logo img {
         display: none;
-      }
+    }
 
     .menu-toggle {
         display: block;
@@ -336,4 +346,373 @@ nav ul li a.contact:hover {
         border-bottom: 10px solid white;
         border-top: 2px solid #000;
     }
+}
+
+/* Por defecto: ocultamos .Elements */
+.Elements {
+    display: none;
+}
+
+.Elements nav ul {
+    display: flex;
+    justify-content: center;
+    /* Centrado horizontal */
+    align-items: center;
+    /* Centrado vertical */
+    list-style: none;
+    gap: 15px;
+    padding: 16px 24px;
+    /* Padding simétrico */
+    margin: 0 auto;
+    /* Centrado adicional si es necesario */
+}
+
+
+/* En pantallas pequeñas, mostramos .Elements y ocultamos el nav principal */
+@media screen and (max-width: 768px) {
+    header nav {
+        display: none;
+    }
+
+    .Elements {
+        display: block;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Estilos Generales */
+.home-principio-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    background: linear-gradient(160deg, #ffffff 0%, #f8f9fa 100%);
+    overflow: hidden;
+    gap: 2rem;
+    position: relative;
+}
+
+.contenido-izquierda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 90vw;
+    text-align: center;
+    padding: 1rem;
+    z-index: 2;
+    animation: fadeInLeft 1s ease-out;
+}
+
+/* Animaciones */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* Logo */
+.contenido-izquierda img {
+    width: clamp(140px, 40vw, 300px);
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Texto del Slogan */
+.lineas-h2-slogan {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.4rem, 5vw, 3rem);
+    color: #2d3436;
+    line-height: 1.3;
+    margin: 0 auto;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    max-width: 90%;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+/* Línea Decorativa */
+.decor-lineas {
+    width: min(80%, 400px);
+    height: 4px;
+    background: linear-gradient(90deg, transparent 0%, #e74c3c 20%, #e74c3c 80%, transparent 100%);
+    margin: 1.5rem auto;
+    animation: scaleIn 0.6s ease-out 0.4s forwards;
+    opacity: 0;
+}
+
+/* Contenedor de Botones */
+.botones-container {
+    display: flex;
+    flex-wrap: nowrap;
+    /* Cambiado a nowrap */
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    animation: fadeInUp 0.8s ease-out 0.6s forwards;
+    opacity: 0;
+    padding: 0 1rem;
+}
+
+/* Estilos de Botones */
+.btn-ver-catalogos,
+.btn-ver {
+    position: relative;
+    min-width: 200px;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1rem, 1.2vw, 1.2rem);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    flex: 1;
+    /* Añadido para igualar tamaño */
+    white-space: nowrap;
+    /* Evitar saltos de línea */
+}
+
+/* Botón Negro */
+.btn-ver-catalogos {
+    background: linear-gradient(135deg, #000000 0%, #2d3436 100%);
+    color: white;
+    border: 2px solid #000000;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.btn-ver-catalogos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-ver-catalogos:hover::before {
+    left: 100%;
+}
+
+/* Botón Borde */
+.btn-ver {
+    background: transparent;
+    color: #2d3436;
+    border: 2px solid #2d3436;
+    box-shadow: 0 8px 30px rgba(45, 52, 54, 0.1);
+}
+
+.btn-ver::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(45, 52, 54, 0.05);
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.4s ease-out;
+}
+
+.btn-ver:hover::after {
+    clip-path: circle(100% at 50% 50%);
+}
+
+/* Iconos */
+.btn-ver-catalogos i,
+.btn-ver i {
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Efectos Hover */
+.btn-ver-catalogos:hover,
+.btn-ver:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ver-catalogos:active,
+.btn-ver:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+/* Animación de Iconos */
+.btn-ver-catalogos:hover i {
+    transform: rotate(-10deg) translateX(3px);
+}
+
+.btn-ver:hover i {
+    transform: rotate(15deg) translateX(3px);
+}
+
+/* Círculo con Imagen */
+.circle-bg {
+    width: clamp(200px, 50vw, 400px);
+    aspect-ratio: 1;
+    background: #C3D3E3;
+    border-radius: 50%;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    animation: fadeInRight 1s ease-out;
+}
+
+.icono-sillon {
+    width: 80%;
+    height: auto;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Media Queries Responsivos */
+@media (min-width: 768px) {
+    .home-principio-page {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 1rem 5%;
+        min-height: 67vh;
+    }
+
+    .contenido-izquierda {
+        align-items: flex-start;
+        text-align: left;
+        max-width: 56%;
+        gap: 2.5rem;
+    }
+
+    .circle-bg {
+
+        padding: 135px 14px 4px 15px;
+        width: clamp(280px, 40vw, 480px);
+        margin: 0;
+    }
+
+    .botones-container {
+        justify-content: flex-start;
+    }
+}
+
+@media (min-width: 1200px) {
+    .home-principio-page {
+        padding: 0px 6rem 0% 6px;
+    }
+
+    .lineas-h2-slogan {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .botones-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-ver-catalogos,
+    .btn-ver {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+
+@media screen and (max-width: 468px) {
+    .circle-bg {
+        opacity: 0;
+        visibility: hidden;
+        height: 0;
+        margin: 0;
+        transition: all 0.3s ease;
+    }
+
+
+}
+img.icono-lampara {
+    display: flex;
+    position: absolute;
+    border-top: 3px solid #44698f;
+    height: 131px;
+    margin: -201px 3px 330px 0;
 }

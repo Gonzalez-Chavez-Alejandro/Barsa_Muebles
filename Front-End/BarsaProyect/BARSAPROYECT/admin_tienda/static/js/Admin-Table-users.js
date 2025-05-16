@@ -3,17 +3,7 @@ let ordenAscendente = true;
 let usuariosPorPagina = 5; 
 let paginaActual = 1; 
 let indiceUsuarioEditando = null;
-let idCounter = 1;
 
-let usuarios = [
-  { id: idCounter++, nombre: 'Juan Pérez', correo: 'juan@correo.com', telefono: '1234567890', contrasena: '1234' },
-  { id: idCounter++, nombre: 'Ana Gómez', correo: 'ana@correo.com', telefono: '0987654321', contrasena: '5678' },
-  { id: idCounter++, nombre: 'Carlos Ruiz', correo: 'carlos@correo.com', telefono: '1122334455', contrasena: 'abcd' },
-  { id: idCounter++, nombre: 'Laura Martínez', correo: 'laura@correo.com', telefono: '5566778899', contrasena: 'efgh' },
-  { id: idCounter++, nombre: 'Pedro Sánchez', correo: 'pedro@correo.com', telefono: '6677889900', contrasena: 'ijkl' },
-  { id: idCounter++, nombre: 'María López', correo: 'maria@correo.com', telefono: '2233445566', contrasena: 'mnop' },
-  { id: idCounter++, nombre: 'José Pérez', correo: 'jose@correo.com', telefono: '3344556677', contrasena: 'qrst' }
-];
 
 let usuariosFiltrados = [...usuarios];
 let productosBusqueda = [];

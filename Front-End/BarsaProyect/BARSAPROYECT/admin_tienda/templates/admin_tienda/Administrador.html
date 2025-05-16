@@ -1,17 +1,17 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel Administrativo</title>
-<!-- ----------------------------------------------- -->
-                 <!-- Link Css -->
-<!-- ----------------------------------------------- -->
+  <!-- ----------------------------------------------- -->
+  <!-- Link Css -->
+  <!-- ----------------------------------------------- -->
 
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Lista-Usuarios.css' %}">
   <link rel="stylesheet" href="{% static 'Css/categoria.css' %}">
@@ -19,19 +19,24 @@
   <link rel="stylesheet" href="{% static 'Css/Admin-Producto-Imagen.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
+
 </head>
+
 <body>
-<!-- ----------------------------------------------- -->
-           <!-- Botón de menú para móvill -->
-<!-- ----------------------------------------------- -->
+  <!-- ----------------------------------------------- -->
+  <!-- Botón de menú para móvill -->
+  <!-- ----------------------------------------------- -->
   <button id="botonMenu" class="boton-menu">
     <i class="fas fa-bars"></i>
   </button>
 
 
-<!-- ----------------------------------------------- -->
-                <!-- Menú lateral -->
-<!-- ----------------------------------------------- -->
+  <!-- ----------------------------------------------- -->
+  <!-- Menú lateral -->
+  <!-- ----------------------------------------------- -->
   <div id="menuLateral" class="menu-lateral">
     <button id="cerrarMenu" class="cerrar-menu">
       <i class="fas fa-times"></i>
@@ -48,6 +53,10 @@
         </button>
         <ul class="submenu">
           <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios')">Lista de usuarios</a></li>
+        </ul>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-star-comment')">Comentarios Stars </a>
+          </li>
         </ul>
       </li>
       <li class="menu-item">
@@ -70,11 +79,15 @@
         <button class="menu-button" onclick="toggleSubmenu(this)">
           <i class="fas fa-box"></i><span>Productos</span>
         </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('productos-lleno')"><i class="fas fa-box"> </i>
+              Todos </a></li>
+        </ul>
         <ul class="submenu" id="submenu-categorias">
           <!-- Aquí se insertarán las categorías -->
         </ul>
       </li>
-      
+
       <li class="menu-item">
         <button class="menu-button"><i class="fas fa-cogs"></i><span>Ajustes</span></button>
       </li>
@@ -87,11 +100,11 @@
   <!-- Contenido principal -->
   <main class="contenido" id="contenidoPrincipal">
     <!-- Sección de inicio -->
-    <section id="inicio" class="seccion activa"> 
+    <section id="inicio" class="seccion activa">
       <h1 class="h1-Panel-Administrativo">Panel Administrativo</h1>
       <p class="descripcion-opcion">Selecciona una opción.</p>
 
-    
+
       <div class="contenedor-cards">
         <!-- Tarjeta de Usuarios -->
         <div class="card-usuario">
@@ -104,7 +117,7 @@
             <i class="fas fa-users-cog"></i> Ver Usuarios
           </button>
         </div>
-    
+
         <!-- Tarjeta de Categorías -->
         <div class="card-categoria">
           <i class="fas fa-tags icono-top"></i>
@@ -114,49 +127,98 @@
             <i class="fas fa-eye"></i> Ir a Categorías
           </button>
         </div>
-    
+
         <!-- Tarjeta de Productos -->
         <div class="card-producto">
           <i class="fas fa-box-open icono-top"></i>
           <h3>Productos</h3>
           <p>Administra los productos disponibles en tu catálogo: crea, edita y elimina fácilmente.</p>
-          <button class="card-btn"  onclick="mostrarSeccion('productos')">
-            <i class="fas fa-eye"></i> Ir a Productos
+          <button class="card-btn" onclick="mostrarSeccion('productos-lleno')">
+            <i class="fas fa-box"></i> Productos
           </button>
         </div>
-      </div>
 
 
-      <div class="botones-muebles">
-        <button onclick="mostrarMueble('sofa')">Sofá</button>
-        <button onclick="mostrarMueble('sala')">Sala</button>
-        <button onclick="mostrarMueble('comedor')">Comedor</button>
-        <button onclick="mostrarMueble('espejo')">Espejo</button>
-        <button onclick="mostrarMueble('otros')">Otros</button>
-      </div>
-      
-      <div id="area-visualizacion">
-        <img id="imagen-mueble"  alt="Sofá" style="max-width:90%; border-radius:20px;" />
-        <div id="nombre-mueble">Sofá</div>
+        <!-- Tarjeta de Comentarios y Estrellas -->
+        <div class="card-comentario">
+          <i class="fas fa-star icono-top"></i>
+          <h3>Comentarios y Valoraciones</h3>
+          <p>Visualiza y administra comentarios y estrellas que los usuarios dejan sobre los productos.</p>
 
+          </button>
+          <button class="card-btn" onclick="mostrarSeccion('usuarios-star-comment')">
+            <i class="fas fa-comments"></i> Ver Opiniones
+          </button>
+        </div>
 
 
 
 
+        <div id="Home-Categorias" class="Home-Categorias">
+          <!-- Flecha izquierda -->
+
+          <div class="carousel" id="carouselCategorias">
+            <!-- Aquí se insertarán dinámicamente los cards -->
+          </div>
+
+          <!-- Flecha derecha -->
+
+        </div>
+        <div id="contenedor-productos" class="contenedor-productos"></div>
+
+
+        <div class="admin-footer-editor">
+          <h2>Editor del Footer</h2>
+
+          <div class="admin-section">
+            <h3>Información de Contacto</h3>
+            <div class="form-group">
+              <label>Correo electrónico:</label>
+              <input type="email" id="admin-email" class="form-control" placeholder="ejemplo@empresa.com">
+            </div>
+            <div class="form-group">
+              <label>Teléfonos (separados por comas):</label>
+              <input type="text" id="admin-phones" class="form-control" placeholder="123-456-7890, 987-654-3210">
+            </div>
+          </div>
+
+          <div class="admin-section">
+            <h3>Ubicaciones</h3>
+            <div id="admin-locations-container">
+              <!-- Las ubicaciones se generarán dinámicamente -->
+            </div>
+            <button id="add-location-btn" class="btn-add">+ Añadir ubicación</button>
+          </div>
+
+          <div class="admin-section">
+            <h3>Redes Sociales</h3>
+            <div id="admin-social-container">
+              <!-- Las redes sociales se generarán dinámicamente -->
+            </div>
+            <button id="add-social-btn" class="btn-add">+ Añadir red social</button>
+          </div>
+
+          <div class="admin-actions">
+            <button id="preview-footer-btn" class="btn-preview">Vista Previa</button>
+
+
+            <button id="save-footer-btn" class="btn-save">Guardar Cambios</button>
+          </div>
+        </div>
 
 
 
     </section>
-    
-    
 
 
 
 
- <!-- ----------------------------------------------- -->
-             <!-- Sección de Usuarios -->
- <!-- ----------------------------------------------- -->
-    
+
+
+    <!-- ----------------------------------------------- -->
+    <!-- Sección de Usuarios -->
+    <!-- ----------------------------------------------- -->
+
     <section id="usuarios" class="seccion">
       <div class="admin-panel">
         <h2>Lista de Usuarios Registrados</h2>
@@ -164,13 +226,13 @@
         <button class="btn-agregar" onclick="abrirModalAgregar()">
           <i class="fas fa-plus"></i> Agregar
         </button>
-        
+
 
         <div class="filtros">
           <input type="text" id="buscador" placeholder="Buscar por nombre..." onkeyup="buscarUsuarios()">
           <button onclick="ordenarPorNombre()">Ordenar A-Z / Z-A</button>
         </div>
-        
+
         <div class="table-container">
           <table class="admin-table">
             <thead>
@@ -198,13 +260,41 @@
     </section>
 
 
+    <section id="usuarios-star-comment" class="seccion">
+      <div class="admin-panel">
+        <h2>Comentarios y Calificaciones</h2>
+
+        <!-- Buscador -->
+        <input type="text" placeholder="Buscar usuario o producto..." class="bscdr-usuarios-star-comment"
+          id="buscador-comentarios" />
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Nombre-Usuario</th>
+                <th>Nombre-Producto</th>
+                <th>Comentarios</th>
+                <th>Stars</th>
+                <th class="td-espacio">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-usuarios-comentarios"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+
+
     <section id="categorias" class="seccion">
       <div class="admin-panel">
         <h2>Lista de Categorías</h2>
 
-      <button class="categoria-btn-agregar" onclick="abrirModalAgregarCategoria()">
-        <i class="fas fa-plus"></i> Agregar
-      </button>
+        <button class="categoria-btn-agregar" onclick="abrirModalAgregarCategoria()">
+          <i class="fas fa-plus"></i> Agregar
+        </button>
 
         <div class="table-container">
           <table class="admin-table">
@@ -213,12 +303,13 @@
                 <th>id</th>
                 <th>Nombre de Categoría</th>
                 <th>Descripción</th>
-                <th>Acciones</th>
+                <th>Imagen</th>
+                <th class="td-espacio">Acciones</th>
               </tr>
             </thead>
             <tbody id="tablaCategorias">
               <!-- ----------------------------------------------- -->
-                    <!-- Las categorías se insertan con JS -->
+              <!-- Las categorías se insertan con JS -->
               <!-- ----------------------------------------------- -->
             </tbody>
           </table>
@@ -232,119 +323,211 @@
       </div>
     </section>
 
- <!-- ----------------------------------------------- -->
-              <!-- Sección de Productos -->
- <!-- ----------------------------------------------- -->
+    <!-- ----------------------------------------------- -->
+    <!-- Sección de Productos -->
+    <!-- ----------------------------------------------- -->
 
-        <section id="productos" class="seccion">
-          <div class="admin-panel"> 
-          <h2 id="categoria-titulo">Selecciona una categoría</h2>
-          <div id="formulario-producto" class="seccion">
-            <form id="agregar-producto-form">
-              <input type="hidden" id="categoria-id">
-              <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos()">
-                <i class="fas fa-plus"></i> Agregar
-              </button>
-              <div class="filtros">
-                <input type="text" id="buscadorProducto" placeholder="Buscar producto..." onkeyup="buscarProductos()">
-                <button id="ordenarBtn" onclick="ordenarPorNombreProducto()">Ordenar A-Z</button>
+    <section id="productos" class="seccion">
+      <div class="admin-panel">
+        <h2 id="categoria-titulo">Selecciona una categoría</h2>
+        <div id="formulario-producto" class="seccion">
+          <form id="agregar-producto-form">
+            <input type="hidden" id="categoria-id">
+            <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos()">
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+            <div class="filtros">
+              <input type="text" id="buscadorProducto" placeholder="Buscar producto..." onkeyup="buscarProductos()">
+
+            </div>
+          </form>
+
+          <div id="tablaContainer" class="scroll-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>
+                    <select id="filtroOferta" onchange="filtrarPorOferta()">
+                      <option value="todos">Ofertas</option>
+                      <option value="oferta">Con</option>
+                      <option value="sinOferta">Sin</option>
+                    </select>
+                  </th>
+                  <th>Precio Oferta</th>
+                  <th>Carpetas</th>
+                  <th>Nombre Imagenes</th>
+                  <th> Acciones </th>
+                </tr>
+              </thead>
+              <tbody id="tablaProductos">
+                <!-- ----------------------------------------------- -->
+                <!-- Las categorías se insertan con JS -->
+                <!-- ----------------------------------------------- -->
+              </tbody>
+            </table>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section id="productos-lleno" class="seccion">
+      <div class="admin-panel">
+
+        <div id="formulario-producto-lleno">
+
+          <div class="admin-card">
+            <form id="form-destacados">
+
+              <h2 id="titulo-destacados">📌 Productos Destacados</h2>
+
+              <!-- Buscar y Agregar -->
+              <div class="conjuntoagregarbuscar">
+                <div class="filtros">
+                  <div class="input-group" id="searchGroup">
+                    <i class="fas fa-search search-icon" id="toggleSearch"></i>
+                    <input type="text" id="buscadorProductoDestacados" placeholder="Buscar producto..."
+                      onkeyup="buscarProductosDestacados()">
+                  </div>
+                </div>
+
+                <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductosDestacados()">
+                  <i class="fas fa-plus"></i> Agregar
+                </button>
               </div>
+
+              <!-- Mostrar y Filtrar -->
+              <div class="select-group-container">
+                <div class="select-group-producto-lleno">
+                  <label for="selectorCantidadProductos" class="select-label">
+                    <i class="fas fa-th-list"></i> Mostrar:
+                  </label>
+                  <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+
+                <div class="select-group-filtro-lleno">
+                  <label for="filtroCategoria" class="select-label">
+                    <i class="fas fa-filter"></i> Filtrar por categoría:
+                  </label>
+                  <div class="select-wrapper">
+                    <select id="filtroCategoria" onchange="filtrarPorCategoria()" class="select">
+                      <option value="">Seleccionar Categoría</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
             </form>
-    
-            <div id="tablaContainer" class="scroll-container">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>
-                      <select id="filtroOferta" onchange="filtrarPorOferta()">
-                        <option value="todos">Ofertas</option>
-                        <option value="oferta">Con</option>
-                        <option value="sinOferta">Sin</option>
-                      </select>
-                    </th>
-                    <th>Precio Oferta</th>
-                    <th>Carpetas</th>
-                    <th>Nombre Imagenes</th>
-                    <th>  Acciones  </th>
-                  </tr>
-                </thead>
-                <tbody id="tablaProductos">
-                  <!-- ----------------------------------------------- -->
-                        <!-- Las categorías se insertan con JS -->
-                  <!-- ----------------------------------------------- -->
-                </tbody>
-              </table>
-              <div class="paginacion">
-                <button onclick="cambiarPaginaProductos(-1)">Anterior</button>
-                <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginasProductos">de 0</span>
-                <button onclick="cambiarPaginaProductos(1)">Siguiente</button>
-              </div>
-              
+          </div>
+
+
+
+          <div id="tablaContainerDestacados" class="scroll-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th class="NombretablaContainerDestacados">Nombre
+                    <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
+                  </th>
+                  <th>Descripción</th>
+                  <th>Precio</th>
+                  <th>Oferta</th>
+                  <th>Precio Oferta</th>
+                  <th>Carpetas</th>
+                  <th>Nombre Imagenes</th>
+                  <th class="td-espacio">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tablaProductosDestacados">
+                <!-- Se insertan productos con JS -->
+              </tbody>
+            </table>
+            <div class="paginacion">
+              <button onclick="cambiarPaginaProductosLleno(-1)">Anterior</button>
+              <span id="paginaActualProductosLleno">Página 1</span> de <span id="totalPaginasProductosLleno">de 0</span>
+              <button onclick="cambiarPaginaProductosLleno(1)">Siguiente</button>
             </div>
           </div>
         </div>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ----------------------------------------------- -->
+    <!-- Sección de imagen -->
+    <!-- ----------------------------------------------- -->
+
+    <section id="imagenes" class="seccion">
+      <div class="admin-panel">
+
+        <nav class="menu-imagenes">
+          <a id="linkSubir-img" class="menu-link-imagen active">Subir Imagen</a>
+          <a id="linkOtro-img" class="menu-link-imagen">Otro Menú</a>
+        </nav>
+        <!-- Sección de Subir Imagen -->
+        <section id="subir" class="seccion active">
+          <h1>Subir Imagen</h1>
+
+          <input type="file" id="fileInput">
+          <button id="uploadButton">Subir Imagen</button>
+
+          <div id="preview" class="preview">
+            <!-- Loader o imagen aparecerán aquí -->
+          </div>
+
+          <h2>Enlace de la Imagen</h2>
+          <textarea id="imageUrl" rows="4" cols="50" readonly
+            placeholder="Aquí aparecerá el enlace de la imagen..."></textarea>
         </section>
-    
-<!-- ----------------------------------------------- -->
-              <!-- Sección de imagen -->
- <!-- ----------------------------------------------- -->
 
- <section id="imagenes" class="seccion">
-  <div class="admin-panel"> 
+        <!-- Otra sección -->
+        <section id="otro" class="seccion">
+          <h1>Otro Menú</h1>
+          <p>Este es otro menú que puedes usar para agregar más contenido en el futuro.</p>
+        </section>
 
-  <nav class="menu-imagenes">
-    <a id="linkSubir-img" class="menu-link-imagen active">Subir Imagen</a>
-    <a id="linkOtro-img" class="menu-link-imagen">Otro Menú</a>
-  </nav>
- <!-- Sección de Subir Imagen -->
- <section id="subir" class="seccion active">
-  <h1>Subir Imagen</h1>
 
-  <input type="file" id="fileInput">
-  <button id="uploadButton">Subir Imagen</button>
-
-  <div id="preview" class="preview">
-    <!-- Loader o imagen aparecerán aquí -->
-  </div>
-
-  <h2>Enlace de la Imagen</h2>
-  <textarea id="imageUrl" rows="4" cols="50" readonly placeholder="Aquí aparecerá el enlace de la imagen..."></textarea>
-</section>
-
-<!-- Otra sección -->
-<section id="otro" class="seccion">
-  <h1>Otro Menú</h1>
-  <p>Este es otro menú que puedes usar para agregar más contenido en el futuro.</p>
-</section>
-
-  
-  </div>
-</div>
-</section>
+      </div>
+      </div>
+    </section>
 
 
   </main>
-          <!--Todo lo de dentro de section termina aqui en main -->
-<!-- ---------------------------------------------------------------------- -->
+  <!--Todo lo de dentro de section termina aqui en main -->
+  <!-- ---------------------------------------------------------------------- -->
 
 
-<!-- ---------------------------------------------------------------------- -->
-<!------------------------------ Empieza Modal ------------------------------->
-<!-- ---------------------------------------------------------------------- -->
+  <!-- ---------------------------------------------------------------------- -->
+  <!------------------------------ Empieza Modal ------------------------------->
+  <!-- ---------------------------------------------------------------------- -->
 
-<!-- ------------------------------------------------ -->
-             <!--Empieza Usuario Modal-->
-<!-- ------------------------------------------------ -->
+  <!-- ------------------------------------------------ -->
+  <!--Empieza Usuario Modal-->
+  <!-- ------------------------------------------------ -->
 
 
-<!-- ----------------------------------------------- -->
-          <!-- Modal para editar usuario -->
-<!-- ----------------------------------------------- -->
-  
+  <!-- ----------------------------------------------- -->
+  <!-- Modal para editar usuario -->
+  <!-- ----------------------------------------------- -->
+
   <div id="modalEditar" class="modal">
     <div class="modal-contenido">
       <h3>Editar Usuario</h3>
@@ -371,10 +554,10 @@
     </div>
   </div>
 
-<!-- ----------------------------------------------- -->
-            <!-- Modal de confirmación Usuario -->
-<!-- ----------------------------------------------- -->
-  
+  <!-- ----------------------------------------------- -->
+  <!-- Modal de confirmación Usuario -->
+  <!-- ----------------------------------------------- -->
+
   <div id="modalConfirmacion" class="modal-confirm">
     <div class="modal-content-confirm">
       <p id="mensajeConfirmacion">¿Estás seguro de que deseas eliminar?</p>
@@ -384,360 +567,325 @@
       </div>
     </div>
   </div>
-  
-<!-- ------------------------------------------------ -->
-        <!-- Modal para agregar nuevo usuario -->
-<!-- ------------------------------------------------ -->
-  
-<div id="modalAgregarUsuario" class="modal">
-  <div class="modal-contenido">
-    <h3>Agregar Usuario</h3>
-    
-    <label>Nombre:</label>
-    <input type="text" id="nombreNuevo">
-    <span id="errorNombreNuevo" class="error"></span>
 
-    <label>Correo:</label>
-    <input type="email" id="correoNuevo">
-    <span id="errorCorreoNuevo" class="error"></span>
+  <!-- ------------------------------------------------ -->
+  <!-- Modal para agregar nuevo usuario -->
+  <!-- ------------------------------------------------ -->
 
-    <label>Teléfono:</label>
-    <input type="text" id="telefonoNuevo">
-    <span id="errorTelefonoNuevo" class="error"></span>
-
-    <label>Contraseña:</label>
-    <input type="text" id="contrasenaNuevo" placeholder="Contraseña" />
-    <span id="errorContrasenaNuevo" class="error"></span>
-
-    <div class="modal-acciones">
-      <button class="btn-guardar" onclick="guardarNuevo()">
-        <i class="fas fa-user-plus"></i> Guardar
-      </button>
-      <button class="btn-cancelar" onclick="cerrarModalAgregarUsuario()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- ------------------------------------------------ -->
-             <!--Empieza Categoria Modal-->
-<!-- ------------------------------------------------ -->
-
-<!-- ------------------------------------------------ -->
-             <!-- Modal Agregar Categoría -->
-<!-- ------------------------------------------------ -->
-
-<div id="modalAgregarCategoria" class="modal">
-  <div class="modal-contenido-agregar">
-    <span class="cerrar" onclick="cerrarModalAgregarCategoria()">&times;</span>
-    <h3 class="h3-agregar-categoria">Agregar Categoría</h3>
-    <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría">
-    <textarea id="descripcionCategoria" placeholder="Descripción"></textarea>
-    <button class="btn-agregar-categoria" onclick="guardarCategoria()">Guardar</button>
-    <button class="cancelar-btn-categoria" onclick="cerrarModalAgregarCategoria()">Cancelar</button>
-  </div>
-</div>
-
-<!-- ------------------------------------------------ -->
-              <!-- Modal Editar Categoría -->
-<!-- ------------------------------------------------ -->
-<div id="modalEditarCategoria" class="modal">
-  <div class="modal-contenido">
-    <span class="cerrar" onclick="cerrarModalEditarCategoria()">&times;</span>
-    <h3>Editar Categoría</h3>
-    <input type="text" id="editarNombreCategoria">
-    <textarea id="editarDescripcionCategoria"></textarea>
-    <div class="modal-acciones"> 
-        <button class="btn-agregar" onclick="guardarEdicionCategoria()">Guardar Cambios</button>
-        <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ------------------------------------------------ -->
-            <!-- Modal Eliminar Categoría -->
-<!-- ------------------------------------------------ -->
-
-<div id="modalEliminarCategoria" class="modal">
-  <div class="modal-contenido-categoria">
-    <span class="cerrar" onclick="cerrarModalEliminarCategoria()">&times;</span>
-    <h3>¿Estás seguro que deseas eliminar esta categoría?</h3>
-    <button class="delete-btn-categoria" onclick="confirmarEliminarCategoria()">Sí, eliminar</button>
-    <button class="cancelar-btn-categoria" onclick="cerrarModalEliminarCategoria()">Cancelar</button>
-  </div>
-</div>
-
-<!-- ------------------------------------------------ -->
-             <!--Empieza Productos Modal-->
-<!-- ------------------------------------------------ --> 
-<!-- ------------------------------------------------ -->
-        <!-- Modal para agregar nuevo Productos -->
-<!-- ------------------------------------------------ -->
-  
-<!-- Modal para agregar nuevo Producto -->
-
-<div id="Modal-Agregar-Producto" class="modal">
-  <div class="modal-contenido">
-    <div class="campo-descripcion-agregar-producto">
-      <h3>Agregar Producto</h3>
-      <!-- Nombre -->
-      <label for="nombreProducto">Nombre del Producto:</label>
-      <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
-      <span id="errorNombreProducto" class="error"></span>
-      <!-- Descripción -->
-      <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
-      <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
-      <span id="errorDescripcionProducto" class="error"></span>
-    </div>
-
-    <hr>
-
-    <div class="precio-oferta-campopreciodescuento-agregar-producto">
-      <!-- Precio -->
-      <label for="precioProducto">Precio:</label>
-      <input type="number" id="precioProducto" placeholder="Precio">
-      <span id="errorPrecioProducto" class="error"></span>
-      
-      <!-- Oferta -->
-      <div class="lineaOferta">
-        <div class="contenedor-linea">
-          <div class="checkbox-linea">
-            <input type="checkbox" id="ofertaProducto">
-            <label class="Oferta" for="ofertaProducto">Oferta</label>
-          </div>
-          <div class="descuento-opciones">
-            <label for="descuentoSeleccionado">Descuento (%):</label>
-            <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0" max="100" disabled>
-            <span class="simbolo">%</span>
-          </div>
-        </div>
-      </div>
-      <!-- Campo de Precio Descuento -->
-      <div class="campo-precio-descuento">
-        <label for="precioProductoDescuento">Precio con Descuento:</label>
-        <input type="number" id="precioProductoDescuento" disabled>
-        <span id="errorPrecioDescuentoProducto" class="error"></span>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="formularios-carpeta-agregar-producto">
-      <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
-        {% csrf_token %}
-        <div class="campo-formulario">
-          <label for="select-carpetas">Seleccionar carpeta existente:</label>
-          <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
-            {% for carpeta in carpetas %}
-              <option value="{{ carpeta }}">{{ carpeta }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="campo-formulario">
-          <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
-          <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
-          <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
-          <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
-        </div>
-      </form>
-      
-      <div class="campo-subir-imagen">
-        <div class="div-campo-subir-imagen"> 
-          <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
-          <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
-            <i class="fas fa-image icono-imagen"> </i> Subir Imagen
-          </button>
-        </div>
-        <input type="file" id="imageInput" accept="image/*" style="display: none;">
-        <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
-        <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
-
-        <label for="textareaImagenes">URLs de imágenes:</label>
-        <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
-      </div>
-    </div>
-
-    <div class="modal-acciones">
-      <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
-      <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- ------------------------------------------------ -->
-        <!-- Modal para Editar un Producto -->
-<!-- ------------------------------------------------ -->
-<!-- Modal de Edición de Producto -->
- 
-<div id="modalEditarProducto" class="modal">
-  <div class="modal-contenido">
-    <h3>Editar Producto</h3>
-    <form id="formEditarProducto">
-      <input type="hidden" id="editarId">
+  <div id="modalAgregarUsuario" class="modal">
+    <div class="modal-contenido">
+      <h3>Agregar Usuario</h3>
 
       <label>Nombre:</label>
-      <input type="text" id="editarNombre" required><br>
+      <input type="text" id="nombreNuevo">
+      <span id="errorNombreNuevo" class="error"></span>
 
-      <label>Descripción:</label>
-      <input type="text" id="editarDescripcion" required><br>
+      <label>Correo:</label>
+      <input type="email" id="correoNuevo">
+      <span id="errorCorreoNuevo" class="error"></span>
 
-      <label>Precio:</label>
-      <input type="number" id="editarPrecio" required><br>
+      <label>Teléfono:</label>
+      <input type="text" id="telefonoNuevo">
+      <span id="errorTelefonoNuevo" class="error"></span>
 
-      <label>¿Está en oferta?</label>
-      <select id="editarOferta">
-        <option value="true">Sí</option>
-        <option value="false">No</option>
-      </select><br>
+      <label>Contraseña:</label>
+      <input type="text" id="contrasenaNuevo" placeholder="Contraseña" />
+      <span id="errorContrasenaNuevo" class="error"></span>
 
-      <label>Precio en oferta:</label>
-      <input type="number" id="editarPrecioOferta"><br>
-
-      <label>Carpeta:</label>
-      <input type="text" id="editarCarpeta"><br>
-
-      <label>URL Imagen:</label>
-      <textarea id="editarNombreImagenes"></textarea><br>
-
-      <label>Categoría ID:</label>
-      <input type="number" id="editarCategoriaId"><br>
-
-      <button type="button" onclick="guardarEditarProducto()" id="btnGuardarProducto">Guardar Cambios</button>
- <button type="button" onclick="cerrarModalEditarProducto()">Cancelar</button>
-    </form>
+      <div class="modal-acciones">
+        <button class="btn-guardar" onclick="guardarNuevo()">
+          <i class="fas fa-user-plus"></i> Guardar
+        </button>
+        <button class="btn-cancelar" onclick="cerrarModalAgregarUsuario()">Cancelar</button>
+      </div>
+    </div>
   </div>
-</div>
-
-        <!-- Modal para Editar Imagenes Producto -->
-<!-- ------------------------------------------------ -->
 
 
-<!-- ----------------------------------------------- -->
-            <!-- Modal de confirmación Producto eliminar -->
-<!-- ----------------------------------------------- -->
 
-<div id="modalEliminarProducto" class="modal">
-  <div class="modal-contenido-producto">
-    <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
-    <h3>¿Estás seguro que deseas eliminar este producto?</h3>
-    <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
-    <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
+  <!-- ------------------------------------------------ -->
+  <!--Empieza Categoria Modal-->
+  <!-- ------------------------------------------------ -->
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Agregar Categoría -->
+  <!-- ------------------------------------------------ -->
+
+  <div id="modalAgregarCategoria" class="modal">
+    <div class="modal-contenido-agregar">
+      <span class="cerrar" onclick="cerrarModalAgregarCategoria()">&times;</span>
+      <h3 class="h3-agregar-categoria">Agregar Categoría</h3>
+      <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría">
+      <textarea id="descripcionCategoria" placeholder="Descripción"></textarea>
+      <input type="text" id="imagenCategoria" placeholder="URL de la imagen">
+
+      <button class="btn-agregar-categoria" onclick="guardarCategoria()">Guardar</button>
+      <button class="cancelar-btn-categoria" onclick="cerrarModalAgregarCategoria()">Cancelar</button>
+    </div>
   </div>
-</div>
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Editar Categoría -->
+  <!-- ------------------------------------------------ -->
+  <div id="modalEditarCategoria" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModalEditarCategoria()">&times;</span>
+      <h3>Editar Categoría</h3>
+      <input type="text" id="editarNombreCategoria">
+      <textarea id="editarDescripcionCategoria"></textarea>
+      <label for="editarImagenCategoria">Imagen URL:</label>
+      <input type="text" id="editarImagenCategoria" />
+      <div class="modal-acciones">
+        <button class="btn-agregar" onclick="guardarEdicionCategoria()">Guardar Cambios</button>
+        <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Eliminar Categoría -->
+  <!-- ------------------------------------------------ -->
+
+  <div id="modalEliminarCategoria" class="modal">
+    <div class="modal-contenido-categoria">
+      <span class="cerrar" onclick="cerrarModalEliminarCategoria()">&times;</span>
+      <h3>¿Estás seguro que deseas eliminar esta categoría?</h3>
+      <button class="delete-btn-categoria" onclick="confirmarEliminarCategoria()">Sí, eliminar</button>
+      <button class="cancelar-btn-categoria" onclick="cerrarModalEliminarCategoria()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------ -->
+  <!--Empieza Productos Modal-->
+  <!-- ------------------------------------------------ -->
+  <!-- ------------------------------------------------ -->
+  <!-- Modal para agregar nuevo Productos -->
+  <!-- ------------------------------------------------ -->
+
+  <!-- Modal para agregar nuevo Producto -->
+
+  <div id="Modal-Agregar-Producto" class="modal">
+    <div class="modal-contenido">
+      <div class="campo-descripcion-agregar-producto">
+        <h3>Agregar Producto</h3>
+        <!-- Nombre -->
+        <label for="nombreProducto">Nombre del Producto:</label>
+        <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
+        <span id="errorNombreProducto" class="error"></span>
+        <!-- Descripción -->
+        <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
+        <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
+        <span id="errorDescripcionProducto" class="error"></span>
+      </div>
+
+      <hr>
+
+      <div class="precio-oferta-campopreciodescuento-agregar-producto">
+        <!-- Precio -->
+        <label for="precioProducto">Precio:</label>
+        <input type="number" id="precioProducto" placeholder="Precio">
+        <span id="errorPrecioProducto" class="error"></span>
+
+        <!-- Oferta -->
+        <div class="lineaOferta">
+          <div class="contenedor-linea">
+            <div class="checkbox-linea">
+              <input type="checkbox" id="ofertaProducto">
+              <label class="Oferta" for="ofertaProducto">Oferta</label>
+            </div>
+            <div class="descuento-opciones">
+              <label for="descuentoSeleccionado">Descuento (%):</label>
+              <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0"
+                max="100" disabled>
+              <span class="simbolo">%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Campo de Precio Descuento -->
+        <div class="campo-precio-descuento">
+          <label for="precioProductoDescuento">Precio con Descuento:</label>
+          <input type="number" id="precioProductoDescuento" disabled>
+          <span id="errorPrecioDescuentoProducto" class="error"></span>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="formularios-carpeta-agregar-producto">
+        <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
+          {% csrf_token %}
+          <div class="campo-formulario">
+            <label for="select-carpetas">Seleccionar carpeta existente:</label>
+            <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
+              {% for carpeta in carpetas %}
+              <option value="{{ carpeta }}">{{ carpeta }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="campo-formulario">
+            <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
+            <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
+            <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
+            <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
+          </div>
+        </form>
+
+        <div class="campo-subir-imagen">
+          <div class="div-campo-subir-imagen">
+            <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
+            <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
+              <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+            </button>
+          </div>
+          <input type="file" id="imageInput" accept="image/*" style="display: none;">
+          <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
+          <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+
+          <label for="textareaImagenes">URLs de imágenes:</label>
+          <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
+        </div>
+      </div>
+
+      <div class="modal-acciones">
+        <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
+        <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------ -->
+  <!-- ------------------------------------------------ -->
+  <!-- ------------------------------------------------ -->
+
+  <!-- MODAL -->
+  <div id="modal-editar" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModalEditar()">&times;</span>
+      <h2>Editar Comentario y Calificación</h2>
+      <form id="form-editar-comentario-stars">
+        <label>Usuario:</label>
+        <select id="editar-usuario" required></select>
+
+        <label>Producto:</label>
+        <select id="editar-producto" required></select>
+
+        <label>Comentario:</label>
+        <textarea id="editar-comentario" rows="4" required></textarea>
+
+        <label>Calificación (1 a 5):</label>
+        <input type="number" id="editar-calificacion" min="1" max="5" required>
+
+        <input type="hidden" id="usuario-original">
+        <input type="hidden" id="producto-original">
+
+        <button type="submit">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal para Editar un Producto -->
+  <!-- ------------------------------------------------ -->
+  <!-- Modal de Edición de Producto -->
+
+
+  <!-- ----------------------------------------------- -->
+  <!-- Modal de confirmación Producto eliminar -->
+  <!-- ----------------------------------------------- -->
+
+  <div id="modalEliminarProducto" class="modal">
+    <div class="modal-contenido-producto">
+      <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
+      <h3>¿Estás seguro que deseas eliminar este producto?</h3>
+      <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
+      <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
+    </div>
+  </div>
 
 
 
-<!-- ---------------------------------------------------------------------- -->
+  <!-- ---------------------------------------------------------------------- -->
 
 
 
-<!-- ------------------------------------------------ -->
-                <!----- Scripts ----->
-<!-- ------------------------------------------------ --> 
-
-<script>
-  const muebles = {
-    sofa: {
-      nombre: 'Sofá',
-      imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
-    },
-    sala: {
-      nombre: 'Sala',
-      imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
-    },
-    comedor: {
-      nombre: 'Comedor',
-       imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
-    },
-    espejo: {
-      nombre: 'Espejo',
-           imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
-    },
-    otros: {
-      nombre: 'Otros',
-            imagen: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png'
-    }
-  };
-
-  function mostrarMueble(tipo) {
-    const mueble = muebles[tipo];
-    document.getElementById('imagen-mueble').src = mueble.imagen;
-    document.getElementById('imagen-mueble').alt = mueble.nombre;
-    document.getElementById('nombre-mueble').textContent = mueble.nombre;
-  }
-</script>
+  <!-- ------------------------------------------------ -->
+  <!----- Scripts ----->
+  <!-- ------------------------------------------------ -->
 
 
 
+  <script src="{% static 'js/variables.js' %}"></script>
+  <script>
 
+    /****************************************************************************/
+    /************** Gestiona y Guarda en carpeta.txt las carpetas  **************/
+    /****************************************************************************/
 
-<script>
-  /****************************************************************************/
-/************** Gestiona y Guarda en carpeta.txt las carpetas  **************/
-/****************************************************************************/
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    document.getElementById('formulario-carpeta').addEventListener('submit', function (event) {
+      event.preventDefault();
 
-const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
- document.getElementById('formulario-carpeta').addEventListener('submit', function(event) {
-    event.preventDefault();
+      const nombreCarpeta = document.getElementById('nombre-carpeta').value.trim();
+      const mensajeError = document.getElementById('mensajeError');
 
-    const nombreCarpeta = document.getElementById('nombre-carpeta').value.trim();
-    const mensajeError = document.getElementById('mensajeError');
-
-    fetch('{% url "gestionar_carpetas" %}', {
+      fetch('{% url "gestionar_carpetas" %}', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken  // Asegúrate que tienes csrfToken definido en JS
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken  // Asegúrate que tienes csrfToken definido en JS
         },
         body: JSON.stringify({ carpeta: nombreCarpeta })
-    })
-    .then(response => response.json().then(data => ({ ok: response.ok, data })))
-    .then(({ ok, data }) => {
-        if (ok && data.carpetas) {
+      })
+        .then(response => response.json().then(data => ({ ok: response.ok, data })))
+        .then(({ ok, data }) => {
+          if (ok && data.carpetas) {
             // Actualizar el select
             const select = document.getElementById('select-carpetas');
             select.innerHTML = '';
             data.carpetas.forEach(carpeta => {
-                const option = document.createElement('option');
-                option.value = carpeta;
-                option.textContent = carpeta;
-                select.appendChild(option);
+              const option = document.createElement('option');
+              option.value = carpeta;
+              option.textContent = carpeta;
+              select.appendChild(option);
             });
 
             // Ocultar mensaje de error si todo salió bien
             mensajeError.style.display = 'none';
             mensajeError.textContent = '';
-        } else {
+          } else {
             // Mostrar mensaje de error
             mensajeError.style.display = 'block';
             mensajeError.textContent = data.error || 'Error al guardar la carpeta. Inténtalo de nuevo.';
-        }
-    })
-    .catch(error => {
-        console.error('Error de red o inesperado:', error);
-        mensajeError.style.display = 'block';
-        mensajeError.textContent = 'Debes de ingresar una carpeta o Inténtalo más tarde.';
+          }
+        })
+        .catch(error => {
+          console.error('Error de red o inesperado:', error);
+          mensajeError.style.display = 'block';
+          mensajeError.textContent = 'Debes de ingresar una carpeta o Inténtalo más tarde.';
+        });
     });
-});
 
 
 
-</script>
-
-  
+  </script>
 
 
-<script src="{% static 'js/Admin-Menu.js' %}"></script>
-<script src="{% static 'js/Admin-Table-users.js' %}"></script>
-<script src="{% static 'js/Admin-Categorias.js' %}"></script>
-<script src="{% static 'js/submenu.js' %}"></script>
-<script src="{% static 'js/Admin-Productos.js' %}"></script>
-<script src="{% static 'js/Ofertas.js' %}"></script>
-<script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
-<script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
-<script src="{% static 'js/Admin-Productos-Table-Manita.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Table-Manita.js' %}"></script>
+  <script src="{% static 'js/Admin-Menu.js' %}"></script>
+  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
+
+  <script src="{% static 'js/submenu.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos.js' %}"></script>
+  <script src="{% static 'js/Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
+
+  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+  <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
+
 </body>
+
 </html>

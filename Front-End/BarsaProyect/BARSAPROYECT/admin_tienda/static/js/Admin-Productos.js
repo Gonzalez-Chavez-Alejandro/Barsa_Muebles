@@ -1,48 +1,109 @@
-let idCounterproductos = 1; 
-const productos = [
-  {id: idCounterproductos++, nombre: "aSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, carpeta:"carpeta", nombreimagenes:"https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png", categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "bSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "cMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "dSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "fMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "gSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "hMesa redonda", descripcion: "Mesa para comedor", precio: 3500, oferta: false, precioOferta: 0, categoriaId: 1 },
-  { id: idCounterproductos++, nombre: "jSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, categoriaId: 1 },
-];
 
-let paginaActualProductos = 1;
-const productosPorPagina = 10;
+
 let ordenAscendentep = true;
 let productosFiltradosGlobal = [...productos]; 
+let productosPorPagina = 5;  // Valor inicial de productos por página
+let paginaActualProductos = 1;
 
+function ordenarPorNombre() {
+  ordenAscendentep = !ordenAscendentep;  // Cambia el orden cada vez que se hace clic
 
-/************************************************************************************************************/
-/***************************** Cambiar Pagina Productos *****************************************************/
-/************************************************************************************************************/
-function cambiarPaginaProductos(direccion) {
-  const totalProductos = productosFiltradosGlobal.length;
-  const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
-  
-  paginaActualProductos += direccion;
-  
-  if (paginaActualProductos < 1) paginaActualProductos = 1;
-  if (paginaActualProductos > totalPaginas) paginaActualProductos = totalPaginas;
-  
-  const inicio = (paginaActualProductos - 1) * productosPorPagina;
-  const fin = inicio + productosPorPagina;
-  const productosPaginados = productosFiltradosGlobal.slice(inicio, fin);
-  
-  llenarTablaProductos(productosPaginados);
-  
-  document.getElementById('paginaActualProductos').textContent = `Página ${paginaActualProductos}`;
-  document.getElementById('totalPaginasProductos').textContent = `de ${totalPaginas}`;
+  // Ordena los productos según el orden seleccionado
+  productos.sort((a, b) => {
+    if (ordenAscendentep) {
+      return a.nombre.localeCompare(b.nombre);  // Orden Ascendente (A-Z)
+    } else {
+      return b.nombre.localeCompare(a.nombre);  // Orden Descendente (Z-A)
+    }
+  });
+
+  // Refresca la tabla después de ordenar
+  llenarTablaProductosLLeno();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  cambiarPaginaProductos(0); // Carga la primera página
+
+/************************************************************************************************************/
+/******************************* Llenar Tabla Productos *****************************************************/
+/************************************************************************************************************/
+function llenarTablaProductosLLeno(lista = productos) {
+  const tbody = document.getElementById("tablaProductosDestacados");
+  tbody.innerHTML = "";
+
+  const inicio = (paginaActualProductos - 1) * productosPorPagina;
+  const fin = inicio + productosPorPagina;
+  const productosPagina = lista.slice(inicio, fin);
+
+  productosPagina.forEach(producto => {
+    const fila = document.createElement("tr");
+
+    fila.innerHTML = `
+      <td>${producto.id}</td>
+      <td>${producto.nombre}</td>
+      <td>${producto.descripcion}</td>
+      <td>$${producto.precio}</td>
+      <td>${producto.oferta ? 'Sí' : 'No'}</td>
+      <td>${producto.oferta ? `$${producto.precioOferta}` : '-'}</td>
+      <td>${producto.carpeta}</td>
+      <td class="td-centrado">
+        <textarea readonly class="form-control">${producto.nombreimagenes}</textarea>
+      </td>
+      <td>
+        <button  class="edit-btn-producto"  onclick="editarProducto(${producto.id})">
+        <i class="fas fa-edit"></i>
+        </button>
+        <button  class="delete-btn-producto" onclick="eliminarProducto(${producto.id})">
+        <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(fila);
+  });
+
+  // Actualiza la paginación
+  document.getElementById("paginaActualProductosLleno").textContent = `Página ${paginaActualProductos}`;
+  document.getElementById("totalPaginasProductosLleno").textContent = `de ${Math.ceil(productos.length / productosPorPagina)}`;
+}
+
+
+function cambiarPaginaProductosLleno(direccion) {
+  const totalPaginas = Math.ceil(productos.length / productosPorPagina);
+  paginaActualProductos += direccion;
+
+  if (paginaActualProductos < 1) paginaActualProductos = 1;
+  if (paginaActualProductos > totalPaginas) paginaActualProductos = totalPaginas;
+
+  llenarTablaProductosLLeno();
+}
+
+function cambiarCantidadProductos() {
+  const selector = document.getElementById("selectorCantidadProductos");
+  productosPorPagina = parseInt(selector.value);
+  paginaActualProductos = 1;
+  llenarTablaProductosLLeno(); // Refresca la tabla con la nueva cantidad
+}
+
+// Cargar la tabla con los productos al inicio
+document.addEventListener("DOMContentLoaded", () => {
+  llenarTablaProductosLLeno();  // Llenar la tabla al cargar
+  cambiarCantidadProductos();   // Establecer la cantidad de productos por página
 });
 
 
+
+
+function cambiarCantidadProductos() {
+
+  const selector = document.getElementById("selectorCantidadProductos");
+  productosPorPagina = parseInt(selector.value);
+  paginaActualProductos = 1;
+  llenarTablaProductosLLeno(); // o el nombre que uses para dibujar la tabla
+}
+// Cargar al inicio
+document.addEventListener("DOMContentLoaded", () => {
+  llenarTablaProductosLLeno();
+  cambiarCantidadProductos()
+});
 /************************************************************************************************************/
 /******************************* Llenar Tabla Productos *****************************************************/
 /************************************************************************************************************/
@@ -77,35 +138,7 @@ function llenarTablaProductos(listaProductos) {
   });
 }
 
-/************************************************************************************************************/
-/******************************* Llenar Tabla Productos *****************************************************/
-/************************************************************************************************************/
 
-
-function buscarProductos() {
-  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
-  productosFiltradosGlobal = productos.filter(p =>
-    p.nombre.toLowerCase().includes(termino) || 
-    p.descripcion.toLowerCase().includes(termino)
-  );
-  paginaActualProductos = 1;
-  cambiarPaginaProductos(0); // Cambiar de página a la primera al buscar
-}
-
-function ordenarPorNombreProducto() {
-  ordenAscendentep = !ordenAscendentep;
-  
-  productosFiltradosGlobal.sort((a, b) => {
-    if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) return ordenAscendentep ? -1 : 1;
-    if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) return ordenAscendentep ? 1 : -1;
-    return 0;
-  });
-  
-  cambiarPaginaProductos(0); // Cambiar de página a la primera después de ordenar
-  
-  const boton = document.getElementById('ordenarBtn');
-  boton.textContent = ordenAscendentep ? 'Ordenar Z-A' : 'Ordenar A-Z';
-}
 
 /************************************************************************************************************/
 /******************************* Guardar Nuevo Producto *****************************************************/
@@ -391,3 +424,158 @@ function cerrarModalAgregarProducto() {
   limpiarFormularioNuevoProducto();
 }
 
+
+
+
+
+
+
+
+
+llenarTablaProductosLLeno(productos);
+
+
+function cargarCategorias() {
+  const selectCategoria = document.getElementById("filtroCategoria");
+  categorias.forEach(categoria => {
+    const option = document.createElement("option");
+    option.value = categoria.id;
+    option.textContent = categoria.nombre;
+    selectCategoria.appendChild(option);
+  });
+}
+
+// Llamar a la función al cargar la página
+cargarCategorias();
+
+
+function filtrarPorCategoria() {
+  const categoriaSeleccionada = document.getElementById("filtroCategoria").value;
+  
+  // Filtrar los productos según la categoría seleccionada
+  const productosFiltrados = productos.filter(producto => {
+    return categoriaSeleccionada ? producto.categoriaId == categoriaSeleccionada : true;
+  });
+  
+  // Llenar la tabla con los productos filtrados
+  llenarTablaProductosLLeno(productosFiltrados);
+}
+
+function buscarProductosDestacados() {
+  const buscador = document.getElementById("buscadorProductoDestacados").value.toLowerCase();
+  
+  const productosFiltrados = productos.filter(producto => 
+    producto.nombre.toLowerCase().includes(buscador)
+  );
+  
+  llenarTablaProductosLLeno(productosFiltrados); // Llenar la tabla con los productos filtrados
+}
+
+let categoriaSeleccionadaId = null;
+
+
+function mostrarTablaCategoria(idCategoria) {
+  categoriaSeleccionadaId = idCategoria;
+
+  // Oculta todas las tablas
+  document.querySelectorAll('.tabla-productos').forEach(tabla => {
+    tabla.classList.remove('activa');
+  });
+
+  // Muestra la tabla de la categoría seleccionada
+  const tabla = document.getElementById('tablaCategoria_' + idCategoria);
+  if (tabla) {
+    tabla.classList.add('activa');
+  }
+
+  // Muestra los productos de esa categoría
+  const productosFiltrados = productos.filter(p => p.categoriaId == idCategoria);
+  mostrarProductosEnTabla(productosFiltrados, idCategoria);
+}
+function buscarProductos() {
+  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
+
+  // Filtro por nombre o descripción + por categoría actual
+  const productosFiltrados = productos.filter(p => {
+    const coincideBusqueda = p.nombre.toLowerCase().includes(termino) ||
+                             p.descripcion.toLowerCase().includes(termino);
+    const coincideCategoria = p.categoriaId == categoriaSeleccionadaId;
+    return coincideBusqueda && coincideCategoria;
+  });
+
+  mostrarProductosEnTabla(productosFiltrados, categoriaSeleccionadaId);
+}
+function mostrarProductosEnTabla(productosFiltrados, idCategoria) {
+  const tabla = document.getElementById('tablaCategoria_' + idCategoria);
+  if (!tabla) return;
+
+  const tbody = tabla.querySelector('tbody');
+  tbody.innerHTML = ''; // Limpia filas anteriores
+
+  productosFiltrados.forEach(p => {
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${p.nombre}</td>
+      <td>${p.descripcion}</td>
+      <td>${p.precio}</td>
+      <td>${p.oferta ? p.precioOferta : '—'}</td>
+      <td><img src="${p.nombreimagenes}" width="50"></td>
+      
+    `;
+    tbody.appendChild(fila);
+  });
+}
+
+function buscarProductos() {
+  const termino = document.getElementById('buscadorProducto').value.toLowerCase();
+  const filas = document.querySelectorAll('#tablaProductos tr');
+
+  filas.forEach(fila => {
+    const nombre = fila.children[1]?.textContent.toLowerCase() || "";
+    fila.style.display = nombre.includes(termino) ? '' : 'none';
+  });
+}
+
+
+  const toggle = document.getElementById('toggleSearch');
+  const group = document.getElementById('searchGroup');
+
+  toggle.addEventListener('click', () => {
+    group.classList.toggle('expand');
+    const input = group.querySelector('input');
+    if (group.classList.contains('expand')) {
+      setTimeout(() => input.focus(), 300);
+    }
+  });
+
+
+
+
+
+
+/* ***************************************************************************** 
+  function renderTarjetas(lista = productos) {
+    const contenedor = document.getElementById("contenedor-productos");
+    contenedor.innerHTML = "";
+  
+    lista.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "tarjeta-producto";
+  
+      const imagen = (p.nombreimagenes?.split(",")[0] || "https://via.placeholder.com/300x180").trim();
+      const precio = p.oferta ? `<span class="oferta">$${p.precioOferta}</span> <del>$${p.precio}</del>` : `$${p.precio}`;
+  
+      div.innerHTML = `
+        <img src="${imagen}" alt="${p.nombre}">
+        <div class="contenido">
+          <div class="nombre">${p.nombre}</div>
+          <div class="descripcion">${p.descripcion}</div>
+          <div class="precio">${precio}</div>
+          <button onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
+        </div>
+      `;
+  
+      contenedor.appendChild(div);
+    });
+  }
+  */

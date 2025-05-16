@@ -7,6 +7,7 @@ import time
 import json
 
 from django.views.decorators.csrf import csrf_exempt
+from flask import app, render_template
 
 
 
@@ -102,6 +103,7 @@ def mostrar_carpetas(request):
     carpetas = leer_carpetas()
     return render(request, 'carpetas.html', {'carpetas': carpetas})
 
+
 # ========================
 # Vista opcional para otra página que use carpetas
 # ========================
@@ -110,3 +112,20 @@ def index(request):
     return render(request, 'index.html', {'carpetas': carpetas})
 
 
+
+def home(request):
+    return render(request, 'admin_tienda/Home.html')  # Ruta correcta de la plantilla
+
+
+
+def nosotros(request):
+    return render(request, 'admin_tienda/Nosotros.html')
+
+def registro(request):
+    return render(request, 'admin_tienda/Registro.html')
+
+def productos(request):
+    return render(request, 'admin_tienda/Productos.html')
+
+def productos_vista(request):
+    return render(request, 'admin_tienda/Producto-vista-solo.html')
