@@ -341,3 +341,25 @@ modal.addEventListener("click", (e) => {
 
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  renderCategorias();
+  renderTarjetas();
+
+  const params = new URLSearchParams(window.location.search);
+  const categoriaParam = params.get("categoria");
+
+  if (categoriaParam) {
+    categoriaSeleccionada = categoriaParam;
+
+    document.querySelectorAll("#lista-categorias li").forEach(el => {
+      el.classList.remove("categoria-activa");
+      if (el.dataset.id === categoriaParam) {
+        el.classList.add("categoria-activa");
+      }
+    });
+
+    aplicarFiltros();
+  }
+
+  document.getElementById("buscador").addEventListener("input", aplicarFiltros);
+});

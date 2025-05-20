@@ -227,7 +227,7 @@
     background-color: #1e3c72;
     color: #fff;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 468px) {
     .contenedor-cards {
       flex-direction: column;
       align-items: center;
@@ -235,7 +235,8 @@
   
     .card-usuario,
     .card-categoria,
-    .card-producto {
+    .card-producto,
+    .card-comentario {
       width: 90%;
       max-width: none;
       margin-left: -10px;

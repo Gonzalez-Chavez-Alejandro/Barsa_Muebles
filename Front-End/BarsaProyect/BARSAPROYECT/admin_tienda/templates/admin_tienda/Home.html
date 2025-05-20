@@ -6,18 +6,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
-    type="image/x-icon">
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home-producto-views.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home-Ubicacion.css' %}">
 
 </head>
 
 <body>
+  <style>
+    .Home-Categorias {
+      background-color: #f8f9fa;
+    }
 
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
   <header>
     <div class="logo">
       <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png"
@@ -26,8 +37,8 @@
     <nav>
       <ul id="menu-elements">
         <li><a href="#">Inicio</a></li>
-        <li><a href="#">Productos</a></li>
-        <li><a href="#">Nosotros</a></li>
+         <li><a href="/productos/">Productos</a></li>
+        <li><a href="/nosotros/">Nosotros</a></li>
         <li><a href="#" class="contact">Contacto</a></li>
       </ul>
     </nav>
@@ -57,9 +68,10 @@
 
     <nav>
       <ul id="menu-elements">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Productos</a></li>
-        <li><a href="#">Nosotros</a></li>
+        <li><a href="{% url 'h' %}">Inicio</a></li>
+
+         <li><a href="/productos/">Productos</a></li>
+        <li><a href="/nosotros/">Nosotros</a></li>
         <li><a href="#" class="contact">Contacto</a></li>
       </ul>
     </nav>
@@ -80,13 +92,14 @@
           <button class="btn-ver-catalogos">
             <i class="fas fa-book-open"></i> Ver Catálogo
           </button>
-          <button class="btn-ver">
+          <a href="{% url 'productos' %}" class="btn-ver">
             <i class="fas fa-box-open"></i> Ver Productos
-          </button>
+          </a>
+
         </div>
       </div>
     </div>
-
+    <hr>
     <div class="circle-bg">
       <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747402118/lampara_wxhrsu.png" alt="Sillón"
         class="icono-lampara">
@@ -100,25 +113,61 @@
 
 
 
+<h2 class="carousel-title">Categorías Destacadas</h2>
+
+<div class="carousel-wrapper">
+  <button id="leftArrow" class="arrow">&#10094;</button>
+  <div id="carouselCategorias" class="carousel">
+    <!-- Aquí van las cards -->
+  </div>
+  <button id="rightArrow" class="arrow">&#10095;</button>
+</div>
 
 
 
-  <div id="Home-Categorias" class="Home-Categorias">
-    <!-- Flecha izquierda -->
 
-    <div class="carousel" id="carouselCategorias">
-      <!-- Aquí se insertarán dinámicamente los cards -->
+
+
+
+
+
+
+<div class="container-ubicacion-tel">
+  <section class="contacto">
+    <h1>CONTACTO</h1>
+
+    <div class="telefonos">
+      <h3>☎ Teléfonos</h3>
+      <ul id="lista-telefonos"></ul>
     </div>
 
-    <!-- Flecha derecha -->
+    <div class="ubicacion">
+      <h3>📍 Ubicación</h3>
+      <ul id="lista-ubicaciones"></ul>
+    </div>
 
+    <div class="social-container" id="lista-redes"></div>
+  </section>
+
+  <div class="ilustracion">
+    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747461124/Ubicacion_txuqry.svg" alt="Ubicación" />
   </div>
+</div>
 
 
 
 
-  <div id="contenedor-productos" class="contenedor-productos"></div>
 
+    <!-- Carrito -->
+<section id="carrito" class="carrito" style="display: none;">
+    <h2>Tu Carrito</h2>
+    <div id="lista-carrito" class="contenedor-carrito"></div>
+    <button id="vaciar-carrito">Vaciar Carrito</button>
+    <button id="cerrar-carrito">Cerrar</button>
+    <div id="total-carrito">
+        <span>Total: $<span id="total-precio">0.00</span></span>
+    </div>
+</section>
 
 
 
@@ -127,9 +176,12 @@
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Header.js' %}"></script>
+  
   <script src="{% static 'js/Home-Carrusel-Categorias.js' %}"></script>
+  
 
-
+<script src="{% static 'js/Carrito.js' %}"></script>
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
 </body>
 
 </html>

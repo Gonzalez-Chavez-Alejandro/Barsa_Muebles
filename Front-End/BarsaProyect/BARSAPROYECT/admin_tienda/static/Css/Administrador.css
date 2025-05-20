@@ -141,7 +141,7 @@ body {
 }
 
   /* Estilos responsive */
-  @media (max-width: 768px) {
+  @media (max-width: 2568px) {
     .menu-lateral {
       transform: translateX(-100%);
       transition: transform 0.3s ease;
@@ -209,3 +209,395 @@ body {
 
 
 
+
+.admin-panel h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.red {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.red label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.red input[type="url"],
+.red input[type="email"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Íconos */
+.social-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.facebook {
+  background-color: #3b5998;
+}
+
+.instagram {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+.whatsapp {
+  background-color: #25D366;
+}
+
+.gmail {
+  background-color: #D44638;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Títulos de secciones */
+#admin-form h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #222;
+  border-left: 4px solid #007bff;
+  padding-left: 0.6rem;
+}
+
+/* Secciones */
+.telefono-contactos,
+.ubicaciones-contactos,
+.redes-contactos {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+/* Lista dinámica */
+#lista-telefonos-admin,
+#lista-ubicaciones-admin {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Teléfonos y ubicaciones con botón eliminar */
+#lista-telefonos-admin div,
+#lista-ubicaciones-admin div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#lista-telefonos-admin input,
+#lista-ubicaciones-admin input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Botón eliminar (X) */
+#lista-telefonos-admin button,
+#lista-ubicaciones-admin button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#lista-telefonos-admin button:hover,
+#lista-ubicaciones-admin button:hover {
+  background-color: #c82333;
+}
+
+
+
+
+.red {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.red label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #333;
+  font-size: 15px;
+}
+
+.red input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4CAF50;
+}
+
+.red input[type="url"],
+.red input[type="email"] {
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.red input[type="url"]:focus,
+.red input[type="email"]:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+
+.red input[type="url"],
+.red input[type="email"] {
+  width: 100%; /* ✔ hace que se adapte al ancho del contenedor */
+  box-sizing: border-box; /* ✔ evita que padding/border rompan el layout */
+}
+
+
+
+/* Botón final de enviar */
+.acciones-contacto {
+  margin-top: 2rem;
+}
+
+
+
+/* Oculta el contenido con animación */
+.contenido-seccion {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 0;
+}
+
+/* Cuando está activa, muestra el contenido */
+.seccion-activa .contenido-seccion {
+  max-height: 1000px;
+  padding:  0;
+}
+
+.right-button {
+  display: flex;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  gap: 10px;
+ 
+}
+
+button.Agregar-telefono,
+button.Agregar-ubicacion {
+  background-color: #4CAF50; /* Verde base */
+  color: white;
+  border: none;
+  padding: 7px 8px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 12px 12px 12px auto;
+}
+
+/* Hover más sutil (sin sombra azul ni cambio agresivo) */
+button.Agregar-telefono:hover,
+button.Agregar-ubicacion:hover {
+  background-color: #3e8e41; /* Verde más oscuro */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto de clic (ligero) */
+button.Agregar-telefono:active,
+button.Agregar-ubicacion:active {
+  background-color: #367636;
+  transform: scale(0.99);
+}
+
+
+  .Agregar-telefono i {
+    font-size: 18px;
+  }
+
+  .Agregar-telefono:hover {
+    background-color: #45a049;
+  }
+
+  .Agregar-telefono:active {
+    background-color: #3e8e41;
+  }
+
+  .Agregar-telefono:focus {
+    outline: 2px solid #2e7d32;
+    outline-offset: 2px;
+  }
+
+/* Animación para la flechita */
+h3 i {
+  transition: transform 0.3s ease;
+}
+
+.seccion-activa h3 i {
+  transform: rotate(180deg);
+}
+
+
+
+.acciones-contacto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+}
+
+.acciones-contacto button {
+  background-color: #007bff; /* Azul reactivo */
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.acciones-contacto button:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+.acciones-contacto .mensaje-oculto {
+  display: none;
+  font-size: 15px;
+  color: #28a745; /* verde éxito */
+  background-color: #eafaf1;
+  border: 1px solid #c3e6cb;
+  padding: 10px 15px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.acciones-contacto .mensaje-visible {
+  display: block;
+  animation: aparecer 0.5s ease;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/*******************************************************************         Diseño span bonito */
+/* Contenedor padre que posiciona el mensaje */
+
+/* Oculto */
+.mensaje-oculto {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Visible y flotante */
+.mensaje-visible {
+  position: fixed;         /* Hace que floten */
+  top: 20px;               /* Ajusta según gusto */
+  right: 20px;             /* Ajusta según gusto */
+  z-index: 9999;           /* Siempre encima */
+  display: flex;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 300px;        /* Para que no sean muy anchos */
+  animation: aparecer 0.5s ease;
+  background-color: white; /* Para evitar transparencia molesta */
+}
+
+/* Mensaje de éxito */
+.acciones-contacto .mensaje-visible:not(.error-mensaje) {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.acciones-contacto .mensaje-visible:not(.error-mensaje) i {
+  font-size: 20px;
+  color: #28a745;
+}
+
+/* Mensaje de error */
+.acciones-contacto .error-mensaje.mensaje-visible {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.15);
+}
+
+.acciones-contacto .error-mensaje.mensaje-visible i {
+  font-size: 20px;
+  color: #dc3545;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

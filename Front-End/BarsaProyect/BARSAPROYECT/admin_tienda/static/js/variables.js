@@ -88,3 +88,34 @@ window.usuarios = [
   { id: idCounter++, nombre: 'María López', correo: 'maria@correo.com', telefono: '2233445566', contrasena: 'mnop' },
   { id: idCounter++, nombre: 'José Pérez', correo: 'jose@correo.com', telefono: '3344556677', contrasena: 'qrst' }
 ];
+
+
+
+
+
+window.contactos = {
+    tel: ["555-123-4567","555-123-4567"],
+    ubicaciones: ["Av. Principal 123"],
+    redes: {
+      facebook: { url: "https://facebook.com/tuPagina", activo: true },
+      instagram: { url: "https://instagram.com/tuPagina", activo: true },
+      whatsapp: { url: "https://wa.me/5215551234567", activo: true },
+      gmail: { url: "mailto:correo@gmail.com", activo: true }
+    }
+  };
+
+  const iconos = {
+    facebook: "fab fa-facebook-f",
+    instagram: "fab fa-instagram",
+    whatsapp: "fab fa-whatsapp",
+    gmail: "fas fa-envelope"
+  };
+
+
+
+
+
+
+
+
+

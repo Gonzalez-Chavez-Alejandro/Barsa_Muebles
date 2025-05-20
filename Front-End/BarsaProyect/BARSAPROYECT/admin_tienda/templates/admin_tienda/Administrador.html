@@ -87,7 +87,14 @@
           <!-- Aquí se insertarán las categorías -->
         </ul>
       </li>
-
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-id-card"></i><span>Contactos</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('contactos')">contactos</a></li>
+        </ul>
+      </li>
       <li class="menu-item">
         <button class="menu-button"><i class="fas fa-cogs"></i><span>Ajustes</span></button>
       </li>
@@ -95,6 +102,7 @@
         <button class="menu-button"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></button>
       </li>
     </ul>
+
   </div>
 
   <!-- Contenido principal -->
@@ -151,15 +159,21 @@
           </button>
         </div>
 
+        <!-- Tarjeta de Contacto -->
+        <div class="card-comentario">
+          <i class="fas fa-address-book icono-top"></i>
+          <h3>Contacto</h3>
+          <p>Administra teléfonos, ubicaciones y redes sociales mostradas en la sección de contacto.</p>
+
+          <button class="card-btn" onclick="mostrarSeccion('contactos')">
+            <i class="fas fa-edit"></i> Editar Contacto
+          </button>
+        </div>
+
+      </div>
 
 
-
-        <div id="Home-Categorias" class="Home-Categorias">
-          <!-- Flecha izquierda -->
-
-          <div class="carousel" id="carouselCategorias">
-            <!-- Aquí se insertarán dinámicamente los cards -->
-          </div>
+        
 
           <!-- Flecha derecha -->
 
@@ -385,7 +399,7 @@
           <div class="admin-card">
             <form id="form-destacados">
 
-              <h2 id="titulo-destacados">📌 Productos Destacados</h2>
+              <h2 id="titulo-destacados">📌 Productos </h2>
 
               <!-- Buscar y Agregar -->
               <div class="conjuntoagregarbuscar">
@@ -443,7 +457,7 @@
                   <th class="NombretablaContainerDestacados">Nombre
                     <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
                   </th>
-                  <th>Descripción</th>
+                  <th class="descripcion-table-productos">Descripción</th>
                   <th>Precio</th>
                   <th>Oferta</th>
                   <th>Precio Oferta</th>
@@ -508,6 +522,147 @@
       </div>
       </div>
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <section id="contactos" class="seccion">
+      <div class="admin-panel">
+        <h2>Administración de Contacto</h2>
+        <div class="acciones-contacto">
+          <p id="mensaje-actualizado" class="mensaje-oculto">
+            <i class="fas fa-check-circle"></i> Teléfono, ubicación y redes actualizados.
+          </p>
+
+          <p id="mensaje-eliminado-telefono" class="mensaje-oculto">
+            <i class="fas fa-check-circle"></i> Teléfono ha sido borrado.
+          </p>
+          <p id="mensaje-error" class="mensaje-oculto error-mensaje">
+            <i class="fas fa-exclamation-circle"></i> Ocurrió un error al eliminar el teléfono.
+          </p>
+          <p id="mensaje-eliminado-ubicacion" class="mensaje-oculto">
+            <i class="fas fa-check-circle"></i> Ubicación ha sido borrada.
+          </p>
+        </div>
+
+        <form id="admin-form">
+          <!-- Teléfonos -->
+          <div class="telefono-contactos">
+            <h3 onclick="toggleSeccion(this)">
+              Teléfonos <i class="fas fa-chevron-down"></i>
+            </h3>
+            <div class="contenido-seccion">
+              <div id="lista-telefonos-admin"></div>
+              <div class="right-button">
+                <button class="Agregar-telefono" type="button" onclick="agregarTelefono()">
+                  <i class="fas fa-plus" style="margin-left: 5px;"></i>
+                  Agregar</button>
+                <!-- <button id="mostrar-error">Mostrar mensaje de error</button>-->
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Ubicaciones -->
+          <div class="ubicaciones-contactos">
+            <h3 onclick="toggleSeccion(this)">
+              Ubicaciones <i class="fas fa-chevron-down"></i>
+            </h3>
+            <div class="contenido-seccion">
+              <div id="lista-ubicaciones-admin"></div>
+              <div class="right-button">
+                <button type="button" class="Agregar-ubicacion" onclick="agregarUbicacion()">
+                  <i class="fas fa-plus" style="margin-left: 5px;"></i>
+                  Agregar </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Redes Sociales -->
+          <div class="redes-contactos">
+            <h3 onclick="toggleSeccion(this)">
+              Redes Sociales <i class="fas fa-chevron-down"></i>
+            </h3>
+            <div class="contenido-seccion">
+              <div class="red">
+                <label>
+                  <input type="checkbox" id="check-facebook">
+                  <i class="fab fa-facebook-f social-icon facebook"></i>
+                  Facebook
+                </label>
+                <input type="url" id="input-facebook" placeholder="https://facebook.com/tuPagina">
+              </div>
+
+              <div class="red">
+                <label>
+                  <input type="checkbox" id="check-instagram">
+                  <i class="fab fa-instagram social-icon instagram"></i>
+                  Instagram
+                </label>
+                <input type="url" id="input-instagram" placeholder="https://instagram.com/tuPagina">
+              </div>
+
+              <div class="red">
+                <label>
+                  <input type="checkbox" id="check-whatsapp">
+                  <i class="fab fa-whatsapp social-icon whatsapp"></i>
+                  WhatsApp
+                </label>
+                <input type="url" id="input-whatsapp" placeholder="https://wa.me/5215551234567">
+              </div>
+
+              <div class="red">
+                <label>
+                  <input type="checkbox" id="check-gmail">
+                  <i class="far fa-envelope social-icon gmail"></i>
+                  Gmail
+                </label>
+                <input type="email" id="input-gmail" placeholder="correo@gmail.com">
+              </div>
+
+
+            </div>
+            <div class="acciones-contacto">
+              <button type="submit" id="btn-actualizar">
+                <i class="fas fa-save"></i>
+                <span>Actualizar Contacto</span>
+              </button>
+
+            </div>
+
+          </div>
+
+      </div>
+
+      </form>
+      </div>
+    </section>
+
+
+
+
+
 
 
   </main>
@@ -885,6 +1040,7 @@
   <script src="{% static 'js/Admin-Categorias.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
 
 </body>
 

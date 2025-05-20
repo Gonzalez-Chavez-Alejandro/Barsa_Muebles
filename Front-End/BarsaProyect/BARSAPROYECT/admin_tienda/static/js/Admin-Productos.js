@@ -579,3 +579,20 @@ function buscarProductos() {
     });
   }
   */
+
+
+  
+const params = new URLSearchParams(window.location.search);
+const categoriaSeleccionada = params.get('categoria');
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (categoriaSeleccionada) {
+    // Buscar el <li> que coincida con la categoría
+    const categoriaElement = Array.from(document.querySelectorAll('#lista-categorias li'))
+      .find(li => li.dataset.nombre?.toLowerCase() === categoriaSeleccionada.toLowerCase());
+
+    if (categoriaElement) {
+      categoriaElement.click();  // Simula el click para filtrar los productos
+    }
+  }
+});
