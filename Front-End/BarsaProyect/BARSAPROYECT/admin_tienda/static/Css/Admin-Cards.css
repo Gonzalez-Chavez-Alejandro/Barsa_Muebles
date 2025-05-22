@@ -113,6 +113,7 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
+    margin-right: 50px;
   }
   
 
@@ -237,9 +238,9 @@
     .card-categoria,
     .card-producto,
     .card-comentario {
-      width: 90%;
+      width: 100%;
       max-width: none;
-      margin-left: -10px;
+      margin-left: 23px;
     }
   
     .h1-Panel-Administrativo {

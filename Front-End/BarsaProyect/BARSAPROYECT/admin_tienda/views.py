@@ -116,7 +116,8 @@ def index(request):
 def home(request):
     return render(request, 'admin_tienda/Home.html')  # Ruta correcta de la plantilla
 
-
+def login(request):
+    return render(request, 'admin_tienda/Login.html')
 
 def nosotros(request):
     return render(request, 'admin_tienda/Nosotros.html')
@@ -129,3 +130,4 @@ def productos(request):
 
 def productos_vista(request):
     return render(request, 'admin_tienda/Producto-vista-solo.html')
+

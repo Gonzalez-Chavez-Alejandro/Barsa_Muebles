@@ -1,4 +1,6 @@
+
 document.addEventListener("DOMContentLoaded", () => { 
+   
     // Cargar carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
@@ -211,3 +213,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cargar al inicio
     actualizarCarritoUI();
 });
+

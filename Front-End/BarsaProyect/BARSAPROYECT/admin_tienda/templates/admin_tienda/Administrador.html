@@ -9,7 +9,8 @@
   <!-- ----------------------------------------------- -->
   <!-- Link Css -->
   <!-- ----------------------------------------------- -->
-
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
@@ -20,8 +21,15 @@
   <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
-  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
-    type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
+
+  <!-- Incluir jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 </head>
 
@@ -56,6 +64,10 @@
         </ul>
         <ul class="submenu">
           <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-star-comment')">Comentarios Stars </a>
+          </li>
+        </ul>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-mandas')">Mandas</a>
           </li>
         </ul>
       </li>
@@ -173,52 +185,52 @@
       </div>
 
 
-        
-
-          <!-- Flecha derecha -->
-
-        </div>
-        <div id="contenedor-productos" class="contenedor-productos"></div>
 
 
-        <div class="admin-footer-editor">
-          <h2>Editor del Footer</h2>
+      <!-- Flecha derecha -->
 
-          <div class="admin-section">
-            <h3>Información de Contacto</h3>
-            <div class="form-group">
-              <label>Correo electrónico:</label>
-              <input type="email" id="admin-email" class="form-control" placeholder="ejemplo@empresa.com">
-            </div>
-            <div class="form-group">
-              <label>Teléfonos (separados por comas):</label>
-              <input type="text" id="admin-phones" class="form-control" placeholder="123-456-7890, 987-654-3210">
-            </div>
+      </div>
+      <div id="contenedor-productos" class="contenedor-productos"></div>
+
+
+      <div class="admin-footer-editor">
+        <h2>Editor del Footer</h2>
+
+        <div class="admin-section">
+          <h3>Información de Contacto</h3>
+          <div class="form-group">
+            <label>Correo electrónico:</label>
+            <input type="email" id="admin-email" class="form-control" placeholder="ejemplo@empresa.com">
           </div>
-
-          <div class="admin-section">
-            <h3>Ubicaciones</h3>
-            <div id="admin-locations-container">
-              <!-- Las ubicaciones se generarán dinámicamente -->
-            </div>
-            <button id="add-location-btn" class="btn-add">+ Añadir ubicación</button>
-          </div>
-
-          <div class="admin-section">
-            <h3>Redes Sociales</h3>
-            <div id="admin-social-container">
-              <!-- Las redes sociales se generarán dinámicamente -->
-            </div>
-            <button id="add-social-btn" class="btn-add">+ Añadir red social</button>
-          </div>
-
-          <div class="admin-actions">
-            <button id="preview-footer-btn" class="btn-preview">Vista Previa</button>
-
-
-            <button id="save-footer-btn" class="btn-save">Guardar Cambios</button>
+          <div class="form-group">
+            <label>Teléfonos (separados por comas):</label>
+            <input type="text" id="admin-phones" class="form-control" placeholder="123-456-7890, 987-654-3210">
           </div>
         </div>
+
+        <div class="admin-section">
+          <h3>Ubicaciones</h3>
+          <div id="admin-locations-container">
+            <!-- Las ubicaciones se generarán dinámicamente -->
+          </div>
+          <button id="add-location-btn" class="btn-add">+ Añadir ubicación</button>
+        </div>
+
+        <div class="admin-section">
+          <h3>Redes Sociales</h3>
+          <div id="admin-social-container">
+            <!-- Las redes sociales se generarán dinámicamente -->
+          </div>
+          <button id="add-social-btn" class="btn-add">+ Añadir red social</button>
+        </div>
+
+        <div class="admin-actions">
+          <button id="preview-footer-btn" class="btn-preview">Vista Previa</button>
+
+
+          <button id="save-footer-btn" class="btn-save">Guardar Cambios</button>
+        </div>
+      </div>
 
 
 
@@ -244,7 +256,6 @@
 
         <div class="filtros">
           <input type="text" id="buscador" placeholder="Buscar por nombre..." onkeyup="buscarUsuarios()">
-          <button onclick="ordenarPorNombre()">Ordenar A-Z / Z-A</button>
         </div>
 
         <div class="table-container">
@@ -298,6 +309,41 @@
         </div>
       </div>
     </section>
+
+
+
+
+
+
+
+
+
+
+    <section id="usuarios-mandas" class="seccion">
+
+      <!-- Buscador -->
+      <div class="um-buscador-container">
+        <div class="um-buscador">
+          <i class="fas fa-search um-icono-buscar"></i>
+          <input type="text" id="um-input-buscar" class="um-input-buscar"
+            placeholder="Buscar por ID, nombre, correo o teléfono..." aria-label="Buscar pedidos">
+        </div>
+      </div>
+      <h1>Pedidos Encargados</h1>
+      <div class="um-header-actions">
+        <button class="um-btn-pdf" id="um-exportar-todos">
+          <i class="fas fa-file-pdf"></i> Exportar todos
+        </button>
+      </div>
+      <div id="pedidos-container"></div>
+    </section>
+
+
+
+
+
+
+
 
 
 
@@ -527,26 +573,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <section id="contactos" class="seccion">
       <div class="admin-panel">
         <h2>Administración de Contacto</h2>
@@ -606,10 +632,15 @@
             </h3>
             <div class="contenido-seccion">
               <div class="red">
-                <label>
-                  <input type="checkbox" id="check-facebook">
-                  <i class="fab fa-facebook-f social-icon facebook"></i>
-                  Facebook
+                <label class="social-label">
+                  <!-- Checkbox escondido -->
+                  <input type="checkbox" id="check-facebook" class="hidden-checkbox">
+                  <!-- Contenedor circular para el ícono -->
+                  <span class="social-circle">
+                    <i class="fab fa-facebook-f social-icon facebook"></i>
+                  </span>
+                  <!-- Texto "Facebook" -->
+                  <span class="social-text">Facebook</span>
                 </label>
                 <input type="url" id="input-facebook" placeholder="https://facebook.com/tuPagina">
               </div>
@@ -1041,6 +1072,7 @@
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
 
 </body>
 

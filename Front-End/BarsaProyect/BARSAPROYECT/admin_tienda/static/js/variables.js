@@ -69,14 +69,6 @@ window.comentarios = [
 
 
 
-
-
-
-
-
-
-
-
 let idCounter = 1;
 
 window.usuarios = [

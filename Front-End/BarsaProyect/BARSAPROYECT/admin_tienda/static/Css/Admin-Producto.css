@@ -20,13 +20,10 @@ select#filtroOferta:focus {
   box-shadow: 0 0 5px rgba(0,123,255,0.5);
 }
 
-
 /* th Centrado */
 .td-centrado {
   text-align: center !important;    /*Con !important! Gana siempre este estilo, pase lo que pase.*/
 }
-
-
 
 .delete-btn-producto,.delete-btn-comentario-stars {
   background-color: #e74c3c;
@@ -47,8 +44,7 @@ select#filtroOferta:focus {
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
-  display: inline-flex
-;
+  display: inline-flex;
   align-items: center;
   gap: 0px;
   transition: transform 0.2sease, box-shadow 0.3sease;
@@ -112,7 +108,6 @@ select#filtroOferta:focus {
   box-sizing: border-box; /* <- Asegura que padding/margin no lo haga más grande */
 }
 
-
 .checkbox-linea, .descuento-opciones {
   display: flex;
   align-items: center;
@@ -134,7 +129,6 @@ label.lbl-descuento-productos {
 .input-con-simbolo input {
   padding-right: 20px; /* Espacio para el % */
 }
-
 
 .simbolo {
   position: absolute;
@@ -160,8 +154,6 @@ td.td-centrado {
   padding: 0;
 }
 
-
-
 .cancelar-btn-producto-Modal {
   padding: 9px 19px;
   border: none;
@@ -182,21 +174,6 @@ td.td-centrado {
   cursor: pointer;
   margin: 0 27px 0px 0px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .select-group-container {
   display: flex;
@@ -258,8 +235,6 @@ td.td-centrado {
     max-width: 70px;
 }
 }
-
-
 
 
 th.td-espacio {
@@ -331,49 +306,6 @@ th.td-espacio {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .layout {
   display: flex;
   flex-wrap: wrap;
@@ -418,27 +350,6 @@ th.td-espacio {
   margin-bottom: 1rem;
   font-size: 16px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 .cerrar {
