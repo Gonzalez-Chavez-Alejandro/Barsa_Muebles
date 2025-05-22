@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from cloudinary.models import CloudinaryField
 from django.db import models
 
@@ -20,5 +21,10 @@ class Muebles(models.Model):
 
     def save(self, *args, **kwargs):
         if self.imageFurniture:
-            self.imageFurniture.public_id = f"muebles/{self.nameFurniture.replace(' ', '_')}"
+            upload_result = cloudinary.uploader.upload(
+                self.imageFurniture,
+                public_id=f"muebles/{self.nameFurniture.replace(' ','_')}",
+                folder='muebles/',
+            )
+            self.imageFurniture = upload_result['secure_url']
         super().save(*args, **kwargs)
