@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Nosotros.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -89,47 +91,6 @@
 
 
 
-
-
-
-
-<style>
-.panel-catalogo {
-  border: 2px dashed #ccc;
-  padding: 1rem;
-  margin: 2rem auto;
-  max-width: 800px;
-  background: #fff;
-  border-radius: 10px;
-  text-align: center;
-}
-.panel-catalogo h2 {
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-.panel-catalogo input[type="file"] {
-  margin-bottom: 1rem;
-}
-.panel-catalogo button {
-  padding: 0.5rem 1rem;
-  background-color: #333;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-</style>
-
-<section class="panel-catalogo">
-  <h2>Subir catálogo en PDF</h2>
-  <form id="upload-form">
-    <input type="file" id="pdf-file" accept="application/pdf" required />
-    <button type="submit">Subir Catálogo</button>
-  </form>
-  <div id="catalogo-container" style="margin-top: 2rem;">
-    <h3>Catálogo actual</h3>
-    <div id="flipbook-viewer"></div>
-  </div>
-</section>
 
 
 

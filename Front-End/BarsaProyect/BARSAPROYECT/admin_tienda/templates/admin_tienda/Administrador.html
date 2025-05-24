@@ -11,6 +11,7 @@
   <!-- ----------------------------------------------- -->
   <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
     type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
@@ -21,7 +22,7 @@
   <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
 
   <!-- Incluir jsPDF -->
@@ -184,7 +185,22 @@
 
       </div>
 
+<!-- Panel de administración -->
+<div class="admin-panel" id="adminPanel">
+    <h3>Administrar Catálogo</h3>
+    <div class="admin-form">
+        <input type="text" 
+               id="nuevoEnlace" 
+               class="admin-input" 
+               placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
+        <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
+    </div>
+    <small class="text-muted">
+        Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
+    </small>
+</div>
 
+<script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
 
 
       <!-- Flecha derecha -->
@@ -255,9 +271,20 @@
 
 
         <div class="filtros">
-          <input type="text" id="buscador" placeholder="Buscar por nombre..." onkeyup="buscarUsuarios()">
-        </div>
+  <div class="search-container">
+    <i class="fas fa-search search-icon"></i>
+    <input 
+      type="text" 
+      id="buscador" 
+      placeholder="Buscar por ID, nombre, correo o teléfono..."
+      onkeyup="buscarUsuarios()"
+    >
+  </div>
+</div>
 
+
+
+        
         <div class="table-container">
           <table class="admin-table">
             <thead>
@@ -393,7 +420,7 @@
         <div id="formulario-producto" class="seccion">
           <form id="agregar-producto-form">
             <input type="hidden" id="categoria-id">
-            <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos()">
+            <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('regular')">
               <i class="fas fa-plus"></i> Agregar
             </button>
             <div class="filtros">
@@ -457,7 +484,7 @@
                   </div>
                 </div>
 
-                <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductosDestacados()">
+                <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('destacado')">
                   <i class="fas fa-plus"></i> Agregar
                 </button>
               </div>
@@ -941,8 +968,125 @@
   </div>
 
   <!-- ------------------------------------------------ -->
+
+  <!-- Modal para Editar Producto -->
+  <div id="Modal-Editar-Producto" class="modal">
+    <div class="modal-contenido">
+      <div class="campo-descripcion-agregar-producto">
+        <h3>Editar Producto</h3>
+        <input type="hidden" id="editarProductoId">
+
+        <!-- Nombre -->
+        <label for="editarNombreProducto">Nombre del Producto:</label>
+        <input type="text" id="editarNombreProducto" placeholder="Nombre del Producto">
+        <span id="errorEditarNombreProducto" class="error"></span>
+
+        <!-- Descripción -->
+        <label for="editarDescripcionProducto">Descripción:</label>
+        <textarea id="editarDescripcionProducto" placeholder="Descripción del producto"></textarea>
+        <span id="errorEditarDescripcionProducto" class="error"></span>
+      </div>
+
+      <hr>
+
+      <div class="precio-oferta-campopreciodescuento-agregar-producto">
+        <!-- Precio -->
+        <label for="editarPrecioProducto">Precio:</label>
+        <input type="number" id="editarPrecioProducto" placeholder="Precio">
+        <span id="errorEditarPrecioProducto" class="error"></span>
+
+        <!-- Oferta -->
+        <div class="lineaOferta">
+          <div class="contenedor-linea">
+            <div class="checkbox-linea">
+              <input type="checkbox" id="editarOfertaProducto">
+              <label class="Oferta" for="editarOfertaProducto">Oferta</label>
+            </div>
+            <div class="descuento-opciones">
+              <label for="editarDescuentoSeleccionado">Descuento (%):</label>
+              <input class="input-descuento-escribir-productos" type="number" id="editarDescuentoSeleccionado" min="0"
+                max="100" disabled>
+              <span class="simbolo">%</span>
+            </div>
+          </div>
+        </div>
+        <!-- Campo de Precio Descuento -->
+        <div class="campo-precio-descuento">
+          <label for="editarPrecioProductoDescuento">Precio con Descuento:</label>
+          <input type="number" id="editarPrecioProductoDescuento" disabled>
+          <span id="errorEditarPrecioDescuentoProducto" class="error"></span>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="formularios-carpeta-agregar-producto">
+        <form method="POST" id="formulario-editar-carpeta">
+          {% csrf_token %}
+          <div class="campo-formulario">
+            <label for="editarSelectCarpetas">Seleccionar carpeta existente:</label>
+            <select id="editarSelectCarpetas" name="carpeta" class="select-carpetas-opciones">
+              {% for carpeta in carpetas %}
+              <option value="{{ carpeta }}">{{ carpeta }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="campo-formulario">
+            <label for="editarNombreCarpeta">Ingrese nueva carpeta:</label>
+            <input type="text" id="editarNombreCarpeta" name="carpeta" placeholder="Nombre de la carpeta">
+            <span id="editarMensajeError" class="mensaje-error" style="display: none;"></span>
+            <button type="button" class="btn-guardar-carpeta" onclick="actualizarCarpeta()">Actualizar carpeta</button>
+          </div>
+        </form>
+
+        <div class="campo-subir-imagen">
+          <div class="div-campo-subir-imagen">
+            <label class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
+            <button type="button" id="btnEditarSubirImagen" class="btn-agregar-subir-imagen">
+              <i class="fas fa-image icono-imagen"> </i> Cambiar Imagen
+            </button>
+          </div>
+          <input type="file" id="editarImageInput" accept="image/*" style="display: none;">
+          <label id="editarLabelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
+          <span id="editarNombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+
+          <!-- Reemplaza el textarea en tu modal con este bloque -->
+          <div class="campo-imagenes">
+            <label>Vista previa de imágenes:</label>
+            <div id="galeria-imagenes-editar" class="galeria-imagenes"></div>
+            <div class="contenedor-urls">
+              <label>URLs de imágenes:</label>
+              <div id="urls-imagenes-editar" class="urls-imagenes"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-acciones">
+        <button class="btn-guardar" onclick="guardarCambiosProducto()">Guardar Cambios</button>
+        <button class="btn-cancelar" onclick="cerrarModalEditarProducto()">Cancelar</button>
+      </div>
+    </div>
+  </div>
   <!-- ------------------------------------------------ -->
-  <!-- ------------------------------------------------ -->
+
+  <!-- ----------------------------------------------- -->
+  <!-- Modal de confirmación Producto eliminar -->
+  <!-- ----------------------------------------------- -->
+
+  <div id="modalEliminarProducto" class="modal">
+    <div class="modal-contenido-producto">
+      <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
+      <h3>¿Estás seguro que deseas eliminar este producto?</h3>
+      <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
+      <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
+    </div>
+  </div>
+
+
+
+  <!-- ---------------------------------------------------------------------- -->
 
   <!-- MODAL -->
   <div id="modal-editar" class="modal">
@@ -969,32 +1113,6 @@
       </form>
     </div>
   </div>
-
-
-  <!-- ------------------------------------------------ -->
-  <!-- Modal para Editar un Producto -->
-  <!-- ------------------------------------------------ -->
-  <!-- Modal de Edición de Producto -->
-
-
-  <!-- ----------------------------------------------- -->
-  <!-- Modal de confirmación Producto eliminar -->
-  <!-- ----------------------------------------------- -->
-
-  <div id="modalEliminarProducto" class="modal">
-    <div class="modal-contenido-producto">
-      <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
-      <h3>¿Estás seguro que deseas eliminar este producto?</h3>
-      <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
-      <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
-    </div>
-  </div>
-
-
-
-  <!-- ---------------------------------------------------------------------- -->
-
-
 
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
@@ -1073,6 +1191,8 @@
   <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
+  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+  
 
 </body>
 
