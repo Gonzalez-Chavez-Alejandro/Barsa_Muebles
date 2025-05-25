@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
-  
+
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
 
   <!-- Incluir jsPDF -->
@@ -102,15 +102,21 @@
       </li>
       <li class="menu-item">
         <button class="menu-button" onclick="toggleSubmenu(this)">
-          <i class="fas fa-id-card"></i><span>Contactos</span>
+          <i class="fas fa-list-alt"></i><span>Catalogo</span>
         </button>
         <ul class="submenu">
-          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('contactos')">contactos</a></li>
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('catalogo')">Catalogo</a></li>
         </ul>
       </li>
       <li class="menu-item">
-        <button class="menu-button"><i class="fas fa-cogs"></i><span>Ajustes</span></button>
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-id-card"></i><span>Contactos</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('contactos')">Contactos</a></li>
+        </ul>
       </li>
+
       <li class="menu-item">
         <button class="menu-button"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></button>
       </li>
@@ -185,22 +191,9 @@
 
       </div>
 
-<!-- Panel de administración -->
-<div class="admin-panel" id="adminPanel">
-    <h3>Administrar Catálogo</h3>
-    <div class="admin-form">
-        <input type="text" 
-               id="nuevoEnlace" 
-               class="admin-input" 
-               placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
-        <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
-    </div>
-    <small class="text-muted">
-        Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
-    </small>
-</div>
 
-<script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+
+
 
 
       <!-- Flecha derecha -->
@@ -257,6 +250,26 @@
 
 
 
+    <section id="catalogo" class="seccion">
+      <!-- Panel de administración -->
+      <div class="admin-panel" id="adminPanel">
+        <h3>Administrar Catálogo</h3>
+        <div class="admin-form">
+          <input type="text" id="nuevoEnlace" class="admin-input"
+            placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
+          <div class="button-group">
+            <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
+            <button class="delete-btn-limpiar-campo" onclick="limpiarCampo()">Eliminar</button>
+          </div>
+        </div>
+        <small class="text-muted">
+          Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
+        </small>
+      </div>
+
+    </section>
+
+
     <!-- ----------------------------------------------- -->
     <!-- Sección de Usuarios -->
     <!-- ----------------------------------------------- -->
@@ -271,20 +284,16 @@
 
 
         <div class="filtros">
-  <div class="search-container">
-    <i class="fas fa-search search-icon"></i>
-    <input 
-      type="text" 
-      id="buscador" 
-      placeholder="Buscar por ID, nombre, correo o teléfono..."
-      onkeyup="buscarUsuarios()"
-    >
-  </div>
-</div>
+          <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="buscador" placeholder="Buscar por ID, nombre, correo o teléfono..."
+              onkeyup="buscarUsuarios()">
+          </div>
+        </div>
 
 
 
-        
+
         <div class="table-container">
           <table class="admin-table">
             <thead>
@@ -1192,7 +1201,7 @@
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
-  
+
 
 </body>
 

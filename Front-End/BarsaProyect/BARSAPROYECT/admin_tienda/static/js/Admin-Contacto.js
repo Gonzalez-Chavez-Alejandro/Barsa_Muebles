@@ -210,15 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mostrarContacto();
 
-    // Mostrar mensaje de éxito al actualizar
-    const mensajeActualizado = document.getElementById('mensaje-actualizado');
-    mensajeActualizado.classList.remove('mensaje-oculto');
-    mensajeActualizado.classList.add('mensaje-visible');
 
-    setTimeout(() => {
-      mensajeActualizado.classList.remove('mensaje-visible');
-      mensajeActualizado.classList.add('mensaje-oculto');
-    }, 2000);
   });
 });
 

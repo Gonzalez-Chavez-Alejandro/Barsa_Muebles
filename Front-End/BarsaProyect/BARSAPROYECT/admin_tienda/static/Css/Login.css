@@ -1,6 +1,3 @@
-       
-
-
        .login-container {
            background: #fff;
            padding: 1.5rem 2.5rem 1.5rem 2.5rem;
@@ -132,7 +129,7 @@
 
        .forgot-password {
            text-align: right;
-           margin-bottom: 1.5rem;
+          
        }
 
        .forgot-password a {
@@ -167,37 +164,109 @@
            color: #4299e1;
        }
 
-       #btn-cerrar-sesion {
-           background-color: white;
-           color: #222;
-           /* texto oscuro */
-           border: 2px solid #222;
-           /* borde gris oscuro */
-           padding: 10px 22px;
-           border-radius: 6px;
-           font-size: 16px;
-           font-weight: 600;
-           cursor: pointer;
-           transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.2s ease;
-           width: 100%;
-       }
-
-       #btn-cerrar-sesion:hover {
-           background-color: #f0f0f0;
-           /* fondo gris muy claro */
-           color: #111;
-           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-       }
-
-       #btn-cerrar-sesion:active {
-           background-color: #e0e0e0;
-           box-shadow: none;
-       }
-
        label,
-.input-field,
-.submit-btn,
-.google-btn,
-.forgot-password a {
-    letter-spacing: 0.5px;
+       .input-field,
+       .submit-btn,
+       .google-btn,
+       .forgot-password a {
+           letter-spacing: 0.5px;
+       }
+
+#btn-cerrar-sesion {
+    background-color: #2C3E50; /* Azul oscuro cálido */
+    color: #ECF0F1; /* Gris claro cálido */
+    border: 2px solid #3A546B; /* Borde tonalidad media */
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+
+#btn-cerrar-sesion:hover {
+    background-color: #34495E; /* 15% más claro */
+    color: #FFFFFF;
+    border-color: #4B6584;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+#btn-cerrar-sesion:active {
+    background-color: #2C3E50;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+#btn-cerrar-sesion:focus {
+    outline: 2px solid #F39C12; /* Naranja cálido para mejor contraste */
+    outline-offset: 2px;
+}
+
+       #btn-configuracion-usuario {
+           background-color: #f8f9fa;
+           color: #2B2B2B;
+           border: 1px solid #dee2e6;
+           padding: 8px 10px;
+           border-radius: 8px;
+           font-size: 16px;
+           font-weight: 500;
+           cursor: pointer;
+           transition: all 0.2s ease;
+           width: 100%;
+           margin: 0%;
+           text-align: center;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+       }
+
+       #btn-configuracion-usuario:hover {
+           background-color: #e9ecef;
+           border-color: #ced4da;
+           box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+           transform: translateY(-1px);
+       }
+
+       #btn-configuracion-usuario:focus {
+           outline: 2px solid #4a90e2;
+           outline-offset: 2px;
+       }
+
+       #btn-configuracion-usuario:active {
+           background-color: #dee2e6;
+           transform: translateY(0);
+       }
+
+       /* Versión móvil */
+       @media (max-width: 768px) {
+           #btn-configuracion-usuario {
+               font-size: 17px;
+               padding: 16px 32px;
+           }
+       }
+
+       /* Manteniendo coherencia con user-info */
+       .user-info {
+           margin-bottom: 30px;
+           border-bottom: 2px solid #e9ecef;
+           /* Borde más suave */
+           padding-bottom: 25px;
+       }
+
+       .user-greeting {
+           font-size: 24px;
+           font-weight: 600;
+           /* Peso más ligero */
+           color: #343a40;
+           margin: 0 0 12px 0;
+           letter-spacing: normal;
+       }
+
+       .email {
+           font-size: 16px;
+           color: #6c757d;
+           /* Color más suave */
+           margin: 0 0 30px 0;
+           font-weight: 400;
+       }

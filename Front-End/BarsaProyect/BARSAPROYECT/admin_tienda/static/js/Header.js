@@ -31,10 +31,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // Código para usuarios en localStorage
-  if (!localStorage.getItem('usuarios')) {
-    localStorage.setItem('usuarios', JSON.stringify(window.usuarios));
-  }
+// Inicializar datos en localStorage si no existen
+['usuarios', 'correo'].forEach(key => {
+    if (!localStorage.getItem(key)) {
+        localStorage.setItem(key, JSON.stringify(window[key]));
+    }
+});
 
   const usuarioActual = JSON.parse(localStorage.getItem('usuarioLogueado'));
 
@@ -42,8 +44,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const menu = document.getElementById('menu-usuario');
     if (usuarioActual) {
       menu.innerHTML = `
-      <p>Hola, ${usuarioActual.nombre}</p>
-      <button id="btn-cerrar-sesion">Cerrar sesión</button>
+       <div class="user-info">
+        <h1 class="user-greeting">Hola, ${usuarioActual.nombre}</h1>
+        <p class="email">${usuarioActual.correo}</p>
+        <button id="btn-configuracion-usuario"><i class="fas fa-cog"></i>
+         Configuración</button>
+    </div>
+    
+    
+    <button id="btn-cerrar-sesion"><i class="fas fa-sign-out-alt"></i>
+    Cerrar sesión</button>
       `;
       document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
         localStorage.removeItem('usuarioLogueado');
@@ -89,3 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const btnConfig = document.getElementById('btn-configuracion-usuario');
+    if (btnConfig) {
+      btnConfig.addEventListener('click', () => {
+        window.location.href = urlConfiguracionUsuario;
+      });
+    }
+  });

@@ -715,45 +715,154 @@ h3 i {
 
 
 
+/* Panel general */
+.admin-panel {
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 40px auto;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.admin-panel:hover {
+  transform: translateY(-2px);
+}
+
+/* Título del panel */
+.admin-panel h3 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 8px;
+}
+
+/* Formulario */
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Input */
+.admin-input {
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 1.5px solid #bbb;
+  border-radius: 10px;
+  outline: none;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.admin-input:focus {
+  border-color: #3498db;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Botones en grupo */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+/* Botón general */
+.admin-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.admin-btn:hover {
+  background-color: #2c80b4;
+  transform: scale(1.02);
+}
+
+.admin-btn:active {
+  transform: scale(0.98);
+}
 
 
 
+/* Texto informativo */
+.text-muted {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.9rem;
+  color: #444;
+  background-color: #eef6fb;
+  padding: 10px 12px;
+  border-left: 4px solid #3498db;
+  border-radius: 6px;
+  line-height: 1.4;
+}
 
+/* Código ejemplo */
+code {
+  display: inline-block;
+  background-color: #e6eef3;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #2c3e50;
+  font-size: 0.9rem;
+  word-break: break-word;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
 
+/* Opcional: para bloques de código más largos */
+pre code {
+  display: block;
+  padding: 12px;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
 
+/* Botón eliminar específico para limpiar campo */
+.delete-btn-limpiar-campo {
+  background-color: #e74c3c;
+}
 
+.delete-btn-limpiar-campo:hover {
+  background-color: #c0392b;
+}
+.delete-btn-limpiar-campo {
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
 
+.delete-btn-limpiar-campo:hover {
+  background-color: #c0392b;
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(192, 57, 43, 0.3);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.delete-btn-limpiar-campo:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(192, 57, 43, 0.4);
+}

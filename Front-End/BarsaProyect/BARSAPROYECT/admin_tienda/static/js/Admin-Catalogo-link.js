@@ -76,3 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         this.value = formatearEnlace(this.value);
     });
 });
+function limpiarCampo() {
+  document.getElementById('nuevoEnlace').value = '';
+}

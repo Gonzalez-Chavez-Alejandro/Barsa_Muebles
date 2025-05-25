@@ -122,7 +122,9 @@
 
     <script src="{% static 'js/variables.js' %}"></script>
 
-
+  <script>
+  const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+</script>
     <script>
         document.getElementById("btn-regresar").addEventListener("click", function () {
             // Oculta la sección de detalle de producto

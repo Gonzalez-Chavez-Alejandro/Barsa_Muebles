@@ -134,3 +134,7 @@ def productos_vista(request):
 def catalogo(request):
     return render(request, 'admin_tienda/Catalogo.html')
 
+
+def configuracion_usuario(request):
+    return render(request, 'admin_tienda/configuracion_usuario.html')
+

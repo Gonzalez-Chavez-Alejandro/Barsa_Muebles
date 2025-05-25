@@ -10,9 +10,11 @@ urlpatterns = [
     path('productos_vista/', views.productos_vista, name='productos_vista'),
     path('login/', views.login, name='login'),
     path('catalogo/', views.catalogo, name='catalogo'),
+     path('configuracion_usuario/', views.configuracion_usuario, name='configuracion_usuario'),
     path('generate_signature/', views.generate_signature, name='generate_signature'),
     path('gestionar_carpetas/', views.gestionar_carpetas, name='gestionar_carpetas'),
     
+   
 ]
 
 

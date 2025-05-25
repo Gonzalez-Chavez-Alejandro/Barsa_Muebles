@@ -12,6 +12,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
    <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home-producto-views.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
@@ -127,6 +128,7 @@
     <div id="lista-carrito" class="contenedor-carrito"></div>
     <button id="vaciar-carrito">Vaciar Carrito</button>
     <button id="cerrar-carrito">Cerrar</button>
+    <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
     <div id="total-carrito">
         <span>Total: $<span id="total-precio">0.00</span></span>
     </div>
@@ -170,6 +172,10 @@
 
 <script src="{% static 'js/Carrito.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+
+    <script>
+  const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+</script>
 </body>
 
 </html>
