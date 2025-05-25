@@ -1,0 +1,224 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>configuracion usuario </title>
+    <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+        type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Login.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/configuracion_usuario.css' %}">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'includes/header.html' %}
+
+    <!-- Botón para abrir administrador -->
+
+<style>
+
+</style>
+
+<!-- HTML -->
+<section class="mis-encargos">
+    <h2>📦 Mis Encargos</h2>
+    <div id="lista-encargos" class="lista-encargos"></div>
+</section>
+
+
+
+
+<div class="credential-card">
+    <div class="credential-header">
+        <h2>
+            <div class="credential-icon">
+                <i class="fas fa-id-card"></i>
+            </div>
+            Editar Credencial
+        </h2>
+    </div>
+
+    <form id="form-configuracion">
+           <form id="form-configuracion">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="nombre" placeholder="Ej: Juan Pérez" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" id="telefono" placeholder="+52 55 1234 5678" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="correo" placeholder="ejemplo@dominio.com" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="contrasena" placeholder="••••••••" required>
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-guardar">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+        </form>
+       
+    </div>
+    </form>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Carrito -->
+    <section id="carrito" class="carrito" style="display: none;">
+        <h2>Tu Carrito</h2>
+        <div id="lista-carrito" class="contenedor-carrito"></div>
+        <button id="vaciar-carrito">Vaciar Carrito</button>
+        <button id="cerrar-carrito">Cerrar</button>
+        <div id="total-carrito">
+            <span>Total: $<span id="total-precio">0.00</span></span>
+        </div>
+    </section>
+
+<script> 
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogueado')) || {
+            nombre: '',
+            correo: '',
+            telefono: '',
+            contrasena: ''
+        };
+
+        // Cargar datos
+        document.getElementById('nombre').value = usuario.nombre;
+        document.getElementById('correo').value = usuario.correo;
+        document.getElementById('telefono').value = usuario.telefono;
+        document.getElementById('contrasena').value = usuario.contrasena;
+
+        // Guardar datos
+        document.getElementById('form-configuracion').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            usuario.nombre = document.getElementById('nombre').value;
+            usuario.correo = document.getElementById('correo').value;
+            usuario.telefono = document.getElementById('telefono').value;
+            usuario.contrasena = document.getElementById('contrasena').value;
+
+            localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+            
+            alert('Cambios guardados exitosamente');
+            window.location.href = 'Home.html';
+        });
+
+        // Toggle password
+     
+    </script>
+
+
+    <script src="{% static 'js/variables.js' %}"></script>
+    <script src="{% static 'js/header.js' %}"></script>
+    <script src="{% static 'js/Carrito.js' %}"></script>
+    <script>
+        const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+    </script>
+
+
+
+
+<script>
+// JavaScript
+document.addEventListener("DOMContentLoaded", cargarEncargosUsuario);
+
+function cargarEncargosUsuario() {
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
+    if (!usuario) {
+        window.location.href = '/login.html';
+        return;
+    }
+
+    const encargos = JSON.parse(localStorage.getItem('encargos')) || [];
+    const encargosUsuario = encargos
+        .filter(encargo => encargo.usuario.correo === usuario.correo)
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)); // ordenar por fecha descendente
+
+    const contenedor = document.getElementById('lista-encargos');
+    contenedor.innerHTML = '';
+
+    if (encargosUsuario.length === 0) {
+        contenedor.innerHTML = `
+            <div class="encargo-card">
+        <p class="messaje-no-tienes-encargos-registrados">
+            <i class="fas fa-box-open" aria-hidden="true"></i>
+            No tienes encargos registrados
+        </p>
+    </div>
+        `;
+        return;
+    }
+
+    encargosUsuario.forEach(encargo => {
+        const encargoId = encargo.id.toString();
+        const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
+
+        const encargoElement = document.createElement('div');
+        encargoElement.className = 'encargo-card';
+        encargoElement.innerHTML = `
+            <div class="encargo-header">
+                <div>
+                    <h3>Encargo #${idDisplay}</h3>
+                    <small class="encargo-id">${encargoId}</small>
+                </div>
+                <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
+            </div>
+            
+            <div class="encargo-productos">
+                ${encargo.productos.map(producto => {
+                    const imagenValida = producto.imagen && typeof producto.imagen === 'string';
+                    const imagenes = imagenValida ? producto.imagen.split(',') : [];
+                    const primeraImagen = imagenes[0] ? imagenes[0].trim() : 'https://via.placeholder.com/100';
+                    
+                    return `
+                        <div class="producto-encargo">
+                            <img src="${primeraImagen}" 
+                                 alt="${producto.nombre}" 
+                                 class="producto-imagen"
+                                 onerror="this.src='https://via.placeholder.com/100'">
+                            <div>
+                                <p>${producto.nombre}</p>
+                                <p>${producto.cantidad} x $${producto.precio?.toFixed(2) || '0.00'}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+            
+            <div class="encargo-total">
+                Total: $${encargo.total?.toFixed(2) || '0.00'}
+            </div>
+        `;
+        
+        contenedor.appendChild(encargoElement);
+    });
+}
+</script>
+
+
+</body>
+
+</html>
