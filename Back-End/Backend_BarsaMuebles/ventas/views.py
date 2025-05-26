@@ -1,17 +1,20 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ventas.serializers import VentasSerializer
+from ventas.serializers import VentaCreateSerializer, VentaSerializer
 
 
 class VentasView(APIView):
-    def post(self, request, furniture_id):
-        data = request.data
-        data['furnitureID'] = furniture_id
-        data['userID'] = request.user.id
-        serializer = VentasSerializer(data=data)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = VentaCreateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
-            return Response({"message":"Venta guardada"}, status=status.HTTP_200_OK)
+            venta = serializer.save()
+            return Response({
+                'message': 'Venta registrada con exito',
+                'venta': VentaSerializer(venta).data
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
