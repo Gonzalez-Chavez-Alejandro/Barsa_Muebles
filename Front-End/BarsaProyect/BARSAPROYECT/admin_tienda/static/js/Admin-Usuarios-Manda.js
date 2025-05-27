@@ -64,12 +64,27 @@ document.addEventListener("DOMContentLoaded", () => {
             </article>
         `;
     }
+container.addEventListener('click', (e) => {
+    if (e.target.closest('.um-btn-eliminar')) {
+        const boton = e.target.closest('.um-btn-eliminar');
+        const id = parseInt(boton.dataset.id); // ¡Asegúrate de convertirlo a número!
 
-    // Función para eliminar pedidos
-    function eliminarPedido(id) {
-        pedidos = pedidos.filter(pedido => pedido.id !== id);
-        localStorage.setItem("encargos", JSON.stringify(pedidos));
+        if (!isNaN(id)) {
+            eliminarPedido(id);
+            renderPedidos(pedidos); // Vuelve a renderizar tras eliminar
+        } else {
+            console.warn("ID inválido:", boton.dataset.id);
+        }
     }
+});
+
+   function eliminarPedido(id) {
+    console.log("Eliminando ID:", id);
+    pedidos = pedidos.filter(p => parseInt(p.id) !== parseInt(id));
+    console.log("Pedidos restantes:", pedidos);
+    localStorage.setItem("encargos", JSON.stringify(pedidos));
+}
+
 
     // Función para renderizar pedidos
     function renderPedidos(pedidosFiltrados) {

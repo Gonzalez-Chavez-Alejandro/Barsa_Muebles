@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (usuarioEncontrado) {
         localStorage.setItem('usuarioLogueado', JSON.stringify(usuarioEncontrado));
         alert('Inicio de sesión exitoso');
-        location.reload();
+        window.location.href = '/';
       } else {
         alert('Correo o contraseña incorrectos');
       }
@@ -107,3 +107,4 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   });
+  

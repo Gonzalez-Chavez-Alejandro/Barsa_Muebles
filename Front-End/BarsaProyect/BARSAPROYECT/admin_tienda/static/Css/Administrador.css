@@ -161,7 +161,7 @@ h1 {
 }
 
 /* Estilos responsive */
-@media (max-width: 2568px) {
+@media (max-width: 900px) {
   .menu-lateral {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
