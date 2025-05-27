@@ -183,17 +183,6 @@ function generarPDF(encargo) {
         configPDF.logoConfig.height
     );
 
-    // Encabezado
-    doc.setFontSize(18);
-    doc.setTextColor(configPDF.colors.primary);
-    doc.setFont("helvetica", "bold");
-    
-    const encargoText = `Encargo #${encargo.id}`;
-    const maxWidth = configPDF.pageWidth - configPDF.margins.left - configPDF.margins.right;
-    const encargoLines = doc.splitTextToSize(encargoText, maxWidth);
-    
-    doc.text(encargoLines, configPDF.margins.left, configPDF.margins.top);
-
     // Información empresa
     doc.setFontSize(10);
     doc.setTextColor(configPDF.colors.secondary);
@@ -203,8 +192,37 @@ function generarPDF(encargo) {
         configPDF.logoConfig.y + 5
     );
 
+    // Obtener datos del usuario
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
+    
+    // Información del cliente
+    let yPosition = configPDF.logoConfig.y + configPDF.logoConfig.height + 10;
+    doc.setFontSize(12);
+    doc.setTextColor(configPDF.colors.primary);
+    doc.setFont("helvetica", "bold");
+    doc.text("Información del Cliente:", configPDF.margins.left, yPosition);
+    
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    yPosition += 7;
+    doc.text(`Nombre: ${usuario.nombre}`, configPDF.margins.left, yPosition);
+    yPosition += 7;
+    doc.text(`Correo: ${usuario.correo}`, configPDF.margins.left, yPosition);
+    yPosition += 7;
+    doc.text(`Teléfono: ${usuario.telefono}`, configPDF.margins.left, yPosition);
+    
+    // Encabezado del encargo
+    yPosition += 15;
+    doc.setFontSize(18);
+    doc.setTextColor(configPDF.colors.primary);
+    doc.setFont("helvetica", "bold");
+    const encargoText = `Encargo #${encargo.id}`;
+    const maxWidth = configPDF.pageWidth - configPDF.margins.left - configPDF.margins.right;
+    const encargoLines = doc.splitTextToSize(encargoText, maxWidth);
+    doc.text(encargoLines, configPDF.margins.left, yPosition);
+
     // Fecha
-    const fechaYPosition = configPDF.margins.top + (encargoLines.length * lineHeight) + 5;
+    const fechaYPosition = yPosition + (encargoLines.length * lineHeight) + 5;
     doc.setFontSize(12);
     doc.text(
         `Fecha: ${new Date(encargo.fecha).toLocaleDateString()}`,

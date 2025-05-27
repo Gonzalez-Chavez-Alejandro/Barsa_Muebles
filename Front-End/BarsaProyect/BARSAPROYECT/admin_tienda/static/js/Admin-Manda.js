@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnCerrar = document.getElementById("cerrar-carrito");
   const btnEncargar = document.getElementById("btn-encargar");
   const carritoContainer = document.getElementById("carrito");
-
+ 
   // Guardar carrito
   const guardarCarrito = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
