@@ -1,151 +1,199 @@
-//--------------------
+let paginaActualCategoria = 1;
+let itemsPorPaginaCategoria = 10;
 
 
+// Mostrar categorías en la tabla con paginación y filtrado
+function mostrarCategorias() {
+  const tbody = document.getElementById("tablaCategorias");
+  tbody.innerHTML = "";
 
-  
-  let categoriasPorPagina = 25;
-  let paginaCategoria = 1;
-  let categoriaEditando = null;
-  let categoriaAEliminar = null;
-  
+  const buscador = document.getElementById("buscadorCategorias").value.toLowerCase();
 
-  function mostrarCategorias() {
-    const tbody = document.getElementById('tablaCategorias');
-    tbody.innerHTML = '';
-  
-    const inicio = (paginaCategoria - 1) * categoriasPorPagina;
-    const fin = inicio + categoriasPorPagina;
-    const categoriasAMostrar = categorias.slice(inicio, fin);
-  
-    categoriasAMostrar.forEach((cat, index) => {
-      const fila = document.createElement('tr');
-      fila.innerHTML = fila.innerHTML = `
-      <td>${cat.id}</td>
-      <td>${cat.nombre}</td>
-      <td>${cat.descripcion}</td>
-      <td><img src="${cat.imagen}" alt="${cat.nombre}" style="width: 80px; height: auto;"/></td>
+  const categoriasFiltradas = window.categorias.filter(cat =>
+    cat.nombre.toLowerCase().includes(buscador) ||
+    cat.descripcion.toLowerCase().includes(buscador)
+  );
+
+  const totalCategorias = categoriasFiltradas.length;
+  const totalPaginas = Math.ceil(totalCategorias / itemsPorPaginaCategoria);
+
+  if (paginaActualCategoria > totalPaginas) {
+    paginaActualCategoria = totalPaginas > 0 ? totalPaginas : 1;
+  }
+
+  const inicio = (paginaActualCategoria - 1) * itemsPorPaginaCategoria;
+  const fin = inicio + itemsPorPaginaCategoria;
+  const categoriasPagina = categoriasFiltradas.slice(inicio, fin);
+
+  categoriasPagina.forEach(categoria => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${categoria.id}</td>
+      <td>${categoria.nombre}</td>
+      <td>${categoria.descripcion}</td>
+      <td><img src="${categoria.imagen}" alt="${categoria.nombre}" width="80"></td>
       <td>
-        <button class="edit-btn-producto" onclick="abrirModalEditarCategoria(${inicio + index})">
-          <i class="fas fa-edit"></i>
-          <a class="button-table"></a>
-        </button>
-        <button class="delete-btn-producto" onclick="abrirModalEliminarCategoria(${inicio + index})">
-          <i class="fas fa-trash-alt"></i>
-          <a class="button-table"></a>
-        </button>
+        <button class="btn-admin-desing-edit" onclick="editarCategoria(${categoria.id})"><i class="fas fa-edit"></i></button>
+        <button class="btn-admin-desing-delete" onclick="eliminarCategoria(${categoria.id})"><i class="fas fa-trash-alt"></i></button>
       </td>
     `;
-    
-      tbody.appendChild(fila);
-    });
-  
-    document.getElementById('paginaActualCategoria').textContent = `Página ${paginaCategoria}`;
-    document.getElementById('totalPaginasCategoria').textContent = `de ${Math.ceil(categorias.length / categoriasPorPagina)}`;
-  }
-  
-  function cambiarPaginaCategoria(direccion) {
-    const totalPaginas = Math.ceil(categorias.length / categoriasPorPagina);
-    paginaCategoria += direccion;
-  
-    if (paginaCategoria < 1) paginaCategoria = 1;
-    if (paginaCategoria > totalPaginas) paginaCategoria = totalPaginas;
-  
-    mostrarCategorias();
-  }
-  
-  function abrirModalAgregarCategoria() {
-    document.getElementById('modalAgregarCategoria').style.display = 'flex';
-  }
-  
-  function abrirModalEditarCategoria(index) {
-    categoriaEditando = index; // Aquí se asigna el índice
-    document.getElementById('editarNombreCategoria').value = categorias[index].nombre;
-    document.getElementById('editarDescripcionCategoria').value = categorias[index].descripcion;
-    document.getElementById('editarImagenCategoria').value = categorias[index].imagen || '' ; // Si no hay imagen, dejar vacío
-    document.getElementById('modalEditarCategoria').style.display = 'flex';
-  }
-  
-  
-  function cerrarModalEditarCategoria() {
-    document.getElementById('modalEditarCategoria').style.display = 'none';
-  }
-  function cerrarModalEliminarCategoria() {
-    document.getElementById('modalEliminarCategoria').style.display = 'none';
-  }
-  
-  function abrirModalEliminarCategoria(index) {
-    categoriaAEliminar = index;
-    document.getElementById('modalEliminarCategoria').style.display = 'flex';
-  }
+    tbody.appendChild(tr);
+  });
 
-  function cerrarModalAgregarCategoria() {
-    document.getElementById('modalAgregarCategoria').style.display = 'none';
-  }
-  
-  
-  function guardarCategoria() {
-    const nombre = document.getElementById('nombreCategoria').value.trim();
-    const descripcion = document.getElementById('descripcionCategoria').value.trim();
-    const imagen = document.getElementById('imagenCategoria')?.value.trim() || ""; // opcional
-  
-    if (nombre && descripcion) {
-      categorias.push({
-        id: idCounterCategoria++,
-        nombre,
-        descripcion,
-        imagen
-      });
-      cerrarModalAgregarCategoria();
-      mostrarCategorias();
-    }
-  }
-  
-  
-  
-  function guardarEdicionCategoria() {
-    const nombre = document.getElementById('editarNombreCategoria').value.trim();
-    const descripcion = document.getElementById('editarDescripcionCategoria').value.trim();
-    
-    // Obtener el valor de la imagen. Si está vacío, mantener la imagen original.
-    const imagen = document.getElementById('editarImagenCategoria')?.value.trim() || categorias[categoriaEditando].imagen;
-    
-    // Validar los campos y editar la categoría
-    if (nombre && descripcion && categoriaEditando !== null) {
-      categorias[categoriaEditando] = {
-        id: categorias[categoriaEditando].id, // conservar el ID original
-        nombre,
-        descripcion,
-        imagen // mantener o actualizar la imagen
-      };
-      cerrarModalEditarCategoria();
-      mostrarCategorias();
-    }
-  }
-  
-  
-  
-  function confirmarEliminarCategoria() {
-    if (categoriaAEliminar !== null) {
-      categorias.splice(categoriaAEliminar, 1);
-      cerrarModalEliminarCategoria();
-      mostrarCategorias();
-    }
-  }
-  
-  // Mostrar al cargar
-  window.onload = mostrarCategorias;
-  // Función para abrir el modal de edición
+  document.getElementById("resultadosInfo").textContent =
+    `Mostrando ${categoriasPagina.length} de ${totalCategorias} categorías`;
 
+  document.getElementById("paginaActualCategoria").textContent = `Página ${paginaActualCategoria}`;
+  document.getElementById("totalPaginasCategoria").textContent = totalPaginas || 1;
 
-// Función para cerrar el modal de edición
-function cerrarModal() {
-  document.getElementById('modalEditar').style.display = 'none'; // Cerrar el modal
+  document.getElementById("btnAnterior").disabled = paginaActualCategoria <= 1;
+  document.getElementById("btnSiguiente").disabled = paginaActualCategoria >= totalPaginas || totalPaginas === 0;
 }
 
+// Cambiar página actual
+function cambiarPaginaCategoria(direccion) {
+  const buscador = document.getElementById("buscadorCategorias").value.toLowerCase();
+  const categoriasFiltradas = window.categorias.filter(cat =>
+    cat.nombre.toLowerCase().includes(buscador) ||
+    cat.descripcion.toLowerCase().includes(buscador)
+  );
 
+  const totalPaginas = Math.ceil(categoriasFiltradas.length / itemsPorPaginaCategoria);
+  const nuevaPagina = paginaActualCategoria + direccion;
 
+  if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+    paginaActualCategoria = nuevaPagina;
+    mostrarCategorias();
+  }
+}
 
-// Selecciona el tbody
+// Cambiar cantidad de ítems por página
+function cambiarItemsPorPagina() {
+  const select = document.getElementById("itemsPorPagina");
+  itemsPorPaginaCategoria = parseInt(select.value);
+  paginaActualCategoria = 1;
+  mostrarCategorias();
+}
 
+// Filtrar categorías
+function filtrarCategorias() {
+  paginaActualCategoria = 1;
+  mostrarCategorias();
+}
 
+// Obtener una categoría por ID
+function obtenerCategoriaPorId(id) {
+  return window.categorias.find(cat => cat.id === id);
+}
 
+// Guardar nueva categoría
+function guardarCategoria() {
+  const nombre = document.getElementById("nombreCategoria").value.trim();
+  const descripcion = document.getElementById("descripcionCategoria").value.trim();
+  const imagen = document.getElementById("imagenCategoria").value.trim();
+
+  if (!nombre || !descripcion || !imagen) {
+    alert("Todos los campos son obligatorios.");
+    return;
+  }
+
+  const nuevaCategoria = {
+    id: idCounterCategoria++,
+    nombre,
+    descripcion,
+    imagen
+  };
+
+  window.categorias.push(nuevaCategoria);
+  cerrarModalAgregarCategoria();
+  mostrarCategorias();
+}
+
+// Guardar edición
+function guardarEdicionCategoria() {
+  const id = window.categoriaIdEditando;
+  const categoria = obtenerCategoriaPorId(id);
+  if (!categoria) return;
+
+  const nombre = document.getElementById("editarNombreCategoria").value.trim();
+  const descripcion = document.getElementById("editarDescripcionCategoria").value.trim();
+  const imagen = document.getElementById("editarImagenCategoria").value.trim();
+
+  if (!nombre || !descripcion || !imagen) {
+    alert("Todos los campos son obligatorios.");
+    return;
+  }
+
+  categoria.nombre = nombre;
+  categoria.descripcion = descripcion;
+  categoria.imagen = imagen;
+
+  cerrarModalEditarCategoria();
+  mostrarCategorias();
+}
+
+// Eliminar categoría
+function eliminarCategoriaPorId(id) {
+  window.categorias = window.categorias.filter(cat => cat.id !== id);
+  mostrarCategorias();
+}
+
+// Mostrar categorías al cargar
+document.addEventListener("DOMContentLoaded", mostrarCategorias);
+
+/* ---------------------- MODALES ---------------------- */
+
+function abrirModalAgregarCategoria() {
+  document.getElementById("modalAgregarCategoria").style.display = "block";
+}
+
+function cerrarModalAgregarCategoria() {
+  document.getElementById("modalAgregarCategoria").style.display = "none";
+}
+
+function editarCategoria(id) {
+  const categoria = obtenerCategoriaPorId(id);
+  if (!categoria) return;
+
+  document.getElementById("editarNombreCategoria").value = categoria.nombre;
+  document.getElementById("editarDescripcionCategoria").value = categoria.descripcion;
+  document.getElementById("editarImagenCategoria").value = categoria.imagen;
+
+  window.categoriaIdEditando = id;
+  document.getElementById("modalEditarCategoria").style.display = "block";
+}
+
+function cerrarModalEditarCategoria() {
+  document.getElementById("modalEditarCategoria").style.display = "none";
+}
+
+function eliminarCategoria(id) {
+  window.categoriaIdAEliminar = id;
+  document.getElementById("modalEliminarCategoria").style.display = "block";
+}
+
+function cerrarModalEliminarCategoria() {
+  document.getElementById("modalEliminarCategoria").style.display = "none";
+}
+
+function confirmarEliminarCategoria() {
+  const id = window.categoriaIdAEliminar;
+  eliminarCategoriaPorId(id);
+  cerrarModalEliminarCategoria();
+}
+
+// Cerrar modal al hacer clic fuera
+window.onclick = function (event) {
+  const modales = [
+    "modalAgregarCategoria",
+    "modalEditarCategoria",
+    "modalEliminarCategoria"
+  ];
+
+  modales.forEach(id => {
+    const modal = document.getElementById(id);
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+};

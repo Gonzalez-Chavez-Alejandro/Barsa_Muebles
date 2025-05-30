@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Administrador-General.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Lista-Usuarios.css' %}">
   <link rel="stylesheet" href="{% static 'Css/categoria.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Producto.css' %}">
@@ -24,7 +25,7 @@
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
 
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
-
+  <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -159,7 +160,7 @@
         <div class="card-producto">
           <i class="fas fa-box-open icono-top"></i>
           <h3>Productos</h3>
-          <p>Administra los productos disponibles en tu catálogo: crea, edita y elimina fácilmente.</p>
+          <p>Administra los productos: crea, edita y elimina fácilmente.</p>
           <button class="card-btn" onclick="mostrarSeccion('productos-lleno')">
             <i class="fas fa-box"></i> Productos
           </button>
@@ -169,8 +170,8 @@
         <!-- Tarjeta de Comentarios y Estrellas -->
         <div class="card-comentario">
           <i class="fas fa-star icono-top"></i>
-          <h3>Comentarios y Valoraciones</h3>
-          <p>Visualiza y administra comentarios y estrellas que los usuarios dejan sobre los productos.</p>
+          <h3>Comentarios y Stars</h3>
+          <p>Visualiza y administra comentarios y estrellas que los usuarios dejan.</p>
 
           </button>
           <button class="card-btn" onclick="mostrarSeccion('usuarios-star-comment')">
@@ -189,542 +190,482 @@
           </button>
         </div>
 
+        <!-- Tarjeta de Catalogo -->
+        <div class="card-producto">
+          <i class="fas fa-box-open icono-top"></i>
+          <h3>Catalogo</h3>
+          <p>Administra el catalogo actual</p>
+          <button class="card-btn" onclick="mostrarSeccion('catalogo')">
+            <i class="fas fa-box"></i> Catalogo
+          </button>
+        </div>
+
       </div>
 
 
 
+      <section id="admin-panel">
+
+      </section>
 
 
 
-      <!-- Flecha derecha -->
-
-      </div>
-      <div id="contenedor-productos" class="contenedor-productos"></div>
 
 
-      <div class="admin-footer-editor">
-        <h2>Editor del Footer</h2>
-
-        <div class="admin-section">
-          <h3>Información de Contacto</h3>
-          <div class="form-group">
-            <label>Correo electrónico:</label>
-            <input type="email" id="admin-email" class="form-control" placeholder="ejemplo@empresa.com">
-          </div>
-          <div class="form-group">
-            <label>Teléfonos (separados por comas):</label>
-            <input type="text" id="admin-phones" class="form-control" placeholder="123-456-7890, 987-654-3210">
-          </div>
-        </div>
-
-        <div class="admin-section">
-          <h3>Ubicaciones</h3>
-          <div id="admin-locations-container">
-            <!-- Las ubicaciones se generarán dinámicamente -->
-          </div>
-          <button id="add-location-btn" class="btn-add">+ Añadir ubicación</button>
-        </div>
-
-        <div class="admin-section">
-          <h3>Redes Sociales</h3>
-          <div id="admin-social-container">
-            <!-- Las redes sociales se generarán dinámicamente -->
-          </div>
-          <button id="add-social-btn" class="btn-add">+ Añadir red social</button>
-        </div>
-
-        <div class="admin-actions">
-          <button id="preview-footer-btn" class="btn-preview">Vista Previa</button>
+  </main>
 
 
-          <button id="save-footer-btn" class="btn-save">Guardar Cambios</button>
+
+
+
+  <section id="catalogo" class="seccion">
+    <!-- Panel de administración -->
+    <div class="admin-panel" id="adminPanel">
+      <h3>Administrar Catálogo</h3>
+      <div class="admin-form">
+        <input type="text" id="nuevoEnlace" class="admin-input"
+          placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
+        <div class="button-group">
+          <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
+          <button class="delete-btn-limpiar-campo" onclick="limpiarCampo()">Eliminar</button>
         </div>
       </div>
+      <small class="text-muted">
+        Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
+      </small>
+    </div>
+
+  </section>
 
 
+  <!-- ----------------------------------------------- -->
+  <!-- Sección de Usuarios -->
+  <!-- ----------------------------------------------- -->
 
-    </section>
-
-
-
-
-
-
-    <section id="catalogo" class="seccion">
-      <!-- Panel de administración -->
-      <div class="admin-panel" id="adminPanel">
-        <h3>Administrar Catálogo</h3>
-        <div class="admin-form">
-          <input type="text" id="nuevoEnlace" class="admin-input"
-            placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
-          <div class="button-group">
-            <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
-            <button class="delete-btn-limpiar-campo" onclick="limpiarCampo()">Eliminar</button>
+  <section id="usuarios" class="seccion">
+    <div class="admin-panel">
+      <div class="admin-panel-lista-usuarios">
+        <div class="usuarios-header">
+          <div class="icon-usuarios">
+            <i class="fas fa-users icono-usuarios" aria-hidden="true"></i>
           </div>
+          <h2 class="titulo-usuarios">Usuarios</h2>
         </div>
-        <small class="text-muted">
-          Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
-        </small>
-      </div>
 
-    </section>
-
-
-    <!-- ----------------------------------------------- -->
-    <!-- Sección de Usuarios -->
-    <!-- ----------------------------------------------- -->
-
-    <section id="usuarios" class="seccion">
-      <div class="admin-panel">
-        <h2>Lista de Usuarios Registrados</h2>
-
-        <button class="btn-agregar" onclick="abrirModalAgregar()">
-          <i class="fas fa-plus"></i> Agregar
-        </button>
-
-
-        <div class="filtros">
-          <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="buscador" placeholder="Buscar por ID, nombre, correo o teléfono..."
-              onkeyup="buscarUsuarios()">
+        <div class="filtros-usuarios">
+          <div class="search-container-usuarios">
+            <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+            <input type="text" id="buscador" class="input-busqueda-usuarios"
+              placeholder="Buscar por ID, nombre, correo o teléfono..." onkeyup="buscarUsuarios()"
+              aria-label="Buscar usuarios">
           </div>
-        </div>
-
-
-
-
-        <div class="table-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Correo</th>
-                <th>Teléfono</th>
-                <th>Contraseña</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Aquí se insertan usuarioss con JS -->
-            </tbody>
-          </table>
-        </div>
-        <div class="paginacion">
-          <button id="paginaAnterior" onclick="cambiarPagina(-1)">Anterior</button>
-          <span id="paginaActual">Página 1 de</span>
-          <span id="totalPaginas">2</span>
-          <button id="paginaSiguiente" onclick="cambiarPagina(1)">Siguiente</button>
+          <button class="btn-agregar-usuario" onclick="abrirModalAgregar()" aria-label="Agregar nuevo usuario">
+            <i class="fas fa-plus" aria-hidden="true"></i> Agregar
+          </button>
         </div>
       </div>
-    </section>
 
-
-    <section id="usuarios-star-comment" class="seccion">
-      <div class="admin-panel">
-        <h2>Comentarios y Calificaciones</h2>
-
-        <!-- Buscador -->
-        <input type="text" placeholder="Buscar usuario o producto..." class="bscdr-usuarios-star-comment"
-          id="buscador-comentarios" />
-        <div class="table-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Nombre-Usuario</th>
-                <th>Nombre-Producto</th>
-                <th>Comentarios</th>
-                <th>Stars</th>
-                <th class="td-espacio">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-usuarios-comentarios"></tbody>
-          </table>
-        </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th>Teléfono</th>
+              <th>Contraseña</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se insertan usuarioss con JS -->
+          </tbody>
+        </table>
       </div>
-    </section>
+      <div class="paginacion">
+        <button id="paginaAnterior">Anterior</button>
+        <div class="info-paginacion">
 
 
+        </div>
+        <button id="paginaSiguiente">Siguiente</button>
+      </div>
+
+  </section>
 
 
-
-
-
-
-
-
-    <section id="usuarios-mandas" class="seccion">
+  <section id="usuarios-star-comment" class="seccion">
+    <div class="admin-panel">
+      <h2>Comentarios y Calificaciones</h2>
 
       <!-- Buscador -->
-      <div class="um-buscador-container">
-        <div class="um-buscador">
-          <i class="fas fa-search um-icono-buscar"></i>
-          <input type="text" id="um-input-buscar" class="um-input-buscar"
-            placeholder="Buscar por ID, nombre, correo o teléfono..." aria-label="Buscar pedidos">
+      <input type="text" placeholder="Buscar usuario o producto..." class="bscdr-usuarios-star-comment"
+        id="buscador-comentarios" />
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre-Usuario</th>
+              <th>Nombre-Producto</th>
+              <th>Comentarios</th>
+              <th>Stars</th>
+              <th class="td-espacio">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-usuarios-comentarios"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+  <section id="usuarios-mandas" class="seccion">
+
+    <!-- Buscador -->
+    <div class="um-buscador-container">
+      <div class="um-buscador">
+        <i class="fas fa-search um-icono-buscar"></i>
+        <input type="text" id="um-input-buscar" class="um-input-buscar"
+          placeholder="Buscar por ID, nombre, correo o teléfono..." aria-label="Buscar pedidos">
+      </div>
+    </div>
+    <h1>Pedidos Encargados</h1>
+    <div class="um-header-actions">
+      <button class="um-btn-pdf" id="um-exportar-todos">
+        <i class="fas fa-file-pdf"></i> Exportar todos
+      </button>
+    </div>
+    <div id="pedidos-container"></div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+  <section id="categorias" class="seccion">
+    <div class="admin-panel">
+      <div class="cabecera-categorias">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <i class="fas fa-tags icono-categorias"></i>
+          <h2 class="h2-lista-categorias">Lista de Categorías</h2>
+        </div>
+
+        <div class="controles-principales">
+          <div class="controles-tabla">
+            <div class="buscador">
+              <i class="fas fa-search"></i>
+              <input type="text" id="buscadorCategorias" placeholder="Buscar categoría..."
+                oninput="filtrarCategorias()">
+            </div>
+
+            <div class="selector-items">
+              <label for="itemsPorPagina">Mostrar:</label>
+              <select id="itemsPorPagina" onchange="cambiarItemsPorPagina()">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="lista-categoria-btn-agregar" onclick="abrirModalAgregarCategoria()">
+            <i class="fas fa-plus"></i> Agregar
+          </button>
         </div>
       </div>
-      <h1>Pedidos Encargados</h1>
-      <div class="um-header-actions">
-        <button class="um-btn-pdf" id="um-exportar-todos">
-          <i class="fas fa-file-pdf"></i> Exportar todos
+
+      <div class="resultados-info" id="resultadosInfo">
+        Mostrando 5 de 5 categorías
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre de Categoría</th>
+              <th>Descripción</th>
+              <th>Imagen</th>
+              <th class="th-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCategorias">
+            <!-- Las categorías se insertan con JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacion">
+        <button onclick="cambiarPaginaCategoria(-1)" id="btnAnterior">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+
+        <div class="info-paginacion">
+          <span id="paginaActualCategoria">Página 1</span>
+          <span> de </span>
+          <span id="totalPaginasCategoria">1</span>
+        </div>
+
+        <button onclick="cambiarPaginaCategoria(1)" id="btnSiguiente">
+          Siguiente <i class="fas fa-chevron-right"></i>
         </button>
       </div>
-      <div id="pedidos-container"></div>
-    </section>
+    </div>
+  </section>
 
 
+  <!-- ----------------------------------------------- -->
+  <!-- Sección de Productos -->
+  <!-- ----------------------------------------------- -->
+
+  <section id="productos" class="seccion">
+    <div class="admin-panel">
+      <h2 id="categoria-titulo">Selecciona una categoría</h2>
+      <div id="formulario-producto" class="seccion">
+        <form id="agregar-producto-form">
+          <input type="hidden" id="categoria-id">
+          <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('regular')">
+            <i class="fas fa-plus"></i> Agregar
+          </button>
+
+          <div class="filtros-usuarios">
+            <div class="search-container-usuarios">
+              <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+              <input type="text" id="buscador" class="input-busqueda-usuarios"
+                placeholder="Buscar por ID, nombre, correo o teléfono..." onkeyup="buscarProductos()"
+                aria-label="Buscar usuarios">
+            </div>
+          </div>
+        </form>
 
 
-
-
-
-
-
-
-
-    <section id="categorias" class="seccion">
-      <div class="admin-panel">
-        <h2>Lista de Categorías</h2>
-
-        <button class="categoria-btn-agregar" onclick="abrirModalAgregarCategoria()">
-          <i class="fas fa-plus"></i> Agregar
-        </button>
-
-        <div class="table-container">
+        <div id="tablaContainer" class="scroll-container">
           <table class="admin-table">
             <thead>
               <tr>
-                <th>id</th>
-                <th>Nombre de Categoría</th>
+                <th>ID</th>
+                <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Imagen</th>
-                <th class="td-espacio">Acciones</th>
+                <th>Precio</th>
+                <th>
+                  <select id="filtroOferta" onchange="filtrarPorOferta()">
+                    <option value="todos">Ofertas</option>
+                    <option value="oferta">Con</option>
+                    <option value="sinOferta">Sin</option>
+                  </select>
+                </th>
+                <th>Precio Oferta</th>
+                <th>Carpetas</th>
+                <th>Nombre Imagenes</th>
+                <th> Acciones </th>
               </tr>
             </thead>
-            <tbody id="tablaCategorias">
+            <tbody id="tablaProductos">
               <!-- ----------------------------------------------- -->
               <!-- Las categorías se insertan con JS -->
               <!-- ----------------------------------------------- -->
             </tbody>
           </table>
-        </div>
-        <div class="paginacion">
-          <button onclick="cambiarPaginaCategoria(-1)">Anterior</button>
-          <span id="paginaActualCategoria">Página 1</span>
-          <span id="totalPaginasCategoria">1</span>
-          <button onclick="cambiarPaginaCategoria(1)">Siguiente</button>
+
+
         </div>
       </div>
-    </section>
-
-    <!-- ----------------------------------------------- -->
-    <!-- Sección de Productos -->
-    <!-- ----------------------------------------------- -->
-
-    <section id="productos" class="seccion">
-      <div class="admin-panel">
-        <h2 id="categoria-titulo">Selecciona una categoría</h2>
-        <div id="formulario-producto" class="seccion">
-          <form id="agregar-producto-form">
-            <input type="hidden" id="categoria-id">
-            <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('regular')">
-              <i class="fas fa-plus"></i> Agregar
-            </button>
-            <div class="filtros">
-              <input type="text" id="buscadorProducto" placeholder="Buscar producto..." onkeyup="buscarProductos()">
-
-            </div>
-          </form>
-
-          <div id="tablaContainer" class="scroll-container">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Descripción</th>
-                  <th>Precio</th>
-                  <th>
-                    <select id="filtroOferta" onchange="filtrarPorOferta()">
-                      <option value="todos">Ofertas</option>
-                      <option value="oferta">Con</option>
-                      <option value="sinOferta">Sin</option>
-                    </select>
-                  </th>
-                  <th>Precio Oferta</th>
-                  <th>Carpetas</th>
-                  <th>Nombre Imagenes</th>
-                  <th> Acciones </th>
-                </tr>
-              </thead>
-              <tbody id="tablaProductos">
-                <!-- ----------------------------------------------- -->
-                <!-- Las categorías se insertan con JS -->
-                <!-- ----------------------------------------------- -->
-              </tbody>
-            </table>
+    </div>
+  </section>
 
 
-          </div>
-        </div>
-      </div>
-    </section>
+  <section id="productos-lleno" class="seccion">
+    <div class="admin-panel">
 
+      <div id="formulario-producto-lleno">
 
-    <section id="productos-lleno" class="seccion">
-      <div class="admin-panel">
+        <div class="admin-card">
+          <form id="form-destacados">
 
-        <div id="formulario-producto-lleno">
+            <h2 id="titulo-destacados">📌 Productos </h2>
 
-          <div class="admin-card">
-            <form id="form-destacados">
-
-              <h2 id="titulo-destacados">📌 Productos </h2>
-
-              <!-- Buscar y Agregar -->
-              <div class="conjuntoagregarbuscar">
-                <div class="filtros">
-                  <div class="input-group" id="searchGroup">
-                    <i class="fas fa-search search-icon" id="toggleSearch"></i>
-                    <input type="text" id="buscadorProductoDestacados" placeholder="Buscar producto..."
-                      onkeyup="buscarProductosDestacados()">
-                  </div>
+            <!-- Buscar y Agregar -->
+            <div class="conjuntoagregarbuscar">
+              <div class="filtros-usuarios">
+                <div class="search-container-usuarios">
+                  <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+                  <input type="text" id="buscador" class="input-busqueda-usuarios"
+                    placeholder="Buscar por nombre, del producto  " onkeyup="buscarProductosDestacados()"
+                    aria-label="Buscar usuarios">
                 </div>
-
-                <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('destacado')">
-                  <i class="fas fa-plus"></i> Agregar
-                </button>
               </div>
-
-              <!-- Mostrar y Filtrar -->
-              <div class="select-group-container">
-                <div class="select-group-producto-lleno">
-                  <label for="selectorCantidadProductos" class="select-label">
-                    <i class="fas fa-th-list"></i> Mostrar:
-                  </label>
-                  <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
+              <div class="select-group-filtro-lleno">
+                <label for="filtroCategoria" class="select-label">
+                  <i class="fas fa-filter"></i> Filtrar por categoría:
+                </label>
+                <div class="select-wrapper">
+                  <select id="filtroCategoria" onchange="filtrarPorCategoria()" class="select">
+                    <option value="">Seleccionar Categoría</option>
                   </select>
                 </div>
-
-                <div class="select-group-filtro-lleno">
-                  <label for="filtroCategoria" class="select-label">
-                    <i class="fas fa-filter"></i> Filtrar por categoría:
-                  </label>
-                  <div class="select-wrapper">
-                    <select id="filtroCategoria" onchange="filtrarPorCategoria()" class="select">
-                      <option value="">Seleccionar Categoría</option>
-                    </select>
-                  </div>
-                </div>
               </div>
-
-            </form>
-          </div>
-
-
-
-          <div id="tablaContainerDestacados" class="scroll-container">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th class="NombretablaContainerDestacados">Nombre
-                    <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
-                  </th>
-                  <th class="descripcion-table-productos">Descripción</th>
-                  <th>Precio</th>
-                  <th>Oferta</th>
-                  <th>Precio Oferta</th>
-                  <th>Carpetas</th>
-                  <th>Nombre Imagenes</th>
-                  <th class="td-espacio">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="tablaProductosDestacados">
-                <!-- Se insertan productos con JS -->
-              </tbody>
-            </table>
-            <div class="paginacion">
-              <button onclick="cambiarPaginaProductosLleno(-1)">Anterior</button>
-              <span id="paginaActualProductosLleno">Página 1</span> de <span id="totalPaginasProductosLleno">de 0</span>
-              <button onclick="cambiarPaginaProductosLleno(1)">Siguiente</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-
-    </section>
-
-
-
-    <!-- ----------------------------------------------- -->
-    <!-- Sección de imagen -->
-    <!-- ----------------------------------------------- -->
-
-    <section id="imagenes" class="seccion">
-      <div class="admin-panel">
-
-        <nav class="menu-imagenes">
-          <a id="linkSubir-img" class="menu-link-imagen active">Subir Imagen</a>
-          <a id="linkOtro-img" class="menu-link-imagen">Otro Menú</a>
-        </nav>
-        <!-- Sección de Subir Imagen -->
-        <section id="subir" class="seccion active">
-          <h1>Subir Imagen</h1>
-
-          <input type="file" id="fileInput">
-          <button id="uploadButton">Subir Imagen</button>
-
-          <div id="preview" class="preview">
-            <!-- Loader o imagen aparecerán aquí -->
-          </div>
-
-          <h2>Enlace de la Imagen</h2>
-          <textarea id="imageUrl" rows="4" cols="50" readonly
-            placeholder="Aquí aparecerá el enlace de la imagen..."></textarea>
-        </section>
-
-        <!-- Otra sección -->
-        <section id="otro" class="seccion">
-          <h1>Otro Menú</h1>
-          <p>Este es otro menú que puedes usar para agregar más contenido en el futuro.</p>
-        </section>
-
-
-      </div>
-      </div>
-    </section>
-
-
-
-
-
-    <section id="contactos" class="seccion">
-      <div class="admin-panel">
-        <h2>Administración de Contacto</h2>
-        <div class="acciones-contacto">
-          <p id="mensaje-actualizado" class="mensaje-oculto">
-            <i class="fas fa-check-circle"></i> Teléfono, ubicación y redes actualizados.
-          </p>
-
-          <p id="mensaje-eliminado-telefono" class="mensaje-oculto">
-            <i class="fas fa-check-circle"></i> Teléfono ha sido borrado.
-          </p>
-          <p id="mensaje-error" class="mensaje-oculto error-mensaje">
-            <i class="fas fa-exclamation-circle"></i> Ocurrió un error al eliminar el teléfono.
-          </p>
-          <p id="mensaje-eliminado-ubicacion" class="mensaje-oculto">
-            <i class="fas fa-check-circle"></i> Ubicación ha sido borrada.
-          </p>
-        </div>
-
-        <form id="admin-form">
-          <!-- Teléfonos -->
-          <div class="telefono-contactos">
-            <h3 onclick="toggleSeccion(this)">
-              Teléfonos <i class="fas fa-chevron-down"></i>
-            </h3>
-            <div class="contenido-seccion">
-              <div id="lista-telefonos-admin"></div>
-              <div class="right-button">
-                <button class="Agregar-telefono" type="button" onclick="agregarTelefono()">
-                  <i class="fas fa-plus" style="margin-left: 5px;"></i>
-                  Agregar</button>
-                <!-- <button id="mostrar-error">Mostrar mensaje de error</button>-->
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Ubicaciones -->
-          <div class="ubicaciones-contactos">
-            <h3 onclick="toggleSeccion(this)">
-              Ubicaciones <i class="fas fa-chevron-down"></i>
-            </h3>
-            <div class="contenido-seccion">
-              <div id="lista-ubicaciones-admin"></div>
-              <div class="right-button">
-                <button type="button" class="Agregar-ubicacion" onclick="agregarUbicacion()">
-                  <i class="fas fa-plus" style="margin-left: 5px;"></i>
-                  Agregar </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Redes Sociales -->
-          <div class="redes-contactos">
-            <h3 onclick="toggleSeccion(this)">
-              Redes Sociales <i class="fas fa-chevron-down"></i>
-            </h3>
-            <div class="contenido-seccion">
-              <div class="red">
-                <label class="social-label">
-                  <!-- Checkbox escondido -->
-                  <input type="checkbox" id="check-facebook" class="hidden-checkbox">
-                  <!-- Contenedor circular para el ícono -->
-                  <span class="social-circle">
-                    <i class="fab fa-facebook-f social-icon facebook"></i>
-                  </span>
-                  <!-- Texto "Facebook" -->
-                  <span class="social-text">Facebook</span>
-                </label>
-                <input type="url" id="input-facebook" placeholder="https://facebook.com/tuPagina">
-              </div>
-
-              <div class="red">
-                <label>
-                  <input type="checkbox" id="check-instagram">
-                  <i class="fab fa-instagram social-icon instagram"></i>
-                  Instagram
-                </label>
-                <input type="url" id="input-instagram" placeholder="https://instagram.com/tuPagina">
-              </div>
-
-              <div class="red">
-                <label>
-                  <input type="checkbox" id="check-whatsapp">
-                  <i class="fab fa-whatsapp social-icon whatsapp"></i>
-                  WhatsApp
-                </label>
-                <input type="url" id="input-whatsapp" placeholder="https://wa.me/5215551234567">
-              </div>
-
-              <div class="red">
-                <label>
-                  <input type="checkbox" id="check-gmail">
-                  <i class="far fa-envelope social-icon gmail"></i>
-                  Gmail
-                </label>
-                <input type="email" id="input-gmail" placeholder="correo@gmail.com">
-              </div>
-
-
-            </div>
-            <div class="acciones-contacto">
-              <button type="submit" id="btn-actualizar">
-                <i class="fas fa-save"></i>
-                <span>Actualizar Contacto</span>
+              <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('destacado')">
+                <i class="fas fa-plus"></i> Agregar
               </button>
+            </div>
+
+            <!-- Mostrar y Filtrar -->
+            <div class="select-group-container">
+              <div class="select-group-producto-lleno">
+                <label for="selectorCantidadProductos" class="select-label">
+                  <i class="fas fa-th-list"></i> Mostrar:
+                </label>
+                <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+
 
             </div>
 
+          </form>
+        </div>
+
+        <div id="tablaContainerDestacados" class="scroll-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th class="NombretablaContainerDestacados">Nombre
+                  <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
+                </th>
+                <th class="th-descripcion">Descripción</th>
+                <th>Precio</th>
+                <th>Oferta</th>
+                <th>Precio Oferta</th>
+                <th>Carpetas</th>
+                <th>Nombre Imagenes</th>
+                <th class="th-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaProductosDestacados">
+              <!-- Se insertan productos con JS -->
+            </tbody>
+          </table>
+          <div class="paginacion">
+            <button onclick="cambiarPaginaProductosLleno(-1)">Anterior</button>
+            <span id="paginaActualProductosLleno">Página 1</span> de <span id="totalPaginasProductosLleno">de 0</span>
+            <button onclick="cambiarPaginaProductosLleno(1)">Siguiente</button>
           </div>
-
+        </div>
       </div>
 
-      </form>
+    </div>
+
+  </section>
+
+
+  <section id="contactos" class="seccion">
+    <div class="admin-container">
+      <h2 class="admin-header"><i class="fas fa-cogs"></i> Panel Administrativo de Contacto</h2>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Correo electrónico</label>
+          <input type="email" id="admin-email" class="form-input" placeholder="contacto@empresa.com">
+        </div>
+
+
+        <div class="form-group">
+          <div class="section-header">
+            <label><i class="fas fa-phone-alt"></i> Teléfonos</label>
+            <button class="icon-btn success" onclick="addPhoneField()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="phones-container" class="dynamic-fields">
+            <div class="input-row">
+              <input type="text" class="form-input phone-input" value="+52 353 535 1750">
+              <button class="icon-btn danger" onclick="removePhoneField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="section-header">
+            <label><i class="fas fa-map-marker-alt"></i> Ubicaciones</label>
+            <button class="icon-btn success" onclick="addLocationField()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="locations-container" class="dynamic-fields">
+            <div class="input-row">
+              <textarea class="form-input location-input">Carretera Sahuayo La Barca KM 5.4</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            <div class="input-row">
+              <textarea class="form-input location-input">Juárez #100 Sahuayo Mich</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            <div class="input-row">
+              <textarea class="form-input location-input">Circunvalación #Jiquilpan</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-share-alt"></i> Redes Sociales</label>
+          <div class="social-grid">
+            <div class="input-group">
+              <i class="fab fa-facebook icon-social"></i>
+              <input type="url" id="facebook" class="form-input" placeholder="Facebook predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fab fa-whatsapp icon-social"></i>
+              <input type="text" id="whatsapp" class="form-input" placeholder="WhatsApp predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fab fa-instagram icon-social"></i>
+              <input type="url" id="instagram" class="form-input" placeholder="Instagram predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fas fa-envelope icon-social"></i>
+              <input type="url" id="envelope" class="form-input" placeholder="Correo predeterminado">
+            </div>
+          </div>
+        </div>
+
+        <button class="primary-btn" onclick="guardarFooter()">
+          <i class="fas fa-save"></i> Guardar Cambios
+        </button>
       </div>
-    </section>
+    </div>
+  </section>
 
 
 
@@ -749,7 +690,6 @@
   <!-- ----------------------------------------------- -->
   <!-- Modal para editar usuario -->
   <!-- ----------------------------------------------- -->
-
   <div id="modalEditar" class="modal">
     <div class="modal-contenido">
       <h3>Editar Usuario</h3>
@@ -770,7 +710,9 @@
       <span id="errorContrasena" class="error"></span>
 
       <div class="modal-acciones">
-        <button onclick="guardarCambios()">Guardar</button>
+        <button onclick="guardarCambios()">
+          <i class="fas fa-user-plus"></i> Guardar
+        </button>
         <button onclick="cerrarModal()">Cancelar</button>
       </div>
     </div>
@@ -886,93 +828,80 @@
 
   <!-- Modal para agregar nuevo Producto -->
 
+  <!-- Modal para agregar nuevo Producto -->
   <div id="Modal-Agregar-Producto" class="modal">
-    <div class="modal-contenido">
-      <div class="campo-descripcion-agregar-producto">
-        <h3>Agregar Producto</h3>
-        <!-- Nombre -->
-        <label for="nombreProducto">Nombre del Producto:</label>
-        <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
-        <span id="errorNombreProducto" class="error"></span>
-        <!-- Descripción -->
-        <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
-        <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
-        <span id="errorDescripcionProducto" class="error"></span>
-      </div>
+    <div class="modal-contenido-producto-new">
 
-      <hr>
+      <h3>Agregar Nuevo Producto</h3>
 
-      <div class="precio-oferta-campopreciodescuento-agregar-producto">
-        <!-- Precio -->
-        <label for="precioProducto">Precio:</label>
-        <input type="number" id="precioProducto" placeholder="Precio">
-        <span id="errorPrecioProducto" class="error"></span>
+      <form id="formulario-producto" method="POST">
+        <!-- Nombre del producto -->
+        <div class="form-group-campo">
+          <label for="nombreProducto">Nombre del Producto</label>
+          <input type="text" id="nombreProducto" placeholder="Ej: Silla Moderna">
+          <span id="errorNombreProducto" class="error"></span>
+        </div>
 
-        <!-- Oferta -->
-        <div class="lineaOferta">
-          <div class="contenedor-linea">
+        <!-- Descripción del producto -->
+        <div class="form-group-campo">
+          <label for="descripcionProducto">Descripción</label>
+          <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
+          <span id="errorDescripcionProducto" class="error"></span>
+        </div>
+
+        <hr>
+
+        <!-- Precio y Oferta -->
+        <div class="form-group-campo">
+          <div class="precio-producto-lbl">
+            <label for="precioProducto">Precio</label>
+            <input type="number" id="precioProducto" placeholder="Ej: 1200.00">
+            <span id="errorPrecioProducto" class="error"></span>
             <div class="checkbox-linea">
               <input type="checkbox" id="ofertaProducto">
-              <label class="Oferta" for="ofertaProducto">Oferta</label>
-            </div>
-            <div class="descuento-opciones">
-              <label for="descuentoSeleccionado">Descuento (%):</label>
-              <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado" min="0"
+              <label for="descuentoSeleccionado" class="descuento-seleccion">Descuento?</label>
+              <input type="number" id="descuentoSeleccionado" class="input-descuento-escribir-productos" min="0"
                 max="100" disabled>
-              <span class="simbolo">%</span>
             </div>
           </div>
+
         </div>
-        <!-- Campo de Precio Descuento -->
-        <div class="campo-precio-descuento">
-          <label for="precioProductoDescuento">Precio con Descuento:</label>
+
+        <div class="form-group-campo">
+          <label for="precioProductoDescuento" class="precio-con-descuento">Precio con Descuento</label>
           <input type="number" id="precioProductoDescuento" disabled>
           <span id="errorPrecioDescuentoProducto" class="error"></span>
         </div>
-      </div>
 
-      <hr>
+        <hr>
 
-      <div class="formularios-carpeta-agregar-producto">
-        <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
-          {% csrf_token %}
-          <div class="campo-formulario">
-            <label for="select-carpetas">Seleccionar carpeta existente:</label>
-            <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
-              {% for carpeta in carpetas %}
-              <option value="{{ carpeta }}">{{ carpeta }}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <div class="campo-formulario">
-            <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
-            <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
+        <!-- Imagen del producto -->
+        <div class="form-group-campo">
+          <div class="carpetas">
+            <label for="nombre-carpeta">Referencia de imagen</label>
+            <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de referencia">
             <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
-            <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
           </div>
-        </form>
-
-        <div class="campo-subir-imagen">
-          <div class="div-campo-subir-imagen">
-            <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
-            <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
-              <i class="fas fa-image icono-imagen"> </i> Subir Imagen
-            </button>
-          </div>
+          <label for="imageInput">Imagen del Producto</label>
+          <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
+            <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+          </button>
           <input type="file" id="imageInput" accept="image/*" style="display: none;">
           <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
           <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+        </div>
 
-          <label for="textareaImagenes">URLs de imágenes:</label>
+        <div class="form-group-campo">
+          <label for="textareaImagenes">URLs de Imágenes</label>
           <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
         </div>
-      </div>
 
-      <div class="modal-acciones">
-        <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
-        <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
-      </div>
+        <div class="modal-acciones">
+          <button type="button" class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
+          <button type="button" class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
+        </div>
+      </form>
+
     </div>
   </div>
 
@@ -980,18 +909,18 @@
 
   <!-- Modal para Editar Producto -->
   <div id="Modal-Editar-Producto" class="modal">
-    <div class="modal-contenido">
+    <div class="modal-contenido-editar-producto">
       <div class="campo-descripcion-agregar-producto">
         <h3>Editar Producto</h3>
         <input type="hidden" id="editarProductoId">
 
         <!-- Nombre -->
-        <label for="editarNombreProducto">Nombre del Producto:</label>
+        <label for="editarNombreProducto" class="lbl-class">Nombre del Producto:</label>
         <input type="text" id="editarNombreProducto" placeholder="Nombre del Producto">
         <span id="errorEditarNombreProducto" class="error"></span>
 
         <!-- Descripción -->
-        <label for="editarDescripcionProducto">Descripción:</label>
+        <label for="editarDescripcionProducto" class="lbl-class">Descripción:</label>
         <textarea id="editarDescripcionProducto" placeholder="Descripción del producto"></textarea>
         <span id="errorEditarDescripcionProducto" class="error"></span>
       </div>
@@ -1000,7 +929,7 @@
 
       <div class="precio-oferta-campopreciodescuento-agregar-producto">
         <!-- Precio -->
-        <label for="editarPrecioProducto">Precio:</label>
+        <label for="editarPrecioProducto" class="lbl-class">Precio:</label>
         <input type="number" id="editarPrecioProducto" placeholder="Precio">
         <span id="errorEditarPrecioProducto" class="error"></span>
 
@@ -1008,20 +937,20 @@
         <div class="lineaOferta">
           <div class="contenedor-linea">
             <div class="checkbox-linea">
-              <input type="checkbox" id="editarOfertaProducto">
-              <label class="Oferta" for="editarOfertaProducto">Oferta</label>
-            </div>
-            <div class="descuento-opciones">
-              <label for="editarDescuentoSeleccionado">Descuento (%):</label>
+              <input type="checkbox" id="editarOfertaProducto" class="check-oferta">
+              <label class="lbl-class" for="editarOfertaProducto">Oferta</label>
+              <div class="descuento-opciones">
+              <label for="editarDescuentoSeleccionado" class="lbl-class">Descuento:</label>
               <input class="input-descuento-escribir-productos" type="number" id="editarDescuentoSeleccionado" min="0"
                 max="100" disabled>
-              <span class="simbolo">%</span>
             </div>
+            </div>
+            
           </div>
         </div>
         <!-- Campo de Precio Descuento -->
         <div class="campo-precio-descuento">
-          <label for="editarPrecioProductoDescuento">Precio con Descuento:</label>
+          <label for="editarPrecioProductoDescuento" class="lbl-class">Precio con Descuento:</label>
           <input type="number" id="editarPrecioProductoDescuento" disabled>
           <span id="errorEditarPrecioDescuentoProducto" class="error"></span>
         </div>
@@ -1030,37 +959,17 @@
       <hr>
 
       <div class="formularios-carpeta-agregar-producto">
-        <form method="POST" id="formulario-editar-carpeta">
-          {% csrf_token %}
-          <div class="campo-formulario">
-            <label for="editarSelectCarpetas">Seleccionar carpeta existente:</label>
-            <select id="editarSelectCarpetas" name="carpeta" class="select-carpetas-opciones">
-              {% for carpeta in carpetas %}
-              <option value="{{ carpeta }}">{{ carpeta }}</option>
-              {% endfor %}
-            </select>
-          </div>
+    
 
-          <div class="campo-formulario">
-            <label for="editarNombreCarpeta">Ingrese nueva carpeta:</label>
-            <input type="text" id="editarNombreCarpeta" name="carpeta" placeholder="Nombre de la carpeta">
-            <span id="editarMensajeError" class="mensaje-error" style="display: none;"></span>
-            <button type="button" class="btn-guardar-carpeta" onclick="actualizarCarpeta()">Actualizar carpeta</button>
-          </div>
-        </form>
+         
+        
 
         <div class="campo-subir-imagen">
-          <div class="div-campo-subir-imagen">
-            <label class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
-            <button type="button" id="btnEditarSubirImagen" class="btn-agregar-subir-imagen">
-              <i class="fas fa-image icono-imagen"> </i> Cambiar Imagen
-            </button>
-          </div>
+          
           <input type="file" id="editarImageInput" accept="image/*" style="display: none;">
           <label id="editarLabelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
           <span id="editarNombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
 
-          <!-- Reemplaza el textarea en tu modal con este bloque -->
           <div class="campo-imagenes">
             <label>Vista previa de imágenes:</label>
             <div id="galeria-imagenes-editar" class="galeria-imagenes"></div>
@@ -1069,6 +978,8 @@
               <div id="urls-imagenes-editar" class="urls-imagenes"></div>
             </div>
           </div>
+
+
         </div>
       </div>
 
@@ -1184,8 +1095,8 @@
 
   </script>
 
+  <script src="{% static 'js/variables.js' %}"></script>
 
-  <script src="{% static 'js/Admin-Productos-Table-Manita.js' %}"></script>
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>
 

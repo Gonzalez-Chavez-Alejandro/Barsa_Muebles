@@ -272,3 +272,9 @@ function generarPDF(encargo) {
 
     doc.save(`encargo-${encargo.id}.pdf`);
 }
+
+
+
+
+
+

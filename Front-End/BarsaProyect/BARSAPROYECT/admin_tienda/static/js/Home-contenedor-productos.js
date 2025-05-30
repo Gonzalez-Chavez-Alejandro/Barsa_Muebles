@@ -88,8 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-function renderTarjetas(lista = productos) {
-    
+function renderTarjetas(lista = productos) { 
     const contenedor = document.getElementById("contenedor-productos");
     contenedor.innerHTML = "";
 
@@ -108,12 +107,21 @@ function renderTarjetas(lista = productos) {
         let descuento = 0;
         let ahorro = 0;
 
-        if (p.oferta) {
-            precioHTML = `<span class="oferta">$${p.precioOferta}</span> <del>$${p.precio}</del>`;
-            descuento = Math.round(((p.precio - p.precioOferta) / p.precio) * 100);
-            ahorro = p.precio - p.precioOferta;
+        // Convertimos precios a número por si vienen como string
+        const precio = Number(p.precio);
+        const precioOferta = Number(p.precioOferta);
+
+        // Validar si el precio no es válido o es 0
+        const precioInvalido = isNaN(precio) || precio <= 0;
+
+        if (p.oferta && !isNaN(precioOferta) && precioOferta > 0) {
+            precioHTML = `<span class="oferta">$${precioOferta}</span> <del>$${precio}</del>`;
+            descuento = Math.round(((precio - precioOferta) / precio) * 100);
+            ahorro = precio - precioOferta;
+        } else if (precioInvalido) {
+            precioHTML = `<span class="contactar">Pongase en contacto</span>`;
         } else {
-            precioHTML = `<span class="oferta">$${p.precio}</span>`;
+            precioHTML = `<span class="oferta">$${precio}</span>`;
         }
 
         div.innerHTML = `

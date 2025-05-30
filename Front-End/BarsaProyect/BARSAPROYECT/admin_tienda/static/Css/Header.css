@@ -32,7 +32,6 @@ nav ul {
     display: flex;
     align-items: center;
     list-style: none;
-    gap: 15px;
 }
 
 nav ul li a {
@@ -41,6 +40,7 @@ nav ul li a {
     font-weight: 500;
     position: relative;
     padding-bottom: 5px;
+    margin: 16px;
 }
 
 /* Efecto de línea debajo del menú */
@@ -339,16 +339,11 @@ img.Barsa-Muebles-Principio-hero {
 
 .Elements nav ul {
     display: flex;
-    justify-content: center;
-    /* Centrado horizontal */
     align-items: center;
-    /* Centrado vertical */
     list-style: none;
-    gap: 15px;
-    padding: 16px 24px;
-    /* Padding simétrico */
+    justify-content: center;
+    padding: 14px 0;
     margin: 0 auto;
-    /* Centrado adicional si es necesario */
 }
 
 
@@ -464,5 +459,14 @@ img.Barsa-Muebles-Principio-hero {
     #btn-configuracion-usuario {
         font-size: 17px;
         padding: 16px 32px;
+    }
+
+    nav ul li a {
+
+        margin: 7px;
+    }
+
+    .carrito {
+        width: 240px;
     }
 }

@@ -108,3 +108,101 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*************************************************************/
+/*********************** Foother *****************************/
+
+
+ window.addEventListener("DOMContentLoaded", () => {
+  const stored = localStorage.getItem('footerData');
+  if (!stored) return;
+
+  const data = JSON.parse(stored);
+
+  // 📧 Email
+  const emailSpan = document.getElementById("dynamic-email");
+  if (emailSpan && data.email) {
+    emailSpan.textContent = data.email;
+  }
+
+  // ☎️ Teléfonos
+  const phoneList = document.getElementById("dynamic-phones");
+  if (phoneList && data.phones) {
+    phoneList.innerHTML = '';
+    data.phones.forEach(phone => {
+      if (phone) {
+        const li = document.createElement("li");
+        li.textContent = phone;
+        phoneList.appendChild(li);
+      }
+    });
+  }
+
+  // 📍 Ubicaciones
+  const locationList = document.getElementById("dynamic-locations");
+  if (locationList && data.locations) {
+    locationList.innerHTML = '';
+    data.locations.forEach(loc => {
+      if (loc) {
+        const li = document.createElement("li");
+        li.textContent = loc;
+        locationList.appendChild(li);
+      }
+    });
+  }
+
+  // 🌐 Redes Sociales
+  const socialContainer = document.getElementById("dynamic-social");
+  if (socialContainer && data.socials) {
+    socialContainer.innerHTML = '';
+    
+    Object.entries(data.socials).forEach(([platform, url]) => {
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+
+        let iconClass;
+        switch(platform.toLowerCase()) {
+          case 'whatsapp':
+            iconClass = 'fab fa-whatsapp';
+            break;
+          case 'email':
+            iconClass = 'fas fa-envelope';
+            break;
+          default:
+            iconClass = `fab fa-${platform.toLowerCase()}`;
+        }
+
+        a.innerHTML = `<i class="${iconClass}"></i>`;
+        socialContainer.appendChild(a);
+      }
+    });
+  }
+});

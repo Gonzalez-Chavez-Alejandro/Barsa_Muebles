@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+</head>
+
+<body>
+    <div class="modal-contenido-producto-new">
+        <div class="campo-descripcion-agregar-producto">
+            <h3>Agregar Producto</h3>
+            <!-- Nombre -->
+            <label for="nombreProducto">Nombre del Producto:</label>
+            <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
+            <span id="errorNombreProducto" class="error"></span>
+            <!-- Descripción -->
+            <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
+            <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
+            <span id="errorDescripcionProducto" class="error"></span>
+        </div>
+
+        <hr>
+
+        <div class="precio-oferta-campopreciodescuento-agregar-producto">
+            <!-- Precio -->
+            <label for="precioProducto">Precio:</label>
+            <input type="number" id="precioProducto" placeholder="Precio">
+            <span id="errorPrecioProducto" class="error"></span>
+
+            <!-- Oferta -->
+            <div class="lineaOferta">
+                <div class="contenedor-linea">
+                    <div class="checkbox-linea">
+                        <input type="checkbox" id="ofertaProducto">
+                        <label class="Oferta" for="ofertaProducto">Oferta</label>
+                    </div>
+                    <div class="descuento-opciones">
+                        <label for="descuentoSeleccionado">Descuento (%):</label>
+                        <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado"
+                            min="0" max="100" disabled>
+                        <span class="simbolo">%</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Campo de Precio Descuento -->
+            <div class="campo-precio-descuento">
+                <label for="precioProductoDescuento">Precio con Descuento:</label>
+                <input type="number" id="precioProductoDescuento" disabled>
+                <span id="errorPrecioDescuentoProducto" class="error"></span>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="formularios-carpeta-agregar-producto">
+            <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
+                {% csrf_token %}
+                <div class="campo-formulario">
+                    <label for="select-carpetas">Seleccionar carpeta existente:</label>
+                    <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
+                        {% for carpeta in carpetas %}
+                        <option value="{{ carpeta }}">{{ carpeta }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="campo-formulario">
+                    <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
+                    <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
+                    <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
+                    <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
+                </div>
+            </form>
+
+            <div class="campo-subir-imagen">
+                <div class="div-campo-subir-imagen">
+                    <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
+                    <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
+                        <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+                    </button>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
+                <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+
+                <label for="textareaImagenes">URLs de imágenes:</label>
+                <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
+            </div>
+        </div>
+
+        <div class="modal-acciones">
+            <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
+            <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
+        </div>
+    </div>
+
+    
+   <script src="{% static 'js/variables.js' %}"></script>
+
+  <script src="{% static 'js/Admin-Menu.js' %}"></script>
+  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
+
+  <script src="{% static 'js/submenu.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos.js' %}"></script>
+  <script src="{% static 'js/Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
+
+  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+  <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
+  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+
+
+</body>
+
+</html>

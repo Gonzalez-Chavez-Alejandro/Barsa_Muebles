@@ -1,21 +1,20 @@
-// Variables globales
-let ordenAscendente = true; 
-let usuariosPorPagina = 5; 
-let paginaActual = 1; 
-let indiceUsuarioEditando = null;
+// Variables globales para control de usuarios y paginación
+let ordenAscendente = true;               // Controla el orden alfabético (ascendente/descendente)
+let usuariosPorPagina = 6;                // Número de usuarios que se muestran por página
+let paginaActual = 1;                     // Página que se está visualizando actualmente
+let indiceUsuarioEditando = null;         // Índice del usuario que se está editando
+let usuariosFiltrados = [...usuarios];    // Lista de usuarios filtrada por búsqueda
+let indicePendienteEliminar = null;       // Índice del usuario pendiente por eliminar
 
 
-let usuariosFiltrados = [...usuarios];
-let productosBusqueda = [];
-
+// Mostrar sección
 function mostrarSeccion(id) {
   const secciones = document.querySelectorAll('.seccion');
   secciones.forEach(seccion => seccion.classList.remove('activa'));
-
-  const seccionMostrada = document.getElementById(id);
-  seccionMostrada.classList.add('activa');
+  document.getElementById(id).classList.add('activa');
 }
 
+// Mostrar usuarios en tabla con paginación
 function mostrarUsuarios(pagina = 1) {
   const tbody = document.querySelector('.admin-table tbody');
   tbody.innerHTML = '';
@@ -24,7 +23,7 @@ function mostrarUsuarios(pagina = 1) {
   const fin = inicio + usuariosPorPagina;
   const usuariosPagina = usuariosFiltrados.slice(inicio, fin);
 
-  usuariosPagina.forEach((usuario) => {
+  usuariosPagina.forEach(usuario => {
     const fila = document.createElement('tr');
     fila.innerHTML = `
       <td>${usuario.id}</td>
@@ -33,13 +32,13 @@ function mostrarUsuarios(pagina = 1) {
       <td>${usuario.telefono}</td>
       <td data-password="${usuario.contrasena}">*******</td>
       <td>
-        <button class="edit-btn"><i class="fas fa-edit"></i><a class="button-table">Editar</a></button>
-        <button class="delete-btn"><i class="fas fa-trash-alt"></i><a class="button-table">Eliminar</a></button>
+        <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn-admin-desing-delete"><i class="fas fa-trash-alt"></i></button>
       </td>`;
 
     const index = usuarios.findIndex(u => u.id === usuario.id);
-    fila.querySelector('.edit-btn').addEventListener('click', () => abrirModal(index));
-    fila.querySelector('.delete-btn').addEventListener('click', () => eliminarUsuario(index));
+    fila.querySelector('.btn-admin-desing-edit').addEventListener('click', () => abrirModal(index));
+    fila.querySelector('.btn-admin-desing-delete').addEventListener('click', () => eliminarUsuario(index));
 
     tbody.appendChild(fila);
   });
@@ -47,34 +46,37 @@ function mostrarUsuarios(pagina = 1) {
   actualizarPaginacion();
 }
 
+// Actualizar controles de paginación (con texto correcto)
 function actualizarPaginacion() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
-  document.getElementById('paginaActual').textContent = `Página ${paginaActual}`;
-  document.getElementById('totalPaginas').textContent = `${totalPaginas}`;
+  const indicador = document.getElementById('indicadorPaginacion');
+  if (indicador) {
+    indicador.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+  }
 
   document.getElementById('paginaAnterior').disabled = paginaActual === 1;
   document.getElementById('paginaSiguiente').disabled = paginaActual === totalPaginas;
 }
 
+// Cambiar página
 function cambiarPagina(direccion) {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
-  paginaActual += direccion;
-  if (paginaActual < 1) paginaActual = 1;
-  if (paginaActual > totalPaginas) paginaActual = totalPaginas;
-
-  mostrarUsuarios(paginaActual);
+  if ((direccion === -1 && paginaActual > 1) || (direccion === 1 && paginaActual < totalPaginas)) {
+    paginaActual += direccion;
+    mostrarUsuarios(paginaActual);
+  }
 }
 
 document.getElementById('paginaAnterior').addEventListener('click', () => cambiarPagina(-1));
 document.getElementById('paginaSiguiente').addEventListener('click', () => cambiarPagina(1));
 
+// Abrir modal editar
 function abrirModal(index) {
   const usuario = usuarios[index];
   document.getElementById('nombreEditar').value = usuario.nombre;
   document.getElementById('correoEditar').value = usuario.correo;
   document.getElementById('telefonoEditar').value = usuario.telefono;
   document.getElementById('contrasenaEditar').value = usuario.contrasena;
-
   indiceUsuarioEditando = index;
   document.getElementById('modalEditar').style.display = 'block';
 }
@@ -91,18 +93,15 @@ function guardarCambios() {
     telefono: document.getElementById("telefonoEditar").value,
     contrasena: document.getElementById("contrasenaEditar").value,
   };
-
   usuariosFiltrados = [...usuarios];
   cerrarModal();
   mostrarUsuarios(paginaActual);
 }
 
-let indicePendienteEliminar = null;
-
+// Eliminar usuario
 function eliminarUsuario(index) {
   const usuario = usuarios[index];
   indicePendienteEliminar = index;
-
   document.getElementById('mensajeConfirmacion').textContent = `¿Estás seguro de que deseas eliminar a ${usuario.nombre}?`;
   document.getElementById('modalConfirmacion').style.display = 'flex';
 }
@@ -122,108 +121,84 @@ document.getElementById('btnCancelarEliminar').addEventListener('click', () => {
   indicePendienteEliminar = null;
 });
 
+// Buscar usuarios
 function buscarUsuarios() {
   const filtro = document.getElementById('buscador').value.toLowerCase();
-
-  usuariosFiltrados = usuarios.filter(usuario => 
-    usuario.nombre.toLowerCase().includes(filtro) || 
+  usuariosFiltrados = usuarios.filter(usuario =>
+    usuario.nombre.toLowerCase().includes(filtro) ||
     usuario.correo.toLowerCase().includes(filtro)
   );
-
   paginaActual = 1;
   mostrarUsuarios(paginaActual);
 }
 
+// Ordenar por nombre
 function ordenarPorNombre() {
   ordenAscendente = !ordenAscendente;
-
   usuariosFiltrados.sort((a, b) => {
     if (a.nombre.toLowerCase() < b.nombre.toLowerCase()) return ordenAscendente ? -1 : 1;
     if (a.nombre.toLowerCase() > b.nombre.toLowerCase()) return ordenAscendente ? 1 : -1;
     return 0;
   });
-
   mostrarUsuarios(paginaActual);
 }
 
+// Agregar nuevo usuario
+function abrirModalAgregar() {
+  document.getElementById('modalAgregarUsuario').style.display = 'block';
+  document.getElementById('nombreNuevo').value = '';
+  document.getElementById('correoNuevo').value = '';
+  document.getElementById('telefonoNuevo').value = '';
+  document.getElementById('contrasenaNuevo').value = '';
+}
+
+function cerrarModalAgregar() {
+  const modal = document.getElementById('modalAgregarUsuario');
+  if (modal) modal.style.display = 'none';
+}
 
 function guardarNuevo() {
-  const nombre = document.getElementById('nombreNuevo').value;
-  const correo = document.getElementById('correoNuevo').value;
-  const telefono = document.getElementById('telefonoNuevo').value;
-  const contrasena = document.getElementById('contrasenaNuevo').value;
+  const nombre = document.getElementById('nombreNuevo').value.trim();
+  const correo = document.getElementById('correoNuevo').value.trim();
+  const telefono = document.getElementById('telefonoNuevo').value.trim();
+  const contrasena = document.getElementById('contrasenaNuevo').value.trim();
 
   if (!nombre || !correo || !telefono || !contrasena) {
     alert("Por favor, complete todos los campos.");
     return;
   }
 
-  // Crear el nuevo usuario
   const nuevoUsuario = {
-    id: idCounter++,  // Asegúrate de que idCounter esté actualizado
+    id: idCounter++,
     nombre,
     correo,
     telefono,
     contrasena
   };
 
-  // Agregar el nuevo usuario al arreglo
   usuarios.push(nuevoUsuario);
-  usuariosFiltrados = [...usuarios];  // Actualizar la lista de usuarios filtrados
-
-  // Mostrar los usuarios en la tabla
+  usuariosFiltrados = [...usuarios];
   mostrarUsuarios(paginaActual);
-
-  // Cerrar el modal de agregar usuario
   cerrarModalAgregar();
-  cerrarModalAgregarUsuario();
-  // Mostrar mensaje de éxito
   alert("Usuario agregado correctamente");
 }
 
-function cerrarModalAgregar() {
-  const modal = document.getElementById('modalAgregarUsuario');
-  if (modal) {
-    modal.style.display = 'none'; // Cerrar el modal si el elemento existe
-  } else {
-    console.error('No se encontró el modal con id "modalAgregarUsuario"');
-  }
-}
-
-
-function abrirModalAgregar() {
-  document.getElementById('modalAgregarUsuario').style.display = 'block';
-}
-
-function cerrarModalAgregarUsuario() {
-  const modal = document.getElementById('modalAgregarUsuario');
-  if (modal) {
-    modal.style.display = 'none'; // Cierra el modal si el elemento existe
-  } else {
-    console.error('No se encontró el modal con id "modalAgregarUsuario"');
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Ahora, el DOM está completamente cargado, por lo que puedes manipular los elementos
-  const toggleBtn = document.getElementById("toggleMenu");
-  const menuLateral = document.getElementById("menuLateral");
-
-  if (toggleBtn && menuLateral) {
-    toggleBtn.addEventListener("click", () => {
-      menuLateral.classList.toggle("hidden");
-    });
-  } else {
-    
-  }
+  document.getElementById("toggleMenu")?.addEventListener("click", () => {
+    document.getElementById("menuLateral")?.classList.toggle("hidden");
+  });
 
   mostrarUsuarios(paginaActual);
+
+  document.getElementById('buscador')?.addEventListener('input', buscarUsuarios);
+  document.getElementById('ordenarNombre')?.addEventListener('click', ordenarPorNombre);
+  document.getElementById('btnAbrirAgregar')?.addEventListener('click', abrirModalAgregar);
+  document.getElementById('btnCerrarAgregar')?.addEventListener('click', cerrarModalAgregar);
+  document.getElementById('btnGuardarNuevo')?.addEventListener('click', guardarNuevo);
+  document.getElementById('btnGuardarCambios')?.addEventListener('click', guardarCambios);
+  document.getElementById('btnCerrarEditar')?.addEventListener('click', cerrarModal);
 });
-function guardarNuevoUsuario() {
-  // Aquí va tu lógica para validar y guardar
-  alert('Usuario agregado correctamente');
+
+function cerrarModalAgregarUsuario() {
   cerrarModalAgregar();
 }
-
-
-mostrarUsuarios(paginaActual);

@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Registro.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
 </head>
 
 <body>
@@ -114,6 +115,10 @@
       <span>Total: $<span id="total-precio">0.00</span></span>
     </div>
   </section>
+
+
+      {% include 'includes/foother.html' %}
+
   <script>
   const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
 </script>

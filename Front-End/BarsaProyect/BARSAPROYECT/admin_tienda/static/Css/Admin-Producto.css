@@ -1,516 +1,526 @@
-/* Estilo de oferta producto*/
-select#filtroOferta {
-  padding: 6px 12px;
-  margin: 0px 20px;
-  border: 2px solid #007bff;
-  border-radius: 6px;
-  background-color: white;
-  color: #333;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-select#filtroOferta:hover {
-  border-color: #0056b3;
-}
-
-select#filtroOferta:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 5px rgba(0,123,255,0.5);
-}
-
-/* th Centrado */
-.td-centrado {
-  text-align: center !important;    /*Con !important! Gana siempre este estilo, pase lo que pase.*/
-}
-
-.delete-btn-producto,.delete-btn-comentario-stars {
-  background-color: #e74c3c;
-  color: white;
-  padding: 8px 11px;
-  margin-top: 5px;
-}
-.edit-btn-producto, .edit-btn-comentario-stars {
-  background-color: #3498db;
-  color: white;
-  padding: 8px 10px;
-}
-
-.delete-btn-producto,.edit-btn-producto,.edit-btn-comentario-stars,.delete-btn-comentario-stars {
- 
-  margin-right: 0px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0px;
-  transition: transform 0.2sease, box-shadow 0.3sease;
-}
-.delete-btn-producto {
-    background-color: #e74c3c;
-    color: white;
-    padding: 8px 11px;
-}
-/* Estilo para el botón */
-.btn-agregar-imagenes {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  gap: 8px;  /* Espacio entre el ícono y el texto */
-}
-
-/* Estilo para el botón */
-.btn-agregar-imagen-home {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  gap: 8px;  /* Espacio entre el ícono y el texto */
-}
-
-/* Estilo para el ícono */
-.icono-imagen {
-  font-size: 16px;  /* Ajusta el tamaño del ícono si es necesario */
-}
-
-.descuento-opciones {
- 
-  display: flex; /* Pone el label y el input en la misma línea */
-  align-items: center; /* Centra verticalmente */
-  gap: 10px; /* Espacio entre el label y el input */
-}
-
-/* Opcional: puedes darle estilos al input para que no sea tan pequeño */
-#descuentoSeleccionado {
-  width: 80px;
-  padding: 4px;
-}
-.contenedor-linea {
-  display: flex;
-  align-items: center;
+/* Galería de imágenes */
+.galeria-imagenes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 10px;
-  flex-wrap: wrap; /* <- ¡Esto evita que se salga! */
-  max-width: 100%; /* <- ¡Esto lo obliga a respetar el ancho del modal! */
-  box-sizing: border-box; /* <- Asegura que padding/margin no lo haga más grande */
+  margin-bottom: 15px;
 }
 
-.checkbox-linea, .descuento-opciones {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.input-descuento-escribir-productos {
-  width: 80px; /* Puedes ajustar el ancho del input */
-  padding: 4px;
-}
-label.lbl-descuento-productos {
-  margin: 0;
-}
-.input-con-simbolo {
+.imagen-container {
   position: relative;
-  display: inline-block;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.input-con-simbolo input {
-  padding-right: 20px; /* Espacio para el % */
-}
-
-.simbolo {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  margin-right: 8px;
-  transform: translateY(-50%);
-  color: #555; /* Color gris suave */
-  pointer-events: none; /* Para que no bloquee el input */
-}
-
-input#precioProductoDescuento {
-  max-width: 396px;
-  margin-left: 3px;
-}
-.descuento-opciones {
-  width: 300px; /* O el tamaño que prefieras */
-  margin: 0 auto; /* Centra el div horizontalmente */
-}
-
-td.td-centrado {
-  margin: 1px;
-  padding: 0;
-}
-
-.cancelar-btn-producto-Modal {
-  padding: 9px 19px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #aaa;
-  color: white;
-  max-width: 105px;
-  text-transform: uppercase;
-}
-
-.delete-btn-producto-Modal {
-  background-color: red;
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 27px 0px 0px;
-}
-
-.select-group-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.select-group-producto-lleno,
-.select-group-filtro-lleno {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1 1 30px;
-  max-width: 400px;
-}
-
-.select-label {
-  font-weight: 500;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-
-.select-wrapper select{
-  height: 32px;
-  padding: 4px 8px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  max-width: 185px;
+.miniatura-imagen {
   width: 100%;
-  box-sizing: border-box;
+  height: 120px;
+  object-fit: cover;
+  display: block;
 }
 
-/* Responsive: SOLO cambia en pantallas pequeñas */
-@media (max-width: 600px) {
-  .select-group-container {
-    gap: 8px;
-  }
-
-  .select-group-producto-lleno,
-  .select-group-filtro-lleno {
-    flex-direction: column; /* ✅ Cambia a vertical */
-    align-items: flex-start; /* Alinea el contenido a la izquierda */
-    width: 100%;
-  }
-
-  .select-wrapper  select {
-    width: 100%;
-    max-width: none;
-  }
-    .select-group-producto-lleno  select select {
-    width: 100%;
-    max-width: 70px;
-}
+.badge-imagen {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px;
+  font-size: 0.8em;
+  text-align: center;
+  white-space: nowrap;
 }
 
-
-th.td-espacio {
-  padding: 0 46px 0 0px;
+/**/
+/* Contenedor principal del formulario de productos */
+#form-destacados {
+  background-color: #fff;
+  padding: 24px;
+  max-width: 100%;
 }
 
+/* Título */
+#titulo-destacados {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
 
+/* Contenedor de buscador y botón Agregar */
 .conjuntoagregarbuscar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.filtros-buscar {
-  flex: 1 1 250px;
-}
-
-.input-group {
-  position: relative;
-  width: 100%;
-}
-
-.input-group input {
-  width: 100%;
-  max-width: 220px;
-  padding: 8px 12px 8px 32px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.search-icon {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  color: #888;
-}
-
+/* Botón Agregar */
 .btn-agregar {
-  padding: 8px 16px;
+  background-color: #007acc;
+  color: #fff;
   border: none;
-  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  transition: background-color 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
+  gap: 8px;
 }
 
-/* ✅ Responsive */
+.btn-agregar:hover {
+  background-color: #005fa3;
+}
+
+/* Contenedor de selects */
+.select-group-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Contenedor individual de un grupo de select */
+.select-group-producto-lleno,
+.select-group-filtro-lleno {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Etiquetas de los selects */
+.select-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Select y su contenedor */
+.select-wrapper,
+.select {
+  width: auto;
+}
+
+.select {
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1.5px solid #2c3e50;
+  background-color: #fdfdfd;
+  color: #2c3e50;
+  transition: border-color 0.3s;
+}
+
+.select:focus {
+  border-color: #007acc;
+  outline: none;
+}
+
 @media (max-width: 600px) {
-  .conjuntoagregarbuscar {
+
+  .conjuntoagregarbuscar,
+  .select-group-container {
     flex-direction: column;
     align-items: stretch;
   }
 
   .btn-agregar {
-    max-width: 94px;
+    width: 100%;
     justify-content: center;
-    margin: 0; /* elimina el margin horizontal fijo */
+  }
+
+  .select-group-producto-lleno,
+  .select-group-filtro-lleno {
+    justify-content: space-between;
   }
 }
 
+/*tabla th descripcion*/
+th.th-descripcion {
+  padding: 0 114px;
+}
+
+input#ofertaProducto {
+  width: 30px;
+  height: 35px;
+  margin: 0% 0% 2%;
+  cursor: pointer;
+}
+
+.scroll-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  /* Ajusta este valor si hay muchas columnas */
+}
+
+@media screen and (max-width: 768px) {
+  .admin-table {
+    font-size: 14px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 6px 10px;
+  }
+}
+
+/*Modal Agregar*/
+/* Estilo general del fondo del modal */
 
 
-.layout {
+/* Contenido del modal */
+.modal-contenido-producto-new {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  max-height: 90vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-contenido-producto-new h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 4px solid #640b0b;
+}
+
+/* Agrupaciones de campos */
+.form-group-campo {
   display: flex;
+  flex-direction: column;
+}
+
+.form-group-campo label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.form-group-campo input[type="text"],
+.form-group-campo input[type="number"],
+.form-group-campo textarea {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group-campo input:focus,
+.form-group-campo textarea:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+/* Texto de error */
+.error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Estilo para checkbox + descuento */
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
   flex-wrap: wrap;
 }
 
-.sidebar {
-  width: 200px;
-  padding: 1rem;
-  border-right: 1px solid #ccc;
+.checkbox-linea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 7px;
 }
 
-.sidebar ul {
-  list-style: none;
-  padding: 0;
+.descuento-opciones {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.sidebar li {
-  cursor: pointer;
+.input-descuento-escribir-productos {
+  width: 80px;
   padding: 0.5rem;
-  margin-bottom: 5px;
-  border-radius: 5px;
-}
-
-.sidebar li:hover {
-  background-color: #f0f0f0;
-}
-
-.categoria-activa {
-  background-color: #ddd;
-  font-weight: bold;
-}
-
-.contenido-principal {
-  flex-grow: 1;
-  padding: 1rem;
-  min-width: 300px;
-}
-
-
-
-
-.cerrar {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.bscdr-usuarios-star-comment {
-  width: 100%;
-  max-width: 368px;
-  padding: 10px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 16px;
+  border-radius: 0.5rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
 }
 
-
-
-
-
-
-/* Estilos para la visualización de imágenes */
-.galeria-imagenes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 10px;
-    margin-bottom: 15px;
+.simbolo {
+  position: absolute;
+  right: 0.5rem;
+  font-weight: bold;
+  color: #666;
 }
 
-.imagen-container {
-    position: relative;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
+/* Botón para subir imagen */
+.btn-agregar-subir-imagen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  margin: 3% 0%;
+  transition: background-color 0.3s;
 }
 
-.miniatura-imagen {
+.btn-agregar-subir-imagen:hover {
+  background-color: #0056b3;
+}
+
+.icono-imagen {
+  font-size: 1.2rem;
+}
+
+/* Estado de la imagen */
+.label-estado-imagen {
+  margin-top: 0.5rem;
+  color: #666;
+}
+
+.nombre-archivo-imagen {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+/* Área de URLs */
+.textarea-imagenes {
+  width: 100%;
+  resize: none;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+/* Botones del modal */
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-guardar {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background-color: #218838;
+}
+
+.btn-cancelar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #c82333;
+}
+
+/* Responsive en pantallas pequeñas */
+@media (max-width: 500px) {
+  .flex-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .descuento-opciones {
     width: 100%;
-    height: 120px;
-    object-fit: cover;
-    display: block;
+    justify-content: space-between;
+  }
+
+  .modal-acciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
-.badge-imagen {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 4px;
-    font-size: 0.8em;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+input#descuentoSeleccionado {
+  margin: 0px 0 8px 2px;
 }
 
-.url-imagen {
-    padding: 8px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    margin: 5px 0;
-    font-size: 0.9em;
-    word-break: break-all;
+.carpetas {
+  margin-bottom: 2%;
+  margin-top: 5%;
 }
 
-.contenedor-urls {
-    margin-top: 15px;
-    max-height: 150px;
-    overflow-y: auto;
+.precio-producto-lbl {
+  margin-top: 3%;
 }
 
-.url-imagen:hover {
-    background: #eee;
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*Modal editar */
+#Modal-Editar-Producto {
+  display: none;
+  /* Oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-contenido-editar-producto {
+  background: white;
+  margin: 2% auto;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+
+  /* Estas líneas son clave para el scroll */
+  max-height: 90vh;
+  /* Limita la altura total */
+  overflow-y: auto;
+  /* Agrega scroll si el contenido excede */
+}
+
+label.lbl-class {
+  font-weight: 600;
+ 
+  color: #444;
+  align-items: center;
+}
+
+.modal-contenido-editar-producto h3 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  border-bottom: 4px solid #640b0b;
+}
+
+input#editarOfertaProducto {
+    width: 27px;
+    height: 21px;
+    margin: 0%;
     cursor: pointer;
 }
 
-
-.copiado {
-    background: #4CAF50 !important;
-    color: white !important;
+.precio-oferta-campopreciodescuento-agregar-producto {
+    margin-top: 4%;
 }
 
-.imagen-container:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s;
+input#editarDescuentoSeleccionado {
+    margin: 0;
+}
+
+
+
+.campo-precio-descuento {
+    margin-top: 6%;
+    margin-bottom: 4%;
+}
+
+.campo-formulario {
+    margin-top: 4%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.contenedor-imagen {
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+}
+
+.imagen-previa {
+  width: 100px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.boton-eliminar {
+  position: absolute;
+  top: 0px;
+  right: 26px;
+  height: 24px;
+  width: 22px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 60%;
+  cursor: pointer;
 }
 
 .url-imagen {
-    transition: all 0.3s ease;
+  margin-top: 5px;
+  cursor: pointer;
+  color: blue;
+  font-size: 12px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.search-container {
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto;
+.url-imagen.copiado {
+  color: green;
+  font-weight: bold;
 }
-
-.search-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-  z-index: 2;
-}
-
-#buscador {
-  width: 100%;
-    padding: 0px 0px 12px 45px;
-    border: 2px solid #e0e0e0;
-    border-radius: 30px;
-    font-size: 32px;
-    transition: all 0.3sease;
-    background: #ffffff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-#buscador:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 2px 8px rgba(0,123,255,0.25);
-}
-
-#buscador::placeholder {
-  color: #6c757d;
-  opacity: 0.8;
-  font-size: 14px;
-}
-
-#buscador:focus::placeholder {
-  opacity: 0.5;
-}
-
-/* Efecto hover */
-#buscador:hover {
-  border-color: #007bff;
-  box-shadow: 0 2px 8px rgba(0,123,255,0.1);
-}
-
-
-
-
-
-
-
-
-

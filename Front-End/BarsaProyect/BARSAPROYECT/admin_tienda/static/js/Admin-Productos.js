@@ -35,8 +35,8 @@ function mostrarProductosCategoria(idCategoria, nombreCategoria) {
 // Ordenar por nombre
 function ordenarPorNombre() {
     ordenAscendentep = !ordenAscendentep;
-    productosFiltradosGlobal.sort((a, b) => ordenAscendentep ? 
-        a.nombre.localeCompare(b.nombre) : 
+    productosFiltradosGlobal.sort((a, b) => ordenAscendentep ?
+        a.nombre.localeCompare(b.nombre) :
         b.nombre.localeCompare(a.nombre));
     llenarTablaProductosLLeno();
 }
@@ -62,17 +62,16 @@ function llenarTablaProductosLLeno(lista = productosFiltradosGlobal) {
             <td>${producto.oferta ? `$${producto.precioOferta.toFixed(2)}` : '-'}</td>
             <td>${producto.carpeta}</td>
             <td class="td-centrado">
-                <textarea readonly class="form-control">${
-                    Array.isArray(producto.nombreimagenes) ? 
-                    producto.nombreimagenes.join(', ') : 
-                    producto.nombreimagenes
-                }</textarea>
+                <textarea readonly class="form-control">${Array.isArray(producto.nombreimagenes) ?
+                producto.nombreimagenes.join(', ') :
+                producto.nombreimagenes
+            }</textarea>
             </td>
             <td>
-                <button class="edit-btn-producto" onclick="editarProducto(${producto.id})">
+                <button class="btn-admin-desing-edit" onclick="editarProducto(${producto.id})">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="delete-btn-producto" onclick="abrirModalEliminarProducto(${producto.id})">
+                <button class="btn-admin-desing-delete" onclick="abrirModalEliminarProducto(${producto.id})">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </td>`;
@@ -99,17 +98,16 @@ function llenarTablaProductos(listaProductos = productos) {
             <td class="td-centrado">${producto.oferta ? `$${producto.precioOferta.toFixed(2)}` : '-'}</td>
             <td>${producto.carpeta}</td>
             <td class="td-centrado">
-                <textarea readonly class="form-control">${
-                    Array.isArray(producto.nombreimagenes) ? 
-                    producto.nombreimagenes.join(', ') : 
-                    producto.nombreimagenes
-                }</textarea>
+                <textarea readonly class="form-control">${Array.isArray(producto.nombreimagenes) ?
+                producto.nombreimagenes.join(', ') :
+                producto.nombreimagenes
+            }</textarea>
             </td>
             <td class="td-centrado">
-                <button class="edit-btn-producto" onclick="editarProducto(${producto.id})">
+                <button class="btn-admin-desing-edit" onclick="editarProducto(${producto.id})">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="delete-btn-producto" onclick="abrirModalEliminarProducto(${producto.id})">
+                <button class="btn-admin-desing-delete" onclick="abrirModalEliminarProducto(${producto.id})">
                     <i class="fas fa-trash-alt"></i>
                 </button>
             </td>`;
@@ -121,10 +119,10 @@ function llenarTablaProductos(listaProductos = productos) {
 function cambiarPaginaProductosLleno(direccion) {
     const totalPaginas = Math.ceil(productosFiltradosGlobal.length / productosPorPagina);
     paginaActualProductos += direccion;
-    
+
     if (paginaActualProductos < 1) paginaActualProductos = 1;
     if (paginaActualProductos > totalPaginas) paginaActualProductos = totalPaginas;
-    
+
     llenarTablaProductosLLeno();
 }
 
@@ -139,7 +137,7 @@ function cambiarCantidadProductos() {
 // Filtros y búsqueda
 function buscarProductos() {
     const busqueda = document.getElementById('buscadorProducto').value.toLowerCase();
-    productosFiltradosGlobal = productos.filter(producto => 
+    productosFiltradosGlobal = productos.filter(producto =>
         producto.nombre.toLowerCase().includes(busqueda) ||
         producto.descripcion.toLowerCase().includes(busqueda)
     );
@@ -149,7 +147,7 @@ function buscarProductos() {
 
 function buscarProductosDestacados() {
     const busqueda = document.getElementById('buscadorProductoDestacados').value.toLowerCase();
-    productosFiltradosGlobal = productos.filter(producto => 
+    productosFiltradosGlobal = productos.filter(producto =>
         producto.nombre.toLowerCase().includes(busqueda) ||
         producto.descripcion.toLowerCase().includes(busqueda)
     );
@@ -158,9 +156,9 @@ function buscarProductosDestacados() {
 
 function filtrarPorOferta() {
     const filtro = document.getElementById('filtroOferta').value;
-    productosFiltradosGlobal = productos.filter(p => 
+    productosFiltradosGlobal = productos.filter(p =>
         filtro === 'todos' ? true :
-        filtro === 'oferta' ? p.oferta : !p.oferta
+            filtro === 'oferta' ? p.oferta : !p.oferta
     );
     llenarTablaProductos(productosFiltradosGlobal);
     llenarTablaProductosLLeno();
@@ -189,7 +187,7 @@ function editarProducto(id) {
         document.getElementById('editarDescripcionProducto').value = productoEditando.descripcion;
         document.getElementById('editarPrecioProducto').value = productoEditando.precio;
         document.getElementById('editarOfertaProducto').checked = productoEditando.oferta;
-        document.getElementById('editarSelectCarpetas').value = productoEditando.carpeta;
+        
 
         // Manejar ofertas
         if (productoEditando.oferta) {
@@ -199,43 +197,37 @@ function editarProducto(id) {
         }
 
         // Procesar imágenes
-        const imagenes = Array.isArray(productoEditando.nombreimagenes) ? 
-                        productoEditando.nombreimagenes : 
-                        productoEditando.nombreimagenes.split(',').map(s => s.trim());
-        
+        const imagenes = Array.isArray(productoEditando.nombreimagenes)
+            ? productoEditando.nombreimagenes
+            : productoEditando.nombreimagenes.split(',').map(s => s.trim());
+
         imagenes.forEach(imagen => {
             if (!imagen) return;
 
-            // Contenedor de imagen
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'imagen-container';
-            
-            // Elemento de imagen
+            // Crear contenedor principal
+            const contenedorImagen = document.createElement('div');
+            contenedorImagen.classList.add('contenedor-imagen');
+
+            // Imagen
             const img = document.createElement('img');
             img.src = imagen;
-            img.className = 'miniatura-imagen';
-            img.onerror = function() { 
-                this.style.display = 'none'; 
+            img.classList.add('imagen-previa');
+            img.onerror = function () {
+                this.style.display = 'none';
             };
-            
-            // Badge con nombre de archivo
-            const badge = document.createElement('div');
-            badge.className = 'badge-imagen';
-            let nombreArchivo = imagen;
-            try {
-                nombreArchivo = new URL(imagen).pathname.split('/').pop();
-            } catch {
-                nombreArchivo = imagen.split('/').pop();
-            }
-            badge.textContent = nombreArchivo;
-            
-            // Contenedor de URL
+
+            // Botón eliminar
+            const botonEliminar = document.createElement('button');
+            botonEliminar.innerHTML = '✖';
+            botonEliminar.classList.add('boton-eliminar');
+            botonEliminar.title = 'Eliminar imagen';
+
+            // URL visible con opción de copiar
             const urlDiv = document.createElement('div');
-            urlDiv.className = 'url-imagen';
+            urlDiv.classList.add('url-imagen');
             urlDiv.textContent = imagen;
-            
-            // Evento para copiar
-            urlDiv.onclick = async function() {
+
+            urlDiv.onclick = async function () {
                 try {
                     await navigator.clipboard.writeText(imagen);
                     this.classList.add('copiado');
@@ -249,28 +241,37 @@ function editarProducto(id) {
                     document.body.removeChild(textarea);
                 }
             };
-            
-            imgContainer.appendChild(img);
-            imgContainer.appendChild(badge);
-            galeria.appendChild(imgContainer);
+
+            // Acción de eliminar
+            botonEliminar.addEventListener('click', () => {
+                contenedorImagen.remove();
+                urlDiv.remove();
+            });
+
+            // Armar estructura
+            contenedorImagen.appendChild(img);
+            contenedorImagen.appendChild(botonEliminar);
+            galeria.appendChild(contenedorImagen);
             urlsContainer.appendChild(urlDiv);
         });
 
+        // Mostrar el modal
         document.getElementById('Modal-Editar-Producto').style.display = 'block';
         toggleCamposEdicionOferta();
     }
 }
 
+
 function toggleCamposEdicionOferta() {
     const ofertaCheckbox = document.getElementById('editarOfertaProducto');
     const descuentoInput = document.getElementById('editarDescuentoSeleccionado');
     const precioDescuentoInput = document.getElementById('editarPrecioProductoDescuento');
-    
+
     ofertaCheckbox.addEventListener('change', () => {
         descuentoInput.disabled = !ofertaCheckbox.checked;
         precioDescuentoInput.disabled = !ofertaCheckbox.checked;
     });
-    
+
     descuentoInput.disabled = !ofertaCheckbox.checked;
     precioDescuentoInput.disabled = !ofertaCheckbox.checked;
 }
@@ -297,21 +298,21 @@ function guardarNuevoProducto() {
 
 function guardarCambiosProducto() {
     if (!productoEditando) return;
-    
+
     productoEditando.nombre = document.getElementById('editarNombreProducto').value;
     productoEditando.descripcion = document.getElementById('editarDescripcionProducto').value;
     productoEditando.precio = parseFloat(document.getElementById('editarPrecioProducto').value);
     productoEditando.oferta = document.getElementById('editarOfertaProducto').checked;
     productoEditando.carpeta = document.getElementById('editarSelectCarpetas').value;
     productoEditando.nombreimagenes = document.getElementById('editarTextareaImagenes').value.split(',').map(s => s.trim());
-    
+
     if (productoEditando.oferta) {
         const descuento = parseFloat(document.getElementById('editarDescuentoSeleccionado').value);
         productoEditando.precioOferta = productoEditando.precio - (productoEditando.precio * (descuento / 100));
     } else {
         productoEditando.precioOferta = null;
     }
-    
+
     llenarTablaProductos();
     llenarTablaProductosLLeno();
     cerrarModalEditarProducto();
@@ -359,7 +360,7 @@ function configurarCalculoDescuento() {
         const estaActivo = ofertaCheckbox.checked;
         descuentoInput.disabled = !estaActivo;
         precioDescuentoInput.disabled = !estaActivo;
-        
+
         if (!estaActivo) {
             descuentoInput.value = '';
             precioDescuentoInput.value = '';
@@ -370,7 +371,7 @@ function configurarCalculoDescuento() {
     descuentoInput.addEventListener('input', () => {
         const precio = parseFloat(precioInput.value);
         const descuento = parseFloat(descuentoInput.value);
-        
+
         if (!isNaN(precio) && !isNaN(descuento)) {
             const precioConDescuento = precio - (precio * (descuento / 100));
             precioDescuentoInput.value = precioConDescuento.toFixed(2);
@@ -381,7 +382,7 @@ function configurarCalculoDescuento() {
     precioDescuentoInput.addEventListener('input', () => {
         const precio = parseFloat(precioInput.value);
         const precioDescuento = parseFloat(precioDescuentoInput.value);
-        
+
         if (!isNaN(precio) && !isNaN(precioDescuento)) {
             const descuento = ((precio - precioDescuento) / precio * 100).toFixed(2);
             descuentoInput.value = descuento;
@@ -441,7 +442,7 @@ function configurarCalculoDescuentoAgregar() {
         const estaActivo = ofertaCheckbox.checked;
         descuentoInput.disabled = !estaActivo;
         precioDescuentoInput.disabled = !estaActivo;
-        
+
         if (!estaActivo) {
             descuentoInput.value = '';
             precioDescuentoInput.value = '';
@@ -452,7 +453,7 @@ function configurarCalculoDescuentoAgregar() {
     descuentoInput.addEventListener('input', () => {
         const precio = parseFloat(precioInput.value);
         const descuento = parseFloat(descuentoInput.value);
-        
+
         if (!isNaN(precio) && !isNaN(descuento)) {
             const precioConDescuento = precio - (precio * (descuento / 100));
             precioDescuentoInput.value = precioConDescuento.toFixed(2);
@@ -463,7 +464,7 @@ function configurarCalculoDescuentoAgregar() {
     precioDescuentoInput.addEventListener('input', () => {
         const precio = parseFloat(precioInput.value);
         const precioDescuento = parseFloat(precioDescuentoInput.value);
-        
+
         if (!isNaN(precio) && !isNaN(precioDescuento)) {
             const descuento = ((precio - precioDescuento) / precio * 100).toFixed(2);
             descuentoInput.value = descuento;
@@ -512,13 +513,13 @@ function configurarSelectoresCarpeta() {
     // Para el modal de agregar
     const selectAgregar = document.getElementById('select-carpetas');
     const inputAgregar = document.getElementById('nombre-carpeta');
-    
-    selectAgregar.addEventListener('change', function() {
+
+    selectAgregar.addEventListener('change', function () {
         inputAgregar.value = this.value;
     });
-    
-    inputAgregar.addEventListener('input', function() {
-        if(this.value !== selectAgregar.value) {
+
+    inputAgregar.addEventListener('input', function () {
+        if (this.value !== selectAgregar.value) {
             selectAgregar.selectedIndex = 0;
         }
     });
@@ -526,13 +527,13 @@ function configurarSelectoresCarpeta() {
     // Para el modal de editar
     const selectEditar = document.getElementById('editarSelectCarpetas');
     const inputEditar = document.getElementById('editarNombreCarpeta');
-    
-    selectEditar.addEventListener('change', function() {
+
+    selectEditar.addEventListener('change', function () {
         inputEditar.value = this.value;
     });
-    
-    inputEditar.addEventListener('input', function() {
-        if(this.value !== selectEditar.value) {
+
+    inputEditar.addEventListener('input', function () {
+        if (this.value !== selectEditar.value) {
             selectEditar.selectedIndex = 0;
         }
     });
@@ -561,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function cargarFiltroCategorias() {
     const select = document.getElementById('filtroCategoria');
     select.innerHTML = '<option value="">Seleccionar Categoría</option>';
-    
+
     categorias.forEach(categoria => {
         const option = document.createElement('option');
         option.value = categoria.id;
@@ -573,17 +574,17 @@ function cargarFiltroCategorias() {
 // Función de filtrado por categoría
 function filtrarPorCategoria() {
     const categoriaId = parseInt(document.getElementById('filtroCategoria').value);
-    
+
     if (categoriaId) {
         productosFiltradosGlobal = productos.filter(p => p.categoriaId === categoriaId);
     } else {
         productosFiltradosGlobal = [...productos];
     }
-    
+
     // Actualizar ambas tablas
     llenarTablaProductos(productosFiltradosGlobal);
     llenarTablaProductosLLeno();
-    
+
     // Reiniciar paginación
     paginaActualProductos = 1;
     actualizarPaginacion();
@@ -605,15 +606,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function buscarProductosDestacados() {
     const busqueda = document.getElementById('buscadorProductoDestacados').value.toLowerCase();
     const categoriaId = parseInt(document.getElementById('filtroCategoria').value);
-    
+
     productosFiltradosGlobal = productos.filter(producto => {
         const coincideBusqueda = producto.nombre.toLowerCase().includes(busqueda) ||
-                                producto.descripcion.toLowerCase().includes(busqueda);
+            producto.descripcion.toLowerCase().includes(busqueda);
         const coincideCategoria = categoriaId ? producto.categoriaId === categoriaId : true;
-        
+
         return coincideBusqueda && coincideCategoria;
     });
-    
+
     llenarTablaProductosLLeno();
 }
 
@@ -621,15 +622,15 @@ function buscarProductosDestacados() {
 function filtrarPorOferta() {
     const filtro = document.getElementById('filtroOferta').value;
     const categoriaId = parseInt(document.getElementById('filtroCategoria').value);
-    
+
     productosFiltradosGlobal = productos.filter(p => {
         const coincideOferta = filtro === 'todos' ? true :
-                              filtro === 'oferta' ? p.oferta : !p.oferta;
+            filtro === 'oferta' ? p.oferta : !p.oferta;
         const coincideCategoria = categoriaId ? p.categoriaId === categoriaId : true;
-        
+
         return coincideOferta && coincideCategoria;
     });
-    
+
     llenarTablaProductos(productosFiltradosGlobal);
     llenarTablaProductosLLeno();
 }
