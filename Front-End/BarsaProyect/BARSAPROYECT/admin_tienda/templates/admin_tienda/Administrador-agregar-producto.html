@@ -1,120 +1,91 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agregar Nuevo Producto</title>
+    <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+        type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
 </head>
 
 <body>
-    <div class="modal-contenido-producto-new">
-        <div class="campo-descripcion-agregar-producto">
-            <h3>Agregar Producto</h3>
-            <!-- Nombre -->
-            <label for="nombreProducto">Nombre del Producto:</label>
-            <input type="text" id="nombreProducto" placeholder="Nombre del Producto">
-            <span id="errorNombreProducto" class="error"></span>
-            <!-- Descripción -->
-            <label for="descripcionProducto" placeholder="Descripción del producto">Descripción:</label>
-            <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
-            <span id="errorDescripcionProducto" class="error"></span>
-        </div>
 
-        <hr>
+    <section id="section-agregar-producto" class="seccion">
+        <div class="admin-panel">
+            <div class="admin-card">
+                <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
+                    <h2>🆕 Agregar Producto</h2>
 
-        <div class="precio-oferta-campopreciodescuento-agregar-producto">
-            <!-- Precio -->
-            <label for="precioProducto">Precio:</label>
-            <input type="number" id="precioProducto" placeholder="Precio">
-            <span id="errorPrecioProducto" class="error"></span>
-
-            <!-- Oferta -->
-            <div class="lineaOferta">
-                <div class="contenedor-linea">
-                    <div class="checkbox-linea">
-                        <input type="checkbox" id="ofertaProducto">
-                        <label class="Oferta" for="ofertaProducto">Oferta</label>
+                    <div class="form-group">
+                        <label for="nombreProducto">Nombre del producto:</label>
+                        <input type="text" id="nombreProducto"
+                            placeholder="Escribe el nombre del producto, Ejemplo LUCERNA" required>
                     </div>
-                    <div class="descuento-opciones">
-                        <label for="descuentoSeleccionado">Descuento (%):</label>
-                        <input class="input-descuento-escribir-productos" type="number" id="descuentoSeleccionado"
-                            min="0" max="100" disabled>
-                        <span class="simbolo">%</span>
+
+                    <div class="form-group">
+                        <label for="descripcionProducto">Descripción:</label>
+                        <textarea id="descripcionProducto" rows="3" placeholder="Descripcion del producto"
+                            required></textarea>
                     </div>
-                </div>
-            </div>
-            <!-- Campo de Precio Descuento -->
-            <div class="campo-precio-descuento">
-                <label for="precioProductoDescuento">Precio con Descuento:</label>
-                <input type="number" id="precioProductoDescuento" disabled>
-                <span id="errorPrecioDescuentoProducto" class="error"></span>
-            </div>
-        </div>
 
-        <hr>
+                    <div class="form-group">
+                        <label for="precioProducto">Precio:</label>
+                        <input type="number" id="precioProducto" required min="0" step="0.01"
+                            placeholder="Precio del producto, Ejemplo 100.">
+                    </div>
 
-        <div class="formularios-carpeta-agregar-producto">
-            <form method="POST" id="formulario-carpeta" action="{% url 'gestionar_carpetas' %}">
-                {% csrf_token %}
-                <div class="campo-formulario">
-                    <label for="select-carpetas">Seleccionar carpeta existente:</label>
-                    <select id="select-carpetas" name="carpeta" class="select-carpetas-opciones">
-                        {% for carpeta in carpetas %}
-                        <option value="{{ carpeta }}">{{ carpeta }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                    <div class="form-group">
+                        <label for="ofertaProducto">¿Está en oferta?</label>
+                        <select id="ofertaProducto" onchange="togglePrecioOferta()">
+                            <option value="no">No</option>
+                            <option value="si">Sí</option>
+                        </select>
+                    </div>
 
-                <div class="campo-formulario">
-                    <label for="nombre-carpeta">Ingrese nueva carpeta:</label>
-                    <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de la carpeta">
-                    <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
-                    <button type="submit" class="btn-guardar-carpeta">Guardar carpeta</button>
-                </div>
-            </form>
+                    <div class="form-group" id="grupoPrecioOferta" style="display: none;">
+                        <label for="precioOferta">Precio de oferta:</label>
+                        <input type="number" id="precioOferta" min="0" step="1"
+                            placeholder="Poner entero en el % del descuento, Ejemplo 100.">
+                        <!-- Input del precio con descuento corregido -->
+                        <input type="text" id="precioProductoDescuento"
+                            placeholder="Pon el numero de arriba del producto se calcula el % solo " disabled>
 
-            <div class="campo-subir-imagen">
-                <div class="div-campo-subir-imagen">
-                    <label for="imageInput" class="lbl-imagen-agregar-producto">Imagen del Producto:</label>
-                    <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
-                        <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoriaProducto">Categoría:</label>
+                        <select id="categoriaProducto" required>
+                            <option value="">Seleccione una categoría</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imagenProducto">Selecciona una o más imágenes:</label>
+                        <input type="file" id="imagenProducto" accept="image/*">
+                        <div id="previewContainer" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-agregar">
+                        <i class="fas fa-save"></i> Guardar producto
                     </button>
-                </div>
-                <input type="file" id="imageInput" accept="image/*" style="display: none;">
-                <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
-                <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
 
-                <label for="textareaImagenes">URLs de imágenes:</label>
-                <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
+                    <a href="#section-productos" class="btn-cancelar">❌ Cancelar</a>
+                </form>
             </div>
         </div>
+    </section>
+    <span id="mensajeGuardado" style="display: none;">✅ Se ha guardado el producto correctamente</span>
 
-        <div class="modal-acciones">
-            <button class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
-            <button class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
-        </div>
-    </div>
+    <script src="{% static 'js/variables.js' %}"></script>
+    <script src="{% static 'js/Admin-agregar-productos.js' %}"></script>
 
-    
-   <script src="{% static 'js/variables.js' %}"></script>
 
-  <script src="{% static 'js/Admin-Menu.js' %}"></script>
-  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
-
-  <script src="{% static 'js/submenu.js' %}"></script>
-  <script src="{% static 'js/Admin-Productos.js' %}"></script>
-  <script src="{% static 'js/Ofertas.js' %}"></script>
-  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
-  <script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
-
-  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
-  <script src="{% static 'js/Admin-Home.js' %}"></script>
-  <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
-  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
-  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
-  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
 
 
 </body>

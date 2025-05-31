@@ -298,3 +298,38 @@ td.td-centrado {
     left: 10px;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.img-carousel {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* espacio entre botones e imagen */
+}
+
+.img-carousel button {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.img-carousel button:hover {
+  background-color: #ddd;
+}

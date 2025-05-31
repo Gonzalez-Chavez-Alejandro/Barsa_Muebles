@@ -20,19 +20,15 @@
   <link rel="stylesheet" href="{% static 'Css/categoria.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Producto-Imagen.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
-
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 </head>
 
 <body>
@@ -94,7 +90,7 @@
           <i class="fas fa-box"></i><span>Productos</span>
         </button>
         <ul class="submenu">
-          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('productos-lleno')"><i class="fas fa-box"> </i>
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('section-productos')"><i class="fas fa-box"> </i>
               Todos </a></li>
         </ul>
         <ul class="submenu" id="submenu-categorias">
@@ -161,7 +157,7 @@
           <i class="fas fa-box-open icono-top"></i>
           <h3>Productos</h3>
           <p>Administra los productos: crea, edita y elimina fácilmente.</p>
-          <button class="card-btn" onclick="mostrarSeccion('productos-lleno')">
+          <button class="card-btn" onclick="mostrarSeccion('section-productos')">
             <i class="fas fa-box"></i> Productos
           </button>
         </div>
@@ -434,72 +430,14 @@
   <!-- Sección de Productos -->
   <!-- ----------------------------------------------- -->
 
-  <section id="productos" class="seccion">
-    <div class="admin-panel">
-      <h2 id="categoria-titulo">Selecciona una categoría</h2>
-      <div id="formulario-producto" class="seccion">
-        <form id="agregar-producto-form">
-          <input type="hidden" id="categoria-id">
-          <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('regular')">
-            <i class="fas fa-plus"></i> Agregar
-          </button>
-
-          <div class="filtros-usuarios">
-            <div class="search-container-usuarios">
-              <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
-              <input type="text" id="buscador" class="input-busqueda-usuarios"
-                placeholder="Buscar por ID, nombre, correo o teléfono..." onkeyup="buscarProductos()"
-                aria-label="Buscar usuarios">
-            </div>
-          </div>
-        </form>
-
-
-        <div id="tablaContainer" class="scroll-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>
-                  <select id="filtroOferta" onchange="filtrarPorOferta()">
-                    <option value="todos">Ofertas</option>
-                    <option value="oferta">Con</option>
-                    <option value="sinOferta">Sin</option>
-                  </select>
-                </th>
-                <th>Precio Oferta</th>
-                <th>Carpetas</th>
-                <th>Nombre Imagenes</th>
-                <th> Acciones </th>
-              </tr>
-            </thead>
-            <tbody id="tablaProductos">
-              <!-- ----------------------------------------------- -->
-              <!-- Las categorías se insertan con JS -->
-              <!-- ----------------------------------------------- -->
-            </tbody>
-          </table>
-
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <section id="productos-lleno" class="seccion">
+  <section id="section-productos" class="seccion">
     <div class="admin-panel">
 
-      <div id="formulario-producto-lleno">
+      <div id="formulario-div-producto">
 
         <div class="admin-card">
           <form id="form-destacados">
-
             <h2 id="titulo-destacados">📌 Productos </h2>
-
             <!-- Buscar y Agregar -->
             <div class="conjuntoagregarbuscar">
               <div class="filtros-usuarios">
@@ -515,14 +453,15 @@
                   <i class="fas fa-filter"></i> Filtrar por categoría:
                 </label>
                 <div class="select-wrapper">
-                  <select id="filtroCategoria" onchange="filtrarPorCategoria()" class="select">
-                    <option value="">Seleccionar Categoría</option>
+                  <select id="filtroCategoria" onchange="filtrarPorCategoria()">
+                    <option value="">Todas las categorías</option>
                   </select>
+
                 </div>
               </div>
-              <button class="btn-agregar" type="button" onclick="abrirModalAgregarProductos('destacado')">
-                <i class="fas fa-plus"></i> Agregar
-              </button>
+              <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
+    <i class="fas fa-plus"></i> Agregar
+</a>
             </div>
 
             <!-- Mostrar y Filtrar -->
@@ -559,12 +498,11 @@
                 <th>Precio</th>
                 <th>Oferta</th>
                 <th>Precio Oferta</th>
-                <th>Carpetas</th>
                 <th>Nombre Imagenes</th>
                 <th class="th-acciones">Acciones</th>
               </tr>
             </thead>
-            <tbody id="tablaProductosDestacados">
+            <tbody id="tabla-productos">
               <!-- Se insertan productos con JS -->
             </tbody>
           </table>
@@ -575,9 +513,7 @@
           </div>
         </div>
       </div>
-
     </div>
-
   </section>
 
 
@@ -940,12 +876,12 @@
               <input type="checkbox" id="editarOfertaProducto" class="check-oferta">
               <label class="lbl-class" for="editarOfertaProducto">Oferta</label>
               <div class="descuento-opciones">
-              <label for="editarDescuentoSeleccionado" class="lbl-class">Descuento:</label>
-              <input class="input-descuento-escribir-productos" type="number" id="editarDescuentoSeleccionado" min="0"
-                max="100" disabled>
+                <label for="editarDescuentoSeleccionado" class="lbl-class">Descuento:</label>
+                <input class="input-descuento-escribir-productos" type="number" id="editarDescuentoSeleccionado" min="0"
+                  max="100" disabled>
+              </div>
             </div>
-            </div>
-            
+
           </div>
         </div>
         <!-- Campo de Precio Descuento -->
@@ -959,13 +895,13 @@
       <hr>
 
       <div class="formularios-carpeta-agregar-producto">
-    
 
-         
-        
+
+
+
 
         <div class="campo-subir-imagen">
-          
+
           <input type="file" id="editarImageInput" accept="image/*" style="display: none;">
           <label id="editarLabelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
           <span id="editarNombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
@@ -1041,79 +977,17 @@
 
 
   <script src="{% static 'js/variables.js' %}"></script>
-  <script>
-
-    /****************************************************************************/
-    /************** Gestiona y Guarda en carpeta.txt las carpetas  **************/
-    /****************************************************************************/
-
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    document.getElementById('formulario-carpeta').addEventListener('submit', function (event) {
-      event.preventDefault();
-
-      const nombreCarpeta = document.getElementById('nombre-carpeta').value.trim();
-      const mensajeError = document.getElementById('mensajeError');
-
-      fetch('{% url "gestionar_carpetas" %}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken  // Asegúrate que tienes csrfToken definido en JS
-        },
-        body: JSON.stringify({ carpeta: nombreCarpeta })
-      })
-        .then(response => response.json().then(data => ({ ok: response.ok, data })))
-        .then(({ ok, data }) => {
-          if (ok && data.carpetas) {
-            // Actualizar el select
-            const select = document.getElementById('select-carpetas');
-            select.innerHTML = '';
-            data.carpetas.forEach(carpeta => {
-              const option = document.createElement('option');
-              option.value = carpeta;
-              option.textContent = carpeta;
-              select.appendChild(option);
-            });
-
-            // Ocultar mensaje de error si todo salió bien
-            mensajeError.style.display = 'none';
-            mensajeError.textContent = '';
-          } else {
-            // Mostrar mensaje de error
-            mensajeError.style.display = 'block';
-            mensajeError.textContent = data.error || 'Error al guardar la carpeta. Inténtalo de nuevo.';
-          }
-        })
-        .catch(error => {
-          console.error('Error de red o inesperado:', error);
-          mensajeError.style.display = 'block';
-          mensajeError.textContent = 'Debes de ingresar una carpeta o Inténtalo más tarde.';
-        });
-    });
-
-
-
-  </script>
-
-  <script src="{% static 'js/variables.js' %}"></script>
-
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>
-
-  <script src="{% static 'js/submenu.js' %}"></script>
   <script src="{% static 'js/Admin-Productos.js' %}"></script>
   <script src="{% static 'js/Ofertas.js' %}"></script>
   <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
-  <script src="{% static 'js/Admin-Productos-Menu-Imagenes.js' %}"></script>
-
   <script src="{% static 'js/Admin-Categorias.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
-
-
 </body>
 
 </html>
