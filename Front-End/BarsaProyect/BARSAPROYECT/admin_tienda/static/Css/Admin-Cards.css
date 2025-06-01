@@ -164,7 +164,6 @@
   }
 
   .h1-Panel-Administrativo {
-    font-family: 'Arial', sans-serif; /* Fuente moderna */
     font-size: 40px;
     font-weight: 600;
     color: #000000; /* Azul oscuro para el texto */
@@ -177,12 +176,8 @@
     transition: all 0.3s ease;
   }
   
-  .h1-Panel-Administrativo:hover {
-    color: #2a5298; /* Cambia el color del texto al pasar el cursor */
-    transform: scale(1.05); /* Ligero zoom cuando el título es hoverado */
-  }
+
   .descripcion-opcion {
-    font-family: 'Arial', sans-serif; /* Fuente simple y moderna */
     font-size: 18px; /* Un tamaño de texto cómodo para leer */
     font-weight: 400; /* Peso normal */
     color: #555; /* Gris oscuro, para un contraste suave */
@@ -327,10 +322,6 @@
       padding: 8px 14px;
     }
   }
-
-
-
-
 
   .precio .contactar {
     color: red;

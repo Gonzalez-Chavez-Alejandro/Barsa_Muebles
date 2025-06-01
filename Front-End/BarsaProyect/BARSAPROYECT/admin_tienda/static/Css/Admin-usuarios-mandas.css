@@ -99,7 +99,7 @@
     max-width: 1000px;
     margin: -48px auto;
     padding: 1.5rem;
-    font-family: 'Inter', system-ui, sans-serif;
+   /* font-family: 'Inter', system-ui, sans-serif;*/
 }
 
 #usuarios-mandas h1 {

@@ -50,9 +50,10 @@ function mostrarProductos() {
         </div>
       </td>
       <td>
-        <button class="btn-admin-desing-edit"   onclick="editarProducto(${producto.id})  ">
-        <i class="fas fa-edit"></i>
-        </button>
+       <a href="/administrador_editar_producto/" class="btn-admin-desing-edit" onclick='editarProducto(${JSON.stringify(producto)})'>
+          <i class="fas fa-edit"></i>
+        </a>
+
         <button class="btn-admin-desing-delete" onclick="eliminarProducto(${producto.id})">
         <i class="fas fa-trash-alt"></i>
         </button>
@@ -151,3 +152,17 @@ function cambiarPaginaProductosLleno(direccion) {
 
   mostrarProductos();
 }
+function buscarProductos() {
+  const input = document.getElementById("buscador-productos").value.toLowerCase();
+  const categoriaSeleccionada = document.getElementById("filtroCategoria").value;
+
+  window.productosFiltrados = window.productos.filter(p => {
+    const coincideBusqueda = p.nombre.toLowerCase().includes(input) || p.descripcion.toLowerCase().includes(input);
+    const coincideCategoria = categoriaSeleccionada === "" || p.categoriaId == categoriaSeleccionada;
+    return coincideBusqueda && coincideCategoria;
+  });
+
+  paginaActualProductos = 1;
+  mostrarProductos();
+}
+

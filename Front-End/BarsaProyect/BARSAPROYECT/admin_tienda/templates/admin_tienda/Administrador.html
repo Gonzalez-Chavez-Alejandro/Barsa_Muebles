@@ -71,14 +71,6 @@
       </li>
       <li class="menu-item">
         <button class="menu-button" onclick="toggleSubmenu(this)">
-          <i class="fas fa-image"></i><span> Imágenes</span>
-        </button>
-        <ul class="submenu">
-          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('imagenes')">Lista Imagenes</a></li>
-        </ul>
-      </li>
-      <li class="menu-item">
-        <button class="menu-button" onclick="toggleSubmenu(this)">
           <i class="fas fa-tags"></i><span>Categorías</span>
         </button>
         <ul class="submenu">
@@ -230,7 +222,6 @@
         Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
       </small>
     </div>
-
   </section>
 
 
@@ -443,8 +434,8 @@
               <div class="filtros-usuarios">
                 <div class="search-container-usuarios">
                   <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
-                  <input type="text" id="buscador" class="input-busqueda-usuarios"
-                    placeholder="Buscar por nombre, del producto  " onkeyup="buscarProductosDestacados()"
+                  <input type="text" id="buscador-productos" class="input-busqueda-usuarios"
+                    placeholder="Buscar por nombre, del producto  " onkeyup="buscarProductos()"
                     aria-label="Buscar usuarios">
                 </div>
               </div>
@@ -460,8 +451,8 @@
                 </div>
               </div>
               <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
-    <i class="fas fa-plus"></i> Agregar
-</a>
+                <i class="fas fa-plus"></i> Agregar
+              </a>
             </div>
 
             <!-- Mostrar y Filtrar -->

@@ -150,6 +150,7 @@ function abrirModalAgregar() {
   document.getElementById('correoNuevo').value = '';
   document.getElementById('telefonoNuevo').value = '';
   document.getElementById('contrasenaNuevo').value = '';
+
 }
 
 function cerrarModalAgregar() {
@@ -179,7 +180,7 @@ function guardarNuevo() {
   usuarios.push(nuevoUsuario);
   usuariosFiltrados = [...usuarios];
   mostrarUsuarios(paginaActual);
-  cerrarModalAgregar();
+  cerrarModalAgregarUsuario()
   alert("Usuario agregado correctamente");
 }
 
@@ -204,3 +205,22 @@ function cerrarModalAgregarUsuario() {
 }
 
 
+// Cierra el modal de editar usuario
+function cerrarModal() {
+    document.getElementById('modalEditar').style.display = 'none';
+}
+
+// Cierra el modal de confirmación
+function cerrarModalConfirmacion() {
+    document.getElementById('modalConfirmacion').style.display = 'none';
+}
+
+// Cierra el modal de agregar usuario
+function cerrarModalAgregarUsuario() {
+    document.getElementById('modalAgregarUsuario').style.display = 'none';
+}
+
+// Versión alternativa que cierra cualquier modal por su ID
+function cerrarCualquierModal(idModal) {
+    document.getElementById(idModal).style.display = 'none';
+}

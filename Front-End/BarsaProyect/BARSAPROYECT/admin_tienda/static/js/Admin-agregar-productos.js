@@ -145,14 +145,20 @@ const selectOferta = document.getElementById('ofertaProducto');
 function actualizarPrecioConDescuento() {
   const precio = parseFloat(precioProductoInput.value);
   const descuento = parseFloat(precioOfertaInput.value);
+if (
+  selectOferta.value === 'si' &&
+  !isNaN(precio) &&
+  !isNaN(descuento) &&
+  precio > 0 &&
+  descuento > 0 &&
+  descuento <= 100
+) {
+  const precioFinal = precio - (precio * descuento / 100);
+  precioDescuentoInput.value = precioFinal.toFixed(2);
+} else {
+  precioDescuentoInput.value = '';
+}
 
-  // Verifica que la oferta esté activa y los valores sean válidos
-  if (selectOferta.value === 'si' && !isNaN(precio) && !isNaN(descuento) && precio > 0 && descuento < precio) {
-    const precioFinal = precio - descuento;
-    precioDescuentoInput.value = precioFinal.toFixed(2); // Muestra resultado como "23.50"
-  } else {
-    precioDescuentoInput.value = '';
-  }
 }
 
 // Escucha cambios en los inputs

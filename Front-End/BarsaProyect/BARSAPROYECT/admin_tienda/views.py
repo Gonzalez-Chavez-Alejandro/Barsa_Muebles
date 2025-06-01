@@ -141,3 +141,10 @@ def configuracion_usuario(request):
 
 def administrador_agregar_producto(request):
     return render(request, 'admin_tienda/Administrador-agregar-producto.html')
+
+
+def administrador_editar_producto(request):
+    return render(request, 'admin_tienda/Administrador-Editar-producto.html')
+
+
+

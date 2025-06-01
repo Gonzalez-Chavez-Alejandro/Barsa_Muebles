@@ -5,33 +5,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agregar Nuevo Producto</title>
+    <title>Editar Nuevo Producto</title>
     <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
         type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Admin-editar-producto.css' %}">
 </head>
 
 <body>
-<header>
-    <div class="agregar-producto-breadcrumb-container">
-        <div class="agregar-producto-breadcrumb">
-            <a class="agregar-producto-breadcrumb-link" href="{% url 'administrador' %}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <span class="agregar-producto-breadcrumb-separator">/</span>
-            <span class="agregar-producto-breadcrumb-active">
-                <i class="fas fa-edit"></i> Agregar Producto
-            </span>
+    <header>
+        <div class="breadcrumb-container">
+            <div class="breadcrumb">
+                <a class="breadcrumb-link" href="{% url 'administrador' %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-active">
+                    <i class="fas fa-edit"></i> Editar Productos
+                </span>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
     <section id="section-agregar-producto" class="seccion">
         <div class="admin-panel">
             <div class="admin-card">
                 <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
-                    <h2>🆕 Agregar Producto</h2>
+                    <h2>Editar Producto</h2>
 
                     <div class="form-group">
                         <label for="nombreProducto">Nombre del producto:</label>
@@ -45,18 +46,20 @@
                             required></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="precioProducto">Precio:</label>
-                        <input type="number" id="precioProducto" required min="0" step="0.01"
-                            placeholder="Precio del producto, Ejemplo 100.">
-                    </div>
+                    <div class="form-row"> <!-- Contenedor flexible para ambos campos -->
+                        <div class="form-group" style="flex: 2;"> <!-- Más ancho para el precio -->
+                            <label for="precioProducto">Precio:</label>
+                            <input type="number" id="precioProducto" required min="0" step="0.01"
+                                placeholder="Precio del producto, Ejemplo 100.">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="ofertaProducto">¿Está en oferta?</label>
-                        <select id="ofertaProducto" onchange="togglePrecioOferta()">
-                            <option value="no">No</option>
-                            <option value="si">Sí</option>
-                        </select>
+                        <div class="form-group" style="flex: 1;"> <!-- Menos ancho para el select -->
+                            <label for="ofertaProducto">¿Está en oferta?</label>
+                            <select id="ofertaProducto" onchange="togglePrecioOferta()">
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group" id="grupoPrecioOferta" style="display: none;">
@@ -67,6 +70,7 @@
                         </div>
                     </div>
 
+                    <!-- Categoría -->
                     <div class="form-group">
                         <label for="categoriaProducto">Categoría:</label>
                         <select id="categoriaProducto" required>
@@ -74,6 +78,7 @@
                         </select>
                     </div>
 
+                    <!-- Imágenes -->
                     <div class="form-group">
                         <label for="imagenProducto">Selecciona una o más imágenes:</label>
                         <input type="file" id="imagenProducto" accept="image/*">
@@ -85,18 +90,15 @@
                         <i class="fas fa-save"></i> Guardar producto
                     </button>
 
-                    <a href="#section-productos" class="btn-cancelar">Cancelar</a>
+                    <a href="{% url 'administrador' %}" class="btn-cancelar">Cancelar</a>
                 </form>
             </div>
         </div>
     </section>
-    <span id="mensajeGuardado" style="display: none;">✅ Se ha guardado el producto correctamente</span>
-<footer>
-    <div class="footer"></div>
-</footer>
-    <script src="{% static 'js/variables.js' %}"></script>
-    <script src="{% static 'js/Admin-agregar-productos.js' %}"></script>
+    <span id="mensajeGuardado" style="display: none;">✅ Se ha editado el producto correctamente</span>
 
+    <script src="{% static 'js/variables.js' %}"></script>
+    <script src="{% static 'js/Admin-editar-productos.js' %}"></script>
 
 
 
