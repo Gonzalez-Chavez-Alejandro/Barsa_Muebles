@@ -242,13 +242,7 @@ textarea {
     /* Transición suave */
 }
 
-.btn-cancelar:hover {
-    background-color: #34515E;
 
-    box-shadow: 0 2px 12px rgba(255, 138, 122, 0.25);
-    color: whitesmoke;
-    border-color: 5 solid black;
-}
 
 
 /* Contenedor para campos en la misma línea */

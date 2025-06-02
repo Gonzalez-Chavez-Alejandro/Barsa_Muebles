@@ -37,7 +37,7 @@ function generarTablaHTML(filtro = "") {
       <td>${comentarios}</td>
       <td>${calificacion}</td>
       <td>
-        <button class="delete-btn-comentario-stars" data-usuario-id="${usuarioId}" data-producto-id="${productoId}">
+        <button class="btn-admin-desing-delete" data-usuario-id="${usuarioId}" data-producto-id="${productoId}">
           <i class="fas fa-trash-alt"></i>
         </button>
       </td>

@@ -124,6 +124,7 @@ td.td-centrado {
   width: 90%;
   max-width: 500px;
   border-radius: 10px;
+   position: relative; 
 }
 
 .modal-contenido h3 {
@@ -278,6 +279,18 @@ td.td-centrado {
   outline: none;
   border-color: #007acc;
 }
+
+.h3-modal{
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+
+
+
 @media (max-width: 600px) {
   .filtros-usuarios {
     flex-direction: column;
@@ -305,7 +318,9 @@ td.td-centrado {
 
 
 
-
+a {
+  text-decoration: none;
+}
 
 
 

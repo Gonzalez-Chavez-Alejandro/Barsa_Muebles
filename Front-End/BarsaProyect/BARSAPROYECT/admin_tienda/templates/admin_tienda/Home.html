@@ -33,7 +33,7 @@
     }
   </style>
 
-
+ 
   {% include 'includes/header.html' %}
 
   <main>
@@ -54,13 +54,12 @@
         </div>
 
         <div class="botones-container">
-          <button class="btn-ver-catalogos">
+          <a href="{% url 'catalogo' %}" class="btn-ver-catalogos">
             <i class="fas fa-book-open"></i> Ver Catálogo
-          </button>
+          </a>
           <a href="{% url 'productos' %}" class="btn-ver">
             <i class="fas fa-box-open"></i> Ver Productos
           </a>
-
         </div>
       </div>
     </div>
@@ -74,12 +73,9 @@
   </div>
 
 
-
-
-
-
   <h2 class="carousel-title">Categorías Destacadas</h2>
 
+  
   <div class="carousel-wrapper">
     <button id="leftArrow" class="arrow">&#10094;</button>
     <div id="carouselCategorias" class="carousel">
@@ -122,9 +118,7 @@
     </div>
   </section>
 
-
   {% include 'includes/foother.html' %}
-
 
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/header.js' %}"></script>
@@ -137,5 +131,4 @@
   <script src="{% static 'js/Admin-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
 </body>
-
 </html>

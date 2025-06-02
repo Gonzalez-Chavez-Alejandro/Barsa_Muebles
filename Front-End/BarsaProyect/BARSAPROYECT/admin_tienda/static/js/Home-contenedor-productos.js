@@ -80,15 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 });
 
-
-
-
-
-
-
-
-
-function renderTarjetas(lista = productos) { 
+function renderTarjetas(lista = productos) {
     const contenedor = document.getElementById("contenedor-productos");
     contenedor.innerHTML = "";
 
@@ -134,7 +126,8 @@ function renderTarjetas(lista = productos) {
                 <div class="ahorro-boton">
                     ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro}</div>` : ''}
                     <button onclick="verDetalle(${p.id})">Ver Producto</button>
-                </div>
+                    <button class="btn-carrito" onclick="enviarpagina(${p.id})">enviarpagina</button>
+                     </div>
             </div>
         `;
 
@@ -142,12 +135,66 @@ function renderTarjetas(lista = productos) {
     });
 }
 
+function enviarpagina(id) {
+    const producto = productos.find(p => p.id === id);
+    if (producto) {
+        localStorage.setItem("producto_seleccionado", JSON.stringify(producto));
+        window.location.href = `/productos_vista/?producto_id=${id}`;
+    }
+}
 
 
 
+function renderTarjetas(lista = productos) {
+    const contenedor = document.getElementById("contenedor-productos");
+    contenedor.innerHTML = "";
 
+    if (lista.length === 0) {
+        contenedor.innerHTML = "<p>No se encontraron productos.</p>";
+        return;
+    }
 
+    lista.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "tarjeta-producto";
 
+        const imagen = (p.nombreimagenes?.split(",")[0] || p.imagen || "https://via.placeholder.com/300x180").trim();
+
+        let precioHTML = "";
+        let descuento = 0;
+        let ahorro = 0;
+
+        const precio = Number(p.precio);
+        const precioOferta = Number(p.precioOferta);
+        const precioInvalido = isNaN(precio) || precio <= 0;
+
+        if (p.oferta && !isNaN(precioOferta) && precioOferta > 0) {
+            precioHTML = `<span class="oferta">$${precioOferta}</span> <del>$${precio}</del>`;
+            descuento = Math.round(((precio - precioOferta) / precio) * 100);
+            ahorro = precio - precioOferta;
+        } else if (precioInvalido) {
+            precioHTML = `<span class="contactar">Pongase en contacto</span>`;
+        } else {
+            precioHTML = `<span class="oferta">$${precio}</span>`;
+        }
+
+        div.innerHTML = `
+            ${descuento > 0 ? `<div class="descuento">${descuento}%</div>` : ''}
+            <img src="${imagen}" alt="${p.nombre}">
+            <div class="contenido">
+                <h2 class="nombre">${p.nombre}</h2>
+                <p class="descripcion">${p.descripcion}</p>
+                <div class="precio">${precioHTML}</div>
+                <div class="ahorro-boton">
+                    ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro}</div>` : ''}
+                    <button class="btn-carrito" onclick="enviarpagina(${p.id})">Ver producto</button>
+                </div>
+            </div>
+        `;
+
+        contenedor.appendChild(div);
+    });
+}
 
 
 
@@ -165,64 +212,50 @@ function verDetalle(id) {
 
     // Oculta la lista principal y muestra el detalle
     document.querySelector(".contenido-principal").style.display = "none";
-    
-    detalleSeccion.classList.add("activo");  
+
+    detalleSeccion.classList.add("activo");
 
     const overlay = document.getElementById("overlay-detalle");
 
-window.verDetalle = function(id) {
-  const prod = productos.find(p => p.id === id);
-  if (!prod) return;
+    window.verDetalle = function (id) {
+        const prod = productos.find(p => p.id === id);
+        if (!prod) return;
+        // Mostrar overlay y detalle
+        overlay.style.display = "block";
+        detalleSeccion.classList.add("activo");
+        detalleSeccion.style.display = "block";
 
-  // Código existente para rellenar detalle...
+        // Evitar scroll del body
+        document.body.classList.add("no-scroll");
+    };
 
-  // Mostrar overlay y detalle
-  overlay.style.display = "block";
-  detalleSeccion.classList.add("activo");
-  detalleSeccion.style.display = "block";
-
-  // Evitar scroll del body
-  document.body.classList.add("no-scroll");
-};
-
-// Agregar evento para botón regresar o para cerrar detalle
-btnRegresar.addEventListener("click", () => {
-  detalleSeccion.classList.remove("activo");
-  detalleSeccion.style.display = "none";
-  overlay.style.display = "none";
-
-  // Mostrar contenido principal
-  document.querySelector(".contenido-principal").style.display = "block";
-
-  // Restaurar scroll y selección
-  document.body.classList.remove("no-scroll");
-});
-
-// También puedes permitir cerrar clickeando en el overlay
-overlay.addEventListener("click", () => {
-  btnRegresar.click();
-});
-
-    
+    // Agregar evento para botón regresar o para cerrar detalle
+    btnRegresar.addEventListener("click", () => {
+        detalleSeccion.classList.remove("activo");
+        detalleSeccion.style.display = "none";
+        overlay.style.display = "none";
+        // Mostrar contenido principal
+        document.querySelector(".contenido-principal").style.display = "block";
+        // Restaurar scroll y selección
+        document.body.classList.remove("no-scroll");
+    });
+    // También puedes permitir cerrar clickeando en el overlay
+    overlay.addEventListener("click", () => {
+        btnRegresar.click();
+    });
 }
 
-
-
-
-
-
-
-
+const detalleSeccion = document.getElementById("detalle-producto");
+const detalleNombre = document.getElementById("detalle-nombre");
+const detalleDescripcion = document.getElementById("detalle-descripcion");
+const detallePrecio = document.getElementById("detalle-precio");
+const detallePrecioOriginal = document.getElementById("detalle-precio-original");
+const detalleImagen = document.getElementById("imagen-grande");
+const detalleAhorro = document.getElementById("detalle-ahorro");
+const detallePorcentaje = document.getElementById("detalle-porcentaje");
+const btnRegresar = document.getElementById("btn-regresar");
 document.addEventListener("DOMContentLoaded", () => {
-    const detalleSeccion = document.getElementById("detalle-producto");
-    const detalleNombre = document.getElementById("detalle-nombre");
-    const detalleDescripcion = document.getElementById("detalle-descripcion");
-    const detallePrecio = document.getElementById("detalle-precio");
-    const detallePrecioOriginal = document.getElementById("detalle-precio-original");
-    const detalleImagen = document.getElementById("imagen-grande");
-    const detalleAhorro = document.getElementById("detalle-ahorro");
-    const detallePorcentaje = document.getElementById("detalle-porcentaje");
-    const btnRegresar = document.getElementById("btn-regresar");
+
 
     // Función para ver los detalles del producto
     window.verDetalle = function (id) {
@@ -268,38 +301,38 @@ document.addEventListener("DOMContentLoaded", () => {
         detallePrecio.textContent = `$${prod.precio || '0.00'}`;
 
         // Mostrar precio original y descuento solo si hay una oferta real
-       // Mostrar precio actual (oferta si existe) y original tachado si aplica
-if (prod.precioOferta && prod.precioOferta < prod.precio) {
-    // Oferta activa
-    detallePrecio.textContent = `$${prod.precioOferta}`; // Precio con descuento en azul
-    detallePrecioOriginal.textContent = `$${prod.precio}`; // Precio original tachado
-    detallePrecioOriginal.style.display = "inline";
+        // Mostrar precio actual (oferta si existe) y original tachado si aplica
+        if (prod.precioOferta && prod.precioOferta < prod.precio) {
+            // Oferta activa
+            detallePrecio.textContent = `$${prod.precioOferta}`; // Precio con descuento en azul
+            detallePrecioOriginal.textContent = `$${prod.precio}`; // Precio original tachado
+            detallePrecioOriginal.style.display = "inline";
 
-    const ahorro = prod.precio - prod.precioOferta;
-    detalleAhorro.textContent = `Ahorras $${ahorro.toFixed(2)}`;
-    detalleAhorro.style.display = "inline";
+            const ahorro = prod.precio - prod.precioOferta;
+            detalleAhorro.textContent = `Ahorras $${ahorro.toFixed(2)}`;
+            detalleAhorro.style.display = "inline";
 
-    const porcentajeDescuento = (ahorro / prod.precio) * 100;
-    const porcentajeRedondeado = Math.round(porcentajeDescuento);
-    detallePorcentaje.textContent = `(${porcentajeRedondeado}%)`;
-    detallePorcentaje.style.display = "inline";
-} else {
-    // Sin oferta
-    detallePrecio.textContent = `$${prod.precio || '0.00'}`; // Precio normal
-    detallePrecioOriginal.textContent = "";
-    detallePrecioOriginal.style.display = "none";
+            const porcentajeDescuento = (ahorro / prod.precio) * 100;
+            const porcentajeRedondeado = Math.round(porcentajeDescuento);
+            detallePorcentaje.textContent = `(${porcentajeRedondeado}%)`;
+            detallePorcentaje.style.display = "inline";
+        } else {
+            // Sin oferta
+            detallePrecio.textContent = `$${prod.precio || '0.00'}`; // Precio normal
+            detallePrecioOriginal.textContent = "";
+            detallePrecioOriginal.style.display = "none";
 
-    detalleAhorro.textContent = "";
-    detalleAhorro.style.display = "none";
+            detalleAhorro.textContent = "";
+            detalleAhorro.style.display = "none";
 
-    detallePorcentaje.textContent = "";
-    detallePorcentaje.style.display = "none";
-}
+            detallePorcentaje.textContent = "";
+            detallePorcentaje.style.display = "none";
+        }
 
 
         // Mostrar vista detalle
         document.querySelector(".contenido-principal").style.display = "none";
-       
+
         detalleSeccion.classList.add("activo");
         detalleSeccion.style.display = "block";
     };
@@ -307,15 +340,6 @@ if (prod.precioOferta && prod.precioOferta < prod.precio) {
     // Renderiza productos al cargar
     renderTarjetas();
 });
-
-
-
-
-
-
-
-
-
 
 const modal = document.getElementById("modal-zoom");
 const modalImg = document.getElementById("imagen-zoom");
@@ -338,36 +362,46 @@ modal.addEventListener("click", (e) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
-  renderCategorias();
-  renderTarjetas();
+    renderCategorias();
+    renderTarjetas();
 
-  const params = new URLSearchParams(window.location.search);
-  const categoriaParam = params.get("categoria");
+    const params = new URLSearchParams(window.location.search);
+    const categoriaParam = params.get("categoria");
 
-  if (categoriaParam) {
-    categoriaSeleccionada = categoriaParam;
+    if (categoriaParam) {
+        categoriaSeleccionada = categoriaParam;
 
-    document.querySelectorAll("#lista-categorias li").forEach(el => {
-      el.classList.remove("categoria-activa");
-      if (el.dataset.id === categoriaParam) {
-        el.classList.add("categoria-activa");
-      }
-    });
+        document.querySelectorAll("#lista-categorias li").forEach(el => {
+            el.classList.remove("categoria-activa");
+            if (el.dataset.id === categoriaParam) {
+                el.classList.add("categoria-activa");
+            }
+        });
 
-    aplicarFiltros();
-  }
+        aplicarFiltros();
+    }
 
-  document.getElementById("buscador").addEventListener("input", aplicarFiltros);
+    document.getElementById("buscador").addEventListener("input", aplicarFiltros);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

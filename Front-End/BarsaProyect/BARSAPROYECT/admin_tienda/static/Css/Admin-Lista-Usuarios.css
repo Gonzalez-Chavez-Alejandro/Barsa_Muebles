@@ -42,13 +42,14 @@
 .btn-cancelar {
   background-color: #aaa;
   color: white;
+  margin-bottom: 10px;
 }
-
+ 
 
 /* Botón mejorado */
 .btn-agregar-usuario {
   position: relative;
-  background-color: #ffffff;
+  background-color: #ffffff; 
   color: #2c3e50;
   border: 1.5px solid #2c3e50;
   padding: 9px 20px;
@@ -69,20 +70,6 @@
   margin-right: 4px;
 }
 
-.btn-agregar-usuario::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, transparent 50%, rgba(44, 62, 80, 0.03) 50%);
-  background-size: 250% 250%;
-  background-position: right bottom;
-  transition: all 0.5s ease;
-  z-index: -1;
-  opacity: 0;
-}
 
 .btn-agregar-usuario:hover {
   transform: translateY(-3px);

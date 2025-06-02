@@ -128,8 +128,15 @@ def registro(request):
 def productos(request):
     return render(request, 'admin_tienda/Productos.html')
 
+
 def productos_vista(request):
-    return render(request, 'admin_tienda/Producto-vista-solo.html')
+    producto_id = request.GET.get('producto_id')
+    # Lógica para buscar el producto o mostrar info...
+    context = {
+        'producto_id': producto_id,
+    }
+    return render(request, 'admin_tienda/Producto-vista-solo.html', context)
+
 
 def catalogo(request):
     return render(request, 'admin_tienda/Catalogo.html')

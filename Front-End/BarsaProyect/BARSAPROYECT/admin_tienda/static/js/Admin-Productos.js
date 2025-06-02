@@ -54,9 +54,10 @@ function mostrarProductos() {
           <i class="fas fa-edit"></i>
         </a>
 
-        <button class="btn-admin-desing-delete" onclick="eliminarProducto(${producto.id})">
+      <button class="btn-admin-desing-delete" onclick="abrirModalEliminarProducto(${producto.id})">
         <i class="fas fa-trash-alt"></i>
-        </button>
+      </button>
+
       </td>
     `;
     tbody.appendChild(tr);
@@ -164,5 +165,31 @@ function buscarProductos() {
 
   paginaActualProductos = 1;
   mostrarProductos();
+}
+
+let productoAEliminar = null;
+
+function abrirModalEliminarProducto(idProducto) {
+  productoAEliminar = idProducto;
+  document.getElementById('modalEliminarProducto').style.display = 'block';
+}
+
+function cerrarModalEliminarProducto() {
+  productoAEliminar = null;
+  document.getElementById('modalEliminarProducto').style.display = 'none';
+}
+
+function eliminarProductoConfirmado() {
+  if (productoAEliminar !== null) {
+    // Eliminar del DOM
+    const fila = document.querySelector(`#fila-producto-${productoAEliminar}`);
+    if (fila) fila.remove();
+
+    // Cierra el modal
+    cerrarModalEliminarProducto();
+
+    // Limpia la variable
+    productoAEliminar = null;
+  }
 }
 

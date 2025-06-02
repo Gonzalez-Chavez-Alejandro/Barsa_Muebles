@@ -384,6 +384,7 @@
     color: white;
     border: 2px solid #000000;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
 }
 
 .btn-ver-catalogos::before {
@@ -407,6 +408,7 @@
     color: #2d3436;
     border: 2px solid #2d3436;
     box-shadow: 0 8px 30px rgba(45, 52, 54, 0.1);
+    text-decoration: none;
 }
 
 .btn-ver::after {

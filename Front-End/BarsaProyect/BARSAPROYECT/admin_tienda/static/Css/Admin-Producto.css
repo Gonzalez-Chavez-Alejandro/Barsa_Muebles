@@ -61,7 +61,7 @@
 
 /* Botón Agregar */
 .btn-agregar {
-  background-color: #007acc;
+  background-color: var(--primary-color);
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -75,7 +75,7 @@
 }
 
 .btn-agregar:hover {
-  background-color: #005fa3;
+  background-color: var(--text-color);
 }
 
 /* Contenedor de selects */

@@ -197,3 +197,45 @@ window.onclick = function (event) {
     }
   });
 };
+
+
+
+document.getElementById('subirImagen').addEventListener('change', function(e) {
+  const archivo = e.target.files[0];
+  const boton = document.getElementById('imagenCategoriaBtn');
+  
+  if (!archivo) {
+    boton.style.backgroundImage = '';
+    boton.classList.remove('has-image');
+    return;
+  }
+
+  const lector = new FileReader();
+  lector.onload = function(e) {
+    boton.style.backgroundImage = `url('${e.target.result}')`;
+    boton.classList.add('has-image');
+    document.getElementById('imagenCategoria').value = e.target.result;
+  };
+  lector.readAsDataURL(archivo);
+});
+
+
+
+document.getElementById('inputImagenArchivo').addEventListener('change', function(e) {
+  const archivo = e.target.files[0];
+  const boton = document.getElementById('imagenCategoriaBtn');
+
+  if (!archivo) {
+    boton.style.backgroundImage = '';
+    boton.classList.remove('has-image');
+    return;
+  }
+
+  const lector = new FileReader();
+  lector.onload = function(e) {
+    boton.style.backgroundImage = `url('${e.target.result}')`;
+    boton.classList.add('has-image');
+    document.getElementById('editarImagenCategoria').value = e.target.result;
+  };
+  lector.readAsDataURL(archivo);
+});

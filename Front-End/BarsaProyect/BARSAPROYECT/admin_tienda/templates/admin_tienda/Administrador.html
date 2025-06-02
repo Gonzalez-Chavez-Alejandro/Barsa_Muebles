@@ -180,7 +180,7 @@
 
         <!-- Tarjeta de Catalogo -->
         <div class="card-producto">
-          <i class="fas fa-box-open icono-top"></i>
+          <i class="fas fa-book-open icono-top"></i>
           <h3>Catalogo</h3>
           <p>Administra el catalogo actual</p>
           <button class="card-btn" onclick="mostrarSeccion('catalogo')">
@@ -619,45 +619,52 @@
   <!-- ----------------------------------------------- -->
   <div id="modalEditar" class="modal">
     <div class="modal-contenido">
+      <span class="cerrar-agregar-usuario-modal" onclick="cerrarModal()">&times;</span>
       <h3>Editar Usuario</h3>
       <label>Nombre:</label>
-      <input type="text" id="nombreEditar">
+      <input type="text" id="nombreEditar" placeholder="Escribe el nombre del usuario." required>
       <span id="errorNombre" class="error"></span>
 
       <label>Correo:</label>
-      <input type="email" id="correoEditar">
+      <input type="email" id="correoEditar" placeholder="Escribe el nombre de gmail." required>
       <span id="errorCorreo" class="error"></span>
 
       <label>Teléfono:</label>
-      <input type="text" id="telefonoEditar">
+      <input type="text" id="telefonoEditar" placeholder="Escribe el numero telefonico. +52 353 000 0000" required>
       <span id="errorTelefono" class="error"></span>
 
       <label>Contraseña:</label>
-      <input type="text" id="contrasenaEditar" placeholder="Contraseña" />
+      <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." required />
       <span id="errorContrasena" class="error"></span>
 
       <div class="modal-acciones">
-        <button onclick="guardarCambios()">
+        <button onclick="guardarCambios()" class="btn-agregar-categoria">
           <i class="fas fa-user-plus"></i> Guardar
         </button>
-        <button onclick="cerrarModal()">Cancelar</button>
+        <button class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
       </div>
     </div>
   </div>
 
   <!-- ----------------------------------------------- -->
   <!-- Modal de confirmación Usuario -->
-  <!-- ----------------------------------------------- -->
+  <!-- ----------------------------------------------- ------------------------------------------------------------->
 
   <div id="modalConfirmacion" class="modal-confirm">
-    <div class="modal-content-confirm">
-      <p id="mensajeConfirmacion">¿Estás seguro de que deseas eliminar?</p>
-      <div class="botones">
-        <button id="btnConfirmarEliminar" class="btn btn-confirmar">Sí, eliminar</button>
-        <button id="btnCancelarEliminar" class="btn btn-cancelar">Cancelar</button>
+
+    <div class="modal-contenido-categoria">
+      <h3 id="mensajeConfirmacion">¿Estás seguro de que deseas eliminar?</h3>
+      <div class="botones-accion">
+        <button id="btnConfirmarEliminar" class="delete-btn-categoria">
+          <span class="icono-eliminar"></span>Sí, eliminar</button>
+        <button id="btnCancelarEliminar" class="delete-cancelar-btn-categoria">
+          <span class="icono-cancelar">✖</span>Cancelar</button>
       </div>
     </div>
   </div>
+
+  <!-- ----------------------------------------------- ------------------------------------------------------------->
+
 
   <!-- ------------------------------------------------ -->
   <!-- Modal para agregar nuevo usuario -->
@@ -665,26 +672,27 @@
 
   <div id="modalAgregarUsuario" class="modal">
     <div class="modal-contenido">
+      <span class="cerrar-agregar-usuario-modal" onclick="cerrarModalAgregarUsuario()">&times;</span>
       <h3>Agregar Usuario</h3>
 
       <label>Nombre:</label>
-      <input type="text" id="nombreNuevo">
+      <input type="text" id="nombreNuevo" placeholder="Escribe el nombre del usuario." required>
       <span id="errorNombreNuevo" class="error"></span>
 
       <label>Correo:</label>
-      <input type="email" id="correoNuevo">
+      <input type="email" id="correoNuevo" placeholder="Escribe el nombre de gmail." required>
       <span id="errorCorreoNuevo" class="error"></span>
 
       <label>Teléfono:</label>
-      <input type="text" id="telefonoNuevo">
+      <input type="text" id="telefonoNuevo" placeholder="Escribe el numero telefonico. +52 353 000 0000" required>
       <span id="errorTelefonoNuevo" class="error"></span>
 
       <label>Contraseña:</label>
-      <input type="text" id="contrasenaNuevo" placeholder="Contraseña" />
+      <input type="password" id="contrasenaNuevo" placeholder="Escribe la contraseña." required />
       <span id="errorContrasenaNuevo" class="error"></span>
 
       <div class="modal-acciones">
-        <button class="btn-guardar" onclick="guardarNuevo()">
+        <button class="btn-agregar-categoria" onclick="guardarNuevo()">
           <i class="fas fa-user-plus"></i> Guardar
         </button>
         <button class="btn-cancelar" onclick="cerrarModalAgregarUsuario()">Cancelar</button>
@@ -706,12 +714,22 @@
     <div class="modal-contenido-agregar">
       <span class="cerrar" onclick="cerrarModalAgregarCategoria()">&times;</span>
       <h3 class="h3-agregar-categoria">Agregar Categoría</h3>
-      <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría">
+      <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría" required>
       <textarea id="descripcionCategoria" placeholder="Descripción"></textarea>
-      <input type="text" id="imagenCategoria" placeholder="URL de la imagen">
 
-      <button class="btn-agregar-categoria" onclick="guardarCategoria()">Guardar</button>
-      <button class="cancelar-btn-categoria" onclick="cerrarModalAgregarCategoria()">Cancelar</button>
+      <!-- Input oculto para subir la imagen -->
+      <input type="file" id="subirImagen" accept="image/*" style="display: none;">
+      <!-- Botón que activa el input file -->
+      <button id="imagenCategoriaBtn" onclick="document.getElementById('subirImagen').click()">Elegir imagen</button>
+
+      <!-- Campo oculto para guardar la URL de la imagen (opcional) -->
+      <input type="hidden" id="imagenCategoria">
+      <div class="buttons-agregar-categoria">
+        <button class="btn-agregar-categoria" onclick="guardarCategoria()">
+          <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar
+        </button>
+        <button class="cancelar-btn-categoria" onclick="cerrarModalAgregarCategoria()">Cancelar</button>
+      </div>
     </div>
   </div>
 
@@ -721,13 +739,19 @@
   <div id="modalEditarCategoria" class="modal">
     <div class="modal-contenido">
       <span class="cerrar" onclick="cerrarModalEditarCategoria()">&times;</span>
-      <h3>Editar Categoría</h3>
-      <input type="text" id="editarNombreCategoria">
-      <textarea id="editarDescripcionCategoria"></textarea>
-      <label for="editarImagenCategoria">Imagen URL:</label>
-      <input type="text" id="editarImagenCategoria" />
+      <h3 class="h3-modal">Editar Categoría</h3>
+      <input type="text" id="editarNombreCategoria" placeholder="Nombre de la categoría">
+      <textarea id="editarDescripcionCategoria" placeholder="Descripción"></textarea>
+      <!-- Botón para subir imagen -->
+      <label for="inputImagenArchivo">Subir imagen:</label>
+      <input type="file" id="inputImagenArchivo" accept="image/*">
+      <!-- Campo oculto donde se guarda la imagen en base64 -->
+      <input type="hidden" id="editarImagenCategoria">
+      <!-- Opcional: botón para mostrar vista previa -->
+      <button id="imagenCategoriaBtn" type="button" class="imagen-preview-btn"></button>
       <div class="modal-acciones">
-        <button class="btn-agregar" onclick="guardarEdicionCategoria()">Guardar Cambios</button>
+        <button class="btn-agregar-editar-categoria" onclick="guardarEdicionCategoria()">
+          <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar</button>
         <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
       </div>
     </div>
@@ -740,198 +764,37 @@
   <div id="modalEliminarCategoria" class="modal">
     <div class="modal-contenido-categoria">
       <span class="cerrar" onclick="cerrarModalEliminarCategoria()">&times;</span>
-      <h3>¿Estás seguro que deseas eliminar esta categoría?</h3>
-      <button class="delete-btn-categoria" onclick="confirmarEliminarCategoria()">Sí, eliminar</button>
-      <button class="cancelar-btn-categoria" onclick="cerrarModalEliminarCategoria()">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- ------------------------------------------------ -->
-  <!--Empieza Productos Modal-->
-  <!-- ------------------------------------------------ -->
-  <!-- ------------------------------------------------ -->
-  <!-- Modal para agregar nuevo Productos -->
-  <!-- ------------------------------------------------ -->
-
-  <!-- Modal para agregar nuevo Producto -->
-
-  <!-- Modal para agregar nuevo Producto -->
-  <div id="Modal-Agregar-Producto" class="modal">
-    <div class="modal-contenido-producto-new">
-
-      <h3>Agregar Nuevo Producto</h3>
-
-      <form id="formulario-producto" method="POST">
-        <!-- Nombre del producto -->
-        <div class="form-group-campo">
-          <label for="nombreProducto">Nombre del Producto</label>
-          <input type="text" id="nombreProducto" placeholder="Ej: Silla Moderna">
-          <span id="errorNombreProducto" class="error"></span>
-        </div>
-
-        <!-- Descripción del producto -->
-        <div class="form-group-campo">
-          <label for="descripcionProducto">Descripción</label>
-          <textarea id="descripcionProducto" placeholder="Descripción del producto"></textarea>
-          <span id="errorDescripcionProducto" class="error"></span>
-        </div>
-
-        <hr>
-
-        <!-- Precio y Oferta -->
-        <div class="form-group-campo">
-          <div class="precio-producto-lbl">
-            <label for="precioProducto">Precio</label>
-            <input type="number" id="precioProducto" placeholder="Ej: 1200.00">
-            <span id="errorPrecioProducto" class="error"></span>
-            <div class="checkbox-linea">
-              <input type="checkbox" id="ofertaProducto">
-              <label for="descuentoSeleccionado" class="descuento-seleccion">Descuento?</label>
-              <input type="number" id="descuentoSeleccionado" class="input-descuento-escribir-productos" min="0"
-                max="100" disabled>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="form-group-campo">
-          <label for="precioProductoDescuento" class="precio-con-descuento">Precio con Descuento</label>
-          <input type="number" id="precioProductoDescuento" disabled>
-          <span id="errorPrecioDescuentoProducto" class="error"></span>
-        </div>
-
-        <hr>
-
-        <!-- Imagen del producto -->
-        <div class="form-group-campo">
-          <div class="carpetas">
-            <label for="nombre-carpeta">Referencia de imagen</label>
-            <input type="text" id="nombre-carpeta" name="carpeta" placeholder="Nombre de referencia">
-            <span id="mensajeError" class="mensaje-error" style="display: none;"></span>
-          </div>
-          <label for="imageInput">Imagen del Producto</label>
-          <button type="button" id="btnSubirImagen" class="btn-agregar-subir-imagen">
-            <i class="fas fa-image icono-imagen"> </i> Subir Imagen
+      <div class="div-categoria-delete">
+        <h3>¿Estás seguro que deseas eliminar esta categoría?</h3>
+        <div class="botones-accion">
+          <button class="delete-btn-categoria" onclick="confirmarEliminarCategoria()">
+            <span class="icono-eliminar"></span> Sí, eliminar
           </button>
-          <input type="file" id="imageInput" accept="image/*" style="display: none;">
-          <label id="labelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
-          <span id="nombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
+          <button class="delete-cancelar-btn-categoria" onclick="cerrarModalEliminarCategoria()">
+            <span class="icono-cancelar">✖</span> Cancelar
+          </button>
         </div>
-
-        <div class="form-group-campo">
-          <label for="textareaImagenes">URLs de Imágenes</label>
-          <textarea id="textareaImagenes" class="textarea-imagenes" rows="4" readonly></textarea>
-        </div>
-
-        <div class="modal-acciones">
-          <button type="button" class="btn-guardar" onclick="guardarNuevoProducto()">Guardar</button>
-          <button type="button" class="btn-cancelar" onclick="cerrarModalAgregarProducto()">Cancelar</button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-
-  <!-- ------------------------------------------------ -->
-
-  <!-- Modal para Editar Producto -->
-  <div id="Modal-Editar-Producto" class="modal">
-    <div class="modal-contenido-editar-producto">
-      <div class="campo-descripcion-agregar-producto">
-        <h3>Editar Producto</h3>
-        <input type="hidden" id="editarProductoId">
-
-        <!-- Nombre -->
-        <label for="editarNombreProducto" class="lbl-class">Nombre del Producto:</label>
-        <input type="text" id="editarNombreProducto" placeholder="Nombre del Producto">
-        <span id="errorEditarNombreProducto" class="error"></span>
-
-        <!-- Descripción -->
-        <label for="editarDescripcionProducto" class="lbl-class">Descripción:</label>
-        <textarea id="editarDescripcionProducto" placeholder="Descripción del producto"></textarea>
-        <span id="errorEditarDescripcionProducto" class="error"></span>
-      </div>
-
-      <hr>
-
-      <div class="precio-oferta-campopreciodescuento-agregar-producto">
-        <!-- Precio -->
-        <label for="editarPrecioProducto" class="lbl-class">Precio:</label>
-        <input type="number" id="editarPrecioProducto" placeholder="Precio">
-        <span id="errorEditarPrecioProducto" class="error"></span>
-
-        <!-- Oferta -->
-        <div class="lineaOferta">
-          <div class="contenedor-linea">
-            <div class="checkbox-linea">
-              <input type="checkbox" id="editarOfertaProducto" class="check-oferta">
-              <label class="lbl-class" for="editarOfertaProducto">Oferta</label>
-              <div class="descuento-opciones">
-                <label for="editarDescuentoSeleccionado" class="lbl-class">Descuento:</label>
-                <input class="input-descuento-escribir-productos" type="number" id="editarDescuentoSeleccionado" min="0"
-                  max="100" disabled>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- Campo de Precio Descuento -->
-        <div class="campo-precio-descuento">
-          <label for="editarPrecioProductoDescuento" class="lbl-class">Precio con Descuento:</label>
-          <input type="number" id="editarPrecioProductoDescuento" disabled>
-          <span id="errorEditarPrecioDescuentoProducto" class="error"></span>
-        </div>
-      </div>
-
-      <hr>
-
-      <div class="formularios-carpeta-agregar-producto">
-
-
-
-
-
-        <div class="campo-subir-imagen">
-
-          <input type="file" id="editarImageInput" accept="image/*" style="display: none;">
-          <label id="editarLabelMensajeImagen" class="label-estado-imagen">Estado de la imagen:</label>
-          <span id="editarNombreArchivoImagen" class="nombre-archivo-imagen" style="display: none;"></span>
-
-          <div class="campo-imagenes">
-            <label>Vista previa de imágenes:</label>
-            <div id="galeria-imagenes-editar" class="galeria-imagenes"></div>
-            <div class="contenedor-urls">
-              <label>URLs de imágenes:</label>
-              <div id="urls-imagenes-editar" class="urls-imagenes"></div>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <div class="modal-acciones">
-        <button class="btn-guardar" onclick="guardarCambiosProducto()">Guardar Cambios</button>
-        <button class="btn-cancelar" onclick="cerrarModalEditarProducto()">Cancelar</button>
       </div>
     </div>
   </div>
-  <!-- ------------------------------------------------ -->
 
   <!-- ----------------------------------------------- -->
   <!-- Modal de confirmación Producto eliminar -->
   <!-- ----------------------------------------------- -->
 
   <div id="modalEliminarProducto" class="modal">
-    <div class="modal-contenido-producto">
-      <span class="cerrar" onclick="cerrarModalEliminarProducto()">&times;</span>
-      <h3>¿Estás seguro que deseas eliminar este producto?</h3>
-      <button class="delete-btn-producto-Modal" onclick="eliminarProductoConfirmado()">Sí, eliminar</button>
-      <button class="cancelar-btn-producto-Modal" onclick="cerrarModalEliminarProducto()">Cancelar</button>
+    <div class="modal-contenido-categoria">
+      <span class="cerrar" onclick="cerrarModalEliminarProducto()" aria-label="Cerrar modal">&times;</span>
+      <div class="div-categoria-delete">
+        <h3>¿Estás seguro que deseas eliminar este producto?</h3>
+        <div class="botones-accion">
+          <button class="delete-btn-categoria" onclick="eliminarProductoConfirmado()">✔ Sí, eliminar</button>
+          <button class="delete-cancelar-btn-categoria" onclick="cerrarModalEliminarProducto()">
+            <span class="icono-cancelar">✖</span> Cancelar</button>
+        </div>
+      </div>
     </div>
   </div>
-
-
 
   <!-- ---------------------------------------------------------------------- -->
 
@@ -964,9 +827,6 @@
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
   <!-- ------------------------------------------------ -->
-
-
-
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>

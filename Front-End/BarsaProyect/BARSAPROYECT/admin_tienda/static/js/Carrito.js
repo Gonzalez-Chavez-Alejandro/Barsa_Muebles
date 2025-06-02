@@ -1,6 +1,6 @@
 
-document.addEventListener("DOMContentLoaded", () => { 
-   
+document.addEventListener("DOMContentLoaded", () => {
+
     // Cargar carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
@@ -137,43 +137,39 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Agregar desde detalle
-    if (btnAgregar) {
-        btnAgregar.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const nombreElem = document.getElementById("detalle-nombre");
-            const precioElem = document.getElementById("detalle-precio");
-            const precioOriginalElem = document.getElementById("detalle-precio-original");
+if (btnAgregar) {
+    btnAgregar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        
+        // Usamos directamente el producto que ya tenemos cargado
+        if (!producto) {
+            alert("No se encontró información del producto.");
+            return;
+        }
 
-            if (!nombreElem || !precioElem || !precioOriginalElem) {
-                alert("Faltan elementos del producto.");
-                return;
-            }
+        // Obtenemos la primera imagen del producto
+        const imagenes = producto.nombreimagenes?.split(",") || [];
+        const imagenPrincipal = imagenes.length > 0 ? imagenes[0].trim() : "";
 
-            const nombre = nombreElem.textContent.trim();
-            let precioTexto = precioElem.textContent.trim();
-            let precio = parseFloat(precioTexto.replace(/[^0-9.]/g, ""));
+        // Usamos precioOferta si existe, sino precio normal
+        const precio = producto.precioOferta && producto.precioOferta < producto.precio 
+            ? producto.precioOferta 
+            : producto.precio;
 
-            if (isNaN(precio) || precioTexto === "") {
-                const originalTexto = precioOriginalElem.textContent.trim();
-                precio = parseFloat(originalTexto.replace(/[^0-9.]/g, ""));
-            }
-
-            let imagen = "";
-            if (window.productos && Array.isArray(window.productos)) {
-                const prod = window.productos.find(p => p.nombre === nombre);
-                imagen = prod?.nombreimagenes || "";
-            }
-
-            if (nombre && !isNaN(precio)) {
-                const producto = { nombre, precio, imagen };
-                agregarAlCarrito(producto);
-                carritoContainer.style.display = "block";
-            } else {
-                alert("Datos inválidos del producto.");
-            }
-        });
-    }
-
+        if (producto.nombre && !isNaN(precio)) {
+            const productoCarrito = { 
+                nombre: producto.nombre, 
+                precio: precio,
+                imagen: imagenPrincipal, // Usamos solo la primera imagen
+                cantidad: 1
+            };
+            agregarAlCarrito(productoCarrito);
+            carritoContainer.style.display = "block";
+        } else {
+            alert("Datos inválidos del producto.");
+        }
+    });
+}
     // Botón vaciar
     if (btnVaciar) {
         btnVaciar.addEventListener("click", vaciarCarrito);
@@ -202,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Cerrar si se hace clic fuera
     document.addEventListener("click", (e) => {
         if (
-            !carritoContainer.contains(e.target) && 
+            !carritoContainer.contains(e.target) &&
             !btnToggleCarrito.contains(e.target) &&
             carritoContainer.style.display === "block"
         ) {
