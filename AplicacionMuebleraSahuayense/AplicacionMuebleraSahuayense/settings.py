@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'autentication',
+    'categorias',
 
     'rest_framework',
     'rest_framework_simplejwt',
