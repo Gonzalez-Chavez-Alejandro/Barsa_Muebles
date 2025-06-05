@@ -3,5 +3,5 @@ from django.urls import path
 from ventas.views import VentasView
 
 urlpatterns=[
-    path('registro/', VentasView.as_view(), name='crear_ventas'),
+    path('registro/<int:mueble_id>/', VentasView.as_view(), name='crear_ventas'),
 ]

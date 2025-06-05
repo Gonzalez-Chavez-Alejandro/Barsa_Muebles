@@ -10,7 +10,7 @@ class VentasView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, mueble_id):
-        data = request.data
+        data = request.data.copy()
         data['userID'] = request.user.id
         data['muebleID'] = mueble_id
         serializer = VentasSerializer(data=data)
