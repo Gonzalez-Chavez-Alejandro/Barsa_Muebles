@@ -32,6 +32,15 @@
 </head>
 
 <body>
+  <header> 
+  <div class="salir_Admin">
+    <button id="btnCerrarSesion" class="btn-salir">
+      <i class="fas fa-sign-out-alt"></i> Salir
+    </button>
+  </div>
+</header>
+
+</header>
   <!-- ----------------------------------------------- -->
   <!-- Botón de menú para móvill -->
   <!-- ----------------------------------------------- -->
@@ -817,13 +826,11 @@
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
-  <script>
-    // En tu JS al cargar la página
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      window.location.href = '/login/';
-    }
-  </script>
+<script>  document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('accessToken');
+  console.log("token", token);
+});
+</script>
 </body>
 
 </html>

@@ -43,14 +43,19 @@ loginForm.addEventListener('submit', async (e) => {
       return;
     }
 
+// Al obtener respuesta exitosa en login
+localStorage.setItem('accessToken', data.access);
+localStorage.setItem('refreshToken', data.refresh);
+
+
     const userInfo = await userResponse.json();
     console.log('Info usuario:', userInfo);
 
     // Paso 3: Redirigir según si es superusuario
     if (userInfo.is_superuser) {
-      window.location.href = '/ruta-para-superusuarios';
+      window.location.href = '/administrador';
     } else {
-      window.location.href = '/ruta-para-usuarios-normales';
+      window.location.href = '/configuracion_usuario';
     }
 
   } catch (error) {

@@ -3,24 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem('accessToken');
 
   if (!menu) return;
-    console.log("token",token)
+  console.log("token", token);
 
   if (token) {
     fetch('/api/usuario/', {
       headers: { Authorization: `Bearer ${token}` }
     })
-      //.then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('No autorizado');
+        return res.json();  // <-- convertir respuesta a JSON aquí
+      })
       .then(data => {
-        console.log("data",data)
+        console.log("data", data);
         menu.innerHTML = `
           <div class="user-info">
-            <h1 class="user-greeting">Hola, ${data.first_name}</h1>
+            <h1 class="user-greeting">Hola, ${data.username}</h1>  <!-- usar username -->
             <p class="email">${data.email}</p>
             <a href="/configuracion_usuario/" id="btn-configuracion-usuario">
               <i class="fas fa-cog"></i> Configuración
             </a>
             <button id="btn-cerrar-sesion">
-              <i class="fas fa-sign-out-alt"></i> Cerrar sesión2
+              <i class="fas fa-sign-out-alt"></i> Cerrar sesión
             </button>
           </div>
         `;
@@ -39,16 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderLoginPrompt() {
     menu.innerHTML = `
-      <a class="btn-identificarse" id="btnLogin" <a href="/login/">Identificarse</a>
+      <a class="btn-identificarse" id="btnLogin" href="/login/">Identificarse</a>
       <div></div>
       <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="/registro/">Empieza aquí.</a></p>
     `;
-    const btnLogin = document.getElementById("btnLogin");
-    if (btnLogin) {
-      btnLogin.addEventListener("click", () => {
-        //window.location.href = "/login/";
-      });
-    }
   }
 
   // Lógica del menú
@@ -71,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
 document.addEventListener('DOMContentLoaded', function () {
     
   // Código para toggle-password
@@ -89,11 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
-
-
-
-
-
 });
 
 

@@ -969,3 +969,48 @@ label {
     grid-template-columns: 1fr;
   }
 }
+
+
+
+
+/*-----------------*/
+.salir_Admin {
+  display: flex;
+  justify-content: flex-end; /* Alinear a la derecha */
+  padding: 10px 20px;
+  background-color: #f0f0f0; /* fondo neutro */
+}
+
+.btn-salir {
+  background-color: #004085; /* azul oscuro, buen contraste para daltónicos */
+  color: #ffffff;
+  border: 2px solid #003366;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  font-weight: 600;
+  user-select: none;
+}
+
+.btn-salir:hover,
+.btn-salir:focus {
+  background-color: #002752;
+  border-color: #001f3f;
+  outline: none;
+}
+
+/* Para accesibilidad */
+.btn-salir:focus-visible {
+  outline: 3px solid #ffbf47; /* amarillo para foco accesible */
+  outline-offset: 2px;
+}
+
+
+
+
+

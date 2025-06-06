@@ -41,3 +41,15 @@ function ocultarTodasLasSecciones() {
   });
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+  if (btnCerrarSesion) {
+    btnCerrarSesion.addEventListener('click', () => {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      console.log("no entra ")
+      window.location.href = '/login/';
+    });
+  }
+});
+
