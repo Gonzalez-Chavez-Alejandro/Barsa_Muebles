@@ -13,8 +13,7 @@ urlpatterns = [
     path('administrador_agregar_producto/', views.administrador_agregar_producto, name='administrador_agregar_producto'),
     path('administrador_editar_producto/', views.administrador_editar_producto, name='administrador_editar_producto'),
     path('configuracion_usuario/', views.configuracion_usuario, name='configuracion_usuario'),
-    path('generate_signature/', views.generate_signature, name='generate_signature'),
-   
+    path('generate_signature/', views.generate_signature, name='generate_signature'), 
 ]
 
 

@@ -1,32 +1,33 @@
-document.getElementById('login-form').addEventListener('submit', async function (e) {
+const loginForm = document.getElementById('login-form');
+
+loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const loginData = {
+    username: document.getElementById('email').value,
+    password: document.getElementById('password').value
+  };
 
   try {
-    const response = await fetch('/api/token/', {
+    const response = await fetch('http://127.0.0.1:8000/api/login/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        email: email,  // o username, según tu serializer
-        password: password
-      })
+      body: JSON.stringify(loginData)
     });
 
-    const data = await response.json();
-
-    if (response.ok) {
-      localStorage.setItem('accessToken', data.access);
-      localStorage.setItem('refreshToken', data.refresh);
-      window.location.href = "/administrador/";
-    } else {
-      alert("Error: " + (data.detail || "Credenciales inválidas"));
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error en el login:', errorData);
+      return;
     }
+
+    const data = await response.json();
+    console.log('Login exitoso:', data);
+    // Aquí guardas tokens, rediriges, etc.
+
   } catch (error) {
-    console.error("Error en el login:", error);
-    alert("Error de red o servidor.");
+    console.error('Error en el login:', error);
   }
 });
