@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home-producto-views.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home-Ubicacion.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+</head>
+
+<body>
+  <style>
+    .Home-Categorias {
+      background-color: #f8f9fa;
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+
+ 
+  {% include 'includes/header.html' %}
+
+  <main>
+    {% block content %}
+    <!-- Aquí va el contenido específico de cada página -->
+    {% endblock %}
+  </main>
+
+
+  <div class="home-principio-page">
+    <div class="contenido-izquierda">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png"
+        alt="Barsa Muebles">
+      <div class="lineas-botones ">
+        <div class="lineas">
+          <h2 class="lineas-h2-slogan">LLENA TU VIDA DE ESPACIO</h2>
+          <div class="decor-lineas"></div>
+        </div>
+
+        <div class="botones-container">
+          <a href="{% url 'catalogo' %}" class="btn-ver-catalogos">
+            <i class="fas fa-book-open"></i> Ver Catálogo
+          </a>
+          <a href="{% url 'productos' %}" class="btn-ver">
+            <i class="fas fa-box-open"></i> Ver Productos
+          </a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="circle-bg">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747402118/lampara_wxhrsu.png" alt="Sillón"
+        class="icono-lampara">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747333317/sillon_tivooc.svg" alt="Sillón"
+        class="icono-sillon">
+    </div>
+  </div>
+
+
+  <h2 class="carousel-title">Categorías Destacadas</h2>
+
+  
+  <div class="carousel-wrapper">
+    <button id="leftArrow" class="arrow">&#10094;</button>
+    <div id="carouselCategorias" class="carousel">
+      <!-- Aquí van las cards -->
+    </div>
+    <button id="rightArrow" class="arrow">&#10095;</button>
+  </div>
+
+  <div class="container-ubicacion-tel">
+    <section class="contacto">
+      <h1>CONTACTO</h1>
+
+      <div class="telefonos">
+        <h3>☎ Teléfonos</h3>
+        <ul id="lista-telefonos-contactanos"></ul>
+      </div>
+
+      <div class="ubicacion">
+        <h3>📍 Ubicación</h3>
+        <ul id="lista-ubicaciones-contactanos"></ul>
+      </div>
+
+      <div class="social-container" id="lista-redes-contactanos"></div>
+    </section>
+
+    <div class="ilustracion">
+      <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1747461124/Ubicacion_txuqry.svg" alt="Ubicación" />
+    </div>
+  </div>
+
+  <!-- Carrito -->
+  <section id="carrito" class="carrito" style="display: none;">
+    <h2>Tu Carrito</h2>
+    <div id="lista-carrito" class="contenedor-carrito"></div>
+    <button id="vaciar-carrito">Vaciar Carrito</button>
+    <button id="cerrar-carrito">Cerrar</button>
+    <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
+    <div id="total-carrito">
+      <span>Total: $<span id="total-precio">0.00</span></span>
+    </div>
+  </section>
+
+  {% include 'includes/foother.html' %}
+
+  <script src="{% static 'js/variables.js' %}"></script>
+  <script src="{% static 'js/header.js' %}"></script>
+  <script src="{% static 'js/Home-Carrusel-Categorias.js' %}"></script>
+  <script src="{% static 'js/Carrito.js' %}"></script>
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+  <script>
+    const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+  </script>
+  <script src="{% static 'js/Admin-Manda.js' %}"></script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+</body>
+</html>

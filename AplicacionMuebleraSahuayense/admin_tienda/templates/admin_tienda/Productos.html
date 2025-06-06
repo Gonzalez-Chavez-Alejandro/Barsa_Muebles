@@ -1,0 +1,143 @@
+{% load static %}
+<script src="{% static 'js/header.js' %}"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <title>Producto</title>
+    <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Productos.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+</head>
+</head>
+
+<body>
+
+    {% include 'includes/header.html' %}
+
+    <main>
+        {% block content %}
+        <!-- Aquí va el contenido específico de cada página -->
+        {% endblock %}
+    </main>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <h3>Categorías</h3>
+            <ul id="lista-categorias">
+                <li data-id="all" class="categoria-activa">Todas</li>
+            </ul>
+        </aside>
+
+        <main class="contenido-principal">
+            <input type="text" id="buscador" placeholder="Buscar productos..." />
+            <div id="contenedor-productos" class="contenedor-productos"></div>
+        </main>
+    </div>
+
+    <div id="overlay-detalle"></div>
+
+    <section id="detalle-producto" class="detalle">
+        <button id="btn-regresar">
+            <i class="fas fa-arrow-left"></i> Regresar
+        </button>
+        <div class="detalle-contenedor">
+
+            <div class="galeria-producto">
+                <div class="imagen-principal">
+                    <img id="imagen-grande" src="" alt="Imagen principal del producto">
+                </div>
+
+                <div class="miniaturas">
+                    <!-- Las miniaturas se agregarán dinámicamente aquí -->
+                </div>
+                <hr>
+            </div>
+            <div class="detalle-info">
+                <h2 id="detalle-nombre" class="producto-titulo"></h2>
+                <p id="detalle-descripcion" class="producto-desc"></p>
+
+                <div class="precio-detalle">
+                    <div class="precio-container">
+                        <span id="detalle-precio" class="oferta precio-actual"></span>
+                        <div class="precio-original-wrapper">
+                            <span id="detalle-precio-original" class="tachado precio-antiguo"></span>
+                            <span id="detalle-porcentaje" class="porcentaje-descuento etiqueta-descuento"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="detalle-ahorro" class="ahorro-detalle ahorro-mensaje"></p>
+
+                <!-- Botón para agregar al carrito -->
+                <button id="agregar-carrito-detalle" class="boton-compra">
+                    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png"
+                        alt="Carrito" class="icono-carrito-svg">
+                    <span>Agregar al carrito </span>
+                </button>
+
+
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-zoom" class="modal-zoom">
+        <span class="cerrar">&times;</span>
+        <img class="modal-contenido" id="imagen-zoom">
+    </div>
+
+    <!-- Carrito -->
+    <section id="carrito" class="carrito" style="display: none;">
+        <h2>Tu Carrito</h2>
+        <div id="lista-carrito" class="contenedor-carrito"></div>
+        <button id="vaciar-carrito">Vaciar Carrito</button>
+        <button id="cerrar-carrito">Cerrar</button>
+        <div id="total-carrito">
+            <span>Total: $<span id="total-precio">0.00</span></span>
+        </div>
+        <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
+    </section>
+
+      {% include 'includes/foother.html' %}
+
+    <script src="{% static 'js/variables.js' %}"></script>
+
+    <script>
+        const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+    </script>
+    <script>
+        document.getElementById("btn-regresar").addEventListener("click", function () {
+            // Oculta la sección de detalle de producto
+            document.getElementById("detalle-producto").classList.remove("activo");
+
+            // Muestra el contenido principal
+            document.querySelector("main.contenido-principal").style.display = "block";
+        });
+
+        // Para mostrar el detalle del producto (por ejemplo, cuando haces clic en un producto)
+        function mostrarDetalleProducto() {
+            // Oculta el contenido principal
+            document.querySelector("main.contenido-principal").style.display = "none";
+
+            // Muestra la sección de detalle
+            document.getElementById("detalle-producto").classList.add("activo");
+        }
+    </script>
+
+    <script src="{% static 'js/Header.js' %}"></script>
+    <script src="{% static 'js/Home-contenedor-productos.js' %}"></script>
+    <script src="{% static 'js/Carrito.js' %}"></script>
+    <script src="{% static 'js/Admin-Manda.js' %}"></script>
+</body>
+
+</html>

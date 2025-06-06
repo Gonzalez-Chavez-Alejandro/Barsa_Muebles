@@ -1,0 +1,829 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Administrativo</title>
+  <!-- ----------------------------------------------- -->
+  <!-- Link Css -->
+  <!-- ----------------------------------------------- -->
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Administrador-General.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Lista-Usuarios.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/categoria.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Producto.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Producto-Imagen.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Cards.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
+  <!-- Incluir jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+  <!-- ----------------------------------------------- -->
+  <!-- Botón de menú para móvill -->
+  <!-- ----------------------------------------------- -->
+  <button id="botonMenu" class="boton-menu">
+    <i class="fas fa-bars"></i>
+  </button>
+
+
+  <!-- ----------------------------------------------- -->
+  <!-- Menú lateral -->
+  <!-- ----------------------------------------------- -->
+  <div id="menuLateral" class="menu-lateral">
+    <button id="cerrarMenu" class="cerrar-menu">
+      <i class="fas fa-times"></i>
+    </button>
+    <ul class="menu">
+      <li class="menu-item">
+        <a href="#" class="menu-button" onclick="mostrarInicio()">
+          <i class="fas fa-home"></i><span>Home</span>
+        </a>
+      </li>
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-user"></i><span>Usuarios</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios')">Lista de usuarios</a></li>
+        </ul>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-star-comment')">Comentarios Stars </a>
+          </li>
+        </ul>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-mandas')">Mandas</a>
+          </li>
+        </ul>
+      </li>
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-tags"></i><span>Categorías</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('categorias')">Lista de categorías</a></li>
+        </ul>
+      </li>
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-box"></i><span>Productos</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('section-productos')"><i class="fas fa-box"> </i>
+              Todos </a></li>
+        </ul>
+        <ul class="submenu" id="submenu-categorias">
+          <!-- Aquí se insertarán las categorías -->
+        </ul>
+      </li>
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-list-alt"></i><span>Catalogo</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('catalogo')">Catalogo</a></li>
+        </ul>
+      </li>
+      <li class="menu-item">
+        <button class="menu-button" onclick="toggleSubmenu(this)">
+          <i class="fas fa-id-card"></i><span>Contactos</span>
+        </button>
+        <ul class="submenu">
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('contactos')">Contactos</a></li>
+        </ul>
+      </li>
+
+      <li class="menu-item">
+        <button class="menu-button"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></button>
+      </li>
+    </ul>
+
+  </div>
+
+  <!-- Contenido principal -->
+  <main class="contenido" id="contenidoPrincipal">
+    <!-- Sección de inicio -->
+    <section id="inicio" class="seccion activa">
+      <h1 class="h1-Panel-Administrativo">Panel Administrativo</h1>
+      <p class="descripcion-opcion">Selecciona una opción.</p>
+
+
+      <div class="contenedor-cards">
+        <!-- Tarjeta de Usuarios -->
+        <div class="card-usuario">
+          <div class="icono-top">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <h3>Gestión de Usuarios</h3>
+          <p>Administra los usuarios del sistema: agrega, edita o elimina fácilmente.</p>
+          <button class="card-btn" onclick="mostrarSeccion('usuarios')">
+            <i class="fas fa-users-cog"></i> Ver Usuarios
+          </button>
+        </div>
+
+        <!-- Tarjeta de Categorías -->
+        <div class="card-categoria">
+          <i class="fas fa-tags icono-top"></i>
+          <h3>Categorías</h3>
+          <p>Administra las categorías de tus productos fácilmente.</p>
+          <button class="card-btn" onclick="mostrarSeccion('categorias')">
+            <i class="fas fa-eye"></i> Ir a Categorías
+          </button>
+        </div>
+
+        <!-- Tarjeta de Productos -->
+        <div class="card-producto">
+          <i class="fas fa-box-open icono-top"></i>
+          <h3>Productos</h3>
+          <p>Administra los productos: crea, edita y elimina fácilmente.</p>
+          <button class="card-btn" onclick="mostrarSeccion('section-productos')">
+            <i class="fas fa-box"></i> Productos
+          </button>
+        </div>
+
+
+        <!-- Tarjeta de Comentarios y Estrellas -->
+        <div class="card-comentario">
+          <i class="fas fa-star icono-top"></i>
+          <h3>Comentarios y Stars</h3>
+          <p>Visualiza y administra comentarios y estrellas que los usuarios dejan.</p>
+
+          </button>
+          <button class="card-btn" onclick="mostrarSeccion('usuarios-star-comment')">
+            <i class="fas fa-comments"></i> Ver Opiniones
+          </button>
+        </div>
+
+        <!-- Tarjeta de Contacto -->
+        <div class="card-comentario">
+          <i class="fas fa-address-book icono-top"></i>
+          <h3>Contacto</h3>
+          <p>Administra teléfonos, ubicaciones y redes sociales mostradas en la sección de contacto.</p>
+
+          <button class="card-btn" onclick="mostrarSeccion('contactos')">
+            <i class="fas fa-edit"></i> Editar Contacto
+          </button>
+        </div>
+
+        <!-- Tarjeta de Catalogo -->
+        <div class="card-producto">
+          <i class="fas fa-book-open icono-top"></i>
+          <h3>Catalogo</h3>
+          <p>Administra el catalogo actual</p>
+          <button class="card-btn" onclick="mostrarSeccion('catalogo')">
+            <i class="fas fa-box"></i> Catalogo
+          </button>
+        </div>
+
+      </div>
+
+
+
+      <section id="admin-panel">
+
+      </section>
+
+
+
+
+
+  </main>
+
+
+
+
+
+  <section id="catalogo" class="seccion">
+    <!-- Panel de administración -->
+    <div class="admin-panel" id="adminPanel">
+      <h3>Administrar Catálogo</h3>
+      <div class="admin-form">
+        <input type="text" id="nuevoEnlace" class="admin-input"
+          placeholder="Ej: https://drive.google.com/file/d/TU_ID/preview">
+        <div class="button-group">
+          <button class="admin-btn" onclick="actualizarPDF()">Actualizar</button>
+          <button class="delete-btn-limpiar-campo" onclick="limpiarCampo()">Eliminar</button>
+        </div>
+      </div>
+      <small class="text-muted">
+        Formato requerido: <code>https://drive.google.com/file/d/[ID_ARCHIVO]/preview</code>
+      </small>
+    </div>
+  </section>
+
+
+  <!-- ----------------------------------------------- -->
+  <!-- Sección de Usuarios -->
+  <!-- ----------------------------------------------- -->
+
+  <section id="usuarios" class="seccion">
+    <div class="admin-panel">
+      <div class="admin-panel-lista-usuarios">
+        <div class="usuarios-header">
+          <div class="icon-usuarios">
+            <i class="fas fa-users icono-usuarios" aria-hidden="true"></i>
+          </div>
+          <h2 class="titulo-usuarios">Usuarios</h2>
+        </div>
+
+        <div class="filtros-usuarios">
+          <div class="search-container-usuarios">
+            <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+            <input type="text" id="buscador" class="input-busqueda-usuarios"
+              placeholder="Buscar por ID, nombre, correo o teléfono..." onkeyup="buscarUsuarios()"
+              aria-label="Buscar usuarios">
+          </div>
+
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th>Teléfono</th>
+              <th>Contraseña</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aquí se insertan usuarioss con JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="paginacion">
+        <button id="paginaAnterior">Anterior</button>
+        <div class="info-paginacion">
+
+
+        </div>
+        <button id="paginaSiguiente">Siguiente</button>
+      </div>
+
+  </section>
+
+
+
+
+
+
+
+
+
+  <section id="usuarios-star-comment" class="seccion">
+    <div class="admin-panel">
+      <h2>Comentarios y Calificaciones</h2>
+
+      <!-- Buscador -->
+      <input type="text" placeholder="Buscar usuario o producto..." class="bscdr-usuarios-star-comment"
+        id="buscador-comentarios" />
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre-Usuario</th>
+              <th>Nombre-Producto</th>
+              <th>Comentarios</th>
+              <th>Stars</th>
+              <th class="td-espacio">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-usuarios-comentarios"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+  <section id="usuarios-mandas" class="seccion">
+
+    <!-- Buscador -->
+    <div class="um-buscador-container">
+      <div class="um-buscador">
+        <i class="fas fa-search um-icono-buscar"></i>
+        <input type="text" id="um-input-buscar" class="um-input-buscar"
+          placeholder="Buscar por ID, nombre, correo o teléfono..." aria-label="Buscar pedidos">
+      </div>
+    </div>
+    <h1>Pedidos Encargados</h1>
+    <div class="um-header-actions">
+      <button class="um-btn-pdf" id="um-exportar-todos">
+        <i class="fas fa-file-pdf"></i> Exportar todos
+      </button>
+    </div>
+    <div id="pedidos-container"></div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+  <section id="categorias" class="seccion">
+    <div class="admin-panel">
+      <div class="cabecera-categorias">
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <i class="fas fa-tags icono-categorias"></i>
+          <h2 class="h2-lista-categorias">Lista de Categorías</h2>
+        </div>
+
+        <div class="controles-principales">
+          <div class="controles-tabla">
+            <div class="buscador">
+              <i class="fas fa-search"></i>
+              <input type="text" id="buscadorCategorias" placeholder="Buscar categoría..."
+                oninput="filtrarCategorias()">
+            </div>
+
+            <div class="selector-items">
+              <label for="itemsPorPagina">Mostrar:</label>
+              <select id="itemsPorPagina" onchange="cambiarItemsPorPagina()">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="lista-categoria-btn-agregar" onclick="abrirModalAgregarCategoria()">
+            <i class="fas fa-plus"></i> Agregar
+          </button>
+        </div>
+      </div>
+
+      <div class="resultados-info" id="resultadosInfo">
+        Mostrando 5 de 5 categorías
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre de Categoría</th>
+              <th>Descripción</th>
+              <th>Imagen</th>
+              <th class="th-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCategorias">
+            <!-- Las categorías se insertan con JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacion">
+        <button onclick="cambiarPaginaCategoria(-1)" id="btnAnterior">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+
+        <div class="info-paginacion">
+          <span id="paginaActualCategoria">Página 1</span>
+          <span> de </span>
+          <span id="totalPaginasCategoria">1</span>
+        </div>
+
+        <button onclick="cambiarPaginaCategoria(1)" id="btnSiguiente">
+          Siguiente <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ----------------------------------------------- -->
+  <!-- Sección de Productos -->
+  <!-- ----------------------------------------------- -->
+
+  <section id="section-productos" class="seccion">
+    <div class="admin-panel">
+
+      <div id="formulario-div-producto">
+
+        <div class="admin-card">
+          <form id="form-destacados">
+            <h2 id="titulo-destacados">📌 Productos </h2>
+            <!-- Buscar y Agregar -->
+            <div class="conjuntoagregarbuscar">
+              <div class="filtros-usuarios">
+                <div class="search-container-usuarios">
+                  <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+                  <input type="text" id="buscador-productos" class="input-busqueda-usuarios"
+                    placeholder="Buscar por nombre, del producto  " onkeyup="buscarProductos()"
+                    aria-label="Buscar usuarios">
+                </div>
+              </div>
+              <div class="select-group-filtro-lleno">
+                <label for="filtroCategoria" class="select-label">
+                  <i class="fas fa-filter"></i> Filtrar por categoría:
+                </label>
+                <div class="select-wrapper">
+                  <select id="filtroCategoria" onchange="filtrarPorCategoria()">
+                    <option value="">Todas las categorías</option>
+                  </select>
+
+                </div>
+              </div>
+              <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
+                <i class="fas fa-plus"></i> Agregar
+              </a>
+            </div>
+
+            <!-- Mostrar y Filtrar -->
+            <div class="select-group-container">
+              <div class="select-group-producto-lleno">
+                <label for="selectorCantidadProductos" class="select-label">
+                  <i class="fas fa-th-list"></i> Mostrar:
+                </label>
+                <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+
+
+            </div>
+
+          </form>
+        </div>
+
+        <div id="tablaContainerDestacados" class="scroll-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th class="NombretablaContainerDestacados">Nombre
+                  <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
+                </th>
+                <th class="th-descripcion">Descripción</th>
+                <th>Precio</th>
+                <th>Oferta</th>
+                <th>Precio Oferta</th>
+                <th>Nombre Imagenes</th>
+                <th class="th-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-productos">
+              <!-- Se insertan productos con JS -->
+            </tbody>
+          </table>
+          <div class="paginacion">
+            <button onclick="cambiarPaginaProductosLleno(-1)">Anterior</button>
+            <span id="paginaActualProductosLleno">Página 1</span> de <span id="totalPaginasProductosLleno">de 0</span>
+            <button onclick="cambiarPaginaProductosLleno(1)">Siguiente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="contactos" class="seccion">
+    <div class="admin-container">
+      <h2 class="admin-header"><i class="fas fa-cogs"></i> Panel Administrativo de Contacto</h2>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Correo electrónico</label>
+          <input type="email" id="admin-email" class="form-input" placeholder="contacto@empresa.com">
+        </div>
+
+
+        <div class="form-group">
+          <div class="section-header">
+            <label><i class="fas fa-phone-alt"></i> Teléfonos</label>
+            <button class="icon-btn success" onclick="addPhoneField()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="phones-container" class="dynamic-fields">
+            <div class="input-row">
+              <input type="text" class="form-input phone-input" value="+52 353 535 1750">
+              <button class="icon-btn danger" onclick="removePhoneField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="section-header">
+            <label><i class="fas fa-map-marker-alt"></i> Ubicaciones</label>
+            <button class="icon-btn success" onclick="addLocationField()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="locations-container" class="dynamic-fields">
+            <div class="input-row">
+              <textarea class="form-input location-input">Carretera Sahuayo La Barca KM 5.4</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            <div class="input-row">
+              <textarea class="form-input location-input">Juárez #100 Sahuayo Mich</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+            <div class="input-row">
+              <textarea class="form-input location-input">Circunvalación #Jiquilpan</textarea>
+              <button class="icon-btn danger" onclick="removeLocationField(this)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fas fa-share-alt"></i> Redes Sociales</label>
+          <div class="social-grid">
+            <div class="input-group">
+              <i class="fab fa-facebook icon-social"></i>
+              <input type="url" id="facebook" class="form-input" placeholder="Facebook predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fab fa-whatsapp icon-social"></i>
+              <input type="text" id="whatsapp" class="form-input" placeholder="WhatsApp predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fab fa-instagram icon-social"></i>
+              <input type="url" id="instagram" class="form-input" placeholder="Instagram predeterminado">
+            </div>
+            <div class="input-group">
+              <i class="fas fa-envelope icon-social"></i>
+              <input type="url" id="envelope" class="form-input" placeholder="Correo predeterminado">
+            </div>
+          </div>
+        </div>
+
+        <button class="primary-btn" onclick="guardarFooter()">
+          <i class="fas fa-save"></i> Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+
+  </main>
+  <!--Todo lo de dentro de section termina aqui en main -->
+  <!-- ---------------------------------------------------------------------- -->
+
+
+  <!-- ---------------------------------------------------------------------- -->
+  <!------------------------------ Empieza Modal ------------------------------->
+  <!-- ---------------------------------------------------------------------- -->
+
+  <!-- ------------------------------------------------ -->
+  <!--Empieza Usuario Modal-->
+  <!-- ------------------------------------------------ -->
+
+
+  <!-- ----------------------------------------------- -->
+  <!-- Modal para editar usuario -->
+  <!-- ----------------------------------------------- -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-agregar-usuario-modal" onclick="cerrarModal()">&times;</span>
+      <h3>Editar Usuario</h3>
+      <label>Nombre:</label>
+      <input type="text" id="nombreEditar" placeholder="Escribe el nombre del usuario." required>
+      <span id="errorNombre" class="error"></span>
+
+      <label>Apellido:</label>
+      <input type="text" id="apellidoEditar" placeholder="Escribe el Apellido." required>
+      <span id="errorapellido" class="error"></span>
+
+      <label>Correo:</label>
+      <input type="email" id="correoEditar" placeholder="Escribe el nombre de gmail." required>
+      <span id="errorCorreo" class="error"></span>
+
+      <label>Teléfono:</label>
+      <input type="text" id="telefonoEditar" placeholder="Escribe el numero telefonico. +52 353 000 0000" required>
+      <span id="errorTelefono" class="error"></span>
+
+      <label>Contraseña:</label>
+      <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." required />
+      <span id="errorContrasena" class="error"></span>
+
+      <div class="modal-acciones">
+        <button onclick="guardarCambios()" class="btn-agregar-categoria">
+          <i class="fas fa-user-plus"></i> Guardar
+        </button>
+        <button class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------- -->
+  <!-- Modal de confirmación Usuario -->
+  <!-- ----------------------------------------------- ------------------------------------------------------------->
+
+  <div id="modalConfirmacion" class="modal-confirm">
+
+    <div class="modal-contenido-categoria">
+      <h3 id="mensajeConfirmacion">¿Estás seguro de que deseas eliminar?</h3>
+      <div class="botones-accion">
+        <button id="btnConfirmarEliminar" class="delete-btn-categoria">
+          <span class="icono-eliminar"></span>Sí, eliminar</button>
+        <button id="btnCancelarEliminar" class="delete-cancelar-btn-categoria">
+          <span class="icono-cancelar">✖</span>Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------- ------------------------------------------------------------->
+
+
+
+
+
+
+  <!-- ------------------------------------------------ -->
+  <!--Empieza Categoria Modal-->
+  <!-- ------------------------------------------------ -->
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Agregar Categoría -->
+  <!-- ------------------------------------------------ -->
+
+  <div id="modalAgregarCategoria" class="modal">
+    <div class="modal-contenido-agregar">
+      <span class="cerrar" onclick="cerrarModalAgregarCategoria()">&times;</span>
+      <h3 class="h3-agregar-categoria">Agregar Categoría</h3>
+
+      <input type="text" id="nombreCategoria" placeholder="Nombre de la categoría" required>
+      <textarea id="descripcionCategoria" placeholder="Descripción"></textarea>
+
+      <!-- Input de imagen oculto -->
+      <input type="file" id="subirImagen" accept="image/*" style="display: none;">
+
+      <!-- Botón que activa el input file -->
+      <button id="imagenCategoriaBtn" onclick="document.getElementById('subirImagen').click()">Elegir imagen</button>
+
+      <div class="buttons-agregar-categoria">
+        <button id="btnGuardarCategoria" class="btn-agregar-categoria">
+          <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar
+        </button>
+
+        <button class="cancelar-btn-categoria" onclick="cerrarModalAgregarCategoria()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Editar Categoría -->
+  <!-- ------------------------------------------------ -->
+  <div id="modalEditarCategoria" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModalEditarCategoria()">&times;</span>
+      <h3 class="h3-modal">Editar Categoría</h3>
+
+      <input type="text" id="editarNombreCategoria" placeholder="Nombre de la categoría">
+      <textarea id="editarDescripcionCategoria" placeholder="Descripción"></textarea>
+
+      <label for="editarImagenArchivo">Subir imagen:</label>
+      <input type="file" id="editarImagenArchivo" accept="image/*">
+
+      <div class="modal-acciones">
+        <button class="btn-agregar-editar-categoria" onclick="guardarEdicionCategoria()">
+          <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar
+        </button>
+        <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ------------------------------------------------ -->
+  <!-- Modal Eliminar Categoría -->
+  <!-- ------------------------------------------------ -->
+
+  <div id="modalEliminarCategoria" class="modal">
+    <div class="modal-contenido-categoria">
+      <span class="cerrar" onclick="cerrarModalEliminarCategoria()">&times;</span>
+      <div class="div-categoria-delete">
+        <h3>¿Estás seguro que deseas eliminar esta categoría?</h3>
+        <div class="botones-accion">
+          <button class="delete-btn-categoria" onclick="confirmarEliminarCategoria()">
+            <span class="icono-eliminar"></span> Sí, eliminar
+          </button>
+          <button class="delete-cancelar-btn-categoria" onclick="cerrarModalEliminarCategoria()">
+            <span class="icono-cancelar">✖</span> Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------------------------------------- -->
+  <!-- Modal de confirmación Producto eliminar -->
+  <!-- ----------------------------------------------- -->
+
+  <div id="modalEliminarProducto" class="modal">
+    <div class="modal-contenido-categoria">
+      <span class="cerrar" onclick="cerrarModalEliminarProducto()" aria-label="Cerrar modal">&times;</span>
+      <div class="div-categoria-delete">
+        <h3>¿Estás seguro que deseas eliminar este producto?</h3>
+        <div class="botones-accion">
+          <button class="delete-btn-categoria" onclick="eliminarProductoConfirmado()">✔ Sí, eliminar</button>
+          <button class="delete-cancelar-btn-categoria" onclick="cerrarModalEliminarProducto()">
+            <span class="icono-cancelar">✖</span> Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------------------------------------------------------------------- -->
+
+  <!-- MODAL -->
+  <div id="modal-editar" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar" onclick="cerrarModalEditar()">&times;</span>
+      <h2>Editar Comentario y Calificación</h2>
+      <form id="form-editar-comentario-stars">
+        <label>Usuario:</label>
+        <select id="editar-usuario" required></select>
+
+        <label>Producto:</label>
+        <select id="editar-producto" required></select>
+
+        <label>Comentario:</label>
+        <textarea id="editar-comentario" rows="4" required></textarea>
+
+        <label>Calificación (1 a 5):</label>
+        <input type="number" id="editar-calificacion" min="1" max="5" required>
+
+        <input type="hidden" id="usuario-original">
+        <input type="hidden" id="producto-original">
+
+        <button type="submit">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ------------------------------------------------ -->
+  <!----- Scripts ----->
+  <!-- ------------------------------------------------ -->
+  <script src="{% static 'js/variables.js' %}"></script>
+  <script src="{% static 'js/Admin-Menu.js' %}"></script>
+  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos.js' %}"></script>
+  <script src="{% static 'js/Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>
+  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+  <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
+  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+  <script>
+    // En tu JS al cargar la página
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      window.location.href = '/login/';
+    }
+  </script>
+</body>
+
+</html>

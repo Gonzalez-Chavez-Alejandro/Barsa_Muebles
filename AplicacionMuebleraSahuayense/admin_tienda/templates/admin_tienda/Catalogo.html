@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/catalogo.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+  <style>
+    
+  </style>
+</head>
+
+<body>
+  {% include 'includes/header.html' %}
+
+  <!-- Botón para abrir administrador -->
+
+
+
+
+  <!-- Catálogo de Productos -->
+  <div id="catalogoContainer">
+    <h2 style="text-align: center; font-family: 'Poppins', sans-serif; color: #333;">
+      Catálogo de Productos
+    </h2>
+    <iframe id="pdfViewer" src="https://drive.google.com/file/d/1LDLgEhEeGEHHfGCkimfqQ0-wD_NtsY88/preview"
+      style="border: none;">
+    </iframe>
+  </div>
+
+
+  {% include 'includes/foother.html' %}
+
+
+  <script>
+    // Catalogo.js
+    (() => {
+      const STORAGE_KEY = 'pdfConfig';
+      const DEFAULT_LINK = 'https://drive.google.com/file/d/1LDLgEhEeGEHHfGCkimfqQ0-wD_NtsY88/preview';
+
+      const actualizarVista = () => {
+        const enlace = localStorage.getItem(STORAGE_KEY) || DEFAULT_LINK;
+        const iframe = document.getElementById('pdfViewer');
+
+        // Forzar recarga del iframe
+        iframe.src = `${enlace}?timestamp=${Date.now()}`;
+      };
+
+      // Escuchar cambios en localStorage
+      window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY) {
+          actualizarVista();
+        }
+      });
+
+      // Cargar inicial
+      document.addEventListener('DOMContentLoaded', actualizarVista);
+    })();
+  </script>
+  <script src="{% static 'js/header.js' %}"></script>
+  <script src="{% static 'js/Carrito.js' %}"></script>
+  <script>
+    const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+  </script>
+  <script src="{% static 'js/Admin-Manda.js' %}"></script>
+</body>
+
+</html>

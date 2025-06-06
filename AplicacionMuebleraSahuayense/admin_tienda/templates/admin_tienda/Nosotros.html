@@ -1,0 +1,131 @@
+{% load static %}
+<script src="{% static 'js/header.js' %}"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
+    type="image/x-icon">
+    <script src="https://unpkg.com/flipbookjs@latest/dist/flipbook.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/flipbookjs@latest/dist/flipbook.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Nosotros.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+
+
+  {% include 'includes/header.html' %}
+
+  <main>
+    {% block content %}
+    <!-- Aquí va el contenido específico de cada página -->
+    {% endblock %}
+  </main>
+
+
+
+
+  <main class="fondo-limitado">
+    <section class="nosotros">
+      <!-- Decoración flotante -->
+
+      <div class="contenido">
+
+        <h1 class="fade-in">
+          <i class="fas fa-couch"></i> <!-- Sofá -->
+          Un poco <span>sobre nosotros</span>
+        </h1>
+
+        <p class="slide-up">Barsa Muebles: <strong>20 años llenando de vida los hogares de México y el mundo.</strong>
+        </p>
+        <p class="slide-up delay-1">
+          Fundada en 2004, <strong>Barsa Muebles</strong> cuenta con un equipo de 52 expertos dedicados a la creación de
+          muebles de calidad superior.
+        </p>
+        <p class="slide-up delay-2">
+          Nuestro compromiso es ofrecer excelencia en cada pieza y superar las expectativas de quienes confían en
+          nosotros.
+        </p>
+
+
+        <div class="timeline">
+          <div class="item fade-in">
+            <h3>2025–2026</h3>
+            <p>“Llena de vida tu espacio” – transformamos hogares en lugares vibrantes y llenos de energía.</p>
+          </div>
+          <div class="item fade-in delay-1">
+            <h3>2024–2025</h3>
+            <p><strong>LLENA TU VIDA DE ESPACIO</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Carrito -->
+  <section id="carrito" class="carrito" style="display: none;">
+    <h2>Tu Carrito</h2>
+    <div id="lista-carrito" class="contenedor-carrito"></div>
+    <button id="vaciar-carrito">Vaciar Carrito</button>
+    <button id="cerrar-carrito">Cerrar</button>
+    <div id="total-carrito">
+      <span>Total: $<span id="total-precio">0.00</span></span>
+    </div>
+     <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
+  </section>
+
+
+
+
+
+
+
+
+  {% include 'includes/foother.html' %}
+
+
+
+
+
+  <script>
+    const elements = document.querySelectorAll('.fade-in, .slide-up, .mueble-bounce');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    elements.forEach(el => observer.observe(el));
+  </script>
+
+
+
+
+
+
+
+
+
+  <script>
+  const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
+</script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+  <script src="{% static 'js/Carrito.js' %}"></script>
+
+</body>
+
+</html>

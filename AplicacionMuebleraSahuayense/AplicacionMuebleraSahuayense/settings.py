@@ -31,11 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'autentication',
     'categorias',
-
     'rest_framework',
     'rest_framework_simplejwt',
     'cloudinary',
     'cloudinary_storage',
+    'admin_tienda',
 ]
 
 AUTH_USER_MODEL = 'autentication.CustomUser'
@@ -106,16 +106,20 @@ WSGI_APPLICATION = 'AplicacionMuebleraSahuayense.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'MuebleriaDB',
-        'USER': 'admin',
-        'PASSWORD': '@dm1nDB',
+        'USER': 'barsa',
+        'PASSWORD': 'barsamuebles123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation

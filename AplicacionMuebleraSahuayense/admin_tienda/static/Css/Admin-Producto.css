@@ -1,0 +1,178 @@
+/* Galería de imágenes */
+.galeria-imagenes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.imagen-container {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.miniatura-imagen {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.badge-imagen {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px;
+  font-size: 0.8em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/**/
+/* Contenedor principal del formulario de productos */
+#form-destacados {
+  background-color: #fff;
+  padding: 24px;
+  max-width: 100%;
+}
+
+/* Título */
+#titulo-destacados {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+/* Contenedor de buscador y botón Agregar */
+.conjuntoagregarbuscar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Botón Agregar */
+.btn-agregar {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-agregar:hover {
+  background-color: var(--text-color);
+}
+
+/* Contenedor de selects */
+.select-group-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Contenedor individual de un grupo de select */
+.select-group-producto-lleno,
+.select-group-filtro-lleno {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Etiquetas de los selects */
+.select-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* Select y su contenedor */
+.select-wrapper,
+.select {
+  width: auto;
+}
+
+.select {
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  border: 1.5px solid #2c3e50;
+  background-color: #fdfdfd;
+  color: #2c3e50;
+  transition: border-color 0.3s;
+}
+
+.select:focus {
+  border-color: #007acc;
+  outline: none;
+}
+
+@media (max-width: 600px) {
+
+  .conjuntoagregarbuscar,
+  .select-group-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-agregar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .select-group-producto-lleno,
+  .select-group-filtro-lleno {
+    justify-content: space-between;
+  }
+}
+
+/*tabla th descripcion*/
+th.th-descripcion {
+  padding: 0 114px;
+}
+
+input#ofertaProducto {
+  width: 30px;
+  height: 35px;
+  margin: 0% 0% 2%;
+  cursor: pointer;
+}
+
+.scroll-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  /* Ajusta este valor si hay muchas columnas */
+}
+
+@media screen and (max-width: 768px) {
+  .admin-table {
+    font-size: 14px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 6px 10px;
+  }
+}
+
