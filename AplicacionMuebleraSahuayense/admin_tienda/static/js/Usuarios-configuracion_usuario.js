@@ -1,32 +1,41 @@
-document.getElementById('form-configuracion').addEventListener('submit', function(e){
-  e.preventDefault();
 
-  const datos = {
-    nombre: document.getElementById('nombre').value,
-    correo: document.getElementById('correo').value,
-    telefono: document.getElementById('telefono').value,
-  };
+document.addEventListener('DOMContentLoaded', async function () {
+  const token = localStorage.getItem('accessToken');
 
-  fetch('/api/usuario/', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + localStorage.getItem('accessToken')  // Usa accessToken correcto
-    },
-    body: JSON.stringify(datos)
-  })
-  .then(response => {
-    if (!response.ok) throw new Error('Error al guardar');
-    return response.json();
-  })
-  .then(data => {
-    alert('Cambios guardados exitosamente');
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('No se pudieron guardar los cambios');
-  });
+  if (!token) {
+    alert('No estás autenticado. Inicia sesión primero.');
+    window.location.href = '/login';  // Redirige si no hay token
+    return;
+  }
+
+  try {
+    // Solicita info del usuario autenticado
+    const response = await fetch('/api/user-info/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('Error al obtener datos del usuario');
+      return;
+    }
+
+    const user = await response.json();
+
+    // Asigna valores a los campos del formulario
+    document.getElementById('nombre').value = user.first_name || '';
+    document.getElementById('telefono').value = user.phoneUser || '';
+    document.getElementById('correo').value = user.email || '';
+
+  } catch (error) {
+    console.error('Error al cargar datos del usuario:', error);
+  }
 });
+
+
 
 
 

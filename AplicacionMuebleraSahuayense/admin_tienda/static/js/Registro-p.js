@@ -1,62 +1,114 @@
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('registro-form');
 
-document.getElementById('registro-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-  const form = e.target;
-  const data = {
-    username: form.email.value,
-    email: form.email.value,
-    phoneUser: form.phoneUser.value,
-    password: form.password.value,
-    first_name: form.first_name.value,
-    last_name: form.last_name.value
-  };
+    // Recolectar campos
+    const firstName = document.getElementById('nombre').value.trim();
+    const edad = parseInt(document.getElementById('edad').value.trim());
+    const email = document.getElementById('correo').value.trim();
+    const password = document.getElementById('contrasena').value;
+    const confirmPassword = document.getElementById('confirmar_contrasena').value;
+    const phoneUser = document.getElementById('telefono').value.trim();
+    const terminos = document.getElementById('terminos').checked;
 
-  const confirmPassword = form.confirm_password.value;
-  if (data.password !== confirmPassword) {
-    alert("Las contraseñas no coinciden.");
-    return;
-  }
+    // Validaciones
+    if (!terminos) {
+      alert('Debes aceptar los términos y condiciones.');
+      return;
+    }
 
-  try {
-    const response = await fetch('/api/register/', {
+    if (password !== confirmPassword) {
+      document.getElementById('confirmar-error').style.display = 'block';
+      return;
+    } else {
+      document.getElementById('confirmar-error').style.display = 'none';
+    }
+
+    if (password.length < 8) {
+      document.getElementById('contrasena-error').style.display = 'block';
+      return;
+    } else {
+      document.getElementById('contrasena-error').style.display = 'none';
+    }
+
+    if (isNaN(edad) || edad < 1 || edad > 120) {
+      document.getElementById('edad-error').style.display = 'block';
+      return;
+    } else {
+      document.getElementById('edad-error').style.display = 'none';
+    }
+
+    // Preparar datos para API
+    const username = firstName;  // <--- CAMBIO AQUÍ
+    const payload = {
+      username: username,
+      email: email,
+      password: password,
+      phoneUser: phoneUser,
+      ageUser: edad
+    };
+
+    // Registrar usuario
+    fetch('/api/register/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
       },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      const registroData = await response.json();
-
-      // Ahora login automático
-      // Dentro del try después del registro exitoso
-      const loginRes = await fetch('/api/token/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: data.email,  // ✅ usa 'username' en lugar de 'email'
-          password: data.password
-        })
+      body: JSON.stringify(payload)
+    })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err; });
+        }
+        return res.json();
+      })
+      .then(data => {
+        // Registro exitoso, login automático
+        return fetch('/api/login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.json().then(err => { throw err; });
+        }
+        return res.json();
+      })
+      .then(authData => {
+        localStorage.setItem('accessToken', authData.access);
+        localStorage.setItem('refreshToken', authData.refresh);
+        alert('Registro e inicio de sesión exitoso');
+        window.location.href = '/';
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        alert('Ocurrió un error durante el registro o login. Intenta de nuevo.');
       });
+  });
 
- 
-      if (loginRes.ok) {
-        const tokens = await loginRes.json();
-        localStorage.setItem('accessToken', tokens.access);
-        localStorage.setItem('refreshToken', tokens.refresh);
-
-        alert("Usuario registrado y autenticado con éxito.");
-        window.location.reload(); // recargar para que se actualice el menú
-      } else {
-        alert("Usuario registrado, pero fallo al iniciar sesión.");
+  // Obtener token CSRF para Django
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
     }
-
-  } catch (error) {
-    alert("Error de red o servidor.");
-    console.error(error);
+    return cookieValue;
   }
 });
-

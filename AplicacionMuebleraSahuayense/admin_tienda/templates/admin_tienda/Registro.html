@@ -1,5 +1,5 @@
 {% load static %}
- <script src="{% static 'js/Header.js' %}"></script>
+<script src="{% static 'js/Header.js' %}"></script>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  
+
   {% include 'includes/header.html' %}
 
   <div class="login-container">
@@ -51,21 +51,21 @@
 
 
         <div class="input-group">
-          <label for="apellido">Apellido</label>
+          <label for="edad">Edad</label>
           <div style="position: relative;">
             <i class="fas fa-user input-icon"></i>
-            <input type="text" id="apellido" name="last_name" class="input-field" placeholder="Tu apellido" required>
+            <input type="number" id="edad" name="ageUser" class="input-field" placeholder="Tu edad" required>
           </div>
-          <small id="apellido-error" class="error-message" style="color: red; display: none;">Solo se permiten
-            letras.</small>
+          <small id="edad-error" class="error-message" style="color: red; display: none;">Ingresa una edad
+            válida.</small>
         </div>
+
 
         <div class="input-group">
           <label for="contrasena">Contraseña</label>
           <div class="password-container" style="position: relative;">
             <i class="fas fa-lock input-icon"></i>
-            <input type="password" id="contrasena" name="password" class="input-field" placeholder="••••••••"
-              required>
+            <input type="password" id="contrasena" name="password" class="input-field" placeholder="••••••••" required>
             <button type="button" class="toggle-password"><i class="fas fa-eye-slash"></i></button>
           </div>
           <small id="contrasena-error" class="error-message" style="color: red; display: none;">Mínimo 8
