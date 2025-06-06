@@ -369,7 +369,8 @@ img.Barsa-Muebles-Principio-hero {
     margin-bottom: 30px;
     border-bottom: 2px solid #e9ecef;
     /* Borde más suave */
-    padding-bottom: 25px;
+    padding-bottom: 17px;
+
 }
 
 .user-greeting {
@@ -437,6 +438,7 @@ img.Barsa-Muebles-Principio-hero {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 7% 0% 0px 0;
 }
 
 #btn-cerrar-sesion:hover {

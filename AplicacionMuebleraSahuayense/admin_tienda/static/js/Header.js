@@ -1,23 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
   const menu = document.getElementById("menu-usuario");
-  const token = localStorage.getItem('accessToken');
 
   if (!menu) return;
-  console.log("token", token);
 
-  if (token) {
-    fetch('/api/usuario/', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+  try {
+    const token = localStorage.getItem('accessToken');
+    console.log("token en localStorage:", token);
+
+    if (token) {
+      fetch('/api/user-info/', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       .then(res => {
+        console.log("Respuesta /api/user-info/ status:", res.status);
         if (!res.ok) throw new Error('No autorizado');
-        return res.json();  // <-- convertir respuesta a JSON aquí
+        return res.json();
       })
       .then(data => {
-        console.log("data", data);
+        console.log("Datos usuario:", data);
         menu.innerHTML = `
           <div class="user-info">
-            <h1 class="user-greeting">Hola, ${data.username}</h1>  <!-- usar username -->
+            <h1 class="user-greeting">Hola, ${data.username}</h1>
             <p class="email">${data.email}</p>
             <a href="/configuracion_usuario/" id="btn-configuracion-usuario">
               <i class="fas fa-cog"></i> Configuración
@@ -27,64 +30,49 @@ document.addEventListener("DOMContentLoaded", () => {
             </button>
           </div>
         `;
+
         document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
-          location.reload();
+          window.location.href = '/login/';
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        console.warn("Error al obtener info usuario:", err);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         renderLoginPrompt();
       });
-  } else {
-    renderLoginPrompt();
-  }
-
-  function renderLoginPrompt() {
-    menu.innerHTML = `
-      <a class="btn-identificarse" id="btnLogin" href="/login/">Identificarse</a>
-      <div></div>
-      <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="/registro/">Empieza aquí.</a></p>
-    `;
-  }
-
-  // Lógica del menú
-  function toggleMenuUsuario() {
-    const menu = document.getElementById("menu-usuario");
-    if (!menu) return;
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-  }
-  window.toggleMenuUsuario = toggleMenuUsuario;
-
-  window.addEventListener('click', function (e) {
-    const usuario = document.querySelector('.usuario-container');
-    const menu = document.getElementById("menu-usuario");
-    if (!usuario || !menu) return;
-    if (!usuario.contains(e.target) && !menu.contains(e.target)) {
-      menu.style.display = "none";
+    } else {
+      renderLoginPrompt();
     }
-  });
-});
 
+    function renderLoginPrompt() {
+      menu.innerHTML = `
+        <a class="btn-identificarse" id="btnLogin" href="/login/">Identificarse</a>
+        <div></div>
+        <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="/registro/">Empieza aquí.</a></p>
+      `;
+    }
 
+    // Toggle menú
+    function toggleMenuUsuario() {
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    window.toggleMenuUsuario = toggleMenuUsuario;
 
-document.addEventListener('DOMContentLoaded', function () {
-    
-  // Código para toggle-password
-  document.querySelectorAll('.toggle-password').forEach(button => {
-    button.addEventListener('click', function () {
-      const passwordInput = this.previousElementSibling;
-      const icon = this.querySelector('i');
-
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    // Ocultar menú si se hace clic fuera
+    window.addEventListener('click', function (e) {
+      const usuarioBtn = document.querySelector('.usuario-container');
+      if (!usuarioBtn || !menu) return;
+      if (!usuarioBtn.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = "none";
       }
     });
-  });
+
+  } catch (error) {
+    console.error("Error con localStorage u otro problema:", error);
+  }
 });
 
 
