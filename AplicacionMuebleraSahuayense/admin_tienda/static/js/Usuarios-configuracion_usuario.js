@@ -1,15 +1,13 @@
-
 document.addEventListener('DOMContentLoaded', async function () {
   const token = localStorage.getItem('accessToken');
 
   if (!token) {
     alert('No estás autenticado. Inicia sesión primero.');
-    window.location.href = '/login';  // Redirige si no hay token
+    window.location.href = '/login';
     return;
   }
 
   try {
-    // Solicita info del usuario autenticado
     const response = await fetch('/api/user-info/', {
       method: 'GET',
       headers: {
@@ -19,16 +17,23 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     if (!response.ok) {
-      console.error('Error al obtener datos del usuario');
+      console.error('No se pudo obtener la información del usuario');
       return;
     }
 
     const user = await response.json();
 
-    // Asigna valores a los campos del formulario
-    document.getElementById('nombre').value = user.first_name || '';
-    document.getElementById('telefono').value = user.phoneUser || '';
-    document.getElementById('correo').value = user.email || '';
+    console.log('Datos del usuario:', user);
+
+    // Llenar campos del formulario con tolerancia a distintos nombres de campos
+    document.getElementById('nombre').value =
+      user.first_name || user.full_name || user.username || '';
+
+    document.getElementById('telefono').value =
+      user.phoneUser || user.phone || '';
+
+    document.getElementById('correo').value =
+      user.email || '';
 
   } catch (error) {
     console.error('Error al cargar datos del usuario:', error);
@@ -37,13 +42,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
+/* */
 
 
-
-
-
-
-/*
 
 // Cargar encargos
 document.addEventListener("DOMContentLoaded", cargarEncargosUsuario);
@@ -296,5 +297,5 @@ function generarPDF(encargo) {
 
 
 
-*/
+
 
