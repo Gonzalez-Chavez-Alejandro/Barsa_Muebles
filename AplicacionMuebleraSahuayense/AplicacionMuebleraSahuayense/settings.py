@@ -31,6 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'autentication',
     'categorias',
+<<<<<<< HEAD
+=======
+    'muebles',
+
+>>>>>>> 1dcb339 (Muebles)
     'rest_framework',
     'rest_framework_simplejwt',
     'cloudinary',
