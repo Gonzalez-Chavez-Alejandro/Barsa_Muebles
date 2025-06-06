@@ -163,6 +163,10 @@ nav ul li a.contact:hover {
     width: 100%;
     margin-bottom: 10px;
     transition: background-color 0.2s ease;
+    
+
+  text-decoration: none; /* quita subrayado */
+  
 }
 
 .btn-identificarse:hover {
@@ -173,6 +177,8 @@ nav ul li a.contact:hover {
 .texto-nuevo {
     font-size: 13px;
     color: #555;
+    margin-top: 11px;
+    
 }
 
 .texto-nuevo a {

@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderLoginPrompt() {
     menu.innerHTML = `
-      <button class="btn-identificarse" id="btnLogin">Identificarse</button>
+      <a class="btn-identificarse" id="btnLogin" <a href="/login/">Identificarse</a>
+      <div></div>
       <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="/registro/">Empieza aquí.</a></p>
     `;
     const btnLogin = document.getElementById("btnLogin");
