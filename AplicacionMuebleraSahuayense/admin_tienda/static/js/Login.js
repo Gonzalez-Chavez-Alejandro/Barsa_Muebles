@@ -1,7 +1,15 @@
 const loginForm = document.getElementById('login-form');
+const errorUsername = document.getElementById('error-username');
+const errorPassword = document.getElementById('error-password');
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  // Limpiar mensajes de error
+  errorUsername.style.display = 'none';
+  errorUsername.textContent = '';
+  errorPassword.style.display = 'none';
+  errorPassword.textContent = '';
 
   const loginData = {
     username: document.getElementById('email').value,
@@ -17,10 +25,30 @@ loginForm.addEventListener('submit', async (e) => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error en el login:', errorData);
-      return;
+  const errorData = await response.json();
+  console.error('Error en el login:', errorData);
+
+  if (errorData.detail) {
+    errorUsername.style.display = 'block';
+    if (errorData.detail === 'No active account found with the given credentials') {
+      errorUsername.textContent = 'Usuario o contraseña incorrectos.';
+    } else {
+      errorUsername.textContent = errorData.detail;
     }
+  } else if (errorData.username) {
+    errorUsername.style.display = 'block';
+    errorUsername.textContent = errorData.username.join(' ');
+  } else if (errorData.password) {
+    errorPassword.style.display = 'block';
+    errorPassword.textContent = errorData.password.join(' ');
+  } else {
+    errorUsername.style.display = 'block';
+    errorUsername.textContent = 'Credenciales inválidas, intenta de nuevo.';
+  }
+
+  return;
+}
+
 
     const data = await response.json();
     console.log('Login exitoso:', data);
@@ -43,10 +71,8 @@ loginForm.addEventListener('submit', async (e) => {
       return;
     }
 
-// Al obtener respuesta exitosa en login
-localStorage.setItem('accessToken', data.access);
-localStorage.setItem('refreshToken', data.refresh);
-
+    localStorage.setItem('accessToken', data.access);
+    localStorage.setItem('refreshToken', data.refresh);
 
     const userInfo = await userResponse.json();
     console.log('Info usuario:', userInfo);
@@ -60,5 +86,9 @@ localStorage.setItem('refreshToken', data.refresh);
 
   } catch (error) {
     console.error('Error en el login:', error);
+
+    // Mostrar mensaje de error genérico
+    errorUsername.style.display = 'block';
+    errorUsername.textContent = 'Error de conexión o servidor. Intenta más tarde.';
   }
 });

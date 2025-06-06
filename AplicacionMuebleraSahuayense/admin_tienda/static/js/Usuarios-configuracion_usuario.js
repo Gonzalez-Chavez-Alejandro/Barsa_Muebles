@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
 
-/* */
+/* 
 
 
 
@@ -297,5 +297,5 @@ function generarPDF(encargo) {
 
 
 
-
+*/
 

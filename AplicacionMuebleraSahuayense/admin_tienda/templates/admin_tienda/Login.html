@@ -46,11 +46,12 @@
 
     <form id="login-form">
       <div class="input-group">
-        <label for="email">Correo electrónico</label>
+        <label for="email">Nombre de Usuario</label>
         <div style="position: relative;">
-          <i class="fas fa-envelope input-icon"></i>
+          <i class="fas fa-user input-icon"></i>
           <input type="text" class="input-field" id="email" name="correo" placeholder="ejemplo@correo.com" required>
         </div>
+        <span id="error-username" class="error-message" style="color: red; font-size: 0.8em; display: none;"></span>
       </div>
 
       <div class="input-group">
@@ -62,7 +63,9 @@
             <i class="fas fa-eye-slash"></i>
           </button>
         </div>
+        <span id="error-password" class="error-message" style="color: red; font-size: 0.8em; display: none;"></span>
       </div>
+
 
       <div class="forgot-password">
         <a href="#" style="display:none;">¿Olvidaste tu contraseña? </a>
@@ -121,4 +124,4 @@
   <script src="{% static 'js/Login.js' %}"></script>
 </body>
 
-</html> 
+</html>
