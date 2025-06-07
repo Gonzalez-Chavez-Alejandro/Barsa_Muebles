@@ -478,3 +478,80 @@ img.Barsa-Muebles-Principio-hero {
         width: 240px;
     }
 }
+
+.flaticon-credits {
+    --primary-color: #6c757d;
+    --hover-color: #0056b3;
+    --bg-color: #f8f9fa;
+    --border-color: #dee2e6;
+    
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 2rem 0 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+}
+
+.credits-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+}
+
+.credits-icon {
+    flex-shrink: 0;
+    color: var(--primary-color);
+}
+
+.credits-text {
+    line-height: 1.4;
+    text-align: center;
+}
+
+.credits-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+    position: relative;
+}
+
+.credits-link:hover {
+    color: var(--hover-color);
+}
+
+.credits-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: -1px;
+    left: 0;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.2s ease;
+}
+
+.credits-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .credits-container {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .credits-text {
+        font-size: 0.8rem;
+    }
+}
