@@ -1,7 +1,7 @@
 let usuarios = [];
 let usuariosFiltrados = [];
 let paginaActual = 1;
-const usuariosPorPagina = 10;
+const usuariosPorPagina = 3;
 
 // Obtener info usuario autenticado desde token guardado
 async function obtenerUsuarioAutenticado() {
@@ -92,14 +92,10 @@ function mostrarUsuarios(pagina = 1) {
   });
 
   // Actualizar paginación y contadores si tienes esas funciones
-  // actualizarPaginacion();
-  // actualizarContadores();
+   actualizarPaginacion();
+   actualizarContadores();
 }
 
-// Eventos para paginación, búsquedas, etc.
-// function paginaAnterior() { ... }
-// function paginaSiguiente() { ... }
-// function buscarUsuarios() { ... }
 
 // Al cargar la página, verificar usuario y permisos
 document.addEventListener("DOMContentLoaded", async () => {
@@ -150,9 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 });
 
-/** 
-
-
+/* */
 
 function actualizarPaginacion() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
@@ -187,53 +181,19 @@ function paginaSiguiente() {
 }
 
 function buscarUsuarios() {
-  const texto = document.getElementById("buscador").value.toLowerCase();
-
-  usuariosFiltrados = usuarios.filter(u =>
-    u.id.toString().includes(texto) ||
-    u.nombre.toLowerCase().includes(texto) ||
-    u.correo.toLowerCase().includes(texto) ||
-    (u.telefono && u.telefono.toLowerCase().includes(texto))
-  );
-
-  paginaActual = 1;
-  mostrarUsuarios(paginaActual);
-}
-
-
-
-
-
-// Navegación entre páginas
-function paginaAnterior() {
-  if (paginaActual > 1) {
-    paginaActual--;
-    mostrarUsuarios(paginaActual);
-  }
-}
-
-function paginaSiguiente() {
-  const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
-  if (paginaActual < totalPaginas) {
-    paginaActual++;
-    mostrarUsuarios(paginaActual);
-  }
-}
-
-// Búsqueda de usuarios
-function buscarUsuarios() {
   const texto = document.getElementById("buscador")?.value.toLowerCase() || "";
 
   usuariosFiltrados = usuarios.filter(usuario =>
-    usuario.nombre.toLowerCase().includes(texto) ||
-    usuario.correo.toLowerCase().includes(texto) ||
-    (usuario.telefono && usuario.telefono.toLowerCase().includes(texto)) ||
-    usuario.id.toString().includes(texto)
+    usuario.id.toString().includes(texto) ||
+    usuario.username?.toLowerCase().includes(texto) ||
+    usuario.email?.toLowerCase().includes(texto) ||
+    usuario.phoneUser?.toLowerCase().includes(texto)
   );
 
   paginaActual = 1;
   mostrarUsuarios(paginaActual);
 }
+/*******************************************************************************/
 
 // Funciones para eliminar usuario
 function eliminarUsuario(id) {
@@ -248,6 +208,10 @@ function cancelarEliminacion() {
   usuarioAEliminarId = null;
 }
 
+
+
+
+/*
 async function confirmarEliminacion() {
   if (!usuarioAEliminarId) return;
 
