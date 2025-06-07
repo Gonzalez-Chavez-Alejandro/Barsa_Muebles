@@ -14,3 +14,20 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({"message": "El usuario se creo correctamente"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# views.py
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import get_user_model
+from .serializers import UserListSerializer
+
+User = get_user_model()
+
+class ListUsersView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserListSerializer(users, many=True)
+        return Response(serializer.data)
