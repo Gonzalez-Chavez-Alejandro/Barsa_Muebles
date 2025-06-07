@@ -22,27 +22,24 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', 
     'django.contrib.admin',
     'autentication',
     'categorias',
-<<<<<<< HEAD
-=======
-    'muebles',
-
->>>>>>> 1dcb339 (Muebles)
     'rest_framework',
     'rest_framework_simplejwt',
     'cloudinary',
     'cloudinary_storage',
     'admin_tienda',
+    'muebles',
 ]
-
 AUTH_USER_MODEL = 'autentication.CustomUser'
 
 # Configuration of Cloudinary Storage
