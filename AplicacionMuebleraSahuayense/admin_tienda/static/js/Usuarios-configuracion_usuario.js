@@ -1,6 +1,7 @@
-document.addEventListener('DOMContentLoaded', async function () {
-  const token = localStorage.getItem('accessToken');
+let usuarioOriginal = null;  // variable global para guardar datos completos del usuario
 
+async function cargarUsuarioLogueado() {
+  const token = localStorage.getItem('accessToken');
   if (!token) {
     alert('No estás autenticado. Inicia sesión primero.');
     window.location.href = '/login';
@@ -9,7 +10,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   try {
     const response = await fetch('/api/user-info/', {
-      method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -17,29 +17,96 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     if (!response.ok) {
-      console.error('No se pudo obtener la información del usuario');
+      alert('No se pudo obtener la información del usuario. Código: ' + response.status);
+      console.error('No se pudo obtener la información del usuario:', response.statusText);
       return;
     }
 
     const user = await response.json();
 
-    console.log('Datos del usuario:', user);
+    // Guardamos el usuario completo para usar luego en la actualización
+    usuarioOriginal = user;
 
-    // Llenar campos del formulario con tolerancia a distintos nombres de campos
-    document.getElementById('nombre').value =
-      user.first_name || user.full_name || user.username || '';
+    document.getElementById('nombre').value = user.username || '';
+    document.getElementById('telefono').value = user.phoneUser || '';
+    const inputCorreo = document.getElementById('correo');
+    inputCorreo.value = user.email || '';
+    inputCorreo.dispatchEvent(new Event('input'));
 
-    document.getElementById('telefono').value =
-      user.phoneUser || user.phone || '';
-
-    document.getElementById('correo').value =
-      user.email || '';
+    // Guardamos el ID para la actualización
+    document.getElementById('form-configuracion').dataset.userId = user.id;
 
   } catch (error) {
+    alert('Error al cargar datos del usuario. Revisa la consola para más detalles.');
     console.error('Error al cargar datos del usuario:', error);
   }
-});
+}
 
+async function actualizarUsuarioLogueado(event) {
+  event.preventDefault();
+
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    alert('No estás autenticado. Inicia sesión primero.');
+    window.location.href = '/login';
+    return;
+  }
+
+  const form = event.target;
+  const userId = form.dataset.userId;
+
+  if (!userId) {
+    alert('No se encontró el ID del usuario para actualizar.');
+    return;
+  }
+
+  if (!usuarioOriginal) {
+    alert('No se cargaron los datos originales del usuario.');
+    return;
+  }
+
+  // Clonamos el objeto original para no modificarlo directamente
+  const data = { ...usuarioOriginal };
+
+  // Sobrescribimos con los valores nuevos (o iguales)
+  data.username = document.getElementById('nombre').value.trim() || data.username;
+  data.phoneUser = document.getElementById('telefono').value.trim() || data.phoneUser;
+  data.email = document.getElementById('correo').value.trim() || data.email;
+
+  try {
+    const response = await fetch(`/api/users/${userId}/`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      alert('Usuario actualizado correctamente');
+      await cargarUsuarioLogueado();
+    } else {
+      let errText = await response.text();
+      try {
+        const errJson = JSON.parse(errText);
+        errText = errJson.detail || JSON.stringify(errJson);
+      } catch {
+        // no es JSON, dejamos el texto tal cual
+      }
+      alert('Error al actualizar usuario: ' + errText);
+      console.error('Error al actualizar usuario:', errText);
+    }
+  } catch (error) {
+    alert('Error al actualizar usuario. Revisa la consola para más detalles.');
+    console.error('Error al actualizar usuario:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  cargarUsuarioLogueado();
+  document.getElementById('form-configuracion').addEventListener('submit', actualizarUsuarioLogueado);
+});
 
 
 /* 

@@ -48,14 +48,15 @@ class ListUsersView(APIView):
 # autentication/views.py
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from django.db.models import ProtectedError
 from .models import CustomUser
 from .serializers import UserListSerializer
-from django.db.models import ProtectedError
+from .permissions import IsAdminOrIsSelf  # importa el permiso personalizado
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserListSerializer
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrIsSelf]
 
     def destroy(self, request, *args, **kwargs):
         try:

@@ -833,43 +833,44 @@
 </script>
 
 <script>
-  // Proteger la vista: redirigir si no hay token
-const accessToken = localStorage.getItem('access_token');
+  const accessToken = localStorage.getItem('access_token');
 
-if (!accessToken) {
-  window.location.href = '/'; // Redirige al login
-} else {
-  // Verificar que el token sea válido y obtener la info del usuario
-  fetch('http://127.0.0.1:8000/api/user-info/', {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Token inválido o expirado');
-    }
-    return response.json();
-  })
-  .then(userInfo => {
-    console.log('Usuario autenticado:', userInfo);
+  if (!accessToken) {
+    window.location.href = '/'; // Redirige al login si no hay token
+  } else {
+    fetch('http://127.0.0.1:8000/api/user-info/', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Token inválido o expirado');
+      }
+      return response.json();
+    })
+    .then(userInfo => {
+      console.log('Usuario autenticado:', userInfo);
 
-    // Aquí puedes usar la info del usuario, por ejemplo:
-    // document.getElementById('nombre-usuario').textContent = userInfo.name;
+      if (!userInfo.is_superuser) {
+        alert('Acceso denegado: no eres superusuario.');
+        // Opcional: redirigir al usuario a una página de inicio general
+        window.location.href = '/';
+      }
 
-  })
-  .catch(error => {
-    console.error('Error de autenticación:', error);
-    // Limpiar tokens y redirigir al login
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    window.location.href = '/';
-  });
-}
-
+      // Aquí puedes continuar cargando el contenido de administrador...
+    })
+    .catch(error => {
+      console.error('Error de autenticación:', error);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      window.location.href = '/';
+    });
+  }
 </script>
+
 
 </body>
 
