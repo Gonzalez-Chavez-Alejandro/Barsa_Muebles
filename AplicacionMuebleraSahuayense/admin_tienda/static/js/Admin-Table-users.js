@@ -1,60 +1,63 @@
 let usuarios = [];
 let usuariosFiltrados = [];
 let paginaActual = 1;
-let usuarioEditandoId = null;
-let usuarioAEliminarId = null;
 const usuariosPorPagina = 10;
 
-// Cargar usuarios al iniciar
-document.addEventListener("DOMContentLoaded", () => {
-  cargarUsuarios();
+// Obtener info usuario autenticado desde token guardado
+async function obtenerUsuarioAutenticado() {
+  const token = localStorage.getItem("access_token");  // Consistencia con tu login
+  if (!token) {
+    console.warn("No hay token en localStorage");
+    return null;
+  }
 
-  // Configurar eventos
-  document.getElementById("paginaAnterior")?.addEventListener("click", paginaAnterior);
-  document.getElementById("paginaSiguiente")?.addEventListener("click", paginaSiguiente);
-  document.getElementById("buscador")?.addEventListener("input", buscarUsuarios);
-  document.getElementById("btnCancelarEliminar")?.addEventListener("click", cancelarEliminacion);
-  document.getElementById("btnConfirmarEliminar")?.addEventListener("click", confirmarEliminacion);
-});
-
-// Función principal para cargar usuarios
-async function cargarUsuarios() {
   try {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      throw new Error("No hay token de autenticación");
-    }
-
-    const response = await fetch("http://localhost:8000/usuarios/", {
+    const response = await fetch("http://127.0.0.1:8000/api/user-info/", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
     });
 
     if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
+      console.error(`Error en user-info: ${response.status}`);
+      return null;
     }
 
-    const data = await response.json();
-
-    usuarios = data.map(user => ({
-      id: user.id,
-      nombre: ((user.first_name || "") + " " + (user.last_name || "")).trim() || user.username,
-      correo: user.email,
-      telefono: user.phoneUser || "N/A",
-      contrasena: "*******"
-    }));
-
-    usuariosFiltrados = [...usuarios];
-    mostrarUsuarios(1);
+    return await response.json();
 
   } catch (error) {
-    console.error("Error al cargar los usuarios:", error);
-    alert("Error al cargar los usuarios. Revisa la consola para más detalles.");
+    console.error("Error al obtener info del usuario:", error);
+    return null;
   }
 }
 
-// Mostrar usuarios en la tabla
+// Cargar usuarios (aquí deberías hacer fetch a tu API que lista usuarios)
+async function cargarUsuarios() {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    alert("No autenticado");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/api/users/", {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+    if (!response.ok) {
+      alert("Error al cargar usuarios");
+      return;
+    }
+    usuarios = await response.json();
+    usuariosFiltrados = [...usuarios];
+    mostrarUsuarios(paginaActual);
+
+  } catch (error) {
+    console.error("Error al cargar usuarios:", error);
+  }
+}
+
 function mostrarUsuarios(pagina = 1) {
   const tbody = document.querySelector(".admin-table tbody");
   if (!tbody) return;
@@ -67,9 +70,7 @@ function mostrarUsuarios(pagina = 1) {
 
   if (usuariosPagina.length === 0) {
     const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td colspan="6" class="text-center">No se encontraron usuarios</td>
-    `;
+    fila.innerHTML = `<td colspan="6" class="text-center">No se encontraron usuarios</td>`;
     tbody.appendChild(fila);
     return;
   }
@@ -77,40 +78,88 @@ function mostrarUsuarios(pagina = 1) {
   usuariosPagina.forEach(usuario => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
-      <td>${usuario.id}</td>
-      <td>${usuario.nombre}</td>
-      <td>${usuario.correo}</td>
-      <td>${usuario.telefono}</td>
-      <td>${usuario.contrasena}</td>
-      <td>
-        <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
-        <button class="btn-admin-desing-delete"><i class="fas fa-trash-alt"></i></button>
-      </td>
-    `;
-
-    fila.querySelector(".btn-admin-desing-edit")
-        ?.addEventListener("click", () => abrirModalEdicion(usuario.id));
-    fila.querySelector(".btn-admin-desing-delete")
-        ?.addEventListener("click", () => eliminarUsuario(usuario.id));
-
+    <td>${usuario.id}</td>
+    <td>${usuario.username}</td>
+    <td>${usuario.email}</td>
+    <td>${usuario.phoneUser || ''}</td>
+    <td>*******</td>
+    <td>
+      <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
+      <button class="btn-admin-desing-delete"><i class="fas fa-trash-alt"></i></button>
+    </td>
+  `;
     tbody.appendChild(fila);
   });
 
-  actualizarPaginacion();
-  actualizarContadores();
+  // Actualizar paginación y contadores si tienes esas funciones
+  // actualizarPaginacion();
+  // actualizarContadores();
 }
 
-// Actualizar controles de paginación
+// Eventos para paginación, búsquedas, etc.
+// function paginaAnterior() { ... }
+// function paginaSiguiente() { ... }
+// function buscarUsuarios() { ... }
+
+// Al cargar la página, verificar usuario y permisos
+document.addEventListener("DOMContentLoaded", async () => {
+  const usuario = await obtenerUsuarioAutenticado();
+
+  if (!usuario) {
+    alert("No estás autenticado. Por favor inicia sesión.");
+    window.location.href = "/login"; // Opcional redirigir
+    return;
+  }
+
+  if (!usuario.is_superuser) {
+    alert("No tienes permisos para acceder a esta sección");
+    document.querySelector(".admin-table").style.display = "none";
+    document.getElementById("buscador").style.display = "none";
+    document.getElementById("paginaAnterior").style.display = "none";
+    document.getElementById("paginaSiguiente").style.display = "none";
+    return;
+  }
+
+  // Si es admin, carga la tabla y activa controles
+  cargarUsuarios();
+
+  document.getElementById("paginaAnterior")?.addEventListener("click", () => {
+    if (paginaActual > 1) {
+      paginaActual--;
+      mostrarUsuarios(paginaActual);
+    }
+  });
+
+  document.getElementById("paginaSiguiente")?.addEventListener("click", () => {
+    const maxPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
+    if (paginaActual < maxPaginas) {
+      paginaActual++;
+      mostrarUsuarios(paginaActual);
+    }
+  });
+
+  document.getElementById("buscador")?.addEventListener("input", (e) => {
+    const texto = e.target.value.toLowerCase();
+    usuariosFiltrados = usuarios.filter(u =>
+      (u.nombre?.toLowerCase().includes(texto) || u.username?.toLowerCase().includes(texto)) ||
+      (u.correo?.toLowerCase().includes(texto) || u.email?.toLowerCase().includes(texto)) ||
+      (u.telefono?.toLowerCase().includes(texto) || u.phoneUser?.toLowerCase().includes(texto))
+    );
+    paginaActual = 1;
+    mostrarUsuarios(paginaActual);
+  });
+});
+
+/** 
+
+
+
 function actualizarPaginacion() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
-  const btnAnterior = document.getElementById("paginaAnterior");
-  const btnSiguiente = document.getElementById("paginaSiguiente");
-
-  if (btnAnterior) btnAnterior.disabled = paginaActual <= 1;
-  if (btnSiguiente) btnSiguiente.disabled = paginaActual >= totalPaginas;
+  document.getElementById("paginaAnterior").disabled = paginaActual <= 1;
+  document.getElementById("paginaSiguiente").disabled = paginaActual >= totalPaginas;
 }
 
-// Actualizar contadores de registros
 function actualizarContadores() {
   const contadorElement = document.getElementById("contador-usuarios");
   if (!contadorElement) return;
@@ -121,6 +170,39 @@ function actualizarContadores() {
 
   contadorElement.textContent = `Mostrando ${inicio} a ${fin} de ${totalUsuarios} usuarios`;
 }
+
+function paginaAnterior() {
+  if (paginaActual > 1) {
+    paginaActual--;
+    mostrarUsuarios(paginaActual);
+  }
+}
+
+function paginaSiguiente() {
+  const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
+  if (paginaActual < totalPaginas) {
+    paginaActual++;
+    mostrarUsuarios(paginaActual);
+  }
+}
+
+function buscarUsuarios() {
+  const texto = document.getElementById("buscador").value.toLowerCase();
+
+  usuariosFiltrados = usuarios.filter(u =>
+    u.id.toString().includes(texto) ||
+    u.nombre.toLowerCase().includes(texto) ||
+    u.correo.toLowerCase().includes(texto) ||
+    (u.telefono && u.telefono.toLowerCase().includes(texto))
+  );
+
+  paginaActual = 1;
+  mostrarUsuarios(paginaActual);
+}
+
+
+
+
 
 // Navegación entre páginas
 function paginaAnterior() {
@@ -351,3 +433,4 @@ window.onclick = function(event) {
     cerrarModal();
   }
 };
+*/

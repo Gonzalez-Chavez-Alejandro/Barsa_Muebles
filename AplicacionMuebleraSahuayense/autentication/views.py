@@ -18,16 +18,27 @@ class RegisterView(APIView):
 
 
 # views.py
-from rest_framework.permissions import IsAuthenticated
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
 from django.contrib.auth import get_user_model
-from .serializers import UserListSerializer
+from rest_framework import status
 
 User = get_user_model()
 
 class ListUsersView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]  # Solo admins pueden acceder
 
     def get(self, request):
         users = User.objects.all()
-        serializer = UserListSerializer(users, many=True)
-        return Response(serializer.data)
+        data = []
+        for u in users:
+            data.append({
+                'id': u.id,
+                'username': u.username,
+                'email': u.email,
+                'is_superuser': u.is_superuser,
+                # agrega campos extra que uses, como phoneUser, etc
+            })
+        return Response(data, status=status.HTTP_200_OK)

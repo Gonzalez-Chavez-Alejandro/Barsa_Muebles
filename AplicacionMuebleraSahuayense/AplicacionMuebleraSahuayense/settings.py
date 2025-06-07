@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles', 
+    'corsheaders',
     'django.contrib.admin',
     'autentication',
     'categorias',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'admin_tienda',
     'muebles',
+    
 ]
 AUTH_USER_MODEL = 'autentication.CustomUser'
 
@@ -77,6 +79,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,6 +122,16 @@ DATABASES = {
     }
 }
 
+#DATABASES = {
+  #  'default': {
+   #     'ENGINE': 'django.db.backends.postgresql',
+  #      'NAME': 'MuebleriaDB',
+   #     'USER': 'barsa',
+   #     'PASSWORD': 'barsamuebles123',
+  #      'HOST': 'localhost',
+  #      'PORT': '5432',
+  #  }
+#}
 
 
 # Password validation
@@ -161,5 +174,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOW_ALL_ORIGINS = True
 
 

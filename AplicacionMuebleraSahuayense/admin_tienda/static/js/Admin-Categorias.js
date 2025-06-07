@@ -1,4 +1,4 @@
-let paginaActualCategoria = 1;
+/*let paginaActualCategoria = 1;
 let itemsPorPaginaCategoria = 10;
 let categoriaIdSeleccionada = null;
 
@@ -297,3 +297,4 @@ async function guardarEdicionCategoria() {
     alert('Error al editar la categoría.');
   }
 }
+  */
