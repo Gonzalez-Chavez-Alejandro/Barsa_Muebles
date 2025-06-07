@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Cargar carrito desde localStorage
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
+ 
     // Elementos del DOM
     const carritoContainer = document.getElementById("carrito");
     const listaCarrito = document.getElementById("lista-carrito");

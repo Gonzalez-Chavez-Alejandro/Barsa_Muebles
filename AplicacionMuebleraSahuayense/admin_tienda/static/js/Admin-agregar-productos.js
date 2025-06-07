@@ -8,7 +8,7 @@ window.addEventListener('DOMContentLoaded', () => {
         selectCategoria.appendChild(option);
     });
 });
-
+ 
 function togglePrecioOferta() {
     const select = document.getElementById("ofertaProducto");
     const grupo = document.getElementById("grupoPrecioOferta");

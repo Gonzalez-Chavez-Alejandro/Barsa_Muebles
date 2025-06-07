@@ -85,7 +85,7 @@ function mostrarUsuarios(pagina = 1) {
       <td>${usuario.phoneUser || ''}</td>
       <td>*******</td>
       <td>
-        <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn-admin-desing-edit" data-id="${usuario.id}"><i class="fas fa-edit"></i></button>
         <button class="btn-admin-desing-delete" data-id="${usuario.id}"><i class="fas fa-trash-alt"></i></button>
       </td>
     `;
@@ -243,134 +243,91 @@ window.addEventListener("keydown", function (e) {
 });
 
 
-/*
-// Función para abrir modal de edición (primer paso)
-function abrirModalEdicion(id) {
-  usuarioEditandoId = id;
-  const usuario = usuarios.find(u => u.id === id);
-  if (!usuario) {
-    mostrarMensaje("Usuario no encontrado", "error");
+
+
+// Al cargar el usuario para editar:
+document.addEventListener("click", async function (event) {
+  if (event.target.closest(".btn-admin-desing-edit")) {
+    const idUsuario = event.target.closest(".btn-admin-desing-edit").getAttribute("data-id");
+    const token = localStorage.getItem("access_token");
+
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/api/users/${idUsuario}/`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error("Error al obtener datos del usuario");
+
+      const usuario = await res.json();
+
+      document.getElementById("modalEditar").style.display = "block";
+
+      document.getElementById("nombreEditar").value = usuario.username || "";
+      // Aquí asignamos ageUser al campo 'apellidoEditar' (años)
+      document.getElementById("apellidoEditar").value = usuario.ageUser || "";  
+      document.getElementById("correoEditar").value = usuario.email || "";
+      document.getElementById("telefonoEditar").value = usuario.phoneUser || "";
+      document.getElementById("contrasenaEditar").value = ""; // Nunca mostramos contraseñas
+
+      document.getElementById("modalEditar").dataset.userId = usuario.id; // Guardamos ID en modal
+
+    } catch (err) {
+      console.error("Error cargando usuario para editar:", err);
+      alert("No se pudo cargar la información del usuario");
+    }
+  }
+});
+
+// Guardar cambios:
+async function guardarCambios() {
+  const token = localStorage.getItem("access_token");
+  const id = document.getElementById("modalEditar").dataset.userId;
+
+  // Aquí parseamos ageUser a número entero (o cadena si prefieres)
+  const ageUserValue = parseInt(document.getElementById("apellidoEditar").value.trim(), 10);
+
+  if (isNaN(ageUserValue) || ageUserValue < 0) {
+    alert("Por favor ingresa un número válido para Años");
     return;
   }
 
-  const modal = document.getElementById("modalEditar");
-  if (modal) modal.style.display = "block";
-
-  // Rellenar inputs con datos actuales
-  document.getElementById("nombreEditar").value = usuario.nombre.split(" ")[0] || "";
-  const nombreCompleto = usuario.nombre.split(" ");
-  const apellido = nombreCompleto.length > 1 ? nombreCompleto.slice(1).join(" ") : "";
-  document.querySelector('#modalEditar input[placeholder*="Apellido"]').value = apellido;
-
-  document.getElementById("correoEditar").value = usuario.correo || "";
-  document.getElementById("telefonoEditar").value = usuario.telefono || "";
-  document.getElementById("contrasenaEditar").value = ""; // Dejamos vacío
-}
-
-// Cerrar modal
-function cerrarModal() {
-  const modal = document.getElementById("modalEditar");
-  if (modal) modal.style.display = "none";
-
-  // Limpiar errores y campos de validación
-  ["errorNombre", "errorapellido", "errorCorreo", "errorTelefono", "errorContrasena"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = "";
-  });
-}
-
-// Guardar cambios (PATCH)
-async function guardarCambios() {
-  if (!usuarioEditandoId) return;
-
-  const nombre = document.getElementById("nombreEditar").value.trim();
-  const apellido = document.querySelector('#modalEditar input[placeholder*="Apellido"]').value.trim();
-  const correo = document.getElementById("correoEditar").value.trim();
-  const telefono = document.getElementById("telefonoEditar").value.trim();
-  const contrasena = document.getElementById("contrasenaEditar").value.trim();
-
-  // Validaciones simples
-  let errores = false;
-  if (nombre.length < 2) {
-    document.getElementById("errorNombre").textContent = "Nombre muy corto";
-    errores = true;
-  } else {
-    document.getElementById("errorNombre").textContent = "";
-  }
-
-  if (apellido.length < 2) {
-    document.getElementById("errorapellido").textContent = "Apellido muy corto";
-    errores = true;
-  } else {
-    document.getElementById("errorapellido").textContent = "";
-  }
-
-  if (!correo.includes("@")) {
-    document.getElementById("errorCorreo").textContent = "Correo inválido";
-    errores = true;
-  } else {
-    document.getElementById("errorCorreo").textContent = "";
-  }
-
-  if (telefono.length < 10) {
-    document.getElementById("errorTelefono").textContent = "Teléfono inválido";
-    errores = true;
-  } else {
-    document.getElementById("errorTelefono").textContent = "";
-  }
-
-  if (contrasena.length > 0 && contrasena.length < 6) {
-    document.getElementById("errorContrasena").textContent = "La contraseña debe tener al menos 6 caracteres";
-    errores = true;
-  } else {
-    document.getElementById("errorContrasena").textContent = "";
-  }
-
-  if (errores) return;
-
-  const datosActualizar = {
-    first_name: nombre,
-    last_name: apellido,
-    email: correo,
-    phoneUser: telefono
+  const data = {
+    username: document.getElementById("nombreEditar").value.trim(),
+    email: document.getElementById("correoEditar").value.trim(),
+    phoneUser: document.getElementById("telefonoEditar").value.trim(),
+    ageUser: ageUserValue,
+    password: document.getElementById("contrasenaEditar").value.trim(),
   };
-  if (contrasena.length > 0) {
-    datosActualizar.password = contrasena;
-  }
+
+  // No enviar password vacío para no resetearla
+  if (!data.password) delete data.password;
 
   try {
-    const token = localStorage.getItem("accessToken");
-    if (!token) throw new Error("No autenticado");
-
-    const response = await fetch(`http://localhost:8000/usuarios/${usuarioEditandoId}/`, {
-      method: "PATCH",
+    const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/`, {
+      method: "PUT",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify(datosActualizar)
+      body: JSON.stringify(data)
     });
 
-    if (!response.ok) {
-      const errData = await response.json();
-      throw new Error(errData.detail || `Error ${response.status}`);
+    if (res.ok) {
+      alert("Usuario actualizado correctamente");
+      document.getElementById("modalEditar").style.display = "none";
+      await cargarUsuarios(); // refresca la tabla
+    } else {
+      const err = await res.json();
+      console.error("Error al actualizar:", err);
+      alert("Error al actualizar usuario: " + (err.detail || res.status));
     }
 
-    // Refrescar lista de usuarios
-    await cargarUsuarios();
-
-    mostrarMensaje("Usuario actualizado correctamente", "success");
-    cerrarModal();
   } catch (error) {
-    mostrarMensaje(`Error al actualizar: ${error.message}`, "error");
+    console.error("Error al enviar actualización:", error);
+    alert("Fallo al actualizar usuario");
   }
 }
 
-// Cerrar modal si se hace click fuera del contenido
-window.onclick = function(event) {
-  const modal = document.getElementById("modalEditar");
-  if (event.target === modal) {
-    cerrarModal();
-  }
-};
-*/
+function cerrarModal() {
+  document.getElementById("modalEditar").style.display = "none";
+}

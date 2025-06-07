@@ -8,7 +8,7 @@ function formatearEnlace(link) {
               .replace(/\/view\?usp=sharing$/, '/preview')
               .replace(/\/edit\?usp=sharing$/, '/preview');
 }
-
+ 
 // Función para validar enlaces de Google Drive
 function validarEnlace(link) {
     const pattern = /^https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9-_]+\/preview$/;

@@ -13,7 +13,7 @@ function mostrarProductosCategoria(idCategoria, nombreCategoria) {
 
   document.getElementById('filtroOferta').value = "todos";
 }
-
+ 
 function filtrarPorOferta() {
   const valor = document.getElementById('filtroOferta').value;
   let productosFiltrados = [];
