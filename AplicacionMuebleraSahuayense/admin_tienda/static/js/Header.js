@@ -96,6 +96,20 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
+/*************************************************************/
+                  /* Validacion del Token */
+/*************************************************************/
+
+function checkAuthRedirect() {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    window.location.href = '/'; // Página principal o login
+  }
+}
+
+
+
+
 
 /*************************************************************/
 /*********************** Foother *****************************/

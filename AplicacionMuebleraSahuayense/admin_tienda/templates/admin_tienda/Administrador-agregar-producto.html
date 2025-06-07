@@ -14,19 +14,19 @@
 </head>
 
 <body>
-<header>
-    <div class="agregar-producto-breadcrumb-container">
-        <div class="agregar-producto-breadcrumb">
-            <a class="agregar-producto-breadcrumb-link" href="{% url 'administrador' %}">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <span class="agregar-producto-breadcrumb-separator">/</span>
-            <span class="agregar-producto-breadcrumb-active">
-                <i class="fas fa-edit"></i> Agregar Producto
-            </span>
+    <header>
+        <div class="agregar-producto-breadcrumb-container">
+            <div class="agregar-producto-breadcrumb">
+                <a class="agregar-producto-breadcrumb-link" href="{% url 'administrador' %}">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <span class="agregar-producto-breadcrumb-separator">/</span>
+                <span class="agregar-producto-breadcrumb-active">
+                    <i class="fas fa-edit"></i> Agregar Producto
+                </span>
+            </div>
         </div>
-    </div>
-</header>
+    </header>
     <section id="section-agregar-producto" class="seccion">
         <div class="admin-panel">
             <div class="admin-card">
@@ -91,15 +91,15 @@
         </div>
     </section>
     <span id="mensajeGuardado" style="display: none;">✅ Se ha guardado el producto correctamente</span>
-<footer>
-    <div class="footer"></div>
-</footer>
+    <footer>
+        <div class="footer"></div>
+    </footer>
     <script src="{% static 'js/variables.js' %}"></script>
     <script src="{% static 'js/Admin-agregar-productos.js' %}"></script>
+    <script src="{% static 'js/Header.js' %}"></script>
+    <script>
 
-
-
-
+        checkAuthRedirect();
+    </script>
 </body>
-
 </html>
