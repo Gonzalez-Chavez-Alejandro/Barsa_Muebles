@@ -2,12 +2,13 @@ let usuarios = [];
 let usuariosFiltrados = [];
 let paginaActual = 1;
 const usuariosPorPagina = 3;
+let usuarioAEliminarId = null; // IMPORTANTE: Definir variable global
 
 // Obtener info usuario autenticado desde token guardado
 async function obtenerUsuarioAutenticado() {
-  const token = localStorage.getItem("access_token");  // Consistencia con tu login
+  const token = localStorage.getItem("access_token");
   if (!token) {
-    console.warn("No hay token en localStorage");
+    console.warn("No hay token en localStorage"); // Consola: no token
     return null;
   }
 
@@ -19,23 +20,23 @@ async function obtenerUsuarioAutenticado() {
     });
 
     if (!response.ok) {
-      console.error(`Error en user-info: ${response.status}`);
+      console.error(`Error en user-info: ${response.status}`); // Consola: error en user-info con status
       return null;
     }
 
     return await response.json();
 
   } catch (error) {
-    console.error("Error al obtener info del usuario:", error);
+    console.error("Error al obtener info del usuario:", error); // Consola: error en fetch
     return null;
   }
 }
 
-// Cargar usuarios (aquí deberías hacer fetch a tu API que lista usuarios)
+// Cargar usuarios
 async function cargarUsuarios() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    alert("No autenticado");
+    alert("No autenticado"); // Alerta: no autenticado
     return;
   }
 
@@ -46,7 +47,7 @@ async function cargarUsuarios() {
       }
     });
     if (!response.ok) {
-      alert("Error al cargar usuarios");
+      alert("Error al cargar usuarios"); // Alerta: error al cargar usuarios
       return;
     }
     usuarios = await response.json();
@@ -54,7 +55,7 @@ async function cargarUsuarios() {
     mostrarUsuarios(paginaActual);
 
   } catch (error) {
-    console.error("Error al cargar usuarios:", error);
+    console.error("Error al cargar usuarios:", error); // Consola: error fetch usuarios
   }
 }
 
@@ -70,7 +71,7 @@ function mostrarUsuarios(pagina = 1) {
 
   if (usuariosPagina.length === 0) {
     const fila = document.createElement("tr");
-    fila.innerHTML = `<td colspan="6" class="text-center">No se encontraron usuarios</td>`;
+    fila.innerHTML = `<td colspan="6" class="text-center">No se encontraron usuarios</td>`; // Mensaje tabla: no usuarios encontrados
     tbody.appendChild(fila);
     return;
   }
@@ -78,37 +79,42 @@ function mostrarUsuarios(pagina = 1) {
   usuariosPagina.forEach(usuario => {
     const fila = document.createElement("tr");
     fila.innerHTML = `
-    <td>${usuario.id}</td>
-    <td>${usuario.username}</td>
-    <td>${usuario.email}</td>
-    <td>${usuario.phoneUser || ''}</td>
-    <td>*******</td>
-    <td>
-      <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
-      <button class="btn-admin-desing-delete"><i class="fas fa-trash-alt"></i></button>
-    </td>
-  `;
+      <td>${usuario.id}</td>
+      <td>${usuario.username}</td>
+      <td>${usuario.email}</td>
+      <td>${usuario.phoneUser || ''}</td>
+      <td>*******</td>
+      <td>
+        <button class="btn-admin-desing-edit"><i class="fas fa-edit"></i></button>
+        <button class="btn-admin-desing-delete" data-id="${usuario.id}"><i class="fas fa-trash-alt"></i></button>
+      </td>
+    `;
     tbody.appendChild(fila);
   });
 
-  // Actualizar paginación y contadores si tienes esas funciones
-   actualizarPaginacion();
-   actualizarContadores();
+  // Asociar eventos a los botones eliminar después de renderizar
+  document.querySelectorAll(".btn-admin-desing-delete").forEach(boton => {
+    boton.addEventListener("click", (e) => {
+      const idUsuario = e.currentTarget.getAttribute("data-id");
+      eliminarUsuario(idUsuario);
+    });
+  });
+
+  actualizarPaginacion();
+  actualizarContadores();
 }
 
-
-// Al cargar la página, verificar usuario y permisos
 document.addEventListener("DOMContentLoaded", async () => {
   const usuario = await obtenerUsuarioAutenticado();
 
   if (!usuario) {
-    alert("No estás autenticado. Por favor inicia sesión.");
-    window.location.href = "/login"; // Opcional redirigir
+    alert("No estás autenticado. Por favor inicia sesión."); // Alerta: no autenticado
+    window.location.href = "/login";
     return;
   }
 
   if (!usuario.is_superuser) {
-    alert("No tienes permisos para acceder a esta sección");
+    alert("No tienes permisos para acceder a esta sección"); // Alerta: sin permisos
     document.querySelector(".admin-table").style.display = "none";
     document.getElementById("buscador").style.display = "none";
     document.getElementById("paginaAnterior").style.display = "none";
@@ -116,7 +122,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Si es admin, carga la tabla y activa controles
   cargarUsuarios();
 
   document.getElementById("paginaAnterior")?.addEventListener("click", () => {
@@ -144,9 +149,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     paginaActual = 1;
     mostrarUsuarios(paginaActual);
   });
-});
 
-/* */
+  // Asociar botones del modal
+  document.getElementById("btnConfirmarEliminar")?.addEventListener("click", confirmarEliminacion);
+  document.getElementById("btnCancelarEliminar")?.addEventListener("click", cancelarEliminacion);
+});
 
 function actualizarPaginacion() {
   const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
@@ -162,22 +169,7 @@ function actualizarContadores() {
   const inicio = (paginaActual - 1) * usuariosPorPagina + 1;
   const fin = Math.min(paginaActual * usuariosPorPagina, totalUsuarios);
 
-  contadorElement.textContent = `Mostrando ${inicio} a ${fin} de ${totalUsuarios} usuarios`;
-}
-
-function paginaAnterior() {
-  if (paginaActual > 1) {
-    paginaActual--;
-    mostrarUsuarios(paginaActual);
-  }
-}
-
-function paginaSiguiente() {
-  const totalPaginas = Math.ceil(usuariosFiltrados.length / usuariosPorPagina);
-  if (paginaActual < totalPaginas) {
-    paginaActual++;
-    mostrarUsuarios(paginaActual);
-  }
+  contadorElement.textContent = `Mostrando ${inicio} a ${fin} de ${totalUsuarios} usuarios`; // Texto contador usuarios
 }
 
 function buscarUsuarios() {
@@ -193,81 +185,65 @@ function buscarUsuarios() {
   paginaActual = 1;
   mostrarUsuarios(paginaActual);
 }
-/*******************************************************************************/
 
-// Funciones para eliminar usuario
+// Modal de confirmación
 function eliminarUsuario(id) {
   usuarioAEliminarId = id;
   const modal = document.getElementById("modalConfirmacion");
-  if (modal) modal.style.display = "block";
+  if (modal) modal.style.display = "block"; // Mostrar modal
 }
 
 function cancelarEliminacion() {
   const modal = document.getElementById("modalConfirmacion");
-  if (modal) modal.style.display = "none";
+  if (modal) modal.style.display = "none"; // Ocultar modal
   usuarioAEliminarId = null;
 }
 
-
-
-
-/*
 async function confirmarEliminacion() {
   if (!usuarioAEliminarId) return;
 
-  try {
-    const token = localStorage.getItem("accessToken");
-    if (!token) throw new Error("No hay token de autenticación");
+  const token = localStorage.getItem("access_token");
 
-    const response = await fetch(`http://localhost:8000/usuarios/${usuarioAEliminarId}/`, {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/api/users/${usuarioAEliminarId}/`, {
       method: "DELETE",
       headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
+        "Authorization": `Bearer ${token}`
       }
     });
 
-    if (response.status === 404) {
-      throw new Error("El usuario no existe o ya fue eliminado");
+    if (response.ok) {
+      alert("Usuario eliminado correctamente");
+      await cargarUsuarios();
+    } else {
+      const data = await response.json();
+      alert(data.error || "Error al eliminar el usuario");
     }
-    if (response.status === 403) {
-      throw new Error("No tienes permisos para esta acción");
-    }
-    if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
-    }
-
-    // Recargar la lista
-    await cargarUsuarios();
-
-    // Cerrar modal y limpiar
-    const modal = document.getElementById("modalConfirmacion");
-    if (modal) modal.style.display = "none";
-    usuarioAEliminarId = null;
-
-    // Mostrar feedback al usuario
-    mostrarMensaje("Usuario eliminado correctamente", "success");
 
   } catch (error) {
-    console.error("Detalles del error:", error);
-    mostrarMensaje(`Error al eliminar: ${error.message}`, "error");
+    console.error("Error al eliminar usuario:", error); // Consola: error eliminar usuario
+  } finally {
+    cancelarEliminacion();
   }
 }
 
-// Función auxiliar para mostrar mensajes
-function mostrarMensaje(texto, tipo = "info") {
-  const mensaje = document.getElementById("mensaje-usuario");
-  if (!mensaje) return;
+// Cerrar modal al hacer clic fuera de él
+window.addEventListener("click", function (e) {
+  const modal = document.getElementById("modalConfirmacion");
+  if (e.target === modal) {
+    cancelarEliminacion(); // Ocultar modal al hacer clic fuera
+  }
+});
 
-  mensaje.textContent = texto;
-  mensaje.className = `mensaje-${tipo}`;
-  mensaje.style.display = "block";
+// Cerrar modal con tecla Escape
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    cancelarEliminacion(); // Ocultar modal con tecla Escape
+  }
+});
 
-  setTimeout(() => {
-    mensaje.style.display = "none";
-  }, 5000);
-}
 
+/*
 // Función para abrir modal de edición (primer paso)
 function abrirModalEdicion(id) {
   usuarioEditandoId = id;

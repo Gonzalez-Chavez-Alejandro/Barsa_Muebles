@@ -42,3 +42,32 @@ class ListUsersView(APIView):
                 # agrega campos extra que uses, como phoneUser, etc
             })
         return Response(data, status=status.HTTP_200_OK)
+
+
+
+# autentication/views.py
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from .models import CustomUser
+from .serializers import UserListSerializer
+from django.db.models import ProtectedError
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserListSerializer
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError as e:
+            return Response(
+                {"error": "No se puede eliminar el usuario porque tiene datos relacionados."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
