@@ -32,15 +32,15 @@
 </head>
 
 <body>
-  <header> 
-  <div class="salir_Admin">
-    <button id="btnCerrarSesion" class="btn-salir">
-      <i class="fas fa-sign-out-alt"></i> Salir
-    </button>
-  </div>
-</header>
+  <header>
+    <div class="salir_Admin">
+      <button id="btnCerrarSesion" class="btn-salir">
+        <i class="fas fa-sign-out-alt"></i> Salir
+      </button>
+    </div>
+  </header>
 
-</header>
+  </header>
   <!-- ----------------------------------------------- -->
   <!-- Botón de menú para móvill -->
   <!-- ----------------------------------------------- -->
@@ -733,9 +733,10 @@
 
       <label for="editarImagenArchivo">Subir imagen:</label>
       <input type="file" id="editarImagenArchivo" accept="image/*">
-
+      <img id="vistaPreviaEditarImagen" src="" alt="Imagen actual"
+        style="width: 120px; margin-top: 10px; border: 1px solid #ccc;">
       <div class="modal-acciones">
-        <button class="btn-agregar-editar-categoria" onclick="guardarEdicionCategoria()">
+        <button class="btn-agregar-editar-categoria" onclick="guardarEdicionCategorias()">
           <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar
         </button>
         <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
@@ -819,57 +820,57 @@
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>
   <script src="{% static 'js/Admin-Productos.js' %}"></script>
   <script src="{% static 'js/Ofertas.js' %}"></script>
-<!--  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>--> 
+  <!--  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>-->
   <script src="{% static 'js/Admin-Categorias.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
-<script>  document.addEventListener('DOMContentLoaded', () => {
-  const token = localStorage.getItem('accessToken');
-  console.log("token", token);
-});
-</script>
-
-<script>
-  const accessToken = localStorage.getItem('access_token');
-
-  if (!accessToken) {
-    window.location.href = '/'; // Redirige al login si no hay token
-  } else {
-    fetch('http://127.0.0.1:8000/api/user-info/', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Token inválido o expirado');
-      }
-      return response.json();
-    })
-    .then(userInfo => {
-      console.log('Usuario autenticado:', userInfo);
-
-      if (!userInfo.is_superuser) {
-        alert('Acceso denegado: no eres superusuario.');
-        // Opcional: redirigir al usuario a una página de inicio general
-        window.location.href = '/';
-      }
-
-      // Aquí puedes continuar cargando el contenido de administrador...
-    })
-    .catch(error => {
-      console.error('Error de autenticación:', error);
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
-      window.location.href = '/';
+  <script>  document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('accessToken');
+      console.log("token", token);
     });
-  }
-</script>
+  </script>
+
+  <script>
+    const accessToken = localStorage.getItem('access_token');
+
+    if (!accessToken) {
+      window.location.href = '/'; // Redirige al login si no hay token
+    } else {
+      fetch('http://127.0.0.1:8000/api/user-info/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Token inválido o expirado');
+          }
+          return response.json();
+        })
+        .then(userInfo => {
+          console.log('Usuario autenticado:', userInfo);
+
+          if (!userInfo.is_superuser) {
+            alert('Acceso denegado: no eres superusuario.');
+            // Opcional: redirigir al usuario a una página de inicio general
+            window.location.href = '/';
+          }
+
+          // Aquí puedes continuar cargando el contenido de administrador...
+        })
+        .catch(error => {
+          console.error('Error de autenticación:', error);
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
+          window.location.href = '/';
+        });
+    }
+  </script>
 
 
 </body>

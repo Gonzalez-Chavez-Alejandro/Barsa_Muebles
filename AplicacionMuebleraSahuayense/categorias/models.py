@@ -1,3 +1,4 @@
+#models.py categorias
 from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 from django.db import models
