@@ -258,9 +258,9 @@ async function guardarEdicionCategorias() {
 
   try {
     const response = await fetch(`/categorias/actualizar/${categoriaNombreSeleccionada}/`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
       },
       body: formData
     });
@@ -271,7 +271,7 @@ async function guardarEdicionCategorias() {
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      alert('Error al actualizar: ' + (errorData.message || JSON.stringify(errorData)));
+      alert('Error al actualizarx: ' + (errorData.message || JSON.stringify(errorData)));
     }
   } catch (error) {
     console.error('Error al actualizar categoría:', error);

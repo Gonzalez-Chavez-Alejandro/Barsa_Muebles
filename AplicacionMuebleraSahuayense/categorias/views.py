@@ -1,4 +1,4 @@
-#views
+#views 
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -28,9 +28,9 @@ class CategoryListView(APIView):
 
 class CategoryUpdateView(APIView):
     permission_classes = [IsAuthenticated]
-    def put(self, request, nameCategory):
+    def patch(self, request, nameCategory):
         category = get_object_or_404(Categorias, nameCategory=nameCategory)
-        serializer = CategoriaSerializer(category, data=request.data)
+        serializer = CategoriaSerializer(category, data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "Categoria actualizada correctamente"}, status=status.HTTP_200_OK)

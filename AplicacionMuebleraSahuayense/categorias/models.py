@@ -1,10 +1,10 @@
-#models.py categorias
+#models.py categorias 
 from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 from django.db import models
 
 class Categorias(models.Model):
-    nameCategory = models.CharField(max_length=100)
+    nameCategory = models.CharField(max_length=100) 
     descriptionCategory = models.CharField(max_length=225)
     imagenCategory = CloudinaryField(
         'image',
@@ -17,7 +17,7 @@ class Categorias(models.Model):
         return self.nameCategory
 
     def save(self, *args, **kwargs):
-        if self.imagenCategory:
+        if hasattr(self.imagenCategory, 'file'):  # ¡Importante! Esto detecta si es un archivo recién subido.
             upload_result = cloudinary.uploader.upload(
                 self.imagenCategory,
                 public_id=f"categorias/{self.nameCategory.replace(' ','_')}",
