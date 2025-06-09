@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     'admin_tienda',
-    'muebles',
+    
+    'productos',
     
 ]
 AUTH_USER_MODEL = 'autentication.CustomUser'

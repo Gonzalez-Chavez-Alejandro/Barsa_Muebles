@@ -12,68 +12,134 @@ function llenarSelectCategorias() {
   });
 }
 
-function mostrarProductos() {
-  const tbody = document.getElementById("tabla-productos");
-  tbody.innerHTML = "";
+async function mostrarProductos() {
+  const token = localStorage.getItem("access_token");
 
-  const inicio = (paginaActualProductos - 1) * cantidadPorPagina;
-  const fin = inicio + cantidadPorPagina;
-  const productosFiltrados = window.productosFiltrados || window.productos;
-  const productosPagina = productosFiltrados.slice(inicio, fin);
-
-  if (productosPagina.length === 0) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="9" style="text-align:center;">No hay productos para esta categoría.</td>`;
-    tbody.appendChild(tr);
+  if (!token) {
+    alert("No estás autenticado");
     return;
   }
 
-  // Inicializa el objeto si no existe
-  window.imagenesProducto = {};
+  //tbody.innerHTML = "";
 
-  productosPagina.forEach((producto) => {
-    const imagenes = producto.nombreimagenes.split(',').map(img => img.trim());
+  try {
+    const response = await fetch("http://127.0.0.1:8000/productos/Listar/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${producto.id}</td>
-      <td>${producto.nombre}</td>
-      <td>${producto.descripcion}</td>
-      <td>${producto.precio}</td>
-      <td>${producto.oferta ? "Sí" : "No"}</td>
-      <td>${producto.precioOferta}</td>
-      <td>
-        <div class="img-carousel" id="carousel-${producto.id}">
-          <button onclick="cambiarImagen(${producto.id}, -1)">◀</button>
-          <img src="${imagenes[0]}" alt="imagen" width="80" height="80" id="img-${producto.id}">
-          <button onclick="cambiarImagen(${producto.id}, 1)">▶</button>
-        </div>
-      </td>
-      <td>
-       <a href="/administrador_editar_producto/" class="btn-admin-desing-edit" onclick='editarProducto(${JSON.stringify(producto)})'>
-          <i class="fas fa-edit"></i>
-        </a>
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error en la solicitud");
+    }
 
-      <button class="btn-admin-desing-delete" onclick="abrirModalEliminarProducto(${producto.id})">
-        <i class="fas fa-trash-alt"></i>
-      </button>
+    const productos = await response.json();
 
-      </td>
-    `;
-    tbody.appendChild(tr);
+    console.log("[DEBUG] Productos recibidos:", productos);
+    mostrarProductosView(productos)
+    /*if (!productos.length) {
+      tbody.innerHTML = `
+        <tr><td colspan="8" style="text-align:center;">No hay productos disponibles.</td></tr>
+      `;
+      return;
+    }
 
-    // Guardar imágenes e índice actual
-    window.imagenesProducto[producto.id] = {
-      imagenes: imagenes,
-      index: 0
-    };
-  });
+    productos.forEach(producto => {
+      const imagen = normalizeImageUrl(producto.imageFurniture || "");
 
-  // Actualizar paginación
-  const totalPaginas = Math.ceil(productosFiltrados.length / cantidadPorPagina);
-  document.getElementById("paginaActualProductosLleno").textContent = `Página ${paginaActualProductos}`;
-  document.getElementById("totalPaginasProductosLleno").textContent = `${totalPaginas}`;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${producto.categoryID || ''}</td>
+        <td>${producto.nameFurniture || ''}</td>
+        <td>${producto.descriptionFurniture || ''}</td>
+        <td>${producto.porcentajeDescuento || 0}%</td>
+        
+        <td>${producto.stateFurniture ? 'Activo' : 'Inactivo'}</td>
+        <td>
+          <img src="${imagen}" 
+               alt="Imagen producto" 
+               width="80" 
+               height="80"
+               onerror="this.src='https://via.placeholder.com/80'">
+        </td>
+        <td>
+          <button class="btn-admin-desing-edit" 
+                  onclick='editarProducto(${JSON.stringify(producto)})'>
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-admin-desing-delete" 
+                  onclick="abrirModalEliminarProducto(${producto.id})">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });*/
+  } catch (err) {
+    console.error("Error al cargar productos:", err);
+    alert("Error al cargar productos: " + err.message);
+  }
 }
+
+function mostrarProductosView(productos) {
+    const tbody = document.getElementById("tabla-productos");
+    if (!productos.length) {
+      tbody.innerHTML = `
+        <tr><td colspan="8" style="text-align:center;">No hay productos disponibles.</td></tr>
+      `;
+      return;
+    }
+
+    productos.forEach(producto => {
+      const imagen = normalizeImageUrl(productos.imageFurniture||"https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png");
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${producto.categoryID || ''}</td>
+        <td>${producto.nameFurniture || ''}</td>
+        <td>${producto.descriptionFurniture || ''}</td>
+        <td>$${Number(producto.priceFurniture).toFixed(2) || '0.00'}</td>
+        <td>${producto.porcentajeDescuento || 0}%</td>
+        <td>$${Number(producto.PrecioOferta).toFixed(2) || '0.00'}</td>
+        
+        <td>${producto.stateFurniture ? 'Activo' : 'Inactivo'}</td>
+        <td>
+          <img src="${imagen}" 
+               alt="Imagen producto" 
+               width="80" 
+               height="80"
+               onerror="this.src='https://via.placeholder.com/80'">
+        </td>
+        <td>
+          <button class="btn-admin-desing-edit" 
+                  onclick='editarProducto(${JSON.stringify(producto)})'>
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-admin-desing-delete" 
+                  onclick="abrirModalEliminarProducto(${producto.id})">
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+}
+
+// Inicialización cuando el DOM está listo
+document.addEventListener("DOMContentLoaded", () => {
+  mostrarProductos()
+});
+
+/*
+
+
+
+
+
+
 
 
 function cambiarImagen(id, direccion) {
@@ -193,3 +259,4 @@ function eliminarProductoConfirmado() {
   }
 }
 
+*/

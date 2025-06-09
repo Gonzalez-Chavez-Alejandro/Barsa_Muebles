@@ -26,7 +26,6 @@ function normalizeImageUrl(url) {
     return `https://res.cloudinary.com/dacrpsl5p/image/upload/${url}`;
 }
 
-
 // Función para cargar categorías desde la API
 async function cargarCategorias() {
   const token = localStorage.getItem('accessToken');

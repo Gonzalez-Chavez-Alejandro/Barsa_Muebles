@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MueblesConfig(AppConfig):
+class ProductosConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'muebles'
+    name = 'productos'
