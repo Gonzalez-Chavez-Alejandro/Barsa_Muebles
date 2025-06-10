@@ -98,7 +98,7 @@ function mostrarProductosView(productos) {
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>${producto.categoryID || ''}</td>
+        
         <td>${producto.nameFurniture || ''}</td>
         <td>${producto.descriptionFurniture || ''}</td>
         <td>$${Number(producto.priceFurniture).toFixed(2) || '0.00'}</td>
@@ -113,6 +113,7 @@ function mostrarProductosView(productos) {
                height="80"
                onerror="this.src='https://via.placeholder.com/80'">
         </td>
+        <td>${producto.categoryID || ''}</td>
         <td>
           <button class="btn-admin-desing-edit" 
                   onclick='editarProducto(${JSON.stringify(producto)})'>
