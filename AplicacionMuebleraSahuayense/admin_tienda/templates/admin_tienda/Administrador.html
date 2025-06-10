@@ -436,105 +436,79 @@
   <!-- ----------------------------------------------- -->
 
   <section id="section-productos" class="seccion">
-    <div class="admin-panel">
+  <div class="admin-panel">
+    <div id="formulario-div-producto">
+      <div class="admin-card">
+        <form id="form-destacados">
+          <h2 id="titulo-destacados">📌 Productos</h2>
 
-      <div id="formulario-div-producto">
-
-        <div class="admin-card">
-          <form id="form-destacados">
-            <h2 id="titulo-destacados">📌 Productos </h2>
-            <!-- Buscar y Agregar -->
-            <div class="conjuntoagregarbuscar">
-              <div class="filtros-usuarios">
-                <div class="search-container-usuarios">
-                  <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
-                  <input type="text" id="buscador-productos" class="input-busqueda-usuarios"
-                    placeholder="Buscar por nombre, del producto  " onkeyup="buscarProductos()"
-                    aria-label="Buscar usuarios">
-                </div>
+          <!-- Buscar y Agregar -->
+          <div class="conjuntoagregarbuscar">
+            <div class="filtros-usuarios">
+              <div class="search-container-usuarios">
+                <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
+                <input type="text" id="buscador-productos" class="input-busqueda-usuarios"
+                  placeholder="Buscar por nombre del producto" onkeyup="buscarProductos()"
+                  aria-label="Buscar productos">
               </div>
-              <div class="filtros-container">
-                <select id="filtroCategoria" class="form-control">
-                  <option value="">Todas las categorías</option>
-                  <!-- Las opciones se cargarán dinámicamente -->
-                </select>
+            </div>
+              
+            <div class="filtros-container">
+              <select id="filtroCategoriasView">
+                <option value="">Todas las categorías</option>
+                <!-- Opciones dinámicas -->
+              </select>
 
-                
-
-                <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()">
-                  <option value="1">1 por página</option>
-                  <option value="5">5 por página</option>
-                  <option value="10">10 por página</option>
-                  <option value="20">20 por página</option>
-                  <option value="50">50 por página</option>
-                </select>
-              </div>
-              <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
-                <i class="fas fa-plus"></i> Agregar
-              </a>
+              <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="form-control">
+                <option value="1">1 por página</option>
+                <option value="5">5 por página</option>
+                <option value="10">10 por página</option>
+                <option value="20">20 por página</option>
+                <option value="50">50 por página</option>
+                <option value="100">100 por página</option>
+              </select>
             </div>
 
-            <!-- Mostrar y Filtrar -->
-            <div class="select-group-container">
-              <div class="select-group-producto-lleno">
-                <label for="selectorCantidadProductos" class="select-label">
-                  <i class="fas fa-th-list"></i> Mostrar:
-                </label>
-                <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
-                  <option value="5">1</option>
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                </select>
-              </div>
-
-
-            </div>
-
-          </form>
-        </div>
-
-        <div id="tablaContainerDestacados" class="scroll-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th class="NombretablaContainerDestacados">Nombre
-                  <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
-                </th>
-                <th class="th-descripcion">Descripción</th>
-                <th>Precio</th>
-                <th>Oferta</th>
-                <th>Descuento</th>
-                <th>Precio Oferta</th>
-                <th>Nombre Imagenes</th>
-                <th>ID</th>
-                <th class="th-acciones">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="tabla-productos">
-              <!-- Se insertan productos con JS -->
-            </tbody>
-          </table>
-          <div>
-            <div class="paginacion">
-              <button id="btnAnteriorProductos">Anterior</button>
-
-
-              <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginas">1</span>
-              <button id="btnSiguienteProductos">Siguiente</button>
-            </div>
-            <table>
-              <tbody id="tabla-productos"></tbody>
-            </table>
-
+            <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
+              <i class="fas fa-plus"></i> Agregar
+            </a>
           </div>
+        </form>
+      </div>
+
+      <div id="tablaContainerDestacados" class="scroll-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="NombretablaContainerDestacados">Nombre
+                <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
+              </th>
+              <th class="th-descripcion">Descripción</th>
+              <th>Precio</th>
+              <th>Oferta</th>
+              <th>Descuento</th>
+              <th>Precio Oferta</th>
+              <th>Nombre Imágenes</th>
+              <th>ID</th>
+              <th class="th-acciones">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-productos">
+            <!-- Productos insertados por JavaScript -->
+          </tbody>
+        </table>
+
+        <div class="paginacion">
+          <button id="btnAnteriorProductos">Anterior</button>
+          <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginas">1</span>
+          <button id="btnSiguienteProductos">Siguiente</button>
         </div>
       </div>
-  </section>
+    </div>
+  </div>
+</section>
+
 
 
   <section id="contactos" class="seccion">
@@ -830,25 +804,7 @@
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
   <!-- ------------------------------------------------ -->
-  <script src="{% static 'js/variables.js' %}"></script>
-  <script src="{% static 'js/Admin-Menu.js' %}"></script>
-  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
-  <script src="{% static 'js/Admin-Productos.js' %}"></script>
-  <script src="{% static 'js/Ofertas.js' %}"></script>
-  <!--  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>-->
-  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
-  <script src="{% static 'js/Admin-Home.js' %}"></script>
-
-  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
-  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
-  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
-  <script>  document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('accessToken');
-      console.log("token", token);
-    });
-  </script>
-
-  <script>
+     <script>
     const accessToken = localStorage.getItem('access_token');
 
     if (!accessToken) {
@@ -886,6 +842,25 @@
         });
     }
   </script>
+  <script src="{% static 'js/variables.js' %}"></script>
+  <script src="{% static 'js/Admin-Menu.js' %}"></script>
+  <script src="{% static 'js/Admin-Table-users.js' %}"></script>
+  <script src="{% static 'js/Ofertas.js' %}"></script>
+  <!--  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>-->
+  <script src="{% static 'js/Admin-Categorias.js' %}"></script>
+  <script src="{% static 'js/Admin-Productos.js' %}"></script>
+  <script src="{% static 'js/Admin-Home.js' %}"></script>
+
+  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+  <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
+  <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+  <script>  document.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('accessToken');
+      console.log("token", token);
+    });
+  </script>
+
+
 
 
 </body>

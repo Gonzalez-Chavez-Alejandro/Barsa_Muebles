@@ -1,15 +1,18 @@
 # productos/serializers.py
 from rest_framework import serializers
 from productos.models import Productos
+from categorias.models import Categorias
 
 class ProductoSerializer(serializers.ModelSerializer):
     PrecioOferta = serializers.SerializerMethodField()
+    categorias_nombres = serializers.SerializerMethodField()
 
     class Meta:
         model = Productos
         fields = [
             'id',
-            'categoryID',
+            'categoryID',  # sigue mandando los IDs
+            'categorias_nombres',  # nuevo campo para mostrar en frontend
             'nameFurniture',
             'descriptionFurniture',
             'priceFurniture',
@@ -24,7 +27,6 @@ class ProductoSerializer(serializers.ModelSerializer):
         descuento = obj.porcentajeDescuento or 0
         return obj.priceFurniture * (1 - descuento / 100)
 
-    def get_imagenes(self, obj):
-        if obj.imageFurniture:
-            return [url.strip() for url in obj.imageFurniture.split(',')]
-        return []
+    def get_categorias_nombres(self, obj):
+        return [cat.nameCategory for cat in obj.categoryID.all()]
+
