@@ -1,6 +1,8 @@
 let paginaActualProductos = 1;
-let cantidadPorPagina = 5;
+let cantidadPorPagina = 1; // Valor inicial que coincide con el selector
 let productosGlobal = [];
+let productosFiltrados = [];
+let modoFiltrado = false;
 
 // Mostrar productos con autenticación
 async function mostrarProductos() {
@@ -87,21 +89,25 @@ function mostrarProductosView() {
   const tbody = document.getElementById("tabla-productos");
   tbody.innerHTML = "";
 
-  if (!productosGlobal.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;">No hay productos disponibles.</td></tr>`;
+  const productos = modoFiltrado ? productosFiltrados : productosGlobal;
+
+  if (!productos.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;">${modoFiltrado ? 'No se encontraron productos.' : 'No hay productos disponibles.'}</td></tr>`;
+    actualizarControlesPaginacion();
     return;
   }
 
-  const totalProductos = productosGlobal.length;
+  const totalProductos = productos.length;
   const totalPaginas = Math.ceil(totalProductos / cantidadPorPagina);
 
-  if (paginaActualProductos > totalPaginas) {
+  // Ajustar página actual si es necesario
+  if (paginaActualProductos > totalPaginas && totalPaginas > 0) {
     paginaActualProductos = totalPaginas;
   }
 
   const inicio = (paginaActualProductos - 1) * cantidadPorPagina;
   const fin = inicio + cantidadPorPagina;
-  const productosPagina = productosGlobal.slice(inicio, fin);
+  const productosPagina = productos.slice(inicio, fin);
 
   productosPagina.forEach(producto => {
     const imagenes = producto.imageFurniture ? producto.imageFurniture.split(",") : [];
@@ -132,28 +138,122 @@ function mostrarProductosView() {
     tbody.appendChild(tr);
   });
 
-  // Mostrar paginación
-  document.getElementById("paginaActual").textContent = `Página ${paginaActualProductos}`;
-  document.getElementById("totalPaginas").textContent = totalPaginas;
+  actualizarControlesPaginacion(totalPaginas);
 }
 
-// Botones de paginación
-document.getElementById("btnAnterior").addEventListener("click", () => {
-  if (paginaActualProductos > 1) {
-    paginaActualProductos--;
-    mostrarProductosView();
-  }
-});
+// Actualizar controles de paginación
+function actualizarControlesPaginacion(totalPaginas = 0) {
+  const btnAnterior = document.getElementById("btnAnteriorProductos");
+  const btnSiguiente = document.getElementById("btnSiguienteProductos");
+  const paginaActualElement = document.getElementById("paginaActualProductos");
+  const totalPaginasElement = document.getElementById("totalPaginas");
 
-document.getElementById("btnSiguiente").addEventListener("click", () => {
-  const totalPaginas = Math.ceil(productosGlobal.length / cantidadPorPagina);
-  if (paginaActualProductos < totalPaginas) {
-    paginaActualProductos++;
-    mostrarProductosView();
+  if (modoFiltrado) {
+    paginaActualElement.textContent = `Página ${paginaActualProductos} (Filtrado)`;
+  } else {
+    paginaActualElement.textContent = `Página ${paginaActualProductos}`;
   }
-});
+  
+  totalPaginasElement.textContent = totalPaginas;
+
+  // Habilitar/deshabilitar botones según la posición
+  btnAnterior.disabled = paginaActualProductos <= 1;
+  btnSiguiente.disabled = paginaActualProductos >= totalPaginas;
+}
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
   mostrarProductos();
+  
+  // Configurar event listeners para los botones de paginación
+  document.getElementById("btnAnteriorProductos").addEventListener("click", () => {
+    if (paginaActualProductos > 1) {
+      paginaActualProductos--;
+      mostrarProductosView();
+    }
+  });
+
+  document.getElementById("btnSiguienteProductos").addEventListener("click", () => {
+    const productos = modoFiltrado ? productosFiltrados : productosGlobal;
+    const totalPaginas = Math.ceil(productos.length / cantidadPorPagina);
+    if (paginaActualProductos < totalPaginas) {
+      paginaActualProductos++;
+      mostrarProductosView();
+    }
+  });
 });
+
+function cambiarCantidadProductos() {
+  const selector = document.getElementById("selectorCantidadProductos");
+  cantidadPorPagina = parseInt(selector.value);
+  paginaActualProductos = 1; // Reiniciar a la primera página
+  mostrarProductosView();
+}
+
+function buscarProductos() {
+  const input = document.getElementById("buscador-productos").value.toLowerCase().trim();
+
+  if (input === "") {
+    modoFiltrado = false;
+    paginaActualProductos = 1;
+    mostrarProductosView();
+    return;
+  }
+
+  productosFiltrados = productosGlobal.filter(producto => {
+    const nombre = producto.nameFurniture?.toLowerCase() || "";
+    const descripcion = producto.descriptionFurniture?.toLowerCase() || "";
+    return nombre.includes(input) || descripcion.includes(input);
+  });
+
+  modoFiltrado = true;
+  paginaActualProductos = 1;
+  mostrarProductosView();
+}
+
+// Función para ordenar por nombre (opcional)
+function ordenarPorNombre() {
+  const productos = modoFiltrado ? productosFiltrados : productosGlobal;
+  
+  // Verificar si ya está ordenado A-Z para cambiar a Z-A
+  if (productos[0]?.nameFurniture < productos[productos.length-1]?.nameFurniture) {
+    productos.sort((a, b) => b.nameFurniture.localeCompare(a.nameFurniture));
+  } else {
+    productos.sort((a, b) => a.nameFurniture.localeCompare(b.nameFurniture));
+  }
+  
+  mostrarProductosView();
+}
+
+
+
+async function cargarCategorias() {
+  const token = localStorage.getItem("access_token"); // O usa ACCESS_TOKEN si ya migraste
+
+  try {
+    const response = await fetch("/categorias/Listar/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error("No se pudieron cargar las categorías");
+
+    const categorias = await response.json();
+    const select = document.getElementById("filtroCategoria");
+    select.innerHTML = `<option value="">Todas las categorías</option>`;
+    
+    categorias.forEach(cat => {
+      const option = document.createElement("option");
+      option.value = cat.id;
+      option.textContent = cat.nameCategory;
+      select.appendChild(option);
+    });
+  } catch (err) {
+    console.error("Error al cargar categorías:", err);
+  }
+}
+
+

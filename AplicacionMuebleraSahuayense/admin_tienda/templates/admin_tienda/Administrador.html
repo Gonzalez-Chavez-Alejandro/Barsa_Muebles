@@ -453,16 +453,21 @@
                     aria-label="Buscar usuarios">
                 </div>
               </div>
-              <div class="select-group-filtro-lleno">
-                <label for="filtroCategoria" class="select-label">
-                  <i class="fas fa-filter"></i> Filtrar por categoría:
-                </label>
-                <div class="select-wrapper">
-                  <select id="filtroCategoria" onchange="filtrarPorCategoria()">
-                    <option value="">Todas las categorías</option>
-                  </select>
+              <div class="filtros-container">
+                <select id="filtroCategoria" class="form-control">
+                  <option value="">Todas las categorías</option>
+                  <!-- Las opciones se cargarán dinámicamente -->
+                </select>
 
-                </div>
+                
+
+                <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()">
+                  <option value="1">1 por página</option>
+                  <option value="5">5 por página</option>
+                  <option value="10">10 por página</option>
+                  <option value="20">20 por página</option>
+                  <option value="50">50 por página</option>
+                </select>
               </div>
               <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
                 <i class="fas fa-plus"></i> Agregar
@@ -476,6 +481,7 @@
                   <i class="fas fa-th-list"></i> Mostrar:
                 </label>
                 <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select">
+                  <option value="5">1</option>
                   <option value="5">5</option>
                   <option value="10">10</option>
                   <option value="15">15</option>
@@ -514,17 +520,20 @@
             </tbody>
           </table>
           <div>
-            <button id="btnAnterior">Anterior</button>
-            <span id="paginaActual">Página 1</span> de <span id="totalPaginas">1</span>
-            <button id="btnSiguiente">Siguiente</button>
-          </div>
-          <table>
-            <tbody id="tabla-productos"></tbody>
-          </table>
+            <div class="paginacion">
+              <button id="btnAnteriorProductos">Anterior</button>
 
+
+              <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginas">1</span>
+              <button id="btnSiguienteProductos">Siguiente</button>
+            </div>
+            <table>
+              <tbody id="tabla-productos"></tbody>
+            </table>
+
+          </div>
         </div>
       </div>
-    </div>
   </section>
 
 
@@ -845,7 +854,7 @@
     if (!accessToken) {
       window.location.href = '/'; // Redirige al login si no hay token
     } else {
-      fetch('http://127.0.0.1:8000/api/user-info/', {
+      fetch('/api/user-info/', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
