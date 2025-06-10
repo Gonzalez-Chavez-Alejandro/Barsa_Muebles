@@ -1,6 +1,6 @@
 let categoriaNombreSeleccionada = null;
 let paginaActualCategoria = 1;
-let itemsPorPaginaCategoria = 10;
+let itemsPorPaginaCategoria = 100;
 
 // Función para obtener imagen placeholder segura
 function getPlaceholderImage(text = 'Imagen no disponible', width = 80, height = 80) {
@@ -53,7 +53,7 @@ async function cargarCategorias() {
       console.log(`[DEBUG] Categoría: ${cat.nameCategory}, Imagen original: ${cat.imagenCategory}, Imagen final: ${imagenFinal}`);
 
       return {
-        id: cat.nameCategory,
+        id: cat.id || cat._id || cat.nameCategory,
         nombre: cat.nameCategory,
         descripcion: cat.descriptionCategory,
         imagen: imagenFinal
@@ -94,6 +94,8 @@ function mostrarCategorias() {
   categoriasPagina.forEach(categoria => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
+            <td>${categoria.id || 'N/A'}</td> <!-- Nueva columna para ID -->
+
             <td>${categoria.nombre}</td>
             <td>${categoria.descripcion}</td>
             <td>
@@ -121,10 +123,35 @@ function mostrarCategorias() {
 
   document.getElementById("paginaActualCategoria").textContent = `Página ${paginaActualCategoria}`;
   document.getElementById("totalPaginasCategoria").textContent = totalPaginas || 1;
-
-  document.getElementById("btnAnterior").disabled = paginaActualCategoria <= 1;
-  document.getElementById("btnSiguiente").disabled = paginaActualCategoria >= totalPaginas || totalPaginas === 0;
 }
+// ========== [CORREGIDO] Eventos de paginación ==========
+function anteriorPagina() {
+  if (paginaActualCategoria > 1) {
+    paginaActualCategoria--;
+    mostrarCategorias();
+  }
+}
+
+function siguientePagina() {
+  const buscador = document.getElementById("buscadorCategorias").value.toLowerCase();
+  const categoriasFiltradas = window.categorias.filter(cat =>
+    cat.nombre.toLowerCase().includes(buscador) ||
+    cat.descripcion.toLowerCase().includes(buscador)
+  );
+  
+  const totalPaginas = Math.ceil(categoriasFiltradas.length / itemsPorPaginaCategoria);
+  
+  if (paginaActualCategoria < totalPaginas) {
+    paginaActualCategoria++;
+    mostrarCategorias();
+  }
+}
+
+// Asegúrate que esta parte esté en tu DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btnAnterior").addEventListener("click", anteriorPagina);
+  document.getElementById("btnSiguiente").addEventListener("click", siguientePagina);
+});
 
 // Filtrar categorías
 function filtrarCategorias() {
@@ -341,8 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Asignar eventos
   document.getElementById('buscadorCategorias').addEventListener('input', filtrarCategorias);
-  document.getElementById('btnAnterior').addEventListener('click', () => cambiarPaginaCategoria(-1));
-  document.getElementById('btnSiguiente').addEventListener('click', () => cambiarPaginaCategoria(1));
+
   document.getElementById('btnGuardarCategoria').addEventListener('click', guardarCategoria);
   document.getElementById('itemsPorPagina').addEventListener('change', cambiarItemsPorPagina);
 

@@ -1,3 +1,4 @@
+/*
 let idCounterproductos = 1;
 window.productos = [
   { id: idCounterproductos++, nombre: "aSilla moderna ssssss sss ssss sssssssssss ssssssss ssssssss ssssssssssssss  xxxxxxxxxxxxx", descripcion: "Silla de madera con respaldo sdfs dsfsdf dsf dsf sfd sdfs df fsdfsd fdsfdf dsfdfs Silla de madera con respaldo sdfs dsfsdf dsf dsf sfd sdfs df fsdfsd fdsfdf dsfdfs Silla de madera con respaldo sdfs dsfsdf dsf dsf sfd sdfs df fsdfsd fdsfdf dsfdfs", precio: 1200, oferta: true, precioOferta: 996,  nombreimagenes: "https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro-B_-_copia_v1estv.png,https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png,https://res.cloudinary.com/dacrpsl5p/image/upload/v1746488796/muebles/e1ol0ruizbzqfugaamx4.webp,https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png,https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png,https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png", categoriaId: 1 },
@@ -80,7 +81,7 @@ window.usuarios = [
   { id: idCounter++, nombre: 'María López', correo: 'maria@correo.com', telefono: '2233445566', contrasena: 'mnop' },
   { id: idCounter++, nombre: 'José Pérez', correo: 'jose@correo.com', telefono: '3344556677', contrasena: 'qrst' }
 ];
-
+*/
 
 
 

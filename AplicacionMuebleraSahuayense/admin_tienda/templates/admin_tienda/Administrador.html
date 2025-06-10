@@ -413,7 +413,7 @@
       </div>
 
       <div class="paginacion">
-        <button onclick="cambiarPaginaCategoria(-1)" id="btnAnterior">
+        <button id="btnAnterior">
           <i class="fas fa-chevron-left"></i> Anterior
         </button>
 
@@ -423,7 +423,7 @@
           <span id="totalPaginasCategoria">1</span>
         </div>
 
-        <button onclick="cambiarPaginaCategoria(1)" id="btnSiguiente">
+        <button id="btnSiguiente">
           Siguiente <i class="fas fa-chevron-right"></i>
         </button>
       </div>
@@ -495,7 +495,7 @@
           <table class="admin-table">
             <thead>
               <tr>
-                
+                <th>ID</th>
                 <th class="NombretablaContainerDestacados">Nombre
                   <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
                 </th>
@@ -513,11 +513,15 @@
               <!-- Se insertan productos con JS -->
             </tbody>
           </table>
-          <div class="paginacion">
-            <button onclick="cambiarPaginaProductosLleno(-1)">Anterior</button>
-            <span id="paginaActualProductosLleno">Página 1</span> de <span id="totalPaginasProductosLleno">de 0</span>
-            <button onclick="cambiarPaginaProductosLleno(1)">Siguiente</button>
+          <div>
+            <button id="btnAnterior">Anterior</button>
+            <span id="paginaActual">Página 1</span> de <span id="totalPaginas">1</span>
+            <button id="btnSiguiente">Siguiente</button>
           </div>
+          <table>
+            <tbody id="tabla-productos"></tbody>
+          </table>
+
         </div>
       </div>
     </div>
@@ -825,7 +829,7 @@
   <!--  <script src="{% static 'js/Admin-Productos-Ofertas.js' %}"></script>-->
   <script src="{% static 'js/Admin-Categorias.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
-  <script src="{% static 'js/Admin-Comentario-Stars.js' %}"></script>
+
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
