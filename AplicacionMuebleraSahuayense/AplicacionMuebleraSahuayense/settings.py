@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
     'admin_tienda',
-    
     'productos',
     
 ]
