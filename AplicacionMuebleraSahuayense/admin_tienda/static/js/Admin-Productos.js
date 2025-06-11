@@ -160,7 +160,7 @@ function actualizarControlesPaginacion(totalPaginas = 0) {
   btnSiguiente.disabled = paginaActualProductos >= totalPaginas;
 }
 
-async function cargarCategorias() {
+async function cargarCategoriasProductos() {
   const token = localStorage.getItem("access_token");
   if (!token) {
     alert("No estás autenticado");
@@ -278,7 +278,7 @@ function cambiarCantidadProductos() {
 
 document.addEventListener("DOMContentLoaded", () => {
   mostrarProductos();
-  cargarCategorias();
+  cargarCategoriasProductos();
 
   const filtroCategoriasViewEl = document.getElementById("filtroCategoriasView");
   if (filtroCategoriasViewEl) {
