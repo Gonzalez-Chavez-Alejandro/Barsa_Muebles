@@ -121,10 +121,13 @@ function mostrarProductosView() {
 
 
        <td>
-         <button class="btn-admin-desing-edit" onclick='editarProducto(${JSON.stringify(producto)})'>
-           <i class="fas fa-edit"></i>
-         </button>
-         <button class="btn-admin-desing-delete" onclick="abrirModalEliminarProducto(${producto.id})">
+        <a href="/editar-producto/${producto.id}/" class="btn-admin-desing-edit-productos">
+
+          <i class="fas fa-edit"></i>
+        </a>
+
+
+         <button class="btn-admin-desing-delete-productos" onclick="abrirModalEliminarProducto(${producto.id})">
            <i class="fas fa-trash-alt"></i>
          </button>
        </td>`;
@@ -134,6 +137,8 @@ function mostrarProductosView() {
   const totalPaginas = Math.ceil(productos.length / cantidadPorPagina);
   actualizarControlesPaginacion(totalPaginas);
 }
+
+
 function obtenerNombresCategorias(ids) {
   if (!Array.isArray(ids)) return "";
   return ids.map(id => {
