@@ -442,37 +442,44 @@
         <form id="form-destacados">
           <h2 id="titulo-destacados">📌 Productos</h2>
 
-          <!-- Buscar y Agregar -->
-          <div class="conjuntoagregarbuscar">
-            <div class="filtros-usuarios">
-              <div class="search-container-usuarios">
-                <i class="fas fa-search icono-busqueda" aria-hidden="true"></i>
-                <input type="text" id="buscador-productos" class="input-busqueda-usuarios"
-                  placeholder="Buscar por nombre del producto" onkeyup="buscarProductos()"
-                  aria-label="Buscar productos">
-              </div>
-            </div>
-              
-            <div class="filtros-container">
-              <select id="filtroCategoriasView">
-                <option value="">Todas las categorías</option>
-                <!-- Opciones dinámicas -->
-              </select>
+         <!-- Buscar y Agregar -->
+<div class="barra-productos-admin">
+  <div class="grupo-busqueda-filtros">
+    <!-- Buscador -->
+    <div class="busqueda-productos">
+      <label for="buscador-productos" class="sr-only">Buscar productos</label>
+      <div class="input-con-icono">
+        <i class="fas fa-search"></i>
+        <input type="text" id="buscador-productos" class="input-busqueda"
+          placeholder="Buscar por nombre del producto" onkeyup="buscarProductos()" />
+      </div>
+    </div>
 
-              <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="form-control">
-                <option value="1">1 por página</option>
-                <option value="5">5 por página</option>
-                <option value="10">10 por página</option>
-                <option value="20">20 por página</option>
-                <option value="50">50 por página</option>
-                <option value="100">100 por página</option>
-              </select>
-            </div>
+    <!-- Filtros -->
+    <div class="filtros-productos">
+      <select id="filtroCategoriasView" class="select-filtro">
+        <option value="">Todas las categorías</option>
+      </select>
 
-            <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
-              <i class="fas fa-plus"></i> Agregar
-            </a>
-          </div>
+      <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select-filtro">
+        <option value="1">1 por página</option>
+        <option value="5" selected>5 por página</option>
+        <option value="10">10 por página</option>
+        <option value="20">20 por página</option>
+        <option value="50">50 por página</option>
+        <option value="100">100 por página</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Botón Agregar -->
+  <div class="agregar-producto">
+    <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
+      <i class="fas fa-plus"></i> Agregar producto
+    </a>
+  </div>
+</div>
+
         </form>
       </div>
 

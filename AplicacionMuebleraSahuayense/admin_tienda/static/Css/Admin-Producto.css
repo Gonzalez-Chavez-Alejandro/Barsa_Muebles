@@ -37,7 +37,7 @@
 /* Contenedor principal del formulario de productos */
 #form-destacados {
   background-color: #fff;
-  padding: 24px;
+  padding: 0;
   max-width: 100%;
 }
 
@@ -172,7 +172,116 @@ input#ofertaProducto {
 
   .admin-table th,
   .admin-table td {
-    padding: 6px 10px;
+    padding: 6px 10px; 
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.barra-productos-admin {
+  display: flex;
+  margin-bottom: 2%;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: #e3e5e7;
+  border-bottom: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.grupo-busqueda-filtros {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.busqueda-productos {
+  position: relative;
+}
+
+.input-con-icono {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.input-con-icono i {
+  color: #888;
+}
+
+.input-busqueda {
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  width: 230px;
+}
+
+.filtros-productos {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.select-filtro {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 0.95rem;
+  min-width: 140px;
+}
+
+.agregar-producto {
+  flex-shrink: 0;
+}
+
+.btn-agregar-producto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #2563eb; /* azul profesional */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-agregar-producto:hover {
+  background-color: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+  .barra-productos-admin {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .grupo-busqueda-filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .busqueda-productos input,
+  .select-filtro {
+    width: 100%;
+  }
+}
