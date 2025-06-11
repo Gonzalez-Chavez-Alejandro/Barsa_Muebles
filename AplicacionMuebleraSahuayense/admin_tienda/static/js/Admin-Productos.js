@@ -320,3 +320,60 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+
+
+
+
+
+
+let productoIdAEliminar = null;
+
+function abrirModalEliminarProducto(id) {
+  productoIdAEliminar = id;
+  document.getElementById('modalEliminarProducto').style.display = 'flex';
+}
+
+function cerrarModalEliminarProducto() {
+  productoIdAEliminar = null;
+  document.getElementById('modalEliminarProducto').style.display = 'none';
+}
+
+function getCSRFToken() {
+  const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+  return tokenMeta ? tokenMeta.getAttribute('content') : '';
+}
+
+async function eliminarProductoConfirmado() {
+  if (!productoIdAEliminar) return;
+
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    alert("No estás autenticado");
+    return;
+  }
+
+  try {
+    const csrfToken = getCSRFToken();
+
+    const response = await fetch(`/productos/eliminar-producto/${productoIdAEliminar}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.redirected || response.ok) {
+      cerrarModalEliminarProducto();
+      await mostrarProductos(); // recarga productos actualizados
+    } else {
+      const errorData = await response.json();
+      console.error("Error del servidor:", errorData);
+      alert("Error al eliminar el producto.");
+    }
+  } catch (error) {
+    console.error("Error en la eliminación:", error);
+    alert("Hubo un error inesperado.");
+  }
+}

@@ -1,3 +1,4 @@
+#productos/models
 from django.db import models
 from autentication.models import CustomUser
 from categorias.models import Categorias
