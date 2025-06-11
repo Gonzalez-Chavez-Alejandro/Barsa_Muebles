@@ -236,15 +236,14 @@
 
       <label>Categorías:</label>
       <div class="checkbox-categorias">
-        {% for categoria in categorias %}
-        <label class="categoria-checkbox">
-          <input type="checkbox" name="categoryID[]" value="{{ categoria.id }}" {% if categoria in
-            producto.categoryID.all %}checked{% endif %}>
+  {% for categoria in categorias %}
+    <label class="categoria-checkbox">
+      <input type="checkbox" name="categoryID[]" value="{{ categoria.id }}" {% if categoria in producto.categoryID.all %}checked{% endif %}>
 
-          {{ categoria.nameCategory }}
-        </label>
-        {% endfor %}
-      </div>
+      {{ categoria.nameCategory }}
+    </label>
+  {% endfor %}
+</div>
 
 
       <button type="submit">Guardar Cambios</button>
