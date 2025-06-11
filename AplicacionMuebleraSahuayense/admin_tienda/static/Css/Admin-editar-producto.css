@@ -107,7 +107,7 @@ form textarea {
 
 form input[type="checkbox"] {
     transform: scale(1.2);
-    margin-top: 10px;
+    
 }
 
 button[type="submit"] {
