@@ -24,8 +24,13 @@ class ProductoSerializer(serializers.ModelSerializer):
         ]
 
     def get_PrecioOferta(self, obj):
+        precio = obj.priceFurniture or 0
         descuento = obj.porcentajeDescuento or 0
-        return obj.priceFurniture * (1 - descuento / 100)
+        try:
+            return round(precio * (1 - descuento / 100), 2)
+        except Exception:
+            return 0
+
 
     def get_categorias_nombres(self, obj):
         return [cat.nameCategory for cat in obj.categoryID.all()]

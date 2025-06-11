@@ -110,12 +110,14 @@ function mostrarProductosView() {
     const tr = document.createElement("tr");
     tr.innerHTML =
       `<td>${producto.id || ''}</td>
+      <td>${producto.stateFurniture ? 'Activo' : 'Inactivo'}</td>
        <td>${producto.nameFurniture || ''}</td>
        <td>${producto.descriptionFurniture || ''}</td>
        <td>$${Number(producto.priceFurniture).toFixed(2)}</td>
        <td>${producto.porcentajeDescuento || 0}%</td>
-       <td>$${Number(producto.PrecioOferta).toFixed(2)}</td>
-       <td>${producto.stateFurniture ? 'Activo' : 'Inactivo'}</td>
+      <td>$${producto.PrecioOferta && !isNaN(producto.PrecioOferta) ? Number(producto.PrecioOferta).toFixed(2) : Number(producto.priceFurniture).toFixed(2)}</td>
+
+       
        <td>${imagenesHTML}</td>
        <td>${categoriasNombres}</td>
 
