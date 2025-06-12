@@ -110,8 +110,8 @@ function mostrarCategorias() {
                     onclick="editarCategoria('${categoria.nombre}')">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn-admin-desing-delete" onclick="eliminarCategoria('${categoria.nombre}')">
-                    <i class="fas fa-trash-alt"></i>
+                <button class="btn-admin-desing-deletes-eliminar" onclick="abrirModalEliminarCategoria('${categoria.id}')">
+                  <i class="fas fa-trash-alt"></i>
                 </button>
             </td>
         `;
@@ -377,3 +377,62 @@ document.addEventListener("DOMContentLoaded", () => {
     btnGuardarEdicion.addEventListener('click', guardarEdicionCategorias);
   }
 });
+
+
+
+
+
+
+
+
+
+let categoriaIdEliminar = null;
+
+function abrirModalEliminarCategoria(id) {
+  categoriaIdEliminar = id;
+  document.getElementById('modalEliminarCategoria').style.display = 'block';
+}
+
+function cerrarModalEliminarCategoria() {
+  categoriaIdEliminar = null;
+  document.getElementById('modalEliminarCategoria').style.display = 'none';
+}
+
+
+
+
+async function confirmarEliminarCategoria() {
+  if (!categoriaIdEliminar) return;
+
+  try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        alert("No estás autenticado");
+        return;
+      }
+
+    const response = await fetch(`/categorias/eliminar/${categoriaIdEliminar}/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      alert('Categoría eliminada correctamente');
+      cerrarModalEliminarCategoria();
+      cargarCategorias();  // función que debes tener para refrescar la lista
+    } else if (data.warning) {
+      alert(data.warning);
+    } else {
+      alert(data.error || 'Error al eliminar la categoría');
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error inesperado al eliminar');
+  }
+}

@@ -35,3 +35,25 @@ class CategoryUpdateView(APIView):
             serializer.save()
             return Response({"message": "Categoria actualizada correctamente"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from categorias.models import Categorias
+
+@api_view(['POST'])  # También puede ser DELETE, pero POST es más cómodo con fetch
+@permission_classes([IsAuthenticated])
+def eliminar_categoria(request, id):
+    try:
+        categoria = Categorias.objects.get(id=id)
+
+        if categoria.productos.exists():
+            return Response({'warning': 'No puedes eliminar esta categoría porque tiene productos asociados.'}, status=400)
+
+        categoria.delete()
+        return Response({'success': True}, status=200)
+
+    except Categorias.DoesNotExist:
+        return Response({'error': 'Categoría no encontrada'}, status=404)

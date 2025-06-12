@@ -209,7 +209,7 @@ td.td-centrado {
 /* --------------------------------------
    Boton Eliminar Editar
 -------------------------------------- */
-.btn-admin-desing-delete,.btn-admin-desing-deletes,.btn-admin-desing-deleteproducto,.btn-admin-desing-delete-productos {
+.btn-admin-desing-delete,.btn-admin-desing-deletes,.btn-admin-desing-deleteproducto,.btn-admin-desing-delete-productos,.btn-admin-desing-deletes-eliminar {
   background-color: #d73a49; /* Rojo más oscuro, mejor contraste */
   color: white;
   padding: 8px 11px;
@@ -222,7 +222,7 @@ td.td-centrado {
   padding: 8px 10px;
 }
 
-.btn-admin-desing-delete,.btn-admin-desing-deletes,.btn-admin-desing-edit,.btn-admin-desing-edits,.btn-admin-desing-editproducto,.btn-admin-desing-deleteproducto,.btn-admin-desing-edit-productos,.btn-admin-desing-delete-productos{
+.btn-admin-desing-delete,.btn-admin-desing-deletes,.btn-admin-desing-edit,.btn-admin-desing-edits,.btn-admin-desing-editproducto,.btn-admin-desing-deleteproducto,.btn-admin-desing-edit-productos,.btn-admin-desing-delete-productos,.btn-admin-desing-deletes-eliminar{
   margin-right: 0px;
   border: none;
   border-radius: 8px;
