@@ -138,7 +138,7 @@ function mostrarProductosView() {
 function obtenerNombresCategorias(ids) {
   if (!Array.isArray(ids)) return "";
   return ids.map(id => {
-    const cat = window.categorias.find(c => c.id === id);
+    const cat = window.categoriasCategorias.find(c => c.id === id);
     return cat ? cat.nameCategory : id;
   }).join(", ");
 }
@@ -179,7 +179,7 @@ async function cargarCategoriasProductos() {
     const categorias = await response.json();
     console.log("[DEBUG] Categorías recibidas:", categorias);
 
-    window.categorias = categorias;
+    window.categoriasCategorias = categorias;
     llenarSelectCategorias();
 
   } catch (err) {
@@ -194,7 +194,7 @@ function llenarSelectCategorias() {
 
   select.innerHTML = '<option value="">Todas las categorías</option>';
 
-  window.categorias.forEach(cat => {
+  window.categoriasCategorias.forEach(cat => {
     const option = document.createElement('option');
     option.value = cat.id;
     option.textContent = cat.nameCategory;
@@ -215,7 +215,7 @@ function filtrarPorCategoria() {
     return;
   }
 
-  const categoria = window.categorias.find(cat => String(cat.id) === categoriaId);
+  const categoria = window.categoriasCategorias.find(cat => String(cat.id) === categoriaId);
   if (!categoria) {
     modoFiltrado = false;
     mostrarProductosView();
