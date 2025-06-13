@@ -12,85 +12,170 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/Productos.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">  
     <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
     <style>
         .contenedor-detalle {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
+    max-width: 1100px;
+    margin: 40px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+}
 
-        .galeria {
-            flex: 1;
-            min-width: 300px;
-        }
+.galeria {
+    flex: 1 1 315px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        #imagen-grande {
-            width: 100%;
-            max-height: 500px;
-            object-fit: contain;
-            border: 1px solid #ddd;
-            margin-bottom: 10px;
-        }
+#imagen-grande {
+    width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
 
-        .miniaturas {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+#imagen-grande:hover {
+    transform: scale(1.02);
+}
 
-        .miniaturas img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border: 2px solid #ddd;
-            cursor: pointer;
-        }
+.miniaturas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-        .miniaturas img.activa {
-            border-color: #0066cc;
-        }
+.miniaturas img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.3s ease, transform 0.2s ease;
+}
 
-        .info-producto {
-            flex: 1;
-            min-width: 300px;
-        }
+.miniaturas img:hover {
+    transform: scale(1.1);
+    border-color: #007BFF;
+}
 
-        .precio-oferta {
-            color: #0066cc;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
+.miniaturas img.activa {
+    border-color: #007BFF;
+    box-shadow: 0 0 10px #007BFFaa;
+}
 
-        .precio-original {
-            text-decoration: line-through;
-            color: #999;
-            margin-right: 10px;
-        }
+.info-producto {
+    flex: 1 1 450px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+}
 
-        .ahorro {
-            color: #e63946;
-            font-weight: bold;
-            margin-left: 10px;
-        }
+.info-producto h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #111;
+}
 
-        .btn-regresar {
-            padding: 10px 20px;
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 1em;
-        }
+.info-producto p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #444;
+}
 
-        
+.precios {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.precio-oferta {
+    color: #E63946;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.precio-original {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1.2rem;
+}
+
+.ahorro {
+    color: #2A9D8F;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+#detalle-ahorro {
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.boton-compra {
+    background-color: white;
+    color: #2a344b;
+    border: 2px solid #2a344b;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.boton-compra:hover {
+    background-color: #2563eb;
+    color: white;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.boton-compra:active {
+    top: 2px;
+    box-shadow: 0 2px 0 #1d4ed8;
+}
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-detalle {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .galeria, .info-producto {
+        min-width: 100%;
+    }
+
+    .boton-compra {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
     </style>
 </head>
 
@@ -115,7 +200,6 @@
 
             <p id="detalle-ahorro" class="ahorro"></p>
 
-            <button id="btn-regresar" class="btn-regresar">Regresar</button>
             <button id="agregar-carrito-detalle" class="boton-compra">
                 <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png"
                     alt="Carrito" class="icono-carrito-svg">
@@ -123,6 +207,113 @@
             </button>
         </div>
     </div>
+
+
+    {% include 'includes/foother.html' %}
+    <script src="{% static 'js/Header.js' %}"></script>
+
+
+<script> 
+const detalleNombre = document.getElementById("detalle-nombre");
+const detalleDescripcion = document.getElementById("detalle-descripcion");
+const detallePrecio = document.getElementById("detalle-precio");
+const detallePrecioOriginal = document.getElementById("detalle-precio-original");
+const detalleImagen = document.getElementById("imagen-grande");
+const detalleAhorro = document.getElementById("detalle-ahorro");
+const detallePorcentaje = document.getElementById("detalle-porcentaje");
+const miniaturasContainer = document.querySelector(".miniaturas");
+
+const urlParams = new URLSearchParams(window.location.search);
+const productoId = parseInt(urlParams.get("producto_id"));
+
+async function cargarProducto() {
+    try {
+        const response = await fetch("/productos/publicos/");
+        if (!response.ok) throw new Error("Error al cargar productos");
+        const productos = await response.json();
+
+        // Mapeamos los productos para renombrar propiedades igual que en tu listado
+        const productosMapeados = productos.map(p => ({
+            id: p.id,
+            nombre: p.nameFurniture,
+            descripcion: p.descriptionFurniture,
+            precio: p.priceFurniture,
+            precioOferta: p.PrecioOferta,
+            nombreimagenes: p.imageFurniture,
+            // Puedes agregar más campos si los necesitas
+        }));
+
+        const producto = productosMapeados.find(p => p.id === productoId);
+        if (!producto) {
+            mostrarError("Producto no encontrado");
+            return;
+        }
+
+        mostrarProducto(producto);
+    } catch (error) {
+        mostrarError("Error al cargar el producto");
+        console.error(error);
+    }
+}
+
+function mostrarProducto(producto) {
+    const imagenes = producto.nombreimagenes?.split(",") || [];
+
+    if (imagenes.length > 0) {
+        detalleImagen.src = imagenes[0].trim();
+        detalleImagen.alt = producto.nombre || "Producto";
+
+        miniaturasContainer.innerHTML = '';
+        imagenes.forEach((img, i) => {
+            const mini = document.createElement("img");
+            mini.src = img.trim();
+            mini.alt = `Miniatura ${i + 1}`;
+            if (i === 0) mini.classList.add("activa");
+
+            mini.addEventListener("click", () => {
+                detalleImagen.src = img.trim();
+                document.querySelectorAll(".miniaturas img").forEach(el => el.classList.remove("activa"));
+                mini.classList.add("activa");
+            });
+
+            miniaturasContainer.appendChild(mini);
+        });
+    }
+
+    detalleNombre.textContent = producto.nombre || "Sin nombre";
+    detalleDescripcion.textContent = producto.descripcion || "Sin descripción";
+
+    const precio = parseFloat(producto.precio) || 0;
+    const oferta = parseFloat(producto.precioOferta) || 0;
+
+    if (oferta > 0 && oferta < precio) {
+        detallePrecio.textContent = `$${oferta.toFixed(2)}`;
+        detallePrecioOriginal.textContent = `$${precio.toFixed(2)}`;
+        detallePrecioOriginal.style.display = "inline";
+
+        const ahorro = precio - oferta;
+        const porcentaje = Math.round((ahorro / precio) * 100);
+        detalleAhorro.textContent = `Ahorras $${ahorro.toFixed(2)}`;
+        detalleAhorro.style.display = "block";
+        detallePorcentaje.textContent = `(${porcentaje}% OFF)`;
+        detallePorcentaje.style.display = "inline";
+    } else {
+        detallePrecio.textContent = `$${precio.toFixed(2)}`;
+        detallePrecioOriginal.style.display = "none";
+        detalleAhorro.style.display = "none";
+        detallePorcentaje.style.display = "none";
+    }
+}
+
+function mostrarError(msg) {
+    document.querySelector(".contenedor-detalle").innerHTML = `
+        <p>${msg}</p>
+    `;
+}
+
+cargarProducto();
+</script>
+
 
 
     <!-- Carrito -->
@@ -136,123 +327,8 @@
         </div>
         <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
     </section>
-
-    {% include 'includes/foother.html' %}
-    <script src="{% static 'js/variables.js' %}"></script>
-
-    <script>
-        const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
-    </script>
-
-    <script>
-        // Obtener elementos del DOM
-        const detalleNombre = document.getElementById("detalle-nombre");
-        const detalleDescripcion = document.getElementById("detalle-descripcion");
-        const detallePrecio = document.getElementById("detalle-precio");
-        const detallePrecioOriginal = document.getElementById("detalle-precio-original");
-        const detalleImagen = document.getElementById("imagen-grande");
-        const detalleAhorro = document.getElementById("detalle-ahorro");
-        const detallePorcentaje = document.getElementById("detalle-porcentaje");
-        const btnRegresar = document.getElementById("btn-regresar");
-        const miniaturasContainer = document.querySelector(".miniaturas");
-
-        // Obtener el producto de localStorage o de la URL
-        let producto;
-        const productoStorage = localStorage.getItem("producto_seleccionado");
-        const urlParams = new URLSearchParams(window.location.search);
-        const productoId = urlParams.get('producto_id');
-
-        if (productoStorage) {
-            producto = JSON.parse(productoStorage);
-        } else if (productoId && window.productos) {
-            producto = window.productos.find(p => p.id === parseInt(productoId));
-        }
-
-        // Mostrar el producto si existe
-        if (producto) {
-            // Mostrar imágenes
-            const imagenes = producto.nombreimagenes?.split(",") || [];
-
-            if (imagenes.length > 0) {
-                detalleImagen.src = imagenes[0].trim();
-                detalleImagen.alt = producto.nombre;
-
-                // Crear miniaturas
-                miniaturasContainer.innerHTML = '';
-                imagenes.forEach((imagen, index) => {
-                    const miniatura = document.createElement("img");
-                    miniatura.src = imagen.trim();
-                    miniatura.alt = `${producto.nombre} miniatura ${index + 1}`;
-
-                    if (index === 0) miniatura.classList.add("activa");
-
-                    miniatura.addEventListener("click", () => {
-                        detalleImagen.src = imagen.trim();
-                        document.querySelectorAll(".miniaturas img").forEach(img => {
-                            img.classList.remove("activa");
-                        });
-                        miniatura.classList.add("activa");
-                    });
-
-                    miniaturasContainer.appendChild(miniatura);
-                });
-            }
-
-            // Mostrar información del producto
-            detalleNombre.textContent = producto.nombre || "No disponible";
-            detalleDescripcion.textContent = producto.descripcion || "Descripción no disponible";
-
-            // Mostrar precios y ofertas
-            if (producto.precioOferta && producto.precioOferta < producto.precio) {
-                detallePrecio.textContent = `$${producto.precioOferta}`;
-                detallePrecioOriginal.textContent = `$${producto.precio}`;
-                detallePrecioOriginal.style.display = "inline";
-
-                const ahorro = producto.precio - producto.precioOferta;
-                detalleAhorro.textContent = `Ahorras $${ahorro.toFixed(2)}`;
-                detalleAhorro.style.display = "inline";
-
-                const porcentajeDescuento = (ahorro / producto.precio) * 100;
-                const porcentajeRedondeado = Math.round(porcentajeDescuento);
-                detallePorcentaje.textContent = `(${porcentajeRedondeado}% OFF)`;
-                detallePorcentaje.style.display = "inline";
-            } else {
-                detallePrecio.textContent = `$${producto.precio || '0.00'}`;
-                detallePrecioOriginal.textContent = "";
-                detallePrecioOriginal.style.display = "none";
-                detalleAhorro.textContent = "";
-                detalleAhorro.style.display = "none";
-                detallePorcentaje.textContent = "";
-                detallePorcentaje.style.display = "none";
-            }
-        } else {
-            document.querySelector(".contenedor-detalle").innerHTML = `
-                <p>No se encontró el producto solicitado.</p>
-                <p>ID buscado: ${productoId || 'No proporcionado'}</p>
-                <button id="btn-regresar" class="btn-regresar">Regresar</button>
-            `;
-        }
-
-        // Botón regresar
-        btnRegresar.addEventListener("click", () => {
-            window.location.href = "/";
-        });
-
-        // Función para agregar al carrito
-
-
-        // Limpiar el localStorage después de usar el dato
-        localStorage.removeItem("producto_seleccionado");
-    </script>
-
-
-    <script src="{% static 'js/Header.js' %}"></script>
-
-    <script src="{% static 'js/Home-contenedor-productos.js' %}"></script>
-
-
-    <script src="{% static 'js/Carrito.js' %}"></script>
-    <script src="{% static 'js/Admin-Manda.js' %}"></script>
+  <!--  <script src="{% static 'js/Carrito.js' %}"></script>
+    <script src="{% static 'js/Admin-Manda.js' %}"></script>-->
 
 </body>
 
