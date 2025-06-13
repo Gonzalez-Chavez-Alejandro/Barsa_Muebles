@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 nombreimagenes: p.imageFurniture,
                 imagen: imagenes[0] || "https://via.placeholder.com/300x180",
                 oferta: p.porcentajeDescuento > 0,
-                categoriaId: p.categoryID[0] || null,
+                categoriaIds: p.categoryID || [],
                 categoriasNombres: p.categorias_nombres,
             };
         });
@@ -34,8 +34,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             nombre: c.nameCategory
         }));
 
+        // Leer categoría de la URL
+        const categoriaEnUrl = getQueryParam("categoria");
+        if (categoriaEnUrl && categorias.some(c => c.id == categoriaEnUrl)) {
+            categoriaSeleccionada = Number(categoriaEnUrl);
+        } else {
+            categoriaSeleccionada = "all";
+        }
+
         renderCategorias();
-        renderTarjetas();
+        aplicarFiltros();
 
     } catch (error) {
         console.error("Error al cargar productos o categorías:", error);
@@ -44,18 +52,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Activar filtro por búsqueda
     document.getElementById("buscador").addEventListener("input", aplicarFiltros);
-
-    // Botón "todas las categorías"
-    const botonTodas = document.querySelector("[data-id='all']");
-    if (botonTodas) {
-        botonTodas.onclick = () => {
-            categoriaSeleccionada = "all";
-            document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("categoria-activa"));
-            botonTodas.classList.add("categoria-activa");
-            aplicarFiltros();
-        };
-    }
 });
+
+// Función para leer parámetros GET de la URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
 function renderTarjetas(lista = productos) {
     const contenedor = document.getElementById("contenedor-productos");
@@ -117,13 +120,24 @@ function renderCategorias() {
     const liAll = document.createElement("li");
     liAll.textContent = "Todas";
     liAll.dataset.id = "all";
-    liAll.classList.add("categoria-activa");
+    if (categoriaSeleccionada === "all") {
+        liAll.classList.add("categoria-activa");
+    }
+    liAll.onclick = () => {
+        categoriaSeleccionada = "all";
+        document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("categoria-activa"));
+        liAll.classList.add("categoria-activa");
+        aplicarFiltros();
+    };
     listaCat.appendChild(liAll);
 
     categorias.forEach(cat => {
         const li = document.createElement("li");
         li.textContent = cat.nombre;
         li.dataset.id = cat.id;
+        if (cat.id === categoriaSeleccionada) {
+            li.classList.add("categoria-activa");
+        }
         li.onclick = () => {
             categoriaSeleccionada = cat.id;
             document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("categoria-activa"));
@@ -142,7 +156,9 @@ function aplicarFiltros() {
             p.nombre.toLowerCase().includes(termino) ||
             p.descripcion.toLowerCase().includes(termino);
 
-        const coincideCategoria = categoriaSeleccionada === "all" || p.categoriaId == categoriaSeleccionada;
+        const coincideCategoria =
+            categoriaSeleccionada === "all" ||
+            p.categoriaIds.includes(Number(categoriaSeleccionada));
 
         return coincideBusqueda && coincideCategoria;
     });
@@ -157,6 +173,7 @@ function enviarpagina(id) {
         window.location.href = `/productos_vista/?producto_id=${id}`;
     }
 }
+
 
 /*
 

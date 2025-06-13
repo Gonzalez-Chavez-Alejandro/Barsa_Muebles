@@ -23,7 +23,7 @@ function normalizeImageUrl(url) {
   }
 
   // Si es una ruta relativa, prepende base URL
-  return `https://res.cloudinary.com/dacrpsl5p/image/upload/${url}`;
+  //return `https://res.cloudinary.com/dacrpsl5p/image/upload/${url}`;
 }
 
 // Función para cargar categorías desde la API
