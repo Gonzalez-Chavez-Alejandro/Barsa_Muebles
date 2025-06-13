@@ -1,7 +1,61 @@
-let productos = window.productos || [];
-let categorias = window.categorias || [];
-
+let productos = [];
+let categorias = [];
 let categoriaSeleccionada = "all";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Cargar productos desde la API
+        const responseProductos = await fetch("/productos/publicos/");
+        const dataProductos = await responseProductos.json();
+
+        productos = dataProductos.map(p => {
+            const imagenes = p.imageFurniture ? p.imageFurniture.split(",") : [];
+            return {
+                id: p.id,
+                nombre: p.nameFurniture,
+                descripcion: p.descriptionFurniture,
+                precio: p.priceFurniture,
+                precioOferta: p.PrecioOferta,
+                descuento: p.porcentajeDescuento,
+                nombreimagenes: p.imageFurniture,
+                imagen: imagenes[0] || "https://via.placeholder.com/300x180",
+                oferta: p.porcentajeDescuento > 0,
+                categoriaId: p.categoryID[0] || null,
+                categoriasNombres: p.categorias_nombres,
+            };
+        });
+
+        // Cargar categorías desde la API
+        const responseCategorias = await fetch("/categorias/publicas/");
+        const dataCategorias = await responseCategorias.json();
+
+        categorias = dataCategorias.map(c => ({
+            id: c.id,
+            nombre: c.nameCategory
+        }));
+
+        renderCategorias();
+        renderTarjetas();
+
+    } catch (error) {
+        console.error("Error al cargar productos o categorías:", error);
+        document.getElementById("contenedor-productos").innerHTML = "<p>Error al cargar productos.</p>";
+    }
+
+    // Activar filtro por búsqueda
+    document.getElementById("buscador").addEventListener("input", aplicarFiltros);
+
+    // Botón "todas las categorías"
+    const botonTodas = document.querySelector("[data-id='all']");
+    if (botonTodas) {
+        botonTodas.onclick = () => {
+            categoriaSeleccionada = "all";
+            document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("categoria-activa"));
+            botonTodas.classList.add("categoria-activa");
+            aplicarFiltros();
+        };
+    }
+});
 
 function renderTarjetas(lista = productos) {
     const contenedor = document.getElementById("contenedor-productos");
@@ -16,18 +70,39 @@ function renderTarjetas(lista = productos) {
         const div = document.createElement("div");
         div.className = "tarjeta-producto";
 
-        const imagen = (p.nombreimagenes?.split(",")[0] || "https://via.placeholder.com/300x180").trim();
-        const precio = p.oferta ? `<span class="oferta">$${p.precioOferta}</span> <del>$${p.precio}</del>` : `$${p.precio}`;
+        const imagen = (p.nombreimagenes?.split(",")[0] || p.imagen || "https://via.placeholder.com/300x180").trim();
+        const precio = Number(p.precio);
+        const precioOferta = Number(p.precioOferta);
+        const precioInvalido = isNaN(precio) || precio <= 0;
+
+        let precioHTML = "";
+        let descuento = 0;
+        let ahorro = 0;
+
+        if (p.oferta && !isNaN(precioOferta) && precioOferta > 0) {
+            precioHTML = `<span class="oferta">$${precioOferta}</span> <del>$${precio}</del>`;
+            descuento = Math.round(((precio - precioOferta) / precio) * 100);
+            ahorro = precio - precioOferta;
+        } else if (precioInvalido) {
+            precioHTML = `<span class="contactar">Póngase en contacto</span>`;
+        } else {
+            precioHTML = `<span class="oferta">$${precio}</span>`;
+        }
 
         div.innerHTML = `
-              <img src="${imagen}" alt="${p.nombre}">
-              <div class="contenido">
-                <div class="nombre">${p.nombre}</div>
-                <div class="descripcion">${p.descripcion}</div>
-                <div class="precio">${precio}</div>
-                <button onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
-              </div>
-            `;
+            ${descuento > 0 ? `<div class="descuento">${descuento}%</div>` : ''}
+            <img src="${imagen}" alt="${p.nombre}">
+            <div class="contenido">
+                <h2 class="nombre">${p.nombre}</h2>
+                <p class="descripcion">${p.descripcion}</p>
+                <div class="precio">${precioHTML}</div>
+                <div class="ahorro-boton">
+                    ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro.toFixed(2)}</div>` : ''}
+                    
+                    <button class="btn-carrito" onclick="enviarpagina(${p.id})">Ver Producto</button>
+                </div>
+            </div>
+        `;
 
         contenedor.appendChild(div);
     });
@@ -35,6 +110,16 @@ function renderTarjetas(lista = productos) {
 
 function renderCategorias() {
     const listaCat = document.getElementById("lista-categorias");
+    if (!listaCat) return;
+
+    listaCat.innerHTML = "";
+
+    // Agregar opción "Todas"
+    const liAll = document.createElement("li");
+    liAll.textContent = "Todas";
+    liAll.dataset.id = "all";
+    liAll.classList.add("categoria-activa");
+    listaCat.appendChild(liAll);
 
     categorias.forEach(cat => {
         const li = document.createElement("li");
@@ -53,7 +138,7 @@ function renderCategorias() {
 function aplicarFiltros() {
     const termino = document.getElementById("buscador").value.toLowerCase();
 
-    let lista = productos.filter(p => {
+    const lista = productos.filter(p => {
         const coincideBusqueda =
             p.nombre.toLowerCase().includes(termino) ||
             p.descripcion.toLowerCase().includes(termino);
@@ -66,75 +151,6 @@ function aplicarFiltros() {
     renderTarjetas(lista);
 }
 
-// Inicialización
-document.addEventListener("DOMContentLoaded", () => {
-    renderCategorias();
-    renderTarjetas();
-
-    document.getElementById("buscador").addEventListener("input", aplicarFiltros);
-    document.querySelector("[data-id='all']").onclick = () => {
-        categoriaSeleccionada = "all";
-        document.querySelectorAll("#lista-categorias li").forEach(el => el.classList.remove("categoria-activa"));
-        document.querySelector("[data-id='all']").classList.add("categoria-activa");
-        aplicarFiltros();
-    };
-});
-
-function renderTarjetas(lista = productos) {
-    const contenedor = document.getElementById("contenedor-productos");
-    contenedor.innerHTML = "";
-
-    if (lista.length === 0) {
-        contenedor.innerHTML = "<p>No se encontraron productos.</p>";
-        return;
-    }
-
-    lista.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "tarjeta-producto";
-
-        const imagen = (p.nombreimagenes?.split(",")[0] || p.imagen || "https://via.placeholder.com/300x180").trim();
-
-        let precioHTML = "";
-        let descuento = 0;
-        let ahorro = 0;
-
-        // Convertimos precios a número por si vienen como string
-        const precio = Number(p.precio);
-        const precioOferta = Number(p.precioOferta);
-
-        // Validar si el precio no es válido o es 0
-        const precioInvalido = isNaN(precio) || precio <= 0;
-
-        if (p.oferta && !isNaN(precioOferta) && precioOferta > 0) {
-            precioHTML = `<span class="oferta">$${precioOferta}</span> <del>$${precio}</del>`;
-            descuento = Math.round(((precio - precioOferta) / precio) * 100);
-            ahorro = precio - precioOferta;
-        } else if (precioInvalido) {
-            precioHTML = `<span class="contactar">Pongase en contacto</span>`;
-        } else {
-            precioHTML = `<span class="oferta">$${precio}</span>`;
-        }
-
-        div.innerHTML = `
-            ${descuento > 0 ? `<div class="descuento">${descuento}%</div>` : ''}
-            <img src="${imagen}" alt="${p.nombre}">
-            <div class="contenido">
-                <h2 class="nombre">${p.nombre}</h2>
-                <p class="descripcion">${p.descripcion}</p>
-                <div class="precio">${precioHTML}</div>
-                <div class="ahorro-boton">
-                    ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro}</div>` : ''}
-                    <button onclick="verDetalle(${p.id})">Ver Producto</button>
-                    <button class="btn-carrito" onclick="enviarpagina(${p.id})">enviarpagina</button>
-                     </div>
-            </div>
-        `;
-
-        contenedor.appendChild(div);
-    });
-}
-
 function enviarpagina(id) {
     const producto = productos.find(p => p.id === id);
     if (producto) {
@@ -143,7 +159,7 @@ function enviarpagina(id) {
     }
 }
 
-
+/*
 
 function renderTarjetas(lista = productos) {
     const contenedor = document.getElementById("contenedor-productos");
@@ -244,7 +260,7 @@ function verDetalle(id) {
         btnRegresar.click();
     });
 }
- /*
+ 
 const detalleSeccion = document.getElementById("detalle-producto");
 const detalleNombre = document.getElementById("detalle-nombre");
 const detalleDescripcion = document.getElementById("detalle-descripcion");
@@ -254,6 +270,7 @@ const detalleImagen = document.getElementById("imagen-grande");
 const detalleAhorro = document.getElementById("detalle-ahorro");
 const detallePorcentaje = document.getElementById("detalle-porcentaje");
 const btnRegresar = document.getElementById("btn-regresar");
+
 document.addEventListener("DOMContentLoaded", () => {
 
 
@@ -386,8 +403,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-*/
 
+*/
 
 
 

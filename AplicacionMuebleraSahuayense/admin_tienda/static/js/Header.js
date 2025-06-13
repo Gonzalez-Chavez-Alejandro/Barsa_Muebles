@@ -75,6 +75,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+/*************************************************************/
+                  /* Validacion del Token */
+/*************************************************************/
+
+function checkAuthRedirect() {
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    window.location.href = '/'; // Página principal o login
+  }
+}
+
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -95,18 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-
-/*************************************************************/
-                  /* Validacion del Token */
-/*************************************************************/
-
-function checkAuthRedirect() {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    window.location.href = '/'; // Página principal o login
-  }
-}
-
 
 
 

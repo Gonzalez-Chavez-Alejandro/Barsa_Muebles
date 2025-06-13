@@ -1,5 +1,5 @@
 #views 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -57,3 +57,19 @@ def eliminar_categoria(request, id):
 
     except Categorias.DoesNotExist:
         return Response({'error': 'Categoría no encontrada'}, status=404)
+
+
+
+# categorias/views.py
+
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny
+from categorias.models import Categorias
+from categorias.serializers import CategoriaSerializer
+
+class PublicCategoryListView(ListAPIView):
+    queryset = Categorias.objects.all()
+    serializer_class = CategoriaSerializer
+    permission_classes = [AllowAny]
+
+

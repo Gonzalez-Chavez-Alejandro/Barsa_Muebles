@@ -6,7 +6,7 @@ from categorias.models import Categorias
 class Productos(models.Model):
     categoryID = models.ManyToManyField(Categorias, related_name='productos')  # antes era ForeignKey
     nameFurniture = models.CharField(max_length=100)
-    descriptionFurniture = models.CharField(max_length=225)
+    descriptionFurniture = models.CharField(max_length=1500)
     priceFurniture = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     porcentajeDescuento = models.DecimalField(max_digits=3, decimal_places=0, default=0)
     stateFurniture = models.BooleanField(default=True)

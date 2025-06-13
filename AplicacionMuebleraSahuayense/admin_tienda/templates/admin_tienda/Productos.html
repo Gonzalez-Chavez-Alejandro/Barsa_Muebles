@@ -35,7 +35,7 @@
         <aside class="sidebar">
             <h3>Categorías</h3>
             <ul id="lista-categorias">
-                <li data-id="all" class="categoria-activa">Todas</li>
+                <li data-id="all" class="categoria-activa"></li>
             </ul>
         </aside>
 
@@ -47,54 +47,10 @@
 
     <div id="overlay-detalle"></div>
 
-    <section id="detalle-producto" class="detalle">
-        <button id="btn-regresar">
-            <i class="fas fa-arrow-left"></i> Regresar
-        </button>
-        <div class="detalle-contenedor">
-
-            <div class="galeria-producto">
-                <div class="imagen-principal">
-                    <img id="imagen-grande" src="" alt="Imagen principal del producto">
-                </div>
-
-                <div class="miniaturas">
-                    <!-- Las miniaturas se agregarán dinámicamente aquí -->
-                </div>
-                <hr>
-            </div>
-            <div class="detalle-info">
-                <h2 id="detalle-nombre" class="producto-titulo"></h2>
-                <p id="detalle-descripcion" class="producto-desc"></p>
-
-                <div class="precio-detalle">
-                    <div class="precio-container">
-                        <span id="detalle-precio" class="oferta precio-actual"></span>
-                        <div class="precio-original-wrapper">
-                            <span id="detalle-precio-original" class="tachado precio-antiguo"></span>
-                            <span id="detalle-porcentaje" class="porcentaje-descuento etiqueta-descuento"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <p id="detalle-ahorro" class="ahorro-detalle ahorro-mensaje"></p>
-
-                <!-- Botón para agregar al carrito -->
-                <button id="agregar-carrito-detalle" class="boton-compra">
-                    <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png"
-                        alt="Carrito" class="icono-carrito-svg">
-                    <span>Agregar al carrito </span>
-                </button>
+  
+  
 
 
-            </div>
-        </div>
-    </section>
-
-    <div id="modal-zoom" class="modal-zoom">
-        <span class="cerrar">&times;</span>
-        <img class="modal-contenido" id="imagen-zoom">
-    </div>
 
     <!-- Carrito -->
     <section id="carrito" class="carrito" style="display: none;">

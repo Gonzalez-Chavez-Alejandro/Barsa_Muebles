@@ -175,3 +175,24 @@ def vista_agregar_producto(request):
 
     return Response({'mensaje': 'Producto creado exitosamentes.'}, status=status.HTTP_201_CREATED)
 
+
+
+
+
+
+
+
+
+
+
+
+
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny
+from productos.models import Productos
+from productos.serializer import ProductoSerializer
+
+class PublicProductListView(ListAPIView):
+    queryset = Productos.objects.filter(stateFurniture=True)
+    serializer_class = ProductoSerializer
+    permission_classes = [AllowAny]  # Pública
