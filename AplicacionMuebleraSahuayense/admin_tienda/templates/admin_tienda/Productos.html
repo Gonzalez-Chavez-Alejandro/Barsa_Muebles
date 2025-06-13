@@ -18,7 +18,46 @@
     <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Productos.css' %}">
     <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
-</head>
+<style>
+   .busqueda-productos {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.input-con-icono {
+  position: relative;
+  width: 100%;
+}
+
+.input-con-icono i {
+  position: absolute;
+  top: 34%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #888;
+  pointer-events: none;
+  font-size: 16px;
+  line-height: 1; /* para mejor alineación */
+}
+
+#buscador {
+  width: 100%;
+  padding: 10px 10px 10px 36px; /* espacio para el icono */
+  font-size: 16px;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  height: 36px;  /* altura fija para mejor alineación */
+  line-height: 1.2;
+}
+
+#buscador:focus {
+  border-color: #384f68e3;
+  outline: none;
+  box-shadow: 0 0 5px #384f68e3;
+}
+
+</style>
 </head>
 
 <body>
@@ -40,7 +79,14 @@
         </aside>
 
         <main class="contenido-principal">
-            <input type="text" id="buscador" placeholder="Buscar productos..." />
+            <div class="busqueda-productos">
+            <label for="buscador" class="sr-only">Buscar productos</label>
+            <div class="input-con-icono">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscador" placeholder="Buscar productos..." autocomplete="off" />
+            </div>
+            </div>
+
             <div id="contenedor-productos" class="contenedor-productos"></div>
         </main>
     </div>

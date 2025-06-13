@@ -18,7 +18,7 @@ loginForm.addEventListener('submit', async (e) => {
 
   try {
     // Paso 1: Hacer login para obtener tokens
-    const response = await fetch('http://127.0.0.1:8000/api/login/', {
+    const response = await fetch('/api/login/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData)
@@ -58,7 +58,7 @@ loginForm.addEventListener('submit', async (e) => {
     localStorage.setItem('refresh_token', data.refresh);
 
     // Paso 2: Consultar endpoint que devuelve info del usuario
-    const userResponse = await fetch('http://127.0.0.1:8000/api/user-info/', {
+    const userResponse = await fetch('/api/user-info/', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${data.access}`,

@@ -13,7 +13,7 @@ async function obtenerUsuarioAutenticado() {
   }
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/user-info/", {
+    const response = await fetch("/api/user-info/", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -41,7 +41,7 @@ async function cargarUsuarios() {
   }
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/users/", {
+    const response = await fetch("/api/users/", {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -205,7 +205,7 @@ async function confirmarEliminacion() {
   const token = localStorage.getItem("access_token");
 
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/users/${usuarioAEliminarId}/`, {
+    const response = await fetch(`/api/users/${usuarioAEliminarId}/`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`
@@ -252,7 +252,7 @@ document.addEventListener("click", async function (event) {
     const token = localStorage.getItem("access_token");
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/users/${idUsuario}/`, {
+      const res = await fetch(`/api/users/${idUsuario}/`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
 
@@ -303,7 +303,7 @@ async function guardarCambios() {
   if (!data.password) delete data.password;
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/`, {
+    const res = await fetch(`/api/users/${id}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
