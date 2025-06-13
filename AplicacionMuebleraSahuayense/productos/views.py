@@ -70,16 +70,15 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from productos.models import Productos
 
-@api_view(['POST'])
+@api_view(['POST'])  # o DELETE
 @permission_classes([IsAuthenticated])
 def eliminar_producto(request, id):
     try:
         producto = Productos.objects.get(id=id)
-        producto.delete()
+        producto.delete()  # Esto elimina el producto y automáticamente limpia la tabla intermedia
         return Response({'success': True})
     except Productos.DoesNotExist:
         return Response({'error': 'Producto no encontrado'}, status=404)
-
 
 
 

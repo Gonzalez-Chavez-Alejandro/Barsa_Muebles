@@ -9,21 +9,21 @@ function getPlaceholderImage(text = 'Imagen no disponible', width = 80, height =
 
 // Función para validar y normalizar URLs de imágenes
 function normalizeImageUrl(url) {
-    if (!url) return '';
+  if (!url) return '';
 
-    // Si ya es una URL completa de Cloudinary válida, no la modifiques
-    if (url.startsWith('https://res.cloudinary.com/')) {
-        return url;
-    }
+  // Si ya es una URL completa de Cloudinary válida, no la modifiques
+  if (url.startsWith('https://res.cloudinary.com/')) {
+    return url;
+  }
 
-    // Si viene algo raro (como image/upload/https://...), intenta limpiar
-    if (url.includes('https://res.cloudinary.com/')) {
-        const index = url.indexOf('https://res.cloudinary.com/');
-        return url.slice(index);
-    }
+  // Si viene algo raro (como image/upload/https://...), intenta limpiar
+  if (url.includes('https://res.cloudinary.com/')) {
+    const index = url.indexOf('https://res.cloudinary.com/');
+    return url.slice(index);
+  }
 
-    // Si es una ruta relativa, prepende base URL
-    return `https://res.cloudinary.com/dacrpsl5p/image/upload/${url}`;
+  // Si es una ruta relativa, prepende base URL
+  return `https://res.cloudinary.com/dacrpsl5p/image/upload/${url}`;
 }
 
 // Función para cargar categorías desde la API
@@ -138,9 +138,9 @@ function siguientePagina() {
     cat.nombre.toLowerCase().includes(buscador) ||
     cat.descripcion.toLowerCase().includes(buscador)
   );
-  
+
   const totalPaginas = Math.ceil(categoriasFiltradas.length / itemsPorPaginaCategoria);
-  
+
   if (paginaActualCategoria < totalPaginas) {
     paginaActualCategoria++;
     mostrarCategorias();
@@ -271,7 +271,7 @@ async function guardarEdicionCategorias() {
   const imagenFile = document.getElementById('editarImagenArchivo').files[0];
 
   if (!nuevoNombre) {
-   // alert('El nombre de la categoría es obligatorio');
+    // alert('El nombre de la categoría es obligatorio');
     return;
   }
 
@@ -405,19 +405,21 @@ async function confirmarEliminarCategoria() {
   if (!categoriaIdEliminar) return;
 
   try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        errorMensaje("No estás autenticado");
-        return;
-      }
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      errorMensaje("No estás autenticado");
+      return;
+    }
 
     const response = await fetch(`/categorias/eliminar/${categoriaIdEliminar}/`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
-      }
+      },
+      body: JSON.stringify({})  // 👈 importante aunque no mandes nada
     });
+
 
     const data = await response.json();
 
@@ -485,4 +487,8 @@ function mostrarMensaje(mensaje, tipo = "success") {
     mensajeDiv.classList.add("mensaje-oculto");
     ultimoMensaje = null; // una vez oculto, permite mostrar ese mensaje otra vez en el futuro
   }, 3000);
+}
+function errorMensaje(msg) {
+  // Puedes personalizar esto con un modal, toast, etc.
+  alert(msg);
 }
