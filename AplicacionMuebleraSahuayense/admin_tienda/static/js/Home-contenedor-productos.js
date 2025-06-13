@@ -97,8 +97,7 @@ function renderTarjetas(lista = productos) {
                 <p class="descripcion">${p.descripcion}</p>
                 <div class="precio">${precioHTML}</div>
                 <div class="ahorro-boton">
-                    ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro.toFixed(2)}</div>` : ''}
-                    
+                    ${descuento > 0 ? `<div class="ahorro">Ahorras $${ahorro.toFixed(2)}</div>` : ''}                   
                     <button class="btn-carrito" onclick="enviarpagina(${p.id})">Ver Producto</button>
                 </div>
             </div>
