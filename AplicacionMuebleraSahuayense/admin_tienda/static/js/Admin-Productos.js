@@ -8,7 +8,7 @@ let modoFiltrado = false;
 async function mostrarProductos() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    alert("No estás autenticado");
+    errorMensaje("No estás autenticado");
     return;
   }
 
@@ -33,7 +33,7 @@ async function mostrarProductos() {
 
   } catch (err) {
     console.error("Error al cargar productos:", err);
-    alert("Error al cargar productos: " + err.message);
+    errorMensaje("Error al cargar productos: " + err.message);
   }
 }
 
@@ -159,7 +159,7 @@ function actualizarControlesPaginacion(totalPaginas = 0) {
 async function cargarCategoriasProductos() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    alert("No estás autenticado");
+    errorMensaje("No estás autenticado");
     return;
   }
 
@@ -184,7 +184,7 @@ async function cargarCategoriasProductos() {
 
   } catch (err) {
     console.error("Error al cargar categorías:", err);
-    alert("Error al cargar categorías: " + err.message);
+    errorMensaje("Error al cargar categorías: " + err.message);
   }
 }
 
@@ -348,7 +348,7 @@ async function eliminarProductoConfirmado() {
 
   const token = localStorage.getItem("access_token");
   if (!token) {
-    alert("No estás autenticado");
+    errorMensaje("No estás autenticado");
     return;
   }
 
@@ -370,10 +370,10 @@ async function eliminarProductoConfirmado() {
     } else {
       const errorData = await response.json();
       console.error("Error del servidor:", errorData);
-      alert("Error al eliminar el producto.");
+      errorMensaje("Error al eliminar el producto.");
     }
   } catch (error) {
     console.error("Error en la eliminación:", error);
-    alert("Hubo un error inesperado.");
+    errorMensaje("Hubo un error inesperado.");
   }
 }

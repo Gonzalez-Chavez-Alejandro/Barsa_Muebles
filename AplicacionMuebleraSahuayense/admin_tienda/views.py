@@ -97,8 +97,8 @@ def configuracion_usuario(request):
     return render(request, 'admin_tienda/configuracion_usuario.html')
 
 
-def administrador_agregar_producto(request):
-    return render(request, 'admin_tienda/Administrador-agregar-producto.html')
+#def administrador_agregar_producto(request):
+#    return render(request, 'admin_tienda/Administrador-agregar-producto.html')
 
 
 #def administrador_editar_producto(request):

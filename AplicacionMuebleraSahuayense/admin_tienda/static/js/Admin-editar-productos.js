@@ -1,4 +1,4 @@
- let imagenesBase64 = [];
+ /*let imagenesBase64 = [];
 
   window.addEventListener("DOMContentLoaded", () => {
     const producto = JSON.parse(localStorage.getItem("productoEditar"));
@@ -237,6 +237,6 @@ function agregarProducto(event) {
   }, 3000);
 }
 
-
+*/
 
 

@@ -82,3 +82,96 @@ def eliminar_producto(request, id):
 
 
 
+
+# productos/api_views.py
+
+
+
+from django.shortcuts import render
+from categorias.models import Categorias
+
+
+def administrador_agregar_producto(request):
+    categorias = Categorias.objects.all()
+    return render(request, 'admin_tienda/Administrador-agregar-producto.html', {
+        'categorias': categorias
+    })
+
+
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from productos.models import Productos
+from categorias.models import Categorias
+from cloudinary.uploader import upload
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def vista_agregar_producto(request):
+    data = request.data
+    files = request.FILES.getlist('imageFurniture')
+
+    errors = {}
+
+    nameFurniture = data.get('nameFurniture', '').strip()
+    descriptionFurniture = data.get('descriptionFurniture', '').strip()
+    priceFurniture = data.get('priceFurniture', '0').strip()
+    porcentajeDescuento = data.get('porcentajeDescuento', '0').strip()
+    stateFurniture = data.get('stateFurniture', 'off')
+
+    # CORRECCIÓN IMPORTANTE: no existe getlist en request.data, usamos getlist de request.POST
+    # Pero aquí, como usamos DRF, request.data es QueryDict si multipart, entonces:
+    if hasattr(data, 'getlist'):
+        category_ids = data.getlist('categoryID')  # Nota: en tu HTML el name es "categoryID" sin []
+    else:
+        category_ids = data.get('categoryID', [])
+        if isinstance(category_ids, str):
+            category_ids = [category_ids]
+
+    # Validaciones
+    if not nameFurniture:
+        errors['nameFurniture'] = "El nombre es obligatorio."
+    if not descriptionFurniture:
+        errors['descriptionFurniture'] = "La descripción es obligatoria."
+    try:
+        priceFurniture_float = float(priceFurniture)
+        if priceFurniture_float < 0:
+            errors['priceFurniture'] = "El precio debe ser positivo."
+    except ValueError:
+        errors['priceFurniture'] = "El precio debe ser un número válido."
+    try:
+        porcentajeDescuento_int = int(porcentajeDescuento)
+        if not (0 <= porcentajeDescuento_int <= 100):
+            errors['porcentajeDescuento'] = "Debe estar entre 0 y 100."
+    except ValueError:
+        errors['porcentajeDescuento'] = "Debe ser un número entero válido."
+    if not category_ids:
+        errors['categoryID'] = "Debe seleccionar al menos una categoría."
+    if not files:
+        errors['imageFurniture'] = "Debe subir al menos una imagen."
+
+    if errors:
+        return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    urls_imagenes = []
+    for img in files:
+        result = upload(img)
+        url = result.get('secure_url')
+        if url:
+            urls_imagenes.append(url)
+
+    producto = Productos.objects.create(
+        nameFurniture=nameFurniture,
+        descriptionFurniture=descriptionFurniture,
+        priceFurniture=priceFurniture_float,
+        porcentajeDescuento=porcentajeDescuento_int,
+        stateFurniture=(stateFurniture == 'on'),
+        userID=request.user,
+        imageFurniture=",".join(urls_imagenes),
+    )
+    producto.categoryID.set(category_ids)
+
+    return Response({'mensaje': 'Producto creado exitosamentes.'}, status=status.HTTP_201_CREATED)
+

@@ -244,7 +244,7 @@ function verDetalle(id) {
         btnRegresar.click();
     });
 }
-
+ /*
 const detalleSeccion = document.getElementById("detalle-producto");
 const detalleNombre = document.getElementById("detalle-nombre");
 const detalleDescripcion = document.getElementById("detalle-descripcion");
@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
+*/
 
 
 

@@ -413,8 +413,7 @@ th.th-acciones {
     letter-spacing: 1.2px;
     font-size: 12px;
     display: inline-flex;       
-    align-items: center;        
-        margin-bottom: 10px;
+    align-items: center;       
 }
 
 .btn-agregar-categoria:hover {

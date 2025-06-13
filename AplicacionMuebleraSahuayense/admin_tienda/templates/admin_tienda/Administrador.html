@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Alerts.css' %}">
+  
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -438,85 +440,85 @@
   <!-- ----------------------------------------------- -->
 
   <section id="section-productos" class="seccion">
-  <div class="admin-panel">
-    <div id="formulario-div-producto">
-      <div class="admin-card">
-        <form id="form-destacados">
-          <h2 id="titulo-destacados">📌 Productos</h2>
+    <div class="admin-panel">
+      <div id="formulario-div-producto">
+        <div class="admin-card">
+          <form id="form-destacados">
+            <h2 id="titulo-destacados">📌 Productos</h2>
 
-         <!-- Buscar y Agregar -->
-<div class="barra-productos-admin">
-  <div class="grupo-busqueda-filtros">
-    <!-- Buscador -->
-    <div class="busqueda-productos">
-      <label for="buscador-productos" class="sr-only">Buscar productos</label>
-      <div class="input-con-icono">
-        <i class="fas fa-search"></i>
-        <input type="text" id="buscador-productos" class="input-busqueda"
-          placeholder="Buscar por nombre del producto" onkeyup="buscarProductos()" />
-      </div>
-    </div>
+            <!-- Buscar y Agregar -->
+            <div class="barra-productos-admin">
+              <div class="grupo-busqueda-filtros">
+                <!-- Buscador -->
+                <div class="busqueda-productos">
+                  <label for="buscador-productos" class="sr-only">Buscar productos</label>
+                  <div class="input-con-icono">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="buscador-productos" class="input-busqueda"
+                      placeholder="Buscar por nombre del producto" onkeyup="buscarProductos()" />
+                  </div>
+                </div>
 
-    <!-- Filtros -->
-    <div class="filtros-productos">
-      <select id="filtroCategoriasView" class="select-filtro">
-        <option value="">Todas las categorías</option>
-      </select>
+                <!-- Filtros -->
+                <div class="filtros-productos">
+                  <select id="filtroCategoriasView" class="select-filtro">
+                    <option value="">Todas las categorías</option>
+                  </select>
 
-      <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select-filtro">
-        <option value="1">1 por página</option>
-        <option value="5" selected>5 por página</option>
-        <option value="10">10 por página</option>
-        <option value="20">20 por página</option>
-        <option value="50">50 por página</option>
-        <option value="100">100 por página</option>
-      </select>
-    </div>
-  </div>
+                  <select id="selectorCantidadProductos" onchange="cambiarCantidadProductos()" class="select-filtro">
+                    <option value="1">1 por página</option>
+                    <option value="5" selected>5 por página</option>
+                    <option value="10">10 por página</option>
+                    <option value="20">20 por página</option>
+                    <option value="50">50 por página</option>
+                    <option value="100">100 por página</option>
+                  </select>
+                </div>
+              </div>
 
-  <!-- Botón Agregar -->
-  <div class="agregar-producto">
-    <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
-      <i class="fas fa-plus"></i> Agregar producto
-    </a>
-  </div>
-</div>
+              <!-- Botón Agregar -->
+              <div class="agregar-producto">
+                <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
+                  <i class="fas fa-plus"></i> Agregar producto
+                </a>
+              </div>
+            </div>
 
-        </form>
-      </div>
+          </form>
+        </div>
 
-      <div id="tablaContainerDestacados" class="scroll-container">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Estado</th>
-              <th class="NombretablaContainerDestacados">Producto
-                <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
-              </th>
-              <th class="th-descripcion">Descripción</th>
-              <th>Precio</th>
-              <th>Oferta</th>
-              <th>Descuento</th>
-              <th>Nombre Imágenes</th>
-              <th>Categorias</th>
-              <th class="th-acciones">Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-productos">
-            <!-- Productos insertados por JavaScript -->
-          </tbody>
-        </table>
+        <div id="tablaContainerDestacados" class="scroll-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Estado</th>
+                <th class="NombretablaContainerDestacados">Producto
+                  <a href="javascript:void(0);" onclick="ordenarPorNombre()">AZ/ZA</a>
+                </th>
+                <th class="th-descripcion">Descripción</th>
+                <th>Precio</th>
+                <th>Oferta</th>
+                <th>Descuento</th>
+                <th>Nombre Imágenes</th>
+                <th>Categorias</th>
+                <th class="th-acciones">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-productos">
+              <!-- Productos insertados por JavaScript -->
+            </tbody>
+          </table>
 
-        <div class="paginacion">
-          <button id="btnAnteriorProductos">Anterior</button>
-          <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginas">1</span>
-          <button id="btnSiguienteProductos">Siguiente</button>
+          <div class="paginacion">
+            <button id="btnAnteriorProductos">Anterior</button>
+            <span id="paginaActualProductos">Página 1</span> de <span id="totalPaginas">1</span>
+            <button id="btnSiguienteProductos">Siguiente</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
 
@@ -605,6 +607,12 @@
       </div>
     </div>
   </section>
+   <!-- ---------------------------------------------------------------------------------------------------- -->
+    <!-- Contenedor para mensajes flotantes -->
+      <div id="mensaje-flotante" class="mensaje-oculto">
+        <i id="icono-mensaje" class="fas fa-check-circle icono-mensaje"></i>
+        <span id="texto-mensaje"></span>
+      </div>
 
   </main>
   <!--Todo lo de dentro de section termina aqui en main -->
@@ -722,6 +730,7 @@
         <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
       </div>
     </div>
+       
   </div>
 
   <!-- ------------------------------------------------ -->
@@ -763,7 +772,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- ---------------------------------------------------------------------- -->
 
   <!-- MODAL -->
@@ -791,10 +800,16 @@
       </form>
     </div>
   </div>
+
+
+
+
+
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
   <!-- ------------------------------------------------ -->
-     <script>
+   
+  <script>
     const accessToken = localStorage.getItem('access_token');
 
     if (!accessToken) {
@@ -848,4 +863,5 @@
     });
   </script>
 </body>
+
 </html>

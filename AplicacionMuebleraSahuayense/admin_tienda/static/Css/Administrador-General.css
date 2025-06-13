@@ -152,6 +152,7 @@ td.td-centrado {
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  border: 2px solid black;
 }
 
 /* --------------------------------------
@@ -347,4 +348,36 @@ a {
 
 .img-carousel button:hover {
   background-color: #ddd;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+button.btn-agregar-editar-categorias {
+    color: white;
+    background-color: #2c3e50;
 }

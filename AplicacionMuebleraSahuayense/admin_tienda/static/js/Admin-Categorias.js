@@ -30,7 +30,7 @@ function normalizeImageUrl(url) {
 async function cargarCategorias() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    alert("No estás autenticado");
+    errorMensaje("No estás autenticado");
     return;
   }
 
@@ -64,7 +64,7 @@ async function cargarCategorias() {
     mostrarCategorias();
   } catch (error) {
     console.error('Error al cargar categorías:', error);
-    alert('Error al cargar categorías: ' + error.message);
+    errorMensaje('Error al cargar categorías: ' + error.message);
   }
 }
 
@@ -190,7 +190,7 @@ function cerrarModalAgregarCategoria() {
 function editarCategoria(nombreCategoria) {
   const categoria = window.categorias.find(cat => cat.nombre === nombreCategoria);
   if (!categoria) {
-    alert('Categoría no encontrada');
+    errorMensaje('Categoría no encontrada');
     return;
   }
 
@@ -217,7 +217,7 @@ function cerrarModalEditarCategoria() {
 async function guardarCategoria() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    alert('No estás autenticado. Por favor inicia sesión.');
+    errorMensaje('No estás autenticado. Por favor inicia sesión.');
     return;
   }
 
@@ -245,16 +245,16 @@ async function guardarCategoria() {
     });
 
     if (response.ok) {
-      alert('Categoría guardada con éxito');
+      mostrarMensaje('Categoría guardada con éxito');
       cerrarModalAgregarCategoria();
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      alert('Error al guardar: ' + (errorData.message || JSON.stringify(errorData)));
+      errorMensaje('Error al guardar: ' + (errorData.message || JSON.stringify(errorData)));
     }
   } catch (error) {
     console.error('Error al guardar categoría:', error);
-    alert('Error de conexión: ' + error.message);
+    errorMensaje('Error de conexión: ' + error.message);
   }
 }
 
@@ -262,7 +262,7 @@ async function guardarCategoria() {
 async function guardarEdicionCategorias() {
   const token = localStorage.getItem('accessToken');
   if (!token || !categoriaNombreSeleccionada) {
-    alert('No estás autenticado o no hay categoría seleccionada');
+    errorMensaje('No estás autenticado o no hay categoría seleccionada');
     return;
   }
 
@@ -271,7 +271,7 @@ async function guardarEdicionCategorias() {
   const imagenFile = document.getElementById('editarImagenArchivo').files[0];
 
   if (!nuevoNombre) {
-    alert('El nombre de la categoría es obligatorio');
+   // alert('El nombre de la categoría es obligatorio');
     return;
   }
 
@@ -292,16 +292,16 @@ async function guardarEdicionCategorias() {
     });
 
     if (response.ok) {
-      alert('Categoría actualizada con éxito');
+      mostrarMensaje('Categoría actualizada con éxito');
       cerrarModalEditarCategoria();
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      alert('Error al actualizarx: ' + (errorData.message || JSON.stringify(errorData)));
+      errorMensaje(errorData);
     }
   } catch (error) {
     console.error('Error al actualizar categoría:', error);
-    alert('Error de conexión: ' + error.message);
+    errorMensaje('Error de conexión: ' + error.message);
   }
 }
 
@@ -313,7 +313,7 @@ async function eliminarCategoria(nombreCategoria) {
 
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    alert('No estás autenticado. Por favor inicia sesión.');
+    errorMensaje('No estás autenticado. Por favor inicia sesión.');
     return;
   }
 
@@ -327,15 +327,15 @@ async function eliminarCategoria(nombreCategoria) {
     });
 
     if (response.ok) {
-      alert('Categoría eliminada con éxito');
+      mostrarMensaje('Categoría eliminada con éxito');
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      alert('Error al eliminar: ' + (errorData.message || JSON.stringify(errorData)));
+      errorMensaje('Error al eliminar: ' + (errorData.message || JSON.stringify(errorData)));
     }
   } catch (error) {
     console.error('Error al eliminar categoría:', error);
-    alert('Error de conexión: ' + error.message);
+    errorMensaje('Error de conexión: ' + error.message);
   }
 }
 
@@ -407,7 +407,7 @@ async function confirmarEliminarCategoria() {
   try {
       const token = localStorage.getItem('accessToken');
       if (!token) {
-        alert("No estás autenticado");
+        errorMensaje("No estás autenticado");
         return;
       }
 
@@ -422,17 +422,67 @@ async function confirmarEliminarCategoria() {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      alert('Categoría eliminada correctamente');
+      mostrarMensaje('Categoría eliminada correctamente');
       cerrarModalEliminarCategoria();
-      cargarCategorias();  // función que debes tener para refrescar la lista
+      cargarCategorias(false);  // función que debes tener para refrescar la lista
     } else if (data.warning) {
-      alert(data.warning);
+      errorMensaje(data.warning);
     } else {
-      alert(data.error || 'Error al eliminar la categoría');
+      errorMensaje(data.error || 'Error al eliminar la categoría');
     }
 
   } catch (error) {
     console.error('Error:', error);
-    alert('Error inesperado al eliminar');
+    errorMensaje('Error inesperado al eliminar');
   }
+}
+
+
+
+
+
+
+
+
+
+
+let timeoutMensaje;
+let ultimoMensaje = null;  // almacena el último mensaje mostrado
+
+function mostrarMensaje(mensaje, tipo = "success") {
+  const mensajeDiv = document.getElementById("mensaje-flotante");
+  const textoSpan = document.getElementById("texto-mensaje");
+  const icono = document.getElementById("icono-mensaje");
+
+  if (!mensajeDiv || !textoSpan || !icono) return;
+
+  // Si el mensaje es igual al último mostrado y aún está visible, no hacemos nada
+  if (mensaje === ultimoMensaje && mensajeDiv.classList.contains("mensaje-visible")) {
+    return;
+  }
+
+  // Actualizamos el último mensaje
+  ultimoMensaje = mensaje;
+
+  textoSpan.textContent = mensaje;
+
+  if (tipo === "error") {
+    mensajeDiv.style.backgroundColor = "#e74c3c"; // rojo
+    icono.className = "fas fa-times-circle icono-mensaje";
+    icono.style.color = "#ffd4d4";
+  } else {
+    mensajeDiv.style.backgroundColor = "#4a6fa5"; // gris azulado
+    icono.className = "fas fa-check-circle icono-mensaje";
+    icono.style.color = "#d0e6ff";
+  }
+
+  mensajeDiv.classList.remove("mensaje-oculto");
+  mensajeDiv.classList.add("mensaje-visible");
+
+  clearTimeout(timeoutMensaje); // limpiar timeout anterior
+  timeoutMensaje = setTimeout(() => {
+    mensajeDiv.classList.remove("mensaje-visible");
+    mensajeDiv.classList.add("mensaje-oculto");
+    ultimoMensaje = null; // una vez oculto, permite mostrar ese mensaje otra vez en el futuro
+  }, 3000);
 }
