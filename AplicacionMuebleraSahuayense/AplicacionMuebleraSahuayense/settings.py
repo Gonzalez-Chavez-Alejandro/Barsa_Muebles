@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'admin_tienda',
     'productos',
+    'encargos',
     
 ]
 AUTH_USER_MODEL = 'autentication.CustomUser'
