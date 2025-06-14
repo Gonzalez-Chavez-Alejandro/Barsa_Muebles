@@ -9,9 +9,6 @@ function cerrarModalImagen() {
     document.getElementById("modalImagen").style.display = "none";
 }
 
-
-
-
 const detalleNombre = document.getElementById("detalle-nombre");
 const detalleDescripcion = document.getElementById("detalle-descripcion");
 const detallePrecio = document.getElementById("detalle-precio");
@@ -30,7 +27,6 @@ async function cargarProducto() {
         if (!response.ok) throw new Error("Error al cargar productos");
         const productos = await response.json();
 
-        // Mapeamos los productos para renombrar propiedades igual que en tu listado
         const productosMapeados = productos.map(p => ({
             id: p.id,
             nombre: p.nameFurniture,
@@ -38,7 +34,6 @@ async function cargarProducto() {
             precio: p.priceFurniture,
             precioOferta: p.PrecioOferta,
             nombreimagenes: p.imageFurniture,
-            // Puedes agregar más campos si los necesitas
         }));
 
         const producto = productosMapeados.find(p => p.id === productoId);
@@ -47,6 +42,9 @@ async function cargarProducto() {
             return;
         }
 
+        // Definir variable global para carrito
+        window.producto = producto;
+
         mostrarProducto(producto);
         cargarCategoriasSimilares(producto.id);
     } catch (error) {
@@ -54,6 +52,7 @@ async function cargarProducto() {
         console.error(error);
     }
 }
+
 
 function mostrarProducto(producto) {
     const imagenes = producto.nombreimagenes?.split(",") || [];
@@ -122,14 +121,7 @@ function mostrarError(msg) {
 
 cargarProducto();
 
-
-
-
-
-
-
-
-async function cargarCategoriasSimilares(productoId) { 
+async function cargarCategoriasSimilares(productoId) {
     try {
         const responseProducto = await fetch("/productos/publicos/");
         if (!responseProducto.ok) throw new Error("Error al cargar productos");
@@ -188,6 +180,7 @@ async function cargarCategoriasSimilares(productoId) {
         console.error("Error al cargar categorías similares", error);
     }
 }
+
 
 
 
