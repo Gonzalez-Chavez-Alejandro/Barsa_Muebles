@@ -81,12 +81,8 @@ def productos(request):
 
 
 def productos_vista(request):
-    producto_id = request.GET.get('producto_id')
-    # Lógica para buscar el producto o mostrar info...
-    context = {
-        'producto_id': producto_id,
-    }
-    return render(request, 'admin_tienda/Producto-vista-solo.html', context)
+    
+    return render(request, 'admin_tienda/Producto-vista-solo.html')
 
 
 def catalogo(request):

@@ -1,117 +1,98 @@
-let usuarioActual = null;  // variable global para guardar usuario completo
-
-// Función para cargar info del usuario desde API
-async function cargarUsuarioActual() {
+async function cargarEncargosUsuario() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
     alert('No estás autenticado. Inicia sesión primero.');
     window.location.href = '/login';
-    return null;
-  }
-
-  try {
-    const res = await fetch('/api/user-info/', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (!res.ok) throw new Error('No autorizado');
-
-    const user = await res.json();
-    usuarioActual = user;  // guardamos para usar luego
-
-    // Guardamos info del usuario también en localStorage para PDF (opcional)
-    localStorage.setItem('usuarioLogueado', JSON.stringify({
-      nombre: user.nombre || user.username || '',
-      correo: user.email || user.correo || '',
-      telefono: user.phoneUser || user.telefono || ''
-    }));
-
-    return user;
-  } catch (error) {
-    alert('Error al obtener información del usuario.');
-    console.error(error);
-    return null;
-  }
-}
-
-// Función para cargar y mostrar encargos del usuario actual
-async function cargarEncargosUsuario() {
-  const user = await cargarUsuarioActual();
-  if (!user) return; // si no hay usuario, no continuar
-
-  const encargos = JSON.parse(localStorage.getItem('encargos')) || [];
-
-  // Filtrar encargos por email del usuario actual
-  const emailUsuario = user.email || user.correo || '';
-  const encargosUsuario = encargos
-    .filter(encargo => encargo.usuario.email === emailUsuario || encargo.usuario.correo === emailUsuario)
-    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
-  const contenedor = document.getElementById('lista-encargos');
-  contenedor.innerHTML = '';
-
-  if (encargosUsuario.length === 0) {
-    contenedor.innerHTML = `
-      <div class="encargo-card">
-        <p class="messaje-no-tienes-encargos-registrados">
-          <i class="fas fa-box-open"></i>
-          No tienes encargos registrados
-        </p>
-      </div>
-    `;
     return;
   }
 
-  encargosUsuario.forEach(encargo => {
-    const encargoId = encargo.id.toString();
-    const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
+  try {
+    // Llamar al endpoint real para obtener encargos del usuario
+    const res = await fetch('/encargos/mis-encargos/', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      }
+    });
 
-    const productosHTML = encargo.productos.map(producto => {
-      const imagenValida = producto.imagen && typeof producto.imagen === 'string';
-      const imagenes = imagenValida ? producto.imagen.split(',') : [];
-      const primeraImagen = imagenes[0] ? imagenes[0].trim() : 'https://via.placeholder.com/100';
+    if (!res.ok) throw new Error('Error al cargar encargos');
 
-      return `
-        <div class="producto-encargo">
-          <img src="${primeraImagen}" 
-               alt="${producto.nombre}" 
-               class="producto-imagen"
-               onerror="this.src='https://via.placeholder.com/100'">
-          <div>
-            <p>${producto.nombre}</p>
-            <p>${producto.cantidad} x $${producto.precio?.toFixed(2) || '0.00'}</p>
-          </div>
+    const encargosUsuario = await res.json();
+
+    const contenedor = document.getElementById('lista-encargos');
+    contenedor.innerHTML = '';
+
+    if (encargosUsuario.length === 0) {
+      contenedor.innerHTML = `
+        <div class="encargo-card">
+          <p class="messaje-no-tienes-encargos-registrados">
+            <i class="fas fa-box-open"></i>
+            No tienes encargos registrados
+          </p>
         </div>
       `;
-    }).join('');
+      return;
+    }
 
-    const encargoElement = document.createElement('div');
-    encargoElement.className = 'encargo-card';
-    encargoElement.innerHTML = `
-      <div class="encargo-header">
-        <div>
-          <h3>Encargo #${idDisplay}</h3>
-          <small class="encargo-id">${encargoId}</small>
+    encargosUsuario.forEach(encargo => {
+      // En tu serializer, productos_encargados tiene 'producto' con 'nameFurniture', 'imagen', etc.
+      const productosHTML = encargo.productos_encargados.map(item => {
+        const imagen = item.imagen || 'https://via.placeholder.com/100';
+        const nombre = item.producto.nameFurniture || 'Producto';
+        const cantidad = item.cantidad || 0;
+        const precio = item.precio_unitario || 0;
+
+        return `
+          <div class="producto-encargo">
+            <img src="${imagen}" 
+                 alt="${nombre}" 
+                 class="producto-imagen"
+                 onerror="this.src='https://via.placeholder.com/100'">
+            <div>
+              <p>${nombre}</p>
+              <p>${cantidad} x $${precio.toFixed(2)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const encargoId = encargo.id.toString();
+      const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
+
+      const encargoElement = document.createElement('div');
+      encargoElement.className = 'encargo-card';
+      encargoElement.innerHTML = `
+        <div class="encargo-header">
+          <div>
+            <h3>Encargo #${idDisplay}</h3>
+            <small class="encargo-id">${encargoId}</small>
+          </div>
+          <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
         </div>
-        <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
-      </div>
-      <div class="encargo-productos">${productosHTML}</div>
-      <div class="encargo-total">
-        Total: $${encargo.total?.toFixed(2) || '0.00'}
-      </div>
-      <div class="encargo-acciones">
-        <button class="btn-pdf" data-encargo='${JSON.stringify(encargo)}'>
-          <i class="fas fa-file-pdf"></i> PDF
-        </button>
-        <button class="btn-eliminar" data-encargo-id="${encargo.id}">
-          <i class="fas fa-trash-alt"></i> Eliminar
-        </button>
-      </div>
-    `;
+        <div class="encargo-productos">${productosHTML}</div>
+        <div class="encargo-total">
+          Total: $${encargo.total.toFixed(2)}
+        </div>
+        <div class="encargo-acciones">
+          <button class="btn-pdf" data-encargo='${JSON.stringify(encargo)}'>
+            <i class="fas fa-file-pdf"></i> PDF
+          </button>
+          <button class="btn-eliminar" data-encargo-id="${encargo.id}">
+            <i class="fas fa-trash-alt"></i> Eliminar
+          </button>
+        </div>
+      `;
 
-    contenedor.appendChild(encargoElement);
-  });
+      contenedor.appendChild(encargoElement);
+    });
+
+  } catch (error) {
+    console.error(error);
+    alert('Error al cargar los encargos del usuario.');
+  }
 }
 
+/*
 // Evento delegado para botones PDF y eliminar
 document.addEventListener('click', (e) => {
   // PDF
@@ -152,6 +133,12 @@ document.addEventListener('click', (e) => {
 
 // Al cargar DOM
 document.addEventListener('DOMContentLoaded', cargarEncargosUsuario);
+
+
+
+
+
+
 
 
 // PDF config y función
@@ -267,4 +254,4 @@ function generarPDF(encargo) {
 
   doc.save(`encargo-${encargo.id}.pdf`);
 }
-
+*/

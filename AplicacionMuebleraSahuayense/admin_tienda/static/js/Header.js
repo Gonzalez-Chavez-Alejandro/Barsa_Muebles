@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       menu.style.display = (menu.style.display === "block") ? "none" : "block";
     }
     window.toggleMenuUsuario = toggleMenuUsuario;
+    
 
     // Ocultar menú si se hace clic fuera
     window.addEventListener('click', function (e) {
@@ -73,6 +74,17 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (error) {
     console.error("Error con localStorage u otro problema:", error);
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btnCarrito = document.querySelector(".btn-carrito");
+  const carrito = document.getElementById("carrito");
+
+  if (!btnCarrito || !carrito) return;
+
+  btnCarrito.addEventListener("click", () => {
+    carrito.style.display = carrito.style.display === "block" ? "none" : "block";
+  });
 });
 
 /*************************************************************/

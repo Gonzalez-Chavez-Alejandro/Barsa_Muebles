@@ -1,38 +1,24 @@
-#serializer/encargos
+# encargos/serializers.py
 from rest_framework import serializers
-from .models import Pedido, PedidoProducto
-
-from autentication.serializers import UserListSerializer  # Ya lo tienes
-
+from .models import Encargo, ProductoEncargado
 from productos.serializer import ProductoSerializer
 
-class PedidoProductoSerializer(serializers.ModelSerializer):
-    producto = ProductoSerializer(read_only=True)
+class ProductoEncargadoSerializer(serializers.ModelSerializer):
+    producto = ProductoSerializer()  # Incluye datos completos del producto
+    imagen = serializers.SerializerMethodField()  # <- necesitas declarar esto
 
     class Meta:
-        model = PedidoProducto
-        fields = ['producto', 'cantidad']
+        model = ProductoEncargado
+        fields = ['producto', 'cantidad', 'precio_unitario', 'imagen']
 
-class PedidoSerializer(serializers.ModelSerializer):
-    productos = serializers.SerializerMethodField()
-    usuario = serializers.SerializerMethodField()
+    def get_imagen(self, obj):
+        imagenes = obj.producto.imageFurniture.split(",") if obj.producto.imageFurniture else []
+        return imagenes[0].strip() if imagenes else 'https://via.placeholder.com/100'
+
+
+class EncargoSerializer(serializers.ModelSerializer):
+    productos_encargados = ProductoEncargadoSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Pedido
-        fields = ['id', 'fecha', 'usuario', 'productos', 'total']
-
-    def get_productos(self, obj):
-        productos = PedidoProducto.objects.filter(pedido=obj)
-        return PedidoProductoSerializer(productos, many=True).data
-
-    def get_usuario(self, obj):
-        return UserListSerializer(obj.usuario).data
-
-# Para registrar nuevos pedidos
-class CrearPedidoProductoSerializer(serializers.Serializer):
-    producto_id = serializers.IntegerField()
-    cantidad = serializers.IntegerField()
-
-class CrearPedidoSerializer(serializers.Serializer):
-    productos = CrearPedidoProductoSerializer(many=True)
-    total = serializers.DecimalField(max_digits=10, decimal_places=2)
+        model = Encargo
+        fields = ['id', 'usuario', 'fecha', 'total', 'productos_encargados']

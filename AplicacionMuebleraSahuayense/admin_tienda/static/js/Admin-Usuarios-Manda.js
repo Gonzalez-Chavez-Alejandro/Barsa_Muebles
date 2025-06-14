@@ -115,7 +115,8 @@ container.addEventListener('click', (e) => {
             );
         });
     }
-
+    });
+/*
 // Configuración común
 const configPDF = {
     logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
@@ -380,3 +381,4 @@ async function generarPDFTodos() {
     // Carga inicial
     renderPedidos(pedidos);
 });
+*/
