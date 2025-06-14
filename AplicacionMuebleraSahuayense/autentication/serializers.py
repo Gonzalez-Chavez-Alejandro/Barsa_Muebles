@@ -57,6 +57,40 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 
+# autentication/serializers.py
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate
+
+User = get_user_model()
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'username'
+
+    def validate(self, attrs):
+        login = attrs.get("username")
+        password = attrs.get("password")
+
+        # Buscar por correo o username
+        user = User.objects.filter(email=login).first() or User.objects.filter(username=login).first()
+
+        if user is None:
+            raise serializers.ValidationError({"detail": "Usuario no encontrado."})
+
+        if not user.check_password(password):
+            raise serializers.ValidationError({"detail": "Contraseña incorrecta."})
+
+        if not user.is_active:
+            raise serializers.ValidationError({"detail": "Cuenta inactiva."})
+
+        data = super().validate({
+            "username": user.username,
+            "password": password
+        })
+
+        return data
 
 
 
