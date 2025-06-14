@@ -12,171 +12,85 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">  
+    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
+    <link rel="stylesheet" href="{% static 'Css/Producto-vista-solo.css' %}">
     <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
-    <style>
-        .contenedor-detalle {
+<style>
+   .contenedor-categorias-similares {
     max-width: 1100px;
     margin: 40px auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    background-color: #fff;
     padding: 30px;
+    background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #222;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-.galeria {
-    flex: 1 1 315px;
-    min-width: 320px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#imagen-grande {
-    width: 100%;
-    max-height: 520px;
-    object-fit: contain;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    margin-bottom: 15px;
-    transition: transform 0.3s ease;
-}
-
-#imagen-grande:hover {
-    transform: scale(1.02);
-}
-
-.miniaturas {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.miniaturas img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: border-color 0.3s ease, transform 0.2s ease;
-}
-
-.miniaturas img:hover {
-    transform: scale(1.1);
-    border-color: #007BFF;
-}
-
-.miniaturas img.activa {
-    border-color: #007BFF;
-    box-shadow: 0 0 10px #007BFFaa;
-}
-
-.info-producto {
-    flex: 1 1 450px;
-    min-width: 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 15px;
-}
-
-.info-producto h1 {
-    font-size: 2.4rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: #111;
-}
-
-.info-producto p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #444;
-}
-
-.precios {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin: 15px 0;
-}
-
-.precio-oferta {
-    color: #E63946;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.precio-original {
-    text-decoration: line-through;
-    color: #999;
-    font-size: 1.2rem;
-}
-
-.ahorro {
-    color: #2A9D8F;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-#detalle-ahorro {
-    margin-top: 0;
-    font-weight: 600;
-}
-
-.boton-compra {
-    background-color: white;
+.contenedor-categorias-similares h2 {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
     color: #2a344b;
-    border: 2px solid #2a344b;
-    padding: 14px 28px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    display: inline-flex;
+    text-align: center;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.contenedor-categorias-similares h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #2a344b;
+}
+
+.categorias-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.categoria-similar {
+    background: white;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    padding: 10px 15px;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    width: 350px;
+    height: 120px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
     transition: all 0.3s ease;
 }
 
-.boton-compra:hover {
-    background-color: #2563eb;
-    color: white;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+.categoria-similar:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.08);
 }
 
-.boton-compra:active {
-    top: 2px;
-    box-shadow: 0 2px 0 #1d4ed8;
+.categoria-similar img {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+    margin-right: 15px;
+}
+
+.categoria-similar h4 {
+    font-size: 1.1rem;
+    color: #2a344b;
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
 }
 
 
 
-/* Responsive */
-@media (max-width: 768px) {
-    .contenedor-detalle {
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .galeria, .info-producto {
-        min-width: 100%;
-    }
-
-    .boton-compra {
-        justify-content: center;
-        width: 100%;
-    }
-}
-
-    </style>
+</style>
 </head>
 
 <body>
@@ -184,9 +98,14 @@
 
     <div class="contenedor-detalle">
         <div class="galeria">
-            <img id="imagen-grande" src="" alt="Imagen principal del producto">
+            <div class="zoom-container">
+                <img id="imagen-grande" src="" alt="Imagen principal del producto">
+                <div id="zoom-lens"></div>
+            </div>
             <div class="miniaturas"></div>
         </div>
+
+
 
         <div class="info-producto">
             <h1 id="detalle-nombre"></h1>
@@ -208,111 +127,17 @@
         </div>
     </div>
 
+    <!-- Categorías Similares -->
+    <div id="categorias-similares" class="contenedor-categorias-similares">
+        <h2>Categorías similares</h2>
+        <div id="lista-categorias-similares" class="categorias-grid"></div>
+    </div>
 
-    {% include 'includes/foother.html' %}
-    <script src="{% static 'js/Header.js' %}"></script>
-
-
-<script> 
-const detalleNombre = document.getElementById("detalle-nombre");
-const detalleDescripcion = document.getElementById("detalle-descripcion");
-const detallePrecio = document.getElementById("detalle-precio");
-const detallePrecioOriginal = document.getElementById("detalle-precio-original");
-const detalleImagen = document.getElementById("imagen-grande");
-const detalleAhorro = document.getElementById("detalle-ahorro");
-const detallePorcentaje = document.getElementById("detalle-porcentaje");
-const miniaturasContainer = document.querySelector(".miniaturas");
-
-const urlParams = new URLSearchParams(window.location.search);
-const productoId = parseInt(urlParams.get("producto_id"));
-
-async function cargarProducto() {
-    try {
-        const response = await fetch("/productos/publicos/");
-        if (!response.ok) throw new Error("Error al cargar productos");
-        const productos = await response.json();
-
-        // Mapeamos los productos para renombrar propiedades igual que en tu listado
-        const productosMapeados = productos.map(p => ({
-            id: p.id,
-            nombre: p.nameFurniture,
-            descripcion: p.descriptionFurniture,
-            precio: p.priceFurniture,
-            precioOferta: p.PrecioOferta,
-            nombreimagenes: p.imageFurniture,
-            // Puedes agregar más campos si los necesitas
-        }));
-
-        const producto = productosMapeados.find(p => p.id === productoId);
-        if (!producto) {
-            mostrarError("Producto no encontrado");
-            return;
-        }
-
-        mostrarProducto(producto);
-    } catch (error) {
-        mostrarError("Error al cargar el producto");
-        console.error(error);
-    }
-}
-
-function mostrarProducto(producto) {
-    const imagenes = producto.nombreimagenes?.split(",") || [];
-
-    if (imagenes.length > 0) {
-        detalleImagen.src = imagenes[0].trim();
-        detalleImagen.alt = producto.nombre || "Producto";
-
-        miniaturasContainer.innerHTML = '';
-        imagenes.forEach((img, i) => {
-            const mini = document.createElement("img");
-            mini.src = img.trim();
-            mini.alt = `Miniatura ${i + 1}`;
-            if (i === 0) mini.classList.add("activa");
-
-            mini.addEventListener("click", () => {
-                detalleImagen.src = img.trim();
-                document.querySelectorAll(".miniaturas img").forEach(el => el.classList.remove("activa"));
-                mini.classList.add("activa");
-            });
-
-            miniaturasContainer.appendChild(mini);
-        });
-    }
-
-    detalleNombre.textContent = producto.nombre || "Sin nombre";
-    detalleDescripcion.textContent = producto.descripcion || "Sin descripción";
-
-    const precio = parseFloat(producto.precio) || 0;
-    const oferta = parseFloat(producto.precioOferta) || 0;
-
-    if (oferta > 0 && oferta < precio) {
-        detallePrecio.textContent = `$${oferta.toFixed(2)}`;
-        detallePrecioOriginal.textContent = `$${precio.toFixed(2)}`;
-        detallePrecioOriginal.style.display = "inline";
-
-        const ahorro = precio - oferta;
-        const porcentaje = Math.round((ahorro / precio) * 100);
-        detalleAhorro.textContent = `Ahorras $${ahorro.toFixed(2)}`;
-        detalleAhorro.style.display = "block";
-        detallePorcentaje.textContent = `(${porcentaje}% OFF)`;
-        detallePorcentaje.style.display = "inline";
-    } else {
-        detallePrecio.textContent = `$${precio.toFixed(2)}`;
-        detallePrecioOriginal.style.display = "none";
-        detalleAhorro.style.display = "none";
-        detallePorcentaje.style.display = "none";
-    }
-}
-
-function mostrarError(msg) {
-    document.querySelector(".contenedor-detalle").innerHTML = `
-        <p>${msg}</p>
-    `;
-}
-
-cargarProducto();
-</script>
+    <!-- Modal de imagen en pantalla completa -->
+    <div id="modalImagen" class="modal-imagen">
+        <span class="cerrar-modal" onclick="cerrarModalImagen()">&times;</span>
+        <img id="imagenModalContenido" src="" alt="Vista ampliada">
+    </div>
 
 
 
@@ -327,8 +152,12 @@ cargarProducto();
         </div>
         <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
     </section>
-  <!--  <script src="{% static 'js/Carrito.js' %}"></script>
-    <script src="{% static 'js/Admin-Manda.js' %}"></script>-->
+
+    {% include 'includes/foother.html' %}
+    <script src="{% static 'js/Header.js' %}"></script>
+    <script src="{% static 'js/Producto-vista-solo.js' %}"></script>
+    <script src="{% static 'js/Carrito.js' %}"></script>
+    <script src="{% static 'js/Admin-Manda.js' %}"></script>
 
 </body>
 
