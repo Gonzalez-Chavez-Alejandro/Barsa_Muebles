@@ -1,26 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Carga carrito desde localStorage
-  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  const menu = document.getElementById("menu-usuario");
+  const carritoContainer = document.getElementById("carrito");
 
-  // Elementos DOM
+  // Variables carrito
+  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
   const listaCarrito = document.getElementById("lista-carrito");
   const totalPrecio = document.getElementById("total-precio");
   const btnVaciar = document.getElementById("vaciar-carrito");
   const btnCerrar = document.getElementById("cerrar-carrito");
   const btnEncargar = document.getElementById("btn-encargar");
-  const carritoContainer = document.getElementById("carrito");
- 
-  // Guardar carrito
+
+  // Estado de usuario validado
+  let usuarioActual = null;
+
+  // --- Funciones para carrito ---
   const guardarCarrito = () => {
     localStorage.setItem("carrito", JSON.stringify(carrito));
   };
 
-  // Calcular total
   const calcularTotal = () => {
     return carrito.reduce((total, p) => total + p.precio * p.cantidad, 0);
   };
 
-  // Actualizar UI carrito
   const actualizarCarritoUI = () => {
     listaCarrito.innerHTML = "";
     carrito.forEach((p) => {
@@ -62,24 +63,81 @@ document.addEventListener("DOMContentLoaded", () => {
     totalPrecio.textContent = calcularTotal().toFixed(2);
   };
 
-  // Vaciar carrito
   const vaciarCarrito = () => {
     carrito = [];
     guardarCarrito();
     actualizarCarritoUI();
   };
 
-  // Evento vaciar carrito
-  btnVaciar.addEventListener("click", vaciarCarrito);
+  // --- Funciones para menú usuario ---
+  function renderLoginPrompt() {
+    if (!menu) return;
+    menu.innerHTML = `
+      <a class="btn-identificarse" id="btnLogin" href="/login/">Identificarse</a>
+      <div></div>
+      <p class="texto-nuevo">¿Eres un cliente nuevo? <a href="/registro/">Empieza aquí.</a></p>
+    `;
+  }
 
-  // Evento cerrar carrito
-  btnCerrar.addEventListener("click", () => {
-    carritoContainer.style.display = "none";
+  function renderUserMenu(data) {
+    if (!menu) return;
+    menu.innerHTML = `
+      <div class="user-info">
+        <h1 class="user-greeting">Hola, ${data.username}</h1>
+        <p class="email">${data.email}</p>
+        <a href="/configuracion_usuario/" id="btn-configuracion-usuario">
+          <i class="fas fa-cog"></i> Configuración
+        </a>
+        <button id="btn-cerrar-sesion">
+          <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+        </button>
+      </div>
+    `;
+
+    document.getElementById("btn-cerrar-sesion").addEventListener("click", () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      usuarioActual = null;
+      renderLoginPrompt();
+      vaciarCarrito();
+      if(carritoContainer) carritoContainer.style.display = "none";
+      window.location.href = '/login/';
+    });
+  }
+
+  // --- Validar token y cargar usuario ---
+  async function validarTokenYUsuario() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      renderLoginPrompt();
+      return;
+    }
+    try {
+      const res = await fetch('/api/user-info/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error("Token inválido o expirado");
+      const data = await res.json();
+      usuarioActual = data;
+      renderUserMenu(data);
+      if(carritoContainer) carritoContainer.style.display = "block";
+    } catch (error) {
+      console.warn("Error validando token:", error);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      usuarioActual = null;
+      renderLoginPrompt();
+      if(carritoContainer) carritoContainer.style.display = "none";
+    }
+  }
+
+  // --- Eventos ---
+  btnVaciar?.addEventListener("click", vaciarCarrito);
+  btnCerrar?.addEventListener("click", () => {
+    if(carritoContainer) carritoContainer.style.display = "none";
   });
 
-  // Evento encargar carrito
-  btnEncargar.addEventListener("click", () => {
-    const usuarioActual = JSON.parse(localStorage.getItem("usuarioLogueado"));
+  btnEncargar?.addEventListener("click", () => {
     if (!usuarioActual) {
       alert("Debes iniciar sesión para encargar productos.");
       return;
@@ -90,13 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Obtener encargos guardados o crear array vacío
     let encargos = JSON.parse(localStorage.getItem("encargos")) || [];
 
-    // Crear objeto encargo con usuario y productos
     const nuevoEncargo = {
       id: `${Date.now()}-${generateUUID()}`,
-
       usuario: usuarioActual,
       productos: carrito,
       fecha: new Date().toISOString(),
@@ -105,18 +160,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     encargos.push(nuevoEncargo);
 
-    // Guardar encargos
     localStorage.setItem("encargos", JSON.stringify(encargos));
-
-    // Vaciar carrito y actualizar UI
     vaciarCarrito();
-
     alert("¡Tu encargo ha sido registrado exitosamente!");
   });
 
-  // Inicializar UI carrito
+  // --- Inicialización ---
+  validarTokenYUsuario();
   actualizarCarritoUI();
+
+  // Opcional: toggle menú usuario, ocultar menú al hacer click fuera, etc.
+  // ...
+
 });
+
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = Math.random() * 16 | 0;

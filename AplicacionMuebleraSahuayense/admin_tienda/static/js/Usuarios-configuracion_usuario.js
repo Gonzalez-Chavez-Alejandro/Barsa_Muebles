@@ -1,240 +1,151 @@
-let usuarioOriginal = null;  // variable global para guardar datos completos del usuario
+let usuarioActual = null;  // variable global para guardar usuario completo
 
-async function cargarUsuarioLogueado() {
+// Función para cargar info del usuario desde API (usada también para encargos)
+async function cargarUsuarioActual() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
     alert('No estás autenticado. Inicia sesión primero.');
     window.location.href = '/login';
-    return;
+    return null;
   }
 
   try {
-    const response = await fetch('/api/user-info/', {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+    const res = await fetch('/api/user-info/', {
+      headers: { 'Authorization': `Bearer ${token}` }
     });
+    if (!res.ok) throw new Error('No autorizado');
 
-    if (!response.ok) {
-      alert('No se pudo obtener la información del usuario. Código: ' + response.status);
-      console.error('No se pudo obtener la información del usuario:', response.statusText);
-      return;
-    }
-
-    const user = await response.json();
-
-    // Guardamos el usuario completo para usar luego en la actualización
-    usuarioOriginal = user;
-
-    document.getElementById('nombre').value = user.username || '';
-    document.getElementById('telefono').value = user.phoneUser || '';
-    const inputCorreo = document.getElementById('correo');
-    inputCorreo.value = user.email || '';
-    inputCorreo.dispatchEvent(new Event('input'));
-
-    // Guardamos el ID para la actualización
-    document.getElementById('form-configuracion').dataset.userId = user.id;
-
+    const user = await res.json();
+    usuarioActual = user;  // guardamos para usar luego
+    return user;
   } catch (error) {
-    alert('Error al cargar datos del usuario. Revisa la consola para más detalles.');
-    console.error('Error al cargar datos del usuario:', error);
+    alert('Error al obtener información del usuario.');
+    console.error(error);
+    return null;
   }
 }
 
-async function actualizarUsuarioLogueado(event) {
-  event.preventDefault();
+// Función para cargar y mostrar encargos del usuario actual
+async function cargarEncargosUsuario() {
+  const user = await cargarUsuarioActual();
+  if (!user) return; // si no hay usuario, no continuar
 
-  const token = localStorage.getItem('accessToken');
-  if (!token) {
-    alert('No estás autenticado. Inicia sesión primero.');
-    window.location.href = '/login';
+  const encargos = JSON.parse(localStorage.getItem('encargos')) || [];
+
+  // Filtrar encargos por correo del usuario actual
+  const encargosUsuario = encargos
+    .filter(encargo => encargo.usuario.email === user.email || encargo.usuario.correo === user.email)
+    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+  const contenedor = document.getElementById('lista-encargos');
+  contenedor.innerHTML = '';
+
+  if (encargosUsuario.length === 0) {
+    contenedor.innerHTML = `
+      <div class="encargo-card">
+        <p class="messaje-no-tienes-encargos-registrados">
+          <i class="fas fa-box-open"></i>
+          No tienes encargos registrados
+        </p>
+      </div>
+    `;
     return;
   }
 
-  const form = event.target;
-  const userId = form.dataset.userId;
+  encargosUsuario.forEach(encargo => {
+    const encargoId = encargo.id.toString();
+    const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
 
-  if (!userId) {
-    alert('No se encontró el ID del usuario para actualizar.');
-    return;
-  }
+    const productosHTML = encargo.productos.map(producto => {
+      const imagenValida = producto.imagen && typeof producto.imagen === 'string';
+      const imagenes = imagenValida ? producto.imagen.split(',') : [];
+      const primeraImagen = imagenes[0] ? imagenes[0].trim() : 'https://via.placeholder.com/100';
 
-  if (!usuarioOriginal) {
-    alert('No se cargaron los datos originales del usuario.');
-    return;
-  }
+      return `
+        <div class="producto-encargo">
+          <img src="${primeraImagen}" 
+               alt="${producto.nombre}" 
+               class="producto-imagen"
+               onerror="this.src='https://via.placeholder.com/100'">
+          <div>
+            <p>${producto.nombre}</p>
+            <p>${producto.cantidad} x $${producto.precio?.toFixed(2) || '0.00'}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
 
-  // Clonamos el objeto original para no modificarlo directamente
-  const data = { ...usuarioOriginal };
+    const encargoElement = document.createElement('div');
+    encargoElement.className = 'encargo-card';
+    encargoElement.innerHTML = `
+      <div class="encargo-header">
+        <div>
+          <h3>Encargo #${idDisplay}</h3>
+          <small class="encargo-id">${encargoId}</small>
+        </div>
+        <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
+      </div>
+      <div class="encargo-productos">${productosHTML}</div>
+      <div class="encargo-total">
+        Total: $${encargo.total?.toFixed(2) || '0.00'}
+      </div>
+      <div class="encargo-acciones">
+        <button class="btn-pdf" data-encargo='${JSON.stringify(encargo)}'>
+          <i class="fas fa-file-pdf"></i> PDF
+        </button>
+        <button class="btn-eliminar" data-encargo-id="${encargo.id}">
+          <i class="fas fa-trash-alt"></i> Eliminar
+        </button>
+      </div>
+    `;
 
-  // Sobrescribimos con los valores nuevos (o iguales)
-  data.username = document.getElementById('nombre').value.trim() || data.username;
-  data.phoneUser = document.getElementById('telefono').value.trim() || data.phoneUser;
-  data.email = document.getElementById('correo').value.trim() || data.email;
-
-  try {
-    const response = await fetch(`/api/users/${userId}/`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      alert('Usuario actualizado correctamente');
-      await cargarUsuarioLogueado();
-    } else {
-      let errText = await response.text();
-      try {
-        const errJson = JSON.parse(errText);
-        errText = errJson.detail || JSON.stringify(errJson);
-      } catch {
-        // no es JSON, dejamos el texto tal cual
-      }
-      alert('Error al actualizar usuario: ' + errText);
-      console.error('Error al actualizar usuario:', errText);
-    }
-  } catch (error) {
-    alert('Error al actualizar usuario. Revisa la consola para más detalles.');
-    console.error('Error al actualizar usuario:', error);
-  }
+    contenedor.appendChild(encargoElement);
+  });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  cargarUsuarioLogueado();
-  document.getElementById('form-configuracion').addEventListener('submit', actualizarUsuarioLogueado);
+// Evento delegado para botones PDF y eliminar
+document.addEventListener('click', (e) => {
+  // PDF
+  if (e.target.closest('.btn-pdf')) {
+    const btn = e.target.closest('.btn-pdf');
+    const encargo = JSON.parse(btn.dataset.encargo);
+    // Aquí llamarías tu función para generar PDF
+    generarPDF(encargo);
+  }
+
+  // Eliminar
+  if (e.target.closest('.btn-eliminar')) {
+    const btn = e.target.closest('.btn-eliminar');
+    const encargoId = btn.dataset.encargoId;
+    if (confirm('¿Estás seguro de querer eliminar este encargo?')) {
+      let encargos = JSON.parse(localStorage.getItem('encargos')) || [];
+      encargos = encargos.filter(e => e.id !== encargoId);
+      localStorage.setItem('encargos', JSON.stringify(encargos));
+
+      // Remover del DOM
+      const card = btn.closest('.encargo-card');
+      if (card) card.remove();
+
+      // Si ya no hay encargos, mostrar mensaje
+      const contenedor = document.getElementById('lista-encargos');
+      if (!contenedor.querySelector('.encargo-card')) {
+        contenedor.innerHTML = `
+          <div class="encargo-card">
+            <p class="messaje-no-tienes-encargos-registrados">
+              <i class="fas fa-box-open"></i>
+              No tienes encargos registrados
+            </p>
+          </div>
+        `;
+      }
+    }
+  }
 });
 
+// Cargar encargos al cargar DOM
+document.addEventListener('DOMContentLoaded', cargarEncargosUsuario);
 
-/* 
-
-
-
-// Cargar encargos
-document.addEventListener("DOMContentLoaded", cargarEncargosUsuario);
-
-function cargarEncargosUsuario() {
-    const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
-    if (!usuario) {
-        window.location.href = "{% url 'h' %}";
-        return;
-    }
-
-    const encargos = JSON.parse(localStorage.getItem('encargos')) || [];
-    const encargosUsuario = encargos
-        .filter(encargo => encargo.usuario.correo === usuario.correo)
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-
-    const contenedor = document.getElementById('lista-encargos');
-    contenedor.innerHTML = '';
-
-    if (encargosUsuario.length === 0) {
-        contenedor.innerHTML = `
-            <div class="encargo-card">
-                <p class="messaje-no-tienes-encargos-registrados">
-                    <i class="fas fa-box-open"></i>
-                    No tienes encargos registrados
-                </p>
-            </div>
-        `;
-        return;
-    }
-
-    encargosUsuario.forEach(encargo => {
-        const encargoId = encargo.id.toString();
-        const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
-
-        const encargoElement = document.createElement('div');
-        encargoElement.className = 'encargo-card';
-        encargoElement.innerHTML = `
-            <div class="encargo-header">
-                <div>
-                    <h3>Encargo #${idDisplay}</h3>
-                    <small class="encargo-id">${encargoId}</small>
-                </div>
-                <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
-            </div>
-            
-            <div class="encargo-productos">
-                ${encargo.productos.map(producto => {
-                    const imagenValida = producto.imagen && typeof producto.imagen === 'string';
-                    const imagenes = imagenValida ? producto.imagen.split(',') : [];
-                    const primeraImagen = imagenes[0] ? imagenes[0].trim() : 'https://via.placeholder.com/100';
-                    
-                    return `
-                        <div class="producto-encargo">
-                            <img src="${primeraImagen}" 
-                                 alt="${producto.nombre}" 
-                                 class="producto-imagen"
-                                 onerror="this.src='https://via.placeholder.com/100'">
-                            <div>
-                                <p>${producto.nombre}</p>
-                                <p>${producto.cantidad} x $${producto.precio?.toFixed(2) || '0.00'}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-            
-            <div class="encargo-total">
-                Total: $${encargo.total?.toFixed(2) || '0.00'}
-            </div>
-            <div class="encargo-acciones">
-                <button class="btn-pdf" data-encargo='${JSON.stringify(encargo)}'>
-                    <i class="fas fa-file-pdf"></i> PDF
-                </button>
-                <button class="btn-eliminar" data-encargo-id="${encargo.id}">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                </button>
-            </div>
-        `;
-        
-        contenedor.appendChild(encargoElement);
-    });
-
-    // Event listeners para botones
-    document.addEventListener('click', (e) => {
-        // Manejar PDF
-        if (e.target.closest('.btn-pdf')) {
-            const button = e.target.closest('.btn-pdf');
-            const encargo = JSON.parse(button.dataset.encargo);
-            generarPDF(encargo);
-        }
-        
-        // Manejar eliminación
-        if (e.target.closest('.btn-eliminar')) {
-            const button = e.target.closest('.btn-eliminar');
-            const encargoId = button.dataset.encargoId;
-            
-            if (confirm('¿Estás seguro de querer eliminar este encargo?, asegurese de contactarnos para la verificacion.')) {
-                // Actualizar localStorage
-                const encargos = JSON.parse(localStorage.getItem('encargos')) || [];
-                const nuevosEncargos = encargos.filter(e => e.id !== encargoId);
-                localStorage.setItem('encargos', JSON.stringify(nuevosEncargos));
-                
-                // Eliminar del DOM
-                const encargoCard = button.closest('.encargo-card');
-                encargoCard.remove();
-                
-                // Mostrar mensaje si no hay encargos
-                if (!document.querySelector('.encargo-card')) {
-                    contenedor.innerHTML = `
-                        <div class="encargo-card">
-                            <p class="messaje-no-tienes-encargos-registrados">
-                                <i class="fas fa-box-open"></i>
-                                No tienes encargos registrados
-                            </p>
-                        </div>
-                    `;
-                }
-            }
-        }
-    });
-}
-
+/*
 const configPDF = {
     logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
     logoConfig: {

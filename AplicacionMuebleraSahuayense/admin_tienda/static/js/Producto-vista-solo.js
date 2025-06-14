@@ -184,3 +184,57 @@ async function cargarCategoriasSimilares(productoId) {
 
 
 
+document.getElementById("btn-encargar").addEventListener("click", () => {
+  if (carrito.length === 0) {
+    alert("Tu carrito está vacío. Agrega productos antes de encargar.");
+    return;
+  }
+
+  // Obtener usuario logueado (puedes adaptar según cómo guardes el usuario)
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogueado'));
+  if (!usuario) {
+    alert("No estás autenticado. Por favor inicia sesión.");
+    window.location.href = "/login"; // O ruta que uses
+    return;
+  }
+
+  // Crear objeto encargo
+  const nuevoEncargo = {
+    id: generarIdUnico(), // función para crear id único
+    fecha: new Date().toISOString(),
+    usuario: {
+      correo: usuario.correo || usuario.email,  // asegúrate de que sea consistente con tu objeto usuario
+      nombre: usuario.username || usuario.nombre || "Usuario",
+      // Puedes agregar más datos si quieres
+    },
+    productos: carrito.map(item => ({
+      id: item.id,
+      nombre: item.nombre,
+      precio: item.precio,
+      cantidad: item.cantidad,
+      imagen: item.imagen
+    })),
+    total: carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
+  };
+
+  // Leer encargos previos
+  let encargos = JSON.parse(localStorage.getItem('encargos')) || [];
+
+  // Agregar nuevo encargo
+  encargos.push(nuevoEncargo);
+
+  // Guardar en localStorage
+  localStorage.setItem('encargos', JSON.stringify(encargos));
+
+  // Vaciar carrito
+  carrito = [];
+  guardarCarrito();
+  actualizarCarritoUI();
+
+  alert("Encargo realizado con éxito. Nos pondremos en contacto contigo pronto.");
+});
+
+// Función para generar un id único (puedes usar una versión simple)
+function generarIdUnico() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+}
