@@ -51,10 +51,7 @@ section.nosotros {
     border-left: 3px solid #e74c3c;
     transition: 0.4s ease;
   }
-  
-  /* L esquina inferior derecha */
 
-  
   /* Línea lateral roja decorativa */
   .contenido::marker,
   .contenido::selection {

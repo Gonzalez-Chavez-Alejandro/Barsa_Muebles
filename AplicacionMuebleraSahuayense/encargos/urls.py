@@ -1,6 +1,6 @@
 # encargos/urls.py
 from django.urls import path
-from encargos.views import actualizar_cantidad_producto_en_encargo, agregar_producto_a_encargo, crear_carrito, crear_encargo, listar_encargos_usuario, obtener_carrito_actual, procesar_pedido
+from encargos.views import ListarTodosLosPedidos, actualizar_cantidad_producto_en_encargo, agregar_producto_a_encargo, crear_carrito, crear_encargo, eliminar_papelera, listar_encargos_usuario, mover_a_papelera, obtener_carrito_actual, procesar_pedido
 
 urlpatterns = [
     path('mis-encargos/', listar_encargos_usuario, name='mis-encargos'),
@@ -10,4 +10,10 @@ urlpatterns = [
     path('procesar-pedido/<int:encargo_id>/', procesar_pedido, name='procesar-pedido'),
     path('crear-carrito/', crear_carrito, name='crear_carrito'),
     path('obtener-carrito/', obtener_carrito_actual, name='obtener_carrito'),
+
+
+     # 🔽 nuevas rutas para admin
+    path('todos/', ListarTodosLosPedidos.as_view()),
+    path('mover-a-papelera/<int:encargo_id>/', mover_a_papelera),
+    path('papelera/eliminar/', eliminar_papelera),
 ]

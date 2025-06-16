@@ -12,7 +12,7 @@
     overflow-y: auto;
     z-index: 1000; /* Asegura que esté por encima de todo */
 }
-
+ 
 /* ───────────── Contenido del Carrito ───────────── */
 .carrito h2 {
     font-size: 1.8rem;

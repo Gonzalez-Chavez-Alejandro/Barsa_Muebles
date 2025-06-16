@@ -196,3 +196,41 @@ def crear_carrito(request):
     nuevo_carrito = Encargo.objects.create(usuario=usuario, estado="carrito", total=0)
     serializer = EncargoSerializer(nuevo_carrito)
     return Response(serializer.data, status=201)
+
+
+
+
+
+from rest_framework.permissions import IsAdminUser
+from rest_framework.views import APIView
+
+class ListarTodosLosPedidos(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        estado = request.query_params.get('estado')
+        if estado:
+            encargos = Encargo.objects.filter(estado=estado).order_by('-fecha')
+        else:
+            encargos = Encargo.objects.all().order_by('-fecha')
+        serializer = EncargoSerializer(encargos, many=True)
+        return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def mover_a_papelera(request, encargo_id):
+    try:
+        encargo = Encargo.objects.get(id=encargo_id)
+        encargo.estado = 'papelera'
+        encargo.save()
+        return Response({"mensaje": "Encargo movido a papelera"})
+    except Encargo.DoesNotExist:
+        return Response({"error": "Encargo no encontrado"}, status=404)
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def eliminar_papelera(request):
+    encargos_en_papelera = Encargo.objects.filter(estado='papelera')
+    total = encargos_en_papelera.count()
+    encargos_en_papelera.delete()
+    return Response({"mensaje": f"Se eliminaron {total} pedidos en papelera."})

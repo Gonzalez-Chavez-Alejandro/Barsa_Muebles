@@ -212,7 +212,6 @@ main.contenido-principal {
     box-sizing: border-box;
     flex-direction: column;
 }
-
 /*=================== GALERÍA ===================*/
 .galeria-producto {
     flex: 1;

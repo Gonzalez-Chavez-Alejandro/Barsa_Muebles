@@ -9,6 +9,7 @@ class Encargo(models.Model):
         ('enviado', 'Enviado'),
         ('entregado', 'Entregado'),
         ('cancelado', 'Cancelado'),
+        ('papelera', 'Papelera'),
     )
 
     usuario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='encargos')
