@@ -209,10 +209,16 @@ class ListarTodosLosPedidos(APIView):
 
     def get(self, request):
         estado = request.query_params.get('estado')
+
         if estado:
-            encargos = Encargo.objects.filter(estado=estado).order_by('-fecha')
+            # Si hay un estado, filtramos por ese estado (excepto 'carrito' explícitamente)
+            if estado == "carrito":
+                return Response([])  # o puedes devolver un 400 si quieres evitarlo
+            encargos = Encargo.objects.filter(estado=estado).exclude(estado='carrito').order_by('-fecha')
         else:
-            encargos = Encargo.objects.all().order_by('-fecha')
+            # Si no hay estado, traemos todos menos 'carrito'
+            encargos = Encargo.objects.exclude(estado='carrito').order_by('-fecha')
+
         serializer = EncargoSerializer(encargos, many=True)
         return Response(serializer.data)
 
@@ -234,3 +240,27 @@ def eliminar_papelera(request):
     total = encargos_en_papelera.count()
     encargos_en_papelera.delete()
     return Response({"mensaje": f"Se eliminaron {total} pedidos en papelera."})
+
+
+
+from rest_framework import status
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def cambiar_estado_encargo(request, encargo_id):
+    try:
+        encargo = Encargo.objects.get(id=encargo_id)
+    except Encargo.DoesNotExist:
+        return Response({"detail": "Encargo no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+    nuevo_estado = request.data.get('estado')
+    estados_validos = [ 'procesado', 'enviado', 'entregado', 'cancelado', 'papelera','pendiente']  # ajusta según tus estados
+#quite carrito
+    if nuevo_estado not in estados_validos:
+        return Response({"detail": f"Estado inválido. Los válidos son: {estados_validos}"}, status=status.HTTP_400_BAD_REQUEST)
+
+    encargo.estado = nuevo_estado
+    encargo.save()
+
+    serializer = EncargoSerializer(encargo)
+    return Response(serializer.data, status=status.HTTP_200_OK)

@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="{% static 'Css/Admin-usuarios-mandas.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Alerts.css' %}">
-  
+
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -342,6 +342,14 @@
         <input type="text" id="um-input-buscar" class="um-input-buscar"
           placeholder="Buscar por ID, nombre, correo o teléfono..." aria-label="Buscar pedidos">
       </div>
+      <div class="um-filtros-estado">
+        <button class="filtro-estado" data-estado="todos">Todos</button>
+        <button class="filtro-estado" data-estado="proceso">En Proceso</button>
+        <button class="filtro-estado" data-estado="entregado">Entregado</button>
+        <button class="filtro-estado" data-estado="finalizado">Finalizado</button>
+        <button class="filtro-estado" data-estado="papelera">Papelera</button>
+      </div>
+
     </div>
     <h1>Pedidos Encargados</h1>
     <div class="um-header-actions">
@@ -351,7 +359,6 @@
     </div>
     <div id="pedidos-container"></div>
   </section>
-
 
 
 
@@ -607,12 +614,12 @@
       </div>
     </div>
   </section>
-   <!-- ---------------------------------------------------------------------------------------------------- -->
-    <!-- Contenedor para mensajes flotantes -->
-      <div id="mensaje-flotante" class="mensaje-oculto">
-        <i id="icono-mensaje" class="fas fa-check-circle icono-mensaje"></i>
-        <span id="texto-mensaje"></span>
-      </div>
+  <!-- ---------------------------------------------------------------------------------------------------- -->
+  <!-- Contenedor para mensajes flotantes -->
+  <div id="mensaje-flotante" class="mensaje-oculto">
+    <i id="icono-mensaje" class="fas fa-check-circle icono-mensaje"></i>
+    <span id="texto-mensaje"></span>
+  </div>
 
   </main>
   <!--Todo lo de dentro de section termina aqui en main -->
@@ -730,7 +737,7 @@
         <button class="editar-btn-categoria" onclick="cerrarModalEditarCategoria()">Cancelar</button>
       </div>
     </div>
-       
+
   </div>
 
   <!-- ------------------------------------------------ -->
@@ -808,7 +815,7 @@
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
   <!-- ------------------------------------------------ -->
-   
+
   <script>
     const accessToken = localStorage.getItem('access_token');
 

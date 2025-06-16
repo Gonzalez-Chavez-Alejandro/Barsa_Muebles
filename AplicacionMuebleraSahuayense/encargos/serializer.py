@@ -19,8 +19,14 @@ class ProductoEncargadoSerializer(serializers.ModelSerializer):
 class EncargoSerializer(serializers.ModelSerializer):
     productos_encargados = ProductoEncargadoSerializer(many=True, read_only=True)
     usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
+    usuario_correo = serializers.CharField(source='usuario.email', read_only=True)
+    usuario_telefono = serializers.CharField(source='usuario.phoneUser', read_only=True)  # Ajusta nombre si es distinto
 
     class Meta:
         model = Encargo
-        fields = ['id', 'usuario', 'usuario_nombre', 'fecha', 'total', 'estado', 'productos_encargados']
+        fields = [
+            'id', 'usuario', 'usuario_nombre', 'usuario_correo', 'usuario_telefono',
+            'fecha', 'total', 'estado', 'productos_encargados'
+        ]
+
 

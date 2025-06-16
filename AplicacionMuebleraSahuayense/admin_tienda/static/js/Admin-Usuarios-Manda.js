@@ -1,50 +1,77 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let pedidos = JSON.parse(localStorage.getItem("encargos")) || [];
+    let pedidos = [];
+    let estadoActivo = "todos";
+
     const container = document.getElementById("pedidos-container");
     const inputBuscar = document.getElementById("um-input-buscar");
 
-    // Función para crear HTML de cada pedido
+    console.log("📦 DOMContentLoaded - Script iniciado");
+
+    async function cargarPedidosDesdeAPI() {
+        try {
+            const token = localStorage.getItem("accessToken");
+            const res = await fetch("/encargos/todos/", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (!res.ok) throw new Error("Error al cargar pedidos");
+            pedidos = await res.json();
+            console.log("✅ Pedidos cargados:", pedidos);
+            renderPedidos(filtrarPedidos());
+        } catch (error) {
+            console.error("❌ Error cargando pedidos:", error);
+            container.innerHTML = `<p class="um-empty-state">❌ No se pudieron cargar los pedidos</p>`;
+        }
+    }
+
     function crearPedidoHTML(pedido) {
-        const usuario = pedido.usuario || {};
-        const productosHTML = pedido.productos.map(p => {
-            const imgUrl = p.imagen ? p.imagen.split(",")[0] : 'https://via.placeholder.com/100';
-            return `
-                <li class="um-producto-item">
-                    <img src="${imgUrl}" alt="${p.nombre}" class="um-producto-img">
-                    <div class="um-producto-info">
-                        <h4>${p.nombre}</h4>
-                        <span class="um-producto-detalle">${p.cantidad} × $${Number(p.precio).toFixed(2)}</span>
-                    </div>
-                </li>
-            `;
-        }).join('');
+        const nombreUsuario = pedido.usuario_nombre || 'Desconocido';
+        const correoUsuario = pedido.usuario_correo || 'No proporcionado';
+        const telefonoUsuario = pedido.usuario_telefono || 'No proporcionado';
+
+        const productosHTML = (pedido.productos_encargados || []).map(p => {
+    const imgUrl = p.imagen || 'https://via.placeholder.com/100';
+    const nombreProducto = p.producto.nameFurniture || 'Sin nombre';
+    const cantidad = p.cantidad || 0;
+    const precio = Number(p.precio_unitario).toFixed(2) || '0.00';
+
+    return `
+        <li class="um-producto-item">
+            <img src="${imgUrl}" alt="${nombreProducto}" class="um-producto-img">
+            <div class="um-producto-info">
+                <h4>${nombreProducto}</h4>
+                <span class="um-producto-detalle">${cantidad} × $${precio}</span>
+            </div>
+        </li>
+    `;
+}).join('');
+
+        const puedeEliminar = (pedido.estado === 'entregado' || pedido.estado === 'papelera');
+        const btnEliminar = puedeEliminar
+            ? `<button class="um-btn-eliminar" data-id="${pedido.id}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+               </button>`
+            : '';
+
+        const estadosPosibles = ['pendiente', 'procesado', 'enviado', 'entregado', 'cancelado'];
+        const opcionesEstado = estadosPosibles.map(est =>
+            `<option value="${est}" ${pedido.estado === est ? 'selected' : ''}>${est.charAt(0).toUpperCase() + est.slice(1)}</option>`
+        ).join('');
 
         return `
             <article class="um-pedido-card" data-id="${pedido.id}">
                 <header class="um-pedido-header">
                     <div class="um-pedido-id">#${pedido.id}</div>
                     <time>${new Date(pedido.fecha).toLocaleDateString('es-ES', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
+                        day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
                     })}</time>
                 </header>
-                
+
                 <div class="um-usuario-info">
-                    <div class="um-info-item">
-                        <i class="fas fa-user um-fas"></i>
-                        ${usuario.nombre || 'Desconocido'}
-                    </div>
-                    <div class="um-info-item">
-                        <i class="fas fa-envelope um-fas"></i>
-                        ${usuario.correo || 'No proporcionado'}
-                    </div>
-                    <div class="um-info-item">
-                        <i class="fas fa-phone um-fas"></i>
-                        ${usuario.telefono || 'No proporcionado'}
-                    </div>
+                    <div class="um-info-item"><i class="fas fa-user um-fas"></i> ${nombreUsuario}</div>
+                    <div class="um-info-item"><i class="fas fa-envelope um-fas"></i> ${correoUsuario}</div>
+                    <div class="um-info-item"><i class="fas fa-phone um-fas"></i> ${telefonoUsuario}</div>
                 </div>
 
                 <ul class="um-productos-lista">${productosHTML}</ul>
@@ -53,9 +80,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     <button class="um-btn-pdf" data-id="${pedido.id}">
                         <i class="fas fa-file-pdf"></i> Generar PDF
                     </button>
-                    <button class="um-btn-eliminar" data-id="${pedido.id}">
-                        <i class="fas fa-check-circle"></i> Completado
-                    </button>
+
+                    <label for="estado-select-${pedido.id}">Estado:</label>
+                    <select class="um-select-estado" id="estado-select-${pedido.id}" data-id="${pedido.id}">
+                        ${opcionesEstado}
+                    </select>
+
+                    ${btnEliminar}
+
                     <div class="um-total-container">
                         <span class="um-total-label">Total:</span>
                         <span class="um-total-precio">$${Number(pedido.total).toFixed(2)}</span>
@@ -64,58 +96,102 @@ document.addEventListener("DOMContentLoaded", () => {
             </article>
         `;
     }
-container.addEventListener('click', (e) => {
-    if (e.target.closest('.um-btn-eliminar')) {
-        const boton = e.target.closest('.um-btn-eliminar');
-        const id = parseInt(boton.dataset.id); // ¡Asegúrate de convertirlo a número!
 
-        if (!isNaN(id)) {
-            eliminarPedido(id);
-            renderPedidos(pedidos); // Vuelve a renderizar tras eliminar
-        } else {
-            console.warn("ID inválido:", boton.dataset.id);
-        }
+    function eliminarPedido(id) {
+        pedidos = pedidos.filter(p => parseInt(p.id) !== parseInt(id));
+        console.log(`🗑 Pedido #${id} eliminado visualmente`);
     }
-});
 
-   function eliminarPedido(id) {
-    console.log("Eliminando ID:", id);
-    pedidos = pedidos.filter(p => parseInt(p.id) !== parseInt(id));
-    console.log("Pedidos restantes:", pedidos);
-    localStorage.setItem("encargos", JSON.stringify(pedidos));
-}
-
-
-    // Función para renderizar pedidos
-    function renderPedidos(pedidosFiltrados) {
+    function renderPedidos(lista) {
         container.innerHTML = '';
-        
-        if (pedidosFiltrados.length === 0) {
+        if (lista.length === 0) {
             container.innerHTML = `<p class="um-empty-state">📭 No se encontraron pedidos</p>`;
+            console.log("📭 Lista vacía tras filtro");
             return;
         }
-
-        pedidosFiltrados.forEach(pedido => {
-            const pedidoDiv = document.createElement('div');
-            pedidoDiv.innerHTML = crearPedidoHTML(pedido);
-            container.appendChild(pedidoDiv.firstElementChild);
+        lista.forEach(pedido => {
+            const div = document.createElement('div');
+            div.innerHTML = crearPedidoHTML(pedido);
+            container.appendChild(div.firstElementChild);
         });
+        console.log(`🖨 Se renderizaron ${lista.length} pedidos`);
     }
 
-    // Función para filtrar pedidos
-    function filtrarPedidos(texto) {
-        const busqueda = texto.toLowerCase().trim();
-        return pedidos.filter(pedido => {
-            const usuario = pedido.usuario || {};
-            return (
-                pedido.id.toString().includes(busqueda) ||
-                (usuario.nombre || '').toLowerCase().includes(busqueda) ||
-                (usuario.correo || '').toLowerCase().includes(busqueda) ||
-                (usuario.telefono || '').includes(busqueda)
+    function filtrarPedidos() {
+        const texto = inputBuscar.value.toLowerCase().trim();
+        const filtrados = pedidos.filter(pedido => {
+            const coincideTexto = (
+                pedido.id.toString().includes(texto) ||
+                (pedido.usuario_nombre || '').toLowerCase().includes(texto) ||
+                (pedido.usuario_correo || '').toLowerCase().includes(texto) ||
+                (pedido.usuario_telefono || '').includes(texto)
             );
+            const coincideEstado = estadoActivo === 'todos' || pedido.estado === estadoActivo;
+            return coincideTexto && coincideEstado;
         });
+        console.log(`🔍 Filtrados (${estadoActivo}):`, filtrados);
+        return filtrados;
     }
+
+    inputBuscar.addEventListener("input", () => {
+        console.log("⌨ Buscando:", inputBuscar.value);
+        renderPedidos(filtrarPedidos());
     });
+
+    container.addEventListener('click', (e) => {
+        if (e.target.closest('.um-btn-eliminar')) {
+            const boton = e.target.closest('.um-btn-eliminar');
+            const id = parseInt(boton.dataset.id);
+            if (!isNaN(id)) {
+                eliminarPedido(id);
+                renderPedidos(filtrarPedidos());
+            }
+        }
+        // Aquí puedes agregar lógica para generar el PDF si lo deseas
+    });
+
+    container.addEventListener('change', async (e) => {
+        if (e.target.classList.contains('um-select-estado')) {
+            const select = e.target;
+            const nuevoEstado = select.value;
+            const pedidoId = select.dataset.id;
+
+            try {
+                const token = localStorage.getItem("accessToken");
+                const res = await fetch(`/encargos/${pedidoId}/cambiar-estado/`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ estado: nuevoEstado })
+                });
+
+                if (!res.ok) throw new Error('No se pudo cambiar el estado');
+
+                const pedido = pedidos.find(p => p.id == pedidoId);
+                if (pedido) pedido.estado = nuevoEstado;
+
+                console.log(`✅ Estado pedido #${pedidoId} actualizado a '${nuevoEstado}'`);
+            } catch (error) {
+                alert('Error al actualizar estado: ' + error.message);
+                const pedido = pedidos.find(p => p.id == pedidoId);
+                if (pedido) select.value = pedido.estado;
+            }
+        }
+    });
+
+    document.querySelectorAll(".filtro-estado").forEach(btn => {
+        btn.addEventListener("click", () => {
+            estadoActivo = btn.dataset.estado;
+            console.log(`📂 Filtro cambiado a: ${estadoActivo}`);
+            renderPedidos(filtrarPedidos());
+        });
+    });
+
+    cargarPedidosDesdeAPI();
+});
+
 /*
 // Configuración común
 const configPDF = {
