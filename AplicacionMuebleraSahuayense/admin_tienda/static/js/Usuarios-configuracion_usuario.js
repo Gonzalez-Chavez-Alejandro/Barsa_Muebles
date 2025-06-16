@@ -78,7 +78,9 @@ async function cargarEncargosUsuario() {
             <div>
               <p><strong>${nombre}</strong></p>
               <p>Cantidad: ${cantidad}</p>
-              <p>Precio original: $${precioOriginal.toFixed(2)}</p>
+              <p>Precio original: ${
+                precioOriginal === 0 ? 'Póngase en contacto con la empresa' : `$${precioOriginal.toFixed(2)}`
+              }</p>
               <p>Descuento: ${porcentajeDescuento}%</p>
               <p>Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
             </div>
@@ -117,7 +119,6 @@ async function cargarEncargosUsuario() {
     alert('Error al cargar los encargos del usuario.');
   }
 }
-
 
 // Escucha eventos para generar PDF y eliminar encargos
 document.addEventListener('click', async (e) => {
@@ -255,7 +256,6 @@ function generarPDF(encargo) {
 
   doc.save(`encargo-${encargo.id}.pdf`);
 }
-
 
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', async () => {
