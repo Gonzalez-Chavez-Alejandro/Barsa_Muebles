@@ -1,11 +1,13 @@
 # encargos/urls.py
 from django.urls import path
-from encargos.views import actualizar_cantidad_producto_en_encargo, agregar_producto_a_encargo, crear_encargo, listar_encargos_usuario
+from encargos.views import actualizar_cantidad_producto_en_encargo, agregar_producto_a_encargo, crear_carrito, crear_encargo, listar_encargos_usuario, obtener_carrito_actual, procesar_pedido
 
 urlpatterns = [
     path('mis-encargos/', listar_encargos_usuario, name='mis-encargos'),
     path('crear/', crear_encargo, name='crear-encargo'),
     path('agregar/<int:encargo_id>/', agregar_producto_a_encargo, name='agregar-producto-a-encargo'),
     path('actualizar-cantidad/<int:encargo_id>/', actualizar_cantidad_producto_en_encargo, name='actualizar-cantidad-producto'),
-
+    path('procesar-pedido/<int:encargo_id>/', procesar_pedido, name='procesar-pedido'),
+    path('crear-carrito/', crear_carrito, name='crear_carrito'),
+    path('obtener-carrito/', obtener_carrito_actual, name='obtener_carrito'),
 ]

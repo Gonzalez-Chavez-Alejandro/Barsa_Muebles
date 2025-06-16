@@ -19,6 +19,8 @@ def crear_encargo(request):
     usuario = request.user
     productos = request.data.get('productos', [])
     total = 0
+    advertencias = []
+
     encargo = Encargo.objects.create(usuario=usuario, total=0)
 
     for p in productos:
@@ -26,8 +28,15 @@ def crear_encargo(request):
         cantidad = p.get('cantidad')
         precio_unitario = p.get('precio_unitario')
 
-        if not all([producto_id, cantidad, precio_unitario]):
-            continue  # puedes manejar errores si falta algún dato
+        if producto_id is None or cantidad is None or precio_unitario is None:
+            continue  # Datos incompletos
+
+        cantidad = int(cantidad)
+        precio_unitario = float(precio_unitario)
+
+        # Registrar advertencia si el precio es 0
+        if precio_unitario == 0:
+            advertencias.append(f"Producto con ID {producto_id} precio no definido. Póngase en contacto para cotización.")
 
         ProductoEncargado.objects.create(
             encargo=encargo,
@@ -35,12 +44,18 @@ def crear_encargo(request):
             cantidad=cantidad,
             precio_unitario=precio_unitario
         )
-        total += cantidad * float(precio_unitario)
+
+        total += cantidad * precio_unitario
 
     encargo.total = total
     encargo.save()
     serializer = EncargoSerializer(encargo)
-    return Response(serializer.data, status=201)
+
+    return Response({
+        "encargo": serializer.data,
+        "advertencias": advertencias
+    }, status=201)
+
 
 
 @api_view(['PATCH'])  # o POST si prefieres
@@ -126,3 +141,58 @@ def actualizar_cantidad_producto_en_encargo(request, encargo_id):
 
     serializer = EncargoSerializer(encargo)
     return Response(serializer.data)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Encargo
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def procesar_pedido(request, encargo_id):
+    try:
+        encargo = Encargo.objects.get(id=encargo_id, usuario=request.user)
+    except Encargo.DoesNotExist:
+        return Response({"detail": "Encargo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Aquí puedes validar si el encargo tiene productos
+    if not encargo.productos_encargados.exists():
+        return Response({"detail": "El encargo está vacío"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Cambiar estado del encargo para marcarlo como procesado
+    encargo.estado = 'procesado'  # Asegúrate que tu modelo tenga este campo y este valor válido
+    encargo.save()
+
+    return Response({"detail": "Pedido procesado exitosamente"})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def obtener_carrito_actual(request):
+    usuario = request.user
+    try:
+        carrito = Encargo.objects.filter(usuario=usuario, estado="carrito").prefetch_related("productos_encargados__producto").first()
+        if carrito:
+            serializer = EncargoSerializer(carrito)
+            return Response(serializer.data)
+        else:
+            return Response({"detalle": "No hay carrito activo."}, status=204)
+    except Exception as e:
+        return Response({"detalle": str(e)}, status=500)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def crear_carrito(request):
+    usuario = request.user
+
+    # Verificar si ya existe un carrito activo
+    carrito_existente = Encargo.objects.filter(usuario=usuario, estado="carrito").first()
+    if carrito_existente:
+        serializer = EncargoSerializer(carrito_existente)
+        return Response(serializer.data, status=200)
+
+    # Crear nuevo carrito con estado "carrito"
+    nuevo_carrito = Encargo.objects.create(usuario=usuario, estado="carrito", total=0)
+    serializer = EncargoSerializer(nuevo_carrito)
+    return Response(serializer.data, status=201)
