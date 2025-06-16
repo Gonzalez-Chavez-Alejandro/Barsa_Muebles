@@ -15,9 +15,9 @@ class ProductoSerializer(serializers.ModelSerializer):
             'categorias_nombres',  # nuevo campo para mostrar en frontend
             'nameFurniture',
             'descriptionFurniture',
-            'priceFurniture',
-            'porcentajeDescuento',
-            'stateFurniture',
+            'priceFurniture', #Precio original
+            'porcentajeDescuento',#Porcentaje descuento
+            'stateFurniture',#Precio con descuento
             'userID',
             'imageFurniture',
             'PrecioOferta',

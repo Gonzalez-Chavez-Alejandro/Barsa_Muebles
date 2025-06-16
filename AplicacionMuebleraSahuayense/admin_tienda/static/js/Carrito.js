@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="btn-aumentar" data-producto-id="${producto.id}">+</button>
         </div>
         <span>Precio: ${precioTexto}</span>
-        <span>Subtotal: ${subtotal}</span>
+        
       `;
       listaCarrito.appendChild(div);
     });
