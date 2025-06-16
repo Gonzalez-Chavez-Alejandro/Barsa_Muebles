@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await res.json();
       usuarioActual = data;
       renderUserMenu(data);
-      carritoContainer?.style && (carritoContainer.style.display = "block");
       await cargarCarritoAPI();
     } catch (error) {
       console.warn("Error validando token:", error);
@@ -223,6 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("✅ Pedido procesado con éxito.");
       carritoActual = null;
       actualizarCarritoUIAPI();
+      window.location.href = "/configuracion_usuario/";
     } catch {
       alert("Error inesperado al procesar pedido.");
     }
@@ -300,4 +300,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
   validarTokenYUsuario();
+});
+
+document.getElementById("btn-encargar")?.addEventListener("click", () => {
+  carritoContainer.style.display = "block";
 });

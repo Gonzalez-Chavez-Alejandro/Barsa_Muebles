@@ -467,8 +467,9 @@
 }
 
 .icono-sillon {
-    width: 80%;
-    padding: 109px 0px 0 1px;
+    width: 38%;
+    margin-top: 3rem;
+    padding: 0rem 4px;
     height: auto;
     filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
     animation: float 4s ease-in-out infinite;
@@ -482,6 +483,7 @@
         padding: 0 1rem 5%;
         min-height: 37vh;
     }
+    
 
     .contenido-izquierda {
         align-items: flex-start;
@@ -500,6 +502,14 @@
     .botones-container {
         justify-content: flex-start;
     }
+    nav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 0;
+    margin:0;
+}
 }
 
 @media (min-width: 1200px) {
@@ -528,6 +538,14 @@
     min-height: 55vh;
     padding: 0;
 }
+nav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    position: relative;
+    padding-bottom: 0;
+    margin:0;
+}
 }
 
 
@@ -539,7 +557,7 @@
         margin: 0;
         transition: all 0.3s ease;
     }
-
+   
 
 }
 img.icono-lampara {

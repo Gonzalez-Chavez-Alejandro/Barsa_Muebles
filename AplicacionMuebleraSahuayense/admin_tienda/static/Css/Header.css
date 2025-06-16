@@ -163,10 +163,11 @@ nav ul li a.contact:hover {
     width: 100%;
     margin-bottom: 10px;
     transition: background-color 0.2s ease;
-    
 
-  text-decoration: none; /* quita subrayado */
-  
+
+    text-decoration: none;
+    /* quita subrayado */
+
 }
 
 .btn-identificarse:hover {
@@ -178,7 +179,7 @@ nav ul li a.contact:hover {
     font-size: 13px;
     color: #555;
     margin-top: 11px;
-    
+
 }
 
 .texto-nuevo a {
@@ -243,6 +244,14 @@ img.Barsa-Muebles-Principio-hero {
 
 /* Responsive */
 @media (max-width: 768px) {
+    .home-principio-page {
+        gap: 0rem;
+    }
+
+    .icono-sillon {
+        width: 38%;
+        margin-top: 0rem;
+    }
 
     nav ul li a.contact {
         padding: 0px 0px;
@@ -257,6 +266,7 @@ img.Barsa-Muebles-Principio-hero {
         padding: 7px 7px;
         font-size: 16px;
         font-weight: bold;
+        margin-left: 4%;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -484,7 +494,7 @@ img.Barsa-Muebles-Principio-hero {
     --hover-color: #0056b3;
     --bg-color: #f8f9fa;
     --border-color: #dee2e6;
-    
+
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     margin: 2rem 0 0;
     padding: 1rem 0;
@@ -550,8 +560,27 @@ img.Barsa-Muebles-Principio-hero {
         flex-direction: column;
         gap: 0.25rem;
     }
-    
+
     .credits-text {
         font-size: 0.8rem;
     }
+
+    .icono-sillon {
+        width: 38%;
+        margin-top: 0rem;
+    }
+    .home-principio-page {
+        gap: 0rem;
+    }
+}
+/* Mostrar en pantallas grandes (PC/Tablet) */
+.icono-sillon {
+  display: block; /* o inline-block, según tu diseño */
+}
+
+/* Ocultar en móviles (ancho menor a 768px) */
+@media (max-width: 768px) {
+  .icono-sillon {
+    display: none;
+  }
 }
