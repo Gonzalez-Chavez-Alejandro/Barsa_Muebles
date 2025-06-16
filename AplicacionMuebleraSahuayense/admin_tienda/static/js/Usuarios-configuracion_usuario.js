@@ -19,7 +19,7 @@ async function cargarUsuarioActual() {
     const data = await res.json();
 
     usuarioActual = {
-      nombre: data.nameUser || data.nombre || '',
+      nombre: data.nameUser || data.nombre || data.username || '',
       correo: data.email || data.correo || '',
       telefono: data.phoneUser || data.telefono || ''
     };
@@ -64,18 +64,23 @@ async function cargarEncargosUsuario() {
 
     encargosUsuario.forEach(encargo => {
       const productosHTML = (encargo.productos_encargados || []).map(item => {
+        const producto = item.producto || {};
         const imagen = item.imagen || 'https://via.placeholder.com/100';
-        const nombre = (item.producto && item.producto.nameFurniture) || 'Producto';
+        const nombre = producto.nameFurniture || 'Producto';
         const cantidad = Number(item.cantidad) || 0;
-        let precio = Number(item.precio_unitario);
-        if (isNaN(precio)) precio = 0;
+        const precioOriginal = Number(producto.priceFurniture) || 0;
+        const porcentajeDescuento = producto.porcentajeDescuento || 0;
+        const precioConDescuento = Number(producto.PrecioOferta) || precioOriginal;
 
         return `
           <div class="producto-encargo">
             <img src="${imagen}" alt="${nombre}" class="producto-imagen" onerror="this.src='https://via.placeholder.com/100'">
             <div>
-              <p>${nombre}</p>
-              <p>${cantidad} x $${precio.toFixed(2)}</p>
+              <p><strong>${nombre}</strong></p>
+              <p>Cantidad: ${cantidad}</p>
+              <p>Precio original: $${precioOriginal.toFixed(2)}</p>
+              <p>Descuento: ${porcentajeDescuento}%</p>
+              <p>Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
             </div>
           </div>`;
       }).join('');
@@ -103,6 +108,7 @@ async function cargarEncargosUsuario() {
             <i class="fas fa-trash-alt"></i> Eliminar
           </button>
         </div>`;
+
       contenedor.appendChild(encargoElement);
     });
 
@@ -111,6 +117,7 @@ async function cargarEncargosUsuario() {
     alert('Error al cargar los encargos del usuario.');
   }
 }
+
 
 // Escucha eventos para generar PDF y eliminar encargos
 document.addEventListener('click', async (e) => {
@@ -159,10 +166,11 @@ document.addEventListener('click', async (e) => {
   }
 });
 
-// Genera PDF con jsPDF
 function generarPDF(encargo) {
+  console.log('usuarioActual:', usuarioActual);
   const doc = new window.jspdf.jsPDF();
   const lineHeight = 7;
+
   const config = {
     logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
     logoConfig: { x: 15, y: 12, width: 40, height: 15 },
@@ -198,42 +206,59 @@ function generarPDF(encargo) {
 
   y += 10;
   doc.setFillColor(config.colors.accent);
-  doc.rect(config.margins.left - 5, y, config.pageWidth - config.margins.left - config.margins.right + 10, 8, 'F');
+  doc.rect(config.margins.left - 1, y, config.pageWidth - config.margins.left - config.margins.right + 10, 8, 'F');
   doc.setTextColor(255).setFontSize(12);
   doc.text('Producto', config.margins.left, y + 6);
-  doc.text('Cantidad', 100, y + 6);
-  doc.text('Precio', 150, y + 6);
+  doc.text('Cantidad', 90, y + 6);
+  doc.text('Precio original', 125, y + 6);
+  doc.text('Precio con descuento', 160, y + 6);
 
   y += 12;
   doc.setFontSize(10).setTextColor(config.colors.primary);
 
+  let tieneProductoConPrecioCero = false;
+
   (encargo.productos_encargados || []).forEach(item => {
     const nombre = (item.producto && item.producto.nameFurniture) || 'Producto';
     const cantidad = Number(item.cantidad) || 0;
+    const precioOriginal = Number(item.producto?.priceFurniture) || 0;
+    const precioConDescuento = Number(item.producto?.PrecioOferta) || 0;
 
-    let precio = Number(item.precio_unitario);
-    if (isNaN(precio)) precio = 0;
+    if (precioOriginal === 0 || precioConDescuento === 0) {
+      tieneProductoConPrecioCero = true;
+    }
+
+    const textoPrecioOriginal = precioOriginal === 0 ? "No definido" : `$${precioOriginal.toFixed(2)}`;
+    const textoPrecioConDescuento = precioConDescuento === 0 ? "No definido" : `$${precioConDescuento.toFixed(2)}`;
 
     const productLines = doc.splitTextToSize(nombre, 60);
     const productHeight = productLines.length * lineHeight;
 
     doc.text(productLines, config.margins.left, y);
-    doc.text(cantidad.toString(), 100, y);
-    doc.text(`$${precio.toFixed(2)}`, 150, y);
+    doc.text(cantidad.toString(), 90, y);
+    doc.text(textoPrecioOriginal, 125, y);
+    doc.text(textoPrecioConDescuento, 170, y);
 
     y += Math.max(productHeight, 8);
   });
 
   y += 10;
   doc.setFont("helvetica", "bold").setFontSize(12);
-  doc.text(`Total: $${Number(encargo.total).toFixed(2)}`, 150, y);
+
+  if (tieneProductoConPrecioCero) {
+    doc.setTextColor('#ff0000');
+    doc.text("Total: Póngase en contacto con la empresa para aclarar el precio.", config.margins.left, y);
+  } else {
+    doc.setTextColor(config.colors.primary);
+    doc.text(`Total: $${Number(encargo.total).toFixed(2)}`, 150, y);
+  }
 
   doc.save(`encargo-${encargo.id}.pdf`);
 }
 
-// Ejecutar al cargar la página
+
+// Al cargar la página
 document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
   await cargarEncargosUsuario();
 });
-
