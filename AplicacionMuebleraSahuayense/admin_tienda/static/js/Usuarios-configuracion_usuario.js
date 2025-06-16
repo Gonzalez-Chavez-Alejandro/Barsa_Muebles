@@ -236,3 +236,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
   await cargarEncargosUsuario();
 });
+
