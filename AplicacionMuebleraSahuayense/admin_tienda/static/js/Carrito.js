@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = '/login/';
     }
   }
-
+  
   async function cargarCarritoAPI() {
     if (!token) return;
     try {
@@ -299,7 +299,5 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("❌ Ocurrió un error al agregar el producto.");
   }
 }
-
-
   validarTokenYUsuario();
 });
