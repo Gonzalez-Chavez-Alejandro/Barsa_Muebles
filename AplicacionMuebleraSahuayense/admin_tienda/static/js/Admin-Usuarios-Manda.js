@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     let pedidos = [];
     let estadoActivo = "todos";
+    let pedidosMostrados = [];  
 
     const container = document.getElementById("pedidos-container");
     const inputBuscar = document.getElementById("um-input-buscar");
@@ -427,6 +428,108 @@ document.addEventListener("click", async function (e) {
         // Guardar PDF
         doc.save(`pedido_${pedido.id}.pdf`);
     }
+document.getElementById("um-exportar-todos").addEventListener("click", async () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+
+    // Obtener logo solo una vez
+    let logoBase64;
+    try {
+        logoBase64 = await obtenerImagenBase64(logoUrl);
+    } catch (e) {
+        console.warn('No se pudo cargar el logo:', e);
+    }
+
+    // Filtrar pedidos según el estado actual (y excluir "carrito")
+    const pedidosAExportar = pedidos.filter(p => {
+        const coincideEstado = estadoActivo === "todos" || p.estado === estadoActivo;
+        return coincideEstado && p.estado !== "carrito";
+    });
+
+    if (pedidosAExportar.length === 0) {
+        alert("No hay pedidos para exportar.");
+        return;
+    }
+
+    for (let i = 0; i < pedidosAExportar.length; i++) {
+        const pedido = pedidosAExportar[i];
+
+        // === CONTENIDO PDF por pedido ===
+        let headerHeight = 0;
+        if (logoBase64) {
+            const imgProps = doc.getImageProperties(logoBase64);
+            const logoWidth = 40;
+            const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
+            const x = 14;
+            const y = 10;
+
+            doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
+            headerHeight = y + logoHeight + 5;
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineWidth(0.5);
+            doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
+        }
+
+        let posY = headerHeight + 10;
+
+        doc.setFontSize(18);
+        doc.text(`Pedido #${pedido.id}`, 14, posY);
+
+        posY += 10;
+        const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
+        doc.setFontSize(12);
+        doc.text(`Fecha: ${fechaStr}`, 14, posY);
+
+        posY += 10;
+        doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
+        posY += 7;
+        doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
+        posY += 7;
+        doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+
+        posY += 12;
+
+        const columnas = [
+            { header: 'Producto', dataKey: 'producto' },
+            { header: 'Cantidad', dataKey: 'cantidad' },
+            { header: 'Precio Unitario', dataKey: 'precio_unitario' },
+            { header: 'Subtotal', dataKey: 'subtotal' }
+        ];
+
+        const filas = (pedido.productos_encargados || []).map(p => {
+            const precioUnit = Number(p.precio_unitario).toFixed(2);
+            const cantidad = p.cantidad || 0;
+            const subtotal = (precioUnit * cantidad).toFixed(2);
+            return {
+                producto: p.producto.nameFurniture || 'Sin nombre',
+                cantidad: cantidad.toString(),
+                precio_unitario: `$${precioUnit}`,
+                subtotal: `$${subtotal}`
+            };
+        });
+
+        doc.autoTable({
+            startY: posY,
+            head: [columnas.map(col => col.header)],
+            body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [73, 84, 104] },
+            margin: { left: 14, right: 14 }
+        });
+
+        const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
+        doc.setFontSize(14);
+        doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
+
+        // Si no es el último, agregar página
+        if (i < pedidosAExportar.length - 1) {
+            doc.addPage();
+        }
+    }
+
+    doc.save(`pedidos_${estadoActivo}.pdf`);
+});
 
 
 });
@@ -454,3 +557,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+
+/*
+document.getElementById('um-exportar-visibles').addEventListener('click', async () => {
+    if (!pedidosMostrados || pedidosMostrados.length === 0) {
+        alert("No hay pedidos visibles para exportar.");
+        return;
+    }
+
+    for (const pedido of pedidosMostrados) {
+        await generarPDF(pedido);
+    }
+
+    alert(`✅ Se generaron ${pedidosMostrados.length} PDFs del estado "${estadoActivo}".`);
+});
+*/
