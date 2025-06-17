@@ -334,56 +334,182 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    async function generarPDF(pedido) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+async function generarPDF(pedido) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-        // URL del logo
-        const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+    const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
 
-        // Obtener logo en base64
-        let logoBase64;
-        try {
-            logoBase64 = await obtenerImagenBase64(logoUrl);
-        } catch (e) {
-            console.warn('No se pudo cargar el logo:', e);
-        }
+    let logoBase64;
+    try {
+        logoBase64 = await obtenerImagenBase64(logoUrl);
+    } catch (e) {
+        console.warn('No se pudo cargar el logo:', e);
+    }
 
-        // Altura total del encabezado para separar contenido
+    let headerHeight = 0;
+
+    if (logoBase64) {
+        const imgProps = doc.getImageProperties(logoBase64);
+        const logoWidth = 40;
+        const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
+        const x = 14;
+        const y = 10;
+
+        doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
+
+        headerHeight = y + logoHeight + 5;
+
+        doc.setDrawColor(0, 0, 0);
+        doc.setLineWidth(0.5);
+        doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
+    }
+
+    let posY = headerHeight + 10;
+
+    doc.setFontSize(18);
+    doc.text(`Pedido #${pedido.id}`, 14, posY);
+
+    posY += 10;
+    const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
+    doc.setFontSize(12);
+    doc.text(`Fecha: ${fechaStr}`, 14, posY);
+
+    posY += 10;
+    doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
+    posY += 7;
+    doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
+    posY += 7;
+    doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+
+    if (estadoActivo === "todos") {
+        posY += 7;
+        doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
+    }
+
+    posY += 12;
+
+    const columnas = [
+        { header: 'Producto', dataKey: 'producto' },
+        { header: 'Cantidad', dataKey: 'cantidad' },
+        { header: 'Precio Original', dataKey: 'precio_original' },
+        { header: '% Descuento', dataKey: 'descuento' },
+        { header: 'Precio Descuento', dataKey: 'precio_descuento' },
+        { header: 'Subtotal', dataKey: 'subtotal' }
+    ];
+
+    const productos = pedido.productos_encargados || [];
+
+    // Validar si hay productos con todos los valores 0
+    const hayProductoConCamposCero = productos.some(p => {
+        const prod = p.producto || {};
+        const precioOriginal = Number(prod.priceFurniture || 0);
+        const porcentajeDescuento = Number(prod.porcentajeDescuento || 0);
+        const precioDescuento = (!isNaN(prod.PrecioOferta) && prod.PrecioOferta !== null)
+            ? Number(prod.PrecioOferta)
+            : precioOriginal;
+        return precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0;
+    });
+
+    const filas = productos.map(p => {
+        const producto = p.producto || {};
+        const cantidad = Number(p.cantidad) || 0;
+
+        const precioOriginal = Number(producto.priceFurniture || 0);
+        const porcentajeDescuento = Number(producto.porcentajeDescuento || 0);
+        const precioDescuento = (!isNaN(producto.PrecioOferta) && producto.PrecioOferta !== null)
+            ? Number(producto.PrecioOferta)
+            : precioOriginal;
+
+        const subtotal = porcentajeDescuento === 0
+            ? precioOriginal * cantidad
+            : precioDescuento * cantidad;
+
+        const camposSinValor = (precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0);
+
+        return {
+            producto: producto.nameFurniture || 'Sin nombre',
+            cantidad: cantidad.toString(),
+            precio_original: camposSinValor ? 'No definido' : `$${precioOriginal.toFixed(2)}`,
+            descuento: camposSinValor ? 'No definido' : `${porcentajeDescuento}%`,
+            precio_descuento: camposSinValor ? 'No definido' : `$${precioDescuento.toFixed(2)}`,
+            subtotal: camposSinValor ? 'No definido' : `$${subtotal.toFixed(2)}`
+        };
+    });
+
+    doc.autoTable({
+        startY: posY,
+        head: [columnas.map(col => col.header)],
+        body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [73, 84, 104] },
+        margin: { left: 14, right: 14 }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
+    doc.setFontSize(14);
+
+    if (hayProductoConCamposCero) {
+        doc.text("Póngase en contacto con la empresa", 14, finalY);
+    } else {
+        doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
+    }
+
+    doc.save(`pedido_${pedido.id}.pdf`);
+}
+
+
+
+document.getElementById("um-exportar-todos").addEventListener("click", async () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+
+    let logoBase64;
+    try {
+        logoBase64 = await obtenerImagenBase64(logoUrl);
+    } catch (e) {
+        console.warn('No se pudo cargar el logo:', e);
+    }
+
+    const pedidosAExportar = pedidos.filter(p => {
+        const coincideEstado = estadoActivo === "todos" || p.estado === estadoActivo;
+        return coincideEstado && p.estado !== "carrito";
+    });
+
+    if (pedidosAExportar.length === 0) {
+        alert("No hay pedidos para exportar.");
+        return;
+    }
+
+    for (let i = 0; i < pedidosAExportar.length; i++) {
+        const pedido = pedidosAExportar[i];
+
         let headerHeight = 0;
-
-        // Dibujar logo como encabezado (izquierda, arriba)
         if (logoBase64) {
             const imgProps = doc.getImageProperties(logoBase64);
-            const logoWidth = 40; // ancho en mm
+            const logoWidth = 40;
             const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
-            const x = 14; // margen izquierdo
-            const y = 10; // margen superior
+            const x = 14;
+            const y = 10;
 
             doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
-
             headerHeight = y + logoHeight + 5;
-
-            // Línea horizontal debajo del encabezado
             doc.setDrawColor(0, 0, 0);
             doc.setLineWidth(0.5);
             doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
         }
 
-        // Posición vertical para el contenido debajo del encabezado
         let posY = headerHeight + 10;
 
-        // Título
         doc.setFontSize(18);
         doc.text(`Pedido #${pedido.id}`, 14, posY);
 
-        // Fecha
         posY += 10;
         const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
         doc.setFontSize(12);
         doc.text(`Fecha: ${fechaStr}`, 14, posY);
 
-        // Datos usuario
         posY += 10;
         doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
         posY += 7;
@@ -391,33 +517,59 @@ document.addEventListener("DOMContentLoaded", () => {
         posY += 7;
         doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
 
-        // Mostrar estado solo si se está filtrando por "todos"
-        if (estadoActivo === "todos") {
+        if (estadoActivo === "todos" && pedido.estado !== "papelera") {
             posY += 7;
             doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
         }
 
-        // Espacio antes de la tabla
         posY += 12;
 
-
-        // Tabla de productos
         const columnas = [
             { header: 'Producto', dataKey: 'producto' },
             { header: 'Cantidad', dataKey: 'cantidad' },
-            { header: 'Precio Unitario', dataKey: 'precio_unitario' },
+            { header: 'Precio Original', dataKey: 'precio_original' },
+            { header: '% Descuento', dataKey: 'descuento' },
+            { header: 'Precio Descuento', dataKey: 'precio_descuento' },
             { header: 'Subtotal', dataKey: 'subtotal' }
         ];
 
-        const filas = (pedido.productos_encargados || []).map(p => {
-            const precioUnit = Number(p.precio_unitario).toFixed(2);
-            const cantidad = p.cantidad || 0;
-            const subtotal = (precioUnit * cantidad).toFixed(2);
+        const productos = pedido.productos_encargados || [];
+
+        // Aquí la clave: detectamos si existe algún producto con todos valores en 0
+        const hayProductoConCamposCero = productos.some(p => {
+            const prod = p.producto || {};
+            const precioOriginal = Number(prod.priceFurniture || 0);
+            const porcentajeDescuento = Number(prod.porcentajeDescuento || 0);
+            const precioDescuento = (!isNaN(prod.PrecioOferta) && prod.PrecioOferta !== null)
+                ? Number(prod.PrecioOferta)
+                : precioOriginal;
+            // Si todos ceros
+            return precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0;
+        });
+
+        const filas = productos.map(p => {
+            const producto = p.producto || {};
+            const cantidad = Number(p.cantidad) || 0;
+
+            const precioOriginal = Number(producto.priceFurniture || 0);
+            const porcentajeDescuento = Number(producto.porcentajeDescuento || 0);
+            const precioDescuento = (!isNaN(producto.PrecioOferta) && producto.PrecioOferta !== null)
+                ? Number(producto.PrecioOferta)
+                : precioOriginal;
+
+            const subtotal = porcentajeDescuento === 0
+                ? precioOriginal * cantidad
+                : precioDescuento * cantidad;
+
+            const camposSinValor = (precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0);
+
             return {
-                producto: p.producto.nameFurniture || 'Sin nombre',
+                producto: producto.nameFurniture || 'Sin nombre',
                 cantidad: cantidad.toString(),
-                precio_unitario: `$${precioUnit}`,
-                subtotal: `$${subtotal}`
+                precio_original: camposSinValor ? 'No definido' : `$${precioOriginal.toFixed(2)}`,
+                descuento: camposSinValor ? 'No definido' : `${porcentajeDescuento}%`,
+                precio_descuento: camposSinValor ? 'No definido' : `$${precioDescuento.toFixed(2)}`,
+                subtotal: camposSinValor ? 'No definido' : `$${subtotal.toFixed(2)}`
             };
         });
 
@@ -430,124 +582,25 @@ document.addEventListener("DOMContentLoaded", () => {
             margin: { left: 14, right: 14 }
         });
 
-        // Total al final
         const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
         doc.setFontSize(14);
-        doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
 
-        // Guardar PDF
-        doc.save(`pedido_${pedido.id}.pdf`);
-    }
-    document.getElementById("um-exportar-todos").addEventListener("click", async () => {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
-
-        // Obtener logo solo una vez
-        let logoBase64;
-        try {
-            logoBase64 = await obtenerImagenBase64(logoUrl);
-        } catch (e) {
-            console.warn('No se pudo cargar el logo:', e);
-        }
-
-        // Filtrar pedidos según el estado actual (y excluir "carrito")
-        const pedidosAExportar = pedidos.filter(p => {
-            const coincideEstado = estadoActivo === "todos" || p.estado === estadoActivo;
-            return coincideEstado && p.estado !== "carrito";
-        });
-
-        if (pedidosAExportar.length === 0) {
-            alert("No hay pedidos para exportar.");
-            return;
-        }
-
-        for (let i = 0; i < pedidosAExportar.length; i++) {
-            const pedido = pedidosAExportar[i];
-
-            // === CONTENIDO PDF por pedido ===
-            let headerHeight = 0;
-            if (logoBase64) {
-                const imgProps = doc.getImageProperties(logoBase64);
-                const logoWidth = 40;
-                const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
-                const x = 14;
-                const y = 10;
-
-                doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
-                headerHeight = y + logoHeight + 5;
-                doc.setDrawColor(0, 0, 0);
-                doc.setLineWidth(0.5);
-                doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
-            }
-
-            let posY = headerHeight + 10;
-
-            doc.setFontSize(18);
-            doc.text(`Pedido #${pedido.id}`, 14, posY);
-
-            posY += 10;
-            const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
-            doc.setFontSize(12);
-            doc.text(`Fecha: ${fechaStr}`, 14, posY);
-
-            posY += 10;
-            doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
-            posY += 7;
-            doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
-            posY += 7;
-            doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
-
-            // Solo mostrar estado si el filtro es "todos" y el pedido no está en papelera
-            if (estadoActivo === "todos" && pedido.estado !== "papelera") {
-                posY += 7;
-                doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
-            }
-
-
-            posY += 12;
-
-
-            const columnas = [
-                { header: 'Producto', dataKey: 'producto' },
-                { header: 'Cantidad', dataKey: 'cantidad' },
-                { header: 'Precio Unitario', dataKey: 'precio_unitario' },
-                { header: 'Subtotal', dataKey: 'subtotal' }
-            ];
-
-            const filas = (pedido.productos_encargados || []).map(p => {
-                const precioUnit = Number(p.precio_unitario).toFixed(2);
-                const cantidad = p.cantidad || 0;
-                const subtotal = (precioUnit * cantidad).toFixed(2);
-                return {
-                    producto: p.producto.nameFurniture || 'Sin nombre',
-                    cantidad: cantidad.toString(),
-                    precio_unitario: `$${precioUnit}`,
-                    subtotal: `$${subtotal}`
-                };
-            });
-
-            doc.autoTable({
-                startY: posY,
-                head: [columnas.map(col => col.header)],
-                body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
-                styles: { fontSize: 10 },
-                headStyles: { fillColor: [73, 84, 104] },
-                margin: { left: 14, right: 14 }
-            });
-
-            const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
-            doc.setFontSize(14);
+        if (hayProductoConCamposCero) {
+            // Si hay al menos un producto con 0 en todos los valores
+            doc.text("Póngase en contacto con la empresa", 14, finalY);
+        } else {
+            // Caso normal, muestra total normal
             doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
-
-            // Si no es el último, agregar página
-            if (i < pedidosAExportar.length - 1) {
-                doc.addPage();
-            }
         }
 
-        doc.save(`pedidos_${estadoActivo}.pdf`);
-    });
+        if (i < pedidosAExportar.length - 1) {
+            doc.addPage();
+        }
+    }
+
+    doc.save(`pedidos_${estadoActivo}.pdf`);
+});
+
 
 
 });
