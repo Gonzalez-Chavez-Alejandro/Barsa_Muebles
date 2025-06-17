@@ -118,3 +118,47 @@
     flex: 1 1 calc(50% - 8px);
   }
 }
+
+
+
+/* Estilos unificados para el botón */
+.um-btn-vaciar-papelera {
+  display: none; /* Oculto por defecto */
+  padding: 8px 16px;
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+/* Estado visible del botón */
+.um-btn-vaciar-papelera.visible {
+  display: inline-block;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Efecto hover */
+.um-btn-vaciar-papelera:hover {
+  background-color: #b71c1c;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Icono dentro del botón */
+.um-btn-vaciar-papelera i {
+  margin-right: 5px;
+}
+
+/* Contenedor opcional (si lo usas) */
+.um-contenedor-boton-papelera {
+  display: inline-block;
+  height: 36px;
+  vertical-align: middle;
+  overflow: hidden;
+}

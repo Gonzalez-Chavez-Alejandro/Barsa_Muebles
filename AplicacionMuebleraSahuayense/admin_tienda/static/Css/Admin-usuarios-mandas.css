@@ -299,7 +299,7 @@
 
 
 #usuarios-mandas .um-btn-pdf {
-            background: #3b82f6;
+            background: #2563eb;
             color: white;
             border: none;
             padding: 0.6rem 1.2rem;
@@ -315,7 +315,7 @@
         }
 
         #usuarios-mandas .um-btn-pdf:hover {
-            background: #2563eb;
+            background: #05266b;
             transform: translateY(-1px);
         }
 

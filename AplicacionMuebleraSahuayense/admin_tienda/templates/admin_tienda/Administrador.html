@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="{% static 'Css/Admin-categorias.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Alerts.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Buttons-Admin-Usuarios-Manda.css' %}">
-  
+
 
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -353,13 +353,16 @@
         <button class="filtro-estado" data-estado="papelera">Papelera</button>
       </div>
 
-      <button id="btn-vaciar-papelera" class="um-btn-vaciar-papelera">
-        <i class="fas fa-trash-alt"></i> Vaciar Papelera
-      </button>
+      
 
     </div>
     <h1>Pedidos Encargados</h1>
     <div class="um-header-actions">
+      <div class="um-contenedor-boton-papelera">
+        <button id="btn-vaciar-papelera" class="um-btn-vaciar-papelera">
+          <i class="fas fa-trash-alt"></i> Vaciar Papelera
+        </button>
+      </div>
       <button class="um-btn-pdf" id="um-exportar-todos">
         <i class="fas fa-file-pdf"></i> Exportar todos
       </button>
