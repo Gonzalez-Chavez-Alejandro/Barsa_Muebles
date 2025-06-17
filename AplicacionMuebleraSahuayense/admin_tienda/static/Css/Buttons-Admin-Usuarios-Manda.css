@@ -162,3 +162,109 @@
   vertical-align: middle;
   overflow: hidden;
 }
+
+
+
+
+
+/* Contenedor principal */
+.um-controls-pedido {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Estilo para la etiqueta */
+.um-controls-pedido label {
+  font-size: 13px;
+  color: #424242;
+  font-weight: 500;
+}
+
+/* Estilo para el select */
+.um-select-estado {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  background-color: #f5f5f5;
+  font-size: 13px;
+  color: #424242;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.um-select-estado:hover {
+  border-color: #bdbdbd;
+  background-color: #fff;
+}
+
+.um-select-estado:focus {
+  outline: none;
+  border-color: #5e35b1;
+  box-shadow: 0 0 0 2px rgba(94, 53, 177, 0.2);
+}
+
+/* Estilo para el botón de papelera */
+.um-btn-papelera {
+  padding: 8px 12px;
+  background-color: #efebe9;
+  color: #6d4c41;
+  border: 1px solid #d7ccc8;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.um-btn-papelera:hover {
+  background-color: #e0d5d0;
+  border-color: #bcaaa4;
+  color: #5d4037;
+}
+
+.um-btn-papelera i {
+  font-size: 12px;
+}
+
+/* Estilos para las opciones del select */
+.um-select-estado option {
+  padding: 5px;
+}
+
+/* Estilos específicos para cada estado (opcional) */
+.um-select-estado option[value="pendiente"] {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.um-select-estado option[value="procesado"] {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.um-select-estado option[value="enviado"] {
+  background-color: #ede7f6;
+  color: #5e35b1;
+}
+
+.um-select-estado option[value="entregado"] {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.um-select-estado option[value="cancelado"] {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.um-select-estado option[value="papelera"] {
+  background-color: #efebe9;
+  color: #6d4c41;
+}
