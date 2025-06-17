@@ -38,7 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             return `
         <li class="um-producto-item">
-            <img src="${imgUrl}" alt="${nombreProducto}" class="um-producto-img">
+            <a href="/productos_vista/?producto_id=${p.producto.id}" target="_blank">
+                <img src="${imgUrl}" alt="${nombreProducto}" class="um-producto-img" style="cursor:pointer;">
+            </a>
+
             <div class="um-producto-info">
                 <h4>${nombreProducto}</h4>
                 <span class="um-producto-detalle">${cantidad} × $${precio}</span>
