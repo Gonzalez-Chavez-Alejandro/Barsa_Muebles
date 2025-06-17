@@ -30,12 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const telefonoUsuario = pedido.usuario_telefono || 'No proporcionado';
 
         const productosHTML = (pedido.productos_encargados || []).map(p => {
-    const imgUrl = p.imagen || 'https://via.placeholder.com/100';
-    const nombreProducto = p.producto.nameFurniture || 'Sin nombre';
-    const cantidad = p.cantidad || 0;
-    const precio = Number(p.precio_unitario).toFixed(2) || '0.00';
+            const imgUrl = p.imagen || 'https://via.placeholder.com/100';
+            const nombreProducto = p.producto.nameFurniture || 'Sin nombre';
+            const cantidad = p.cantidad || 0;
+            const precio = Number(p.precio_unitario).toFixed(2) || '0.00';
 
-    return `
+            return `
         <li class="um-producto-item">
             <img src="${imgUrl}" alt="${nombreProducto}" class="um-producto-img">
             <div class="um-producto-info">
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         </li>
     `;
-}).join('');
+        }).join('');
 
         const puedeEliminar = (pedido.estado === 'entregado' || pedido.estado === 'papelera');
         const btnEliminar = puedeEliminar
@@ -63,9 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <header class="um-pedido-header">
                     <div class="um-pedido-id">#${pedido.id}</div>
                     <time>${new Date(pedido.fecha).toLocaleDateString('es-ES', {
-                        day: '2-digit', month: 'short', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
-                    })}</time>
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        })}</time>
                 </header>
 
                 <div class="um-usuario-info">
@@ -85,6 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <select class="um-select-estado" id="estado-select-${pedido.id}" data-id="${pedido.id}">
                         ${opcionesEstado}
                     </select>
+
+                    <button class="um-btn-papelera" data-id="${pedido.id}">
+                    <i class="fas fa-trash"></i> Papelera
+                    </button>
+
 
                     ${btnEliminar}
 
@@ -146,9 +151,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 eliminarPedido(id);
                 renderPedidos(filtrarPedidos());
             }
+        } else if (e.target.closest('.um-btn-pdf')) {
+            const botonPDF = e.target.closest('.um-btn-pdf');
+            const id = parseInt(botonPDF.dataset.id);
+            if (!isNaN(id)) {
+                const pedido = pedidos.find(p => p.id === id);
+                if (pedido) {
+                    generarPDF(pedido);
+                } else {
+                    alert('Pedido no encontrado para generar PDF');
+                }
+            }
         }
-        // Aquí puedes agregar lógica para generar el PDF si lo deseas
     });
+
 
     container.addEventListener('change', async (e) => {
         if (e.target.classList.contains('um-select-estado')) {
@@ -190,271 +206,229 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     cargarPedidosDesdeAPI();
+
+document.addEventListener("click", async function (e) {
+    if (e.target.closest(".um-btn-papelera")) {
+        const btn = e.target.closest(".um-btn-papelera");
+        const encargoId = btn.dataset.id;
+
+        const confirmar = confirm("¿Estás seguro de mover este pedido a la papelera?");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`/encargos/mover-a-papelera/${encargoId}/`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.error || "No se pudo mover a papelera");
+            }
+
+            const data = await res.json();
+            alert(data.mensaje || "Encargo movido a papelera");
+
+            if (typeof cargarEncargos === "function") {
+                await cargarEncargos();  // Espera que se recargue correctamente
+            } else {
+                location.reload();  // Fallback si no está definida
+            }
+
+        } catch (err) {
+            console.error("Error al mover a papelera:", err);
+            alert("Ocurrió un error al mover el pedido a la papelera.");
+        }
+    }
 });
 
-/*
-// Configuración común
-const configPDF = {
-    logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
-    logoConfig: {
-        x: 15,  // Posición desde la izquierda
-        y: 12,  // Posición desde arriba
-        width: 40,  // Ancho en puntos (1cm ≈ 28.35 puntos)
-        height: 15  // Alto proporcional (mantiene relación de aspecto)
-    },
-    margins: { left: 45, right: 15, top: 40 },
-    colors: {
-        primary: '#2d3748',
-        secondary: '#4a5568',
-        accent: '#4a5568'
-    }
-};
+document.getElementById("btn-vaciar-papelera").addEventListener("click", async () => {
+    const confirmar = confirm("¿Estás seguro de eliminar todos los pedidos en papelera?");
+    if (!confirmar) return;
 
-// Función auxiliar para cargar imágenes
-function loadImage(url) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.onload = () => resolve(img);
-        img.onerror = (err) => reject(new Error('Error al cargar el logo'));
-        img.src = url + '?v=' + Date.now(); // Cache buster
-    });
-}
-
-async function generarPDFIndividual(pedido) {
-    const doc = new jspdf.jsPDF();
-    const logo = await loadImage(configPDF.logoUrl);
-    
-    // Calcular dimensiones del logo
-    const aspectRatio = logo.width / logo.height;
-    const logoHeight = configPDF.logoConfig.width / aspectRatio;
-
-    // Encabezado profesional
-    doc.addImage(
-        logo,
-        'PNG',
-        configPDF.logoConfig.x,
-        configPDF.logoConfig.y,
-        configPDF.logoConfig.width,
-        logoHeight
-    );
-
-    // Título principal
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(configPDF.colors.primary);
-    doc.text(`Pedido #${pedido.id}`, configPDF.margins.left, 40);
-
-    // Sección de información del cliente
-    let y = 50;
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(configPDF.colors.accent);
-    doc.text('INFORMACIÓN DEL CLIENTE', configPDF.margins.left, y);
-    y += 10;
-
-    // Detalles del cliente
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(configPDF.colors.primary);
-    const clienteInfo = [
-        `Nombre: ${pedido.usuario.nombre || 'Desconocido'}`,
-        `Correo: ${pedido.usuario.correo || 'No proporcionado'}`,
-        `Teléfono: ${pedido.usuario.telefono || 'No proporcionado'}`,
-        `Fecha: ${new Date(pedido.fecha).toLocaleDateString('es-ES', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        })}`
-    ];
-
-    clienteInfo.forEach(info => {
-        doc.text(info, configPDF.margins.left, y);
-        y += 8;
-    });
-    y += 15;
-
-    // Tabla de productos (mismo estilo que reporte completo)
-    const headers = [['Producto', 'Cantidad', 'P. Unitario', 'Total']];
-    const rows = pedido.productos.map(p => [
-        p.nombre,
-        p.cantidad,
-        `$${p.precio.toFixed(2)}`,
-        `$${(p.cantidad * p.precio).toFixed(2)}`
-    ]);
-
-    doc.autoTable({
-        startY: y,
-        head: headers,
-        body: rows,
-        margin: { left: configPDF.margins.left },
-        styles: {
-            fontSize: 10,
-            cellPadding: 3,
-            textColor: configPDF.colors.primary,
-            lineColor: configPDF.colors.secondary
-        },
-        headStyles: {
-            fillColor: configPDF.colors.accent,
-            textColor: '#ffffff',
-            fontStyle: 'bold'
-        },
-        alternateRowStyles: {
-            fillColor: '#f8fafc'
-        }
-    });
-
-    // Total alineado a la derecha
-    const finalY = doc.autoTable.previous.finalY + 15;
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(configPDF.colors.accent);
-    doc.text(`TOTAL: $${pedido.total.toFixed(2)}`, 160, finalY, { align: 'right' });
-
-    // Pie de página idéntico al reporte completo
-    doc.setFontSize(8);
-    doc.setTextColor(configPDF.colors.secondary);
-    const footerY = doc.internal.pageSize.height - 10;
-    doc.text('© Barsa Muebles - Todos los derechos reservados', 15, footerY);
-
-    // Línea decorativa superior al pie de página
-    doc.setLineWidth(0.2);
-    doc.setDrawColor(configPDF.colors.secondary);
-    doc.line(15, footerY - 5, 195, footerY - 5);
-
-    doc.save(`Pedido_${pedido.id}_${new Date().toISOString().split('T')[0]}.pdf`);
-}
-
-async function generarPDFTodos() {
-    const doc = new jspdf.jsPDF();
-    const logo = await loadImage(configPDF.logoUrl);
-    let y = configPDF.margins.top;
-    let pageNumber = 1;
-
-    // Función para agregar encabezado con logo
-    const addHeader = () => {
-        // Calcular dimensiones manteniendo proporción
-        const aspectRatio = logo.width / logo.height;
-        const logoHeight = configPDF.logoConfig.width / aspectRatio;
-        
-        // Agregar logo
-        doc.addImage(
-            logo,
-            'PNG',
-            configPDF.logoConfig.x,
-            configPDF.logoConfig.y,
-            configPDF.logoConfig.width,
-            logoHeight
-        );
-        
-        // Texto del encabezado
-        doc.setFontSize(14);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(configPDF.colors.primary);
-        doc.text(`Reporte de Pedidos - Página ${pageNumber}`, configPDF.margins.left, 40);
-        
-        // Reiniciar posición Y
-        y = 50;
-    };
-
-    // Encabezado inicial
-    addHeader();
-
-    pedidos.forEach((pedido, index) => {
-        // Verificar espacio para nuevo pedido
-        if (y > 250) {
-            doc.addPage();
-            pageNumber++;
-            addHeader();
-        }
-
-        // Encabezado del pedido
-        doc.setFontSize(12);
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(configPDF.colors.accent);
-        doc.text(`Pedido #${pedido.id}`, configPDF.margins.left, y);
-        y += 8;
-
-        // Información del cliente
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(configPDF.colors.primary);
-        doc.text(`• Cliente: ${pedido.usuario.nombre || 'Desconocido'}`, configPDF.margins.left, y);
-        y += 7;
-        doc.text(`• Fecha: ${new Date(pedido.fecha).toLocaleDateString('es-ES')}`, configPDF.margins.left, y);
-        y += 10;
-
-        // Tabla de productos
-        const headers = [['Producto', 'Cantidad', 'P. Unitario', 'Total']];
-        const rows = pedido.productos.map(p => [
-            p.nombre,
-            p.cantidad,
-            `$${p.precio.toFixed(2)}`,
-            `$${(p.cantidad * p.precio).toFixed(2)}`
-        ]);
-
-        doc.autoTable({
-            startY: y,
-            head: headers,
-            body: rows,
-            margin: { left: configPDF.margins.left },
-            styles: {
-                fontSize: 10,
-                cellPadding: 2,
-                textColor: configPDF.colors.primary,
-                lineColor: configPDF.colors.secondary
-            },
-            headStyles: {
-                fillColor: configPDF.colors.secondary,
-                textColor: '#ffffff',
-                fontStyle: 'bold'
-            },
-            alternateRowStyles: {
-                fillColor: '#f8fafc'
+    try {
+        const res = await fetch("/encargos/papelera/eliminar/", {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                "Content-Type": "application/json"
             }
         });
 
-        // Total del pedido
-        y = doc.autoTable.previous.finalY + 10;
-        doc.setFontSize(11);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`Total Pedido: $${pedido.total.toFixed(2)}`, 160, y, { align: 'right' });
-        y += 15;
-
-        // Línea divisoria estilizada
-        doc.setLineWidth(0.3);
-        doc.setDrawColor(configPDF.colors.accent);
-        doc.line(15, y, 195, y);
-        y += 12;
-    });
-
-    doc.save('Reporte_Completo_Pedidos.pdf');
-}
-
-    // Event Listeners
-    inputBuscar.addEventListener('input', (e) => {
-        renderPedidos(filtrarPedidos(e.target.value));
-    });
-
-    container.addEventListener('click', (e) => {
-        // Eliminar pedido
-        if (e.target.closest('.um-btn-eliminar')) {
-            const id = Number(e.target.closest('.um-btn-eliminar').dataset.id);
-            eliminarPedido(id);
-            renderPedidos(pedidos);
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.error || "No se pudo eliminar la papelera");
         }
-        
-        // Generar PDF individual
-        if (e.target.closest('.um-btn-pdf')) {
-            const id = Number(e.target.closest('.um-btn-pdf').dataset.id);
-            const pedido = pedidos.find(p => p.id === id);
-            if (pedido) generarPDFIndividual(pedido);
+
+        const data = await res.json();
+        alert(data.mensaje || "Papelera vaciada");
+
+        if (typeof cargarEncargos === "function") {
+            await cargarEncargos();
+        } else {
+            location.reload();
         }
-    });
 
-    document.getElementById('um-exportar-todos').addEventListener('click', generarPDFTodos);
-
-    // Carga inicial
-    renderPedidos(pedidos);
+    } catch (err) {
+        console.error("Error al eliminar papelera:", err);
+        alert("Error al eliminar pedidos de la papelera.");
+    }
 });
-*/
+document.addEventListener("click", async function (e) {
+    if (e.target.closest(".um-btn-eliminar")) {
+        const btn = e.target.closest(".um-btn-eliminar");
+        const encargoId = btn.dataset.id;
+
+        const confirmar = confirm("¿Estás seguro de eliminar este pedido? Esta acción no se puede deshacer.");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`/encargos/eliminar/${encargoId}/`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.error || "No se pudo eliminar el encargo");
+            }
+
+            const data = await res.json();
+            alert(data.mensaje || "Encargo eliminado correctamente");
+
+            if (typeof cargarEncargos === "function") {
+                await cargarEncargos();
+            } else {
+                location.reload();
+            }
+
+        } catch (err) {
+            console.error("Error al eliminar el encargo:", err);
+            alert("Ocurrió un error al eliminar el encargo.");
+        }
+    }
+});
+
+
+
+
+    async function obtenerImagenBase64(url) {
+        const response = await fetch(url);
+        const blob = await response.blob();
+
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function generarPDF(pedido) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // URL del logo
+        const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+
+        // Obtener logo en base64
+        let logoBase64;
+        try {
+            logoBase64 = await obtenerImagenBase64(logoUrl);
+        } catch (e) {
+            console.warn('No se pudo cargar el logo:', e);
+        }
+
+        // Altura total del encabezado para separar contenido
+        let headerHeight = 0;
+
+        // Dibujar logo como encabezado (izquierda, arriba)
+        if (logoBase64) {
+            const imgProps = doc.getImageProperties(logoBase64);
+            const logoWidth = 40; // ancho en mm
+            const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
+            const x = 14; // margen izquierdo
+            const y = 10; // margen superior
+
+            doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
+
+            headerHeight = y + logoHeight + 5;
+
+            // Línea horizontal debajo del encabezado
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineWidth(0.5);
+            doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
+        }
+
+        // Posición vertical para el contenido debajo del encabezado
+        let posY = headerHeight + 10;
+
+        // Título
+        doc.setFontSize(18);
+        doc.text(`Pedido #${pedido.id}`, 14, posY);
+
+        // Fecha
+        posY += 10;
+        const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
+        doc.setFontSize(12);
+        doc.text(`Fecha: ${fechaStr}`, 14, posY);
+
+        // Datos usuario
+        posY += 10;
+        doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
+        posY += 7;
+        doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
+        posY += 7;
+        doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+
+        // Espacio antes de la tabla
+        posY += 12;
+
+        // Tabla de productos
+        const columnas = [
+            { header: 'Producto', dataKey: 'producto' },
+            { header: 'Cantidad', dataKey: 'cantidad' },
+            { header: 'Precio Unitario', dataKey: 'precio_unitario' },
+            { header: 'Subtotal', dataKey: 'subtotal' }
+        ];
+
+        const filas = (pedido.productos_encargados || []).map(p => {
+            const precioUnit = Number(p.precio_unitario).toFixed(2);
+            const cantidad = p.cantidad || 0;
+            const subtotal = (precioUnit * cantidad).toFixed(2);
+            return {
+                producto: p.producto.nameFurniture || 'Sin nombre',
+                cantidad: cantidad.toString(),
+                precio_unitario: `$${precioUnit}`,
+                subtotal: `$${subtotal}`
+            };
+        });
+
+        doc.autoTable({
+            startY: posY,
+            head: [columnas.map(col => col.header)],
+            body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
+            styles: { fontSize: 10 },
+            headStyles: { fillColor: [73, 84, 104] },
+            margin: { left: 14, right: 14 }
+        });
+
+        // Total al final
+        const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
+        doc.setFontSize(14);
+        doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
+
+        // Guardar PDF
+        doc.save(`pedido_${pedido.id}.pdf`);
+    }
+
+
+});
+
+

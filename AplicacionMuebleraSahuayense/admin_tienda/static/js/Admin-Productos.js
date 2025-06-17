@@ -115,7 +115,7 @@ function mostrarProductosView() {
        <td>${producto.descriptionFurniture || ''}</td>
        <td>$${Number(producto.priceFurniture).toFixed(2)}</td>
        <td>${producto.porcentajeDescuento || 0}%</td>
-      <td>$${producto.PrecioOferta && !isNaN(producto.PrecioOferta) ? Number(producto.PrecioOferta).toFixed(2) : Number(producto.priceFurniture).toFixed(2)}</td>
+       <td>$${producto.PrecioOferta && !isNaN(producto.PrecioOferta) ? Number(producto.PrecioOferta).toFixed(2) : Number(producto.priceFurniture).toFixed(2)}</td>
        <td>${imagenesHTML}</td>
        <td>${categoriasNombres}</td>
        <td>

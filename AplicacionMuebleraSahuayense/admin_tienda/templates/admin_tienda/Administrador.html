@@ -344,11 +344,17 @@
       </div>
       <div class="um-filtros-estado">
         <button class="filtro-estado" data-estado="todos">Todos</button>
-        <button class="filtro-estado" data-estado="proceso">En Proceso</button>
+        <button class="filtro-estado" data-estado="pendiente">Pendiente</button>
+        <button class="filtro-estado" data-estado="procesado">Procesado</button>
+        <button class="filtro-estado" data-estado="enviado">Enviado</button>
         <button class="filtro-estado" data-estado="entregado">Entregado</button>
-        <button class="filtro-estado" data-estado="finalizado">Finalizado</button>
+        <button class="filtro-estado" data-estado="cancelado">Cancelado</button>
         <button class="filtro-estado" data-estado="papelera">Papelera</button>
       </div>
+
+      <button id="btn-vaciar-papelera" class="um-btn-vaciar-papelera">
+        <i class="fas fa-trash-alt"></i> Vaciar Papelera
+      </button>
 
     </div>
     <h1>Pedidos Encargados</h1>

@@ -241,6 +241,15 @@ def eliminar_papelera(request):
     encargos_en_papelera.delete()
     return Response({"mensaje": f"Se eliminaron {total} pedidos en papelera."})
 
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def eliminar_encargo(request, encargo_id):
+    try:
+        encargo = Encargo.objects.get(id=encargo_id)
+        encargo.delete()
+        return Response({"mensaje": "Encargo eliminado correctamente"})
+    except Encargo.DoesNotExist:
+        return Response({"error": "Encargo no encontrado"}, status=404)
 
 
 from rest_framework import status
@@ -254,7 +263,7 @@ def cambiar_estado_encargo(request, encargo_id):
         return Response({"detail": "Encargo no encontrado."}, status=status.HTTP_404_NOT_FOUND)
 
     nuevo_estado = request.data.get('estado')
-    estados_validos = [ 'procesado', 'enviado', 'entregado', 'cancelado', 'papelera','pendiente']  # ajusta según tus estados
+    estados_validos = [ 'carrito', 'procesado', 'enviado', 'entregado', 'cancelado', 'papelera','pendiente']  # ajusta según tus estados
 #quite carrito
     if nuevo_estado not in estados_validos:
         return Response({"detail": f"Estado inválido. Los válidos son: {estados_validos}"}, status=status.HTTP_400_BAD_REQUEST)
