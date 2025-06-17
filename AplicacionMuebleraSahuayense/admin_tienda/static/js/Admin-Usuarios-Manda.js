@@ -432,3 +432,21 @@ document.addEventListener("click", async function (e) {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+  const filtros = document.querySelectorAll('.filtro-estado');
+  
+  filtros.forEach(filtro => {
+    filtro.addEventListener('click', function() {
+      // Remover la clase active de todos los filtros primero
+      filtros.forEach(f => f.classList.remove('active'));
+      
+      // Añadir active solo al filtro clickeado
+      this.classList.add('active');
+      
+      // Si se clickea cualquier filtro que no sea "todos", quitar el active de "todos"
+      if (this.dataset.estado !== 'todos') {
+        document.querySelector('.filtro-estado[data-estado="todos"]').classList.remove('active');
+      }
+    });
+  });
+});
