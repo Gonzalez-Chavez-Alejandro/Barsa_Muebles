@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Error inesperado al procesar pedido.");
     }
   });
-
+ 
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
     if (!window.producto?.id) {
       alert("⚠️ Producto no cargado aún.");
