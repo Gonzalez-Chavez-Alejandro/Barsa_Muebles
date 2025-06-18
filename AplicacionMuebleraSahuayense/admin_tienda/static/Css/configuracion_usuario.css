@@ -606,3 +606,30 @@ input:focus {
 }
 
 
+.encargo-estado {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #0b0c0c; /* gris por defecto */
+}
+
+.encargo-estado.estado-procesado {
+  background-color: #3498db; /* azul */
+}
+
+.encargo-estado.estado-enviado {
+  background-color: #27ae60; /* verde */
+}
+
+.encargo-estado.estado-entregado {
+  background-color: #2ecc71; /* verde claro */
+}
+
+.encargo-estado.estado-cancelado {
+  background-color: #e74c3c; /* rojo */
+}
+

@@ -29,7 +29,6 @@ async function cargarUsuarioActual() {
   }
 }
 
-// Carga encargos del usuario y los muestra en el contenedor
 async function cargarEncargosUsuario() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
@@ -91,12 +90,21 @@ async function cargarEncargosUsuario() {
       encargoElement.className = 'encargo-card';
       const encargoId = encargo.id.toString();
       const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
+      const estadoMostrar = (encargo.estado === 'procesado') ? 'procesando' : (encargo.estado || 'desconocido');
 
+      // Aquí se añade el estado visible en la cabecera
       encargoElement.innerHTML = `
         <div class="encargo-header">
           <div>
             <h3>Encargo #${idDisplay}</h3>
+            <h3>Estado:
+            <p class="encargo-estado estado-${estadoMostrar.toLowerCase()}">
+  <strong>${estadoMostrar.charAt(0).toUpperCase() + estadoMostrar.slice(1)}</strong>
+</p>
+
             <small class="encargo-id">${encargoId}</small>
+            </h3>
+
           </div>
           <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
         </div>
@@ -106,8 +114,8 @@ async function cargarEncargosUsuario() {
           <button class="btn-pdf" data-encargo='${encodeURIComponent(JSON.stringify(encargo))}'>
             <i class="fas fa-file-pdf"></i> PDF
           </button>
-          <button class="btn-eliminar" data-encargo-id="${encargo.id}">
-            <i class="fas fa-trash-alt"></i> Eliminar
+          <button class="btn-cancelar" data-encargo-id="${encargo.id}">
+            <i class="fas fa-times-circle"></i> Cancelar pedido
           </button>
         </div>`;
 
@@ -120,52 +128,47 @@ async function cargarEncargosUsuario() {
   }
 }
 
+
+
 // Escucha eventos para generar PDF y eliminar encargos
+// Evento global para delegar acciones
 document.addEventListener('click', async (e) => {
-  if (e.target.closest('.btn-pdf')) {
-    const btn = e.target.closest('.btn-pdf');
-    const encargo = JSON.parse(decodeURIComponent(btn.dataset.encargo));
+  const btnPDF = e.target.closest('.btn-pdf');
+  const btnCancelar = e.target.closest('.btn-cancelar');
+
+  // Generar PDF
+  if (btnPDF) {
+    const encargo = JSON.parse(decodeURIComponent(btnPDF.dataset.encargo));
     generarPDF(encargo);
+    return;
   }
 
-  if (e.target.closest('.btn-eliminar')) {
-    const btn = e.target.closest('.btn-eliminar');
-    const encargoId = btn.dataset.encargoId;
+  // Cancelar pedido
+  if (btnCancelar) {
+    const id = btnCancelar.getAttribute('data-encargo-id');
+    if (!confirm('¿Estás seguro de que quieres cancelar este pedido?')) return;
 
-    if (confirm('¿Estás seguro de eliminar este encargo?')) {
+    try {
       const token = localStorage.getItem('accessToken');
-      if (!token) {
-        alert('No estás autenticado.');
-        window.location.href = '/login';
-        return;
-      }
+      const res = await fetch(`/encargos/${id}/cambiar-estado/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ estado: 'cancelado' })
+      });
 
-      try {
-        const res = await fetch(`/encargos/eliminar/${encargoId}/`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!res.ok) throw new Error('No se pudo eliminar');
-
-        btn.closest('.encargo-card').remove();
-
-        const contenedor = document.getElementById('lista-encargos');
-        if (!contenedor.querySelector('.encargo-card')) {
-          contenedor.innerHTML = `
-            <div class="encargo-card">
-              <p class="messaje-no-tienes-encargos-registrados">
-                <i class="fas fa-box-open"></i> No tienes encargos registrados
-              </p>
-            </div>`;
-        }
-      } catch (error) {
-        console.error(error);
-        alert('Error al eliminar encargo.');
-      }
+      if (!res.ok) throw new Error('Error al cancelar el pedido');
+      alert('Pedido cancelado correctamente');
+      cargarEncargosUsuario();  // recargar lista
+    } catch (err) {
+      console.error(err);
+      alert('Hubo un error al cancelar el pedido.');
     }
   }
 });
+
 
 function generarPDF(encargo) {
   console.log('usuarioActual:', usuarioActual);
