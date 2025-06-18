@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("✅ Pedido procesado con éxito.");
       carritoActual = null;
       actualizarCarritoUIAPI();
-      window.location.href = "/configuracion_usuario/";
+      window.location.href = "/configuracion_usuario/#mis-encargos";
     } catch {
       alert("Error inesperado al procesar pedido.");
     }

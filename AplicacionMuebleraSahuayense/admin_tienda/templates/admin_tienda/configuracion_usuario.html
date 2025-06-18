@@ -265,7 +265,19 @@
 
         </script>
         <script src="{% static 'js/Admin-Manda.js' %}"></script>
-         
+         <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash;
+
+  if (hash === "#mis-encargos") {
+    mostrarSeccion("mis-encargos");
+  }
+
+  // Puedes agregar más si quieres soportar otros accesos directos:
+  // if (hash === "#mi-perfil") mostrarSeccion("mi-perfil");
+});
+</script>
+
 </body>
 
 </html>
