@@ -543,10 +543,16 @@
 
       <div class="form-section">
         <div class="form-group">
-          <label><i class="fas fa-envelope"></i> Correo electrónico</label>
-          <input type="email" id="admin-email" class="form-input" placeholder="contacto@empresa.com">
+          <label><i class="fas fa-envelope"></i> Correos electrónicos</label>
+          <div class="section-header">
+            <button class="icon-btn success" onclick="addEmailField()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="emails-container" class="dynamic-fields">
+            <!-- Aquí se agregan inputs dinámicamente -->
+          </div>
         </div>
-
 
         <div class="form-group">
           <div class="section-header">
@@ -622,6 +628,7 @@
       </div>
     </div>
   </section>
+
   <!-- ---------------------------------------------------------------------------------------------------- -->
   <!-- Contenedor para mensajes flotantes -->
   <div id="mensaje-flotante" class="mensaje-oculto">

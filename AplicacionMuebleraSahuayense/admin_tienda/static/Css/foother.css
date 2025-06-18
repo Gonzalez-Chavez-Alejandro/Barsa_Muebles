@@ -204,3 +204,25 @@ footer {
     padding: 0px 0px 0px;
     margin-top: 27px;
 }
+
+
+.email-list li {
+  margin-bottom: 6px; /* espacio entre correos */
+}
+
+.email-list a {
+  color: inherit;          /* hereda el color del texto padre */
+  text-decoration: none;   /* quita el subrayado */
+  cursor: default;         /* cambia el cursor para que no parezca enlace, si quieres */
+}
+
+/* Opcional: si quieres que al pasar el mouse cambie color o se subraye */
+.email-list a:hover {
+  color: #007bff;          /* un azul suave al pasar mouse */
+  text-decoration: underline;
+  cursor: pointer;         /* vuelve cursor pointer solo al hover */
+}
+
+ul#dynamic-emails {
+    margin: 0 0 0 34px;
+}

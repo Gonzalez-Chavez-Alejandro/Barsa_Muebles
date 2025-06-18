@@ -125,73 +125,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /*************************************************************/
 /*********************** Foother *****************************/
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const res = await fetch("/api/footer/");
+    if (!res.ok) throw new Error("No se pudo obtener datos del footer");
 
+    const data = await res.json();
 
- window.addEventListener("DOMContentLoaded", () => {
-  const stored = localStorage.getItem('footerData');
-  if (!stored) return;
+    // Correos dinámicos
+    const emailList = document.getElementById("dynamic-emails");
+    emailList.innerHTML = '';  // Limpiar
 
-  const data = JSON.parse(stored);
+    // Si tienes un arreglo 'emails' en el JSON, recorremos
+    (data.emails || []).forEach(email => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `mailto:${email}`;
+      a.textContent = email;
+      li.appendChild(a);
+      emailList.appendChild(li);
+    });
 
-  // 📧 Email
-  const emailSpan = document.getElementById("dynamic-email");
-  if (emailSpan && data.email) {
-    emailSpan.textContent = data.email;
-  }
-
-  // ☎️ Teléfonos
-  const phoneList = document.getElementById("dynamic-phones");
-  if (phoneList && data.phones) {
+    // Lista de teléfonos
+    const phoneList = document.getElementById("dynamic-phones");
     phoneList.innerHTML = '';
-    data.phones.forEach(phone => {
-      if (phone) {
-        const li = document.createElement("li");
-        li.textContent = phone;
-        phoneList.appendChild(li);
-      }
+    (data.phones || []).forEach(phone => {
+      const li = document.createElement("li");
+      li.textContent = phone;
+      phoneList.appendChild(li);
     });
-  }
 
-  // 📍 Ubicaciones
-  const locationList = document.getElementById("dynamic-locations");
-  if (locationList && data.locations) {
+    // Lista de ubicaciones
+    const locationList = document.getElementById("dynamic-locations");
     locationList.innerHTML = '';
-    data.locations.forEach(loc => {
-      if (loc) {
-        const li = document.createElement("li");
-        li.textContent = loc;
-        locationList.appendChild(li);
-      }
+    (data.locations || []).forEach(loc => {
+      const li = document.createElement("li");
+      li.textContent = loc;
+      locationList.appendChild(li);
     });
-  }
 
-  // 🌐 Redes Sociales
-  const socialContainer = document.getElementById("dynamic-social");
-  if (socialContainer && data.socials) {
+    // Redes sociales con íconos
+    const socialContainer = document.getElementById("dynamic-social");
     socialContainer.innerHTML = '';
-    
-    Object.entries(data.socials).forEach(([platform, url]) => {
-      if (url) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
+    for (const [platform, url] of Object.entries(data.socials || {})) {
+      if (!url) continue;
 
-        let iconClass;
-        switch(platform.toLowerCase()) {
-          case 'whatsapp':
-            iconClass = 'fab fa-whatsapp';
-            break;
-          case 'email':
-            iconClass = 'fas fa-envelope';
-            break;
-          default:
-            iconClass = `fab fa-${platform.toLowerCase()}`;
-        }
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
 
-        a.innerHTML = `<i class="${iconClass}"></i>`;
-        socialContainer.appendChild(a);
-      }
-    });
+      let iconClass = platform === 'whatsapp' ? 'fab fa-whatsapp' :
+                      platform === 'email' ? 'fas fa-envelope' :
+                      `fab fa-${platform.toLowerCase()}`;
+
+      a.innerHTML = `<i class="${iconClass}"></i>`;
+      socialContainer.appendChild(a);
+    }
+
+  } catch (err) {
+    console.error("Error cargando footer:", err);
   }
 });

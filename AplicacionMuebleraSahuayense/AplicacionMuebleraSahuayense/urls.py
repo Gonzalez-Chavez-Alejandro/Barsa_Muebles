@@ -7,4 +7,5 @@ urlpatterns = [
     path('categorias/', include('categorias.urls')),
     path('productos/', include('productos.urls')),
     path('encargos/', include('encargos.urls')),
+    path('api/footer/', include('footer.urls')),
 ]

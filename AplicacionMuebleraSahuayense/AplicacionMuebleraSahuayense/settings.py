@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'admin_tienda',
     'productos',
     'encargos',
-    
+    'footer',
 ]
 AUTH_USER_MODEL = 'autentication.CustomUser'
 

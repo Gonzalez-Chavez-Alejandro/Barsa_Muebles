@@ -1,104 +1,156 @@
 const DEFAULTS = {
-          facebook: "https://www.facebook.com/share/18dEbL8gtP/",
-          whatsapp: "https://wa.me/523535351750",
-          instagram: "https://www.instagram.com/barsa_muebles/",
-          email: "mailto:barsamuebles@gmail.com"
-        };
+  facebook: "https://www.facebook.com/share/18dEbL8gtP/",
+  whatsapp: "https://wa.me/5235351750",
+  instagram: "https://www.instagram.com/barsa_muebles/",
+  email: "mailto:barsamuebles@gmail.com"
+};
 
-        function addPhoneField() {
-          const container = document.getElementById('phones-container');
-          const div = document.createElement('div');
-          div.className = 'input-row';
-          div.innerHTML = `
-      <input type="text" class="form-input phone-input" placeholder="+52 000 000 0000">
-      <button class="icon-btn danger" onclick="removePhoneField(this)">
-        <i class="fas fa-trash"></i>
-      </button>
-    `;
-          container.appendChild(div);
-        }
+const token = localStorage.getItem('accessToken');
+if (!token) {
+  alert("No estás autenticado. Inicia sesión primero.");
+  window.location.href = "/login";  // O redirige donde corresponda
+}
 
-        function removePhoneField(btn) {
-          btn.closest('.input-row').remove();
-        }
+// Correos dinámicos
+function addEmailField(value = "") {
+  const container = document.getElementById('emails-container');
+  const div = document.createElement('div');
+  div.className = 'input-row';
+  div.innerHTML = `
+    <input type="email" class="form-input email-input" value="${value}" placeholder="correo@empresa.com" >
+    <button class="icon-btn danger" onclick="removeEmailField(this)">
+      <i class="fas fa-trash"></i>
+    </button>
+  `;
+  container.appendChild(div);
+}
 
-        function addLocationField() {
-          const container = document.getElementById('locations-container');
-          const div = document.createElement('div');
-          div.className = 'input-row';
-          div.innerHTML = `
-      <textarea class="form-input location-input" placeholder="Av. Principal #123, Ciudad"></textarea>
-      <button class="icon-btn danger" onclick="removeLocationField(this)">
-        <i class="fas fa-trash"></i>
-      </button>
-    `;
-          container.appendChild(div);
-        }
+function removeEmailField(btn) {
+  btn.closest('.input-row').remove();
+}
 
-        function removeLocationField(btn) {
-          btn.closest('.input-row').remove();
-        }
+// Teléfonos
+function addPhoneField(value = "") {
+  const container = document.getElementById('phones-container');
+  const div = document.createElement('div');
+  div.className = 'input-row';
+  div.innerHTML = `
+    <input type="text" class="form-input phone-input" value="${value}" placeholder="+52 000 000 0000">
+    <button class="icon-btn danger" onclick="removePhoneField(this)">
+      <i class="fas fa-trash"></i>
+    </button>
+  `;
+  container.appendChild(div);
+}
 
-        function guardarFooter() {
-          const facebookValue = document.getElementById('facebook').value.trim() || DEFAULTS.facebook;
-          const whatsappValue = document.getElementById('whatsapp').value.trim() || DEFAULTS.whatsapp;
-          const instagramValue = document.getElementById('instagram').value.trim() || DEFAULTS.instagram;
-          const emailValue = document.getElementById('envelope').value.trim() || DEFAULTS.email;
+function removePhoneField(btn) {
+  btn.closest('.input-row').remove();
+}
 
-          const footerData = {
-            email: document.getElementById('admin-email').value,
-            phones: Array.from(document.querySelectorAll('.phone-input')).map(input => input.value),
-            locations: Array.from(document.querySelectorAll('.location-input')).map(textarea => textarea.value),
-            socials: {
-              facebook: facebookValue,
-              whatsapp: whatsappValue,
-              instagram: instagramValue,
-              email: emailValue
-            }
-          };
+// Ubicaciones
+function addLocationField(value = "") {
+  const container = document.getElementById('locations-container');
+  const div = document.createElement('div');
+  div.className = 'input-row';
+  div.innerHTML = `
+    <textarea class="form-input location-input" placeholder="Av. Principal #123, Ciudad">${value}</textarea>
+    <button class="icon-btn danger" onclick="removeLocationField(this)">
+      <i class="fas fa-trash"></i>
+    </button>
+  `;
+  container.appendChild(div);
+}
 
-          localStorage.setItem('footerData', JSON.stringify(footerData));
-          alert('Configuración guardada exitosamente!');
-        }
+function removeLocationField(btn) {
+  btn.closest('.input-row').remove();
+}
 
-        function cargarFooter() {
-          const data = JSON.parse(localStorage.getItem('footerData'));
-          if (!data) return;
+// Cargar datos del footer
+async function cargarFooter() {
+  try {
+    const res = await fetch('/api/footer/', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!res.ok) throw new Error('No se pudo cargar el footer');
+    const data = await res.json();
 
-          document.getElementById('admin-email').value = data.email || '';
+    // Correos
+    const emailsContainer = document.getElementById('emails-container');
+    emailsContainer.innerHTML = '';
+    if (data.emails && data.emails.length > 0) {
+      data.emails.forEach(email => addEmailField(email));
+    } else {
+      addEmailField('');  // Al menos un input vacío
+    }
 
-          const phonesContainer = document.getElementById('phones-container');
-          phonesContainer.innerHTML = '';
-          data.phones.forEach(phone => {
-            const div = document.createElement('div');
-            div.className = 'input-row';
-            div.innerHTML = `
-        <input type="text" class="form-input phone-input" value="${phone}">
-        <button class="icon-btn danger" onclick="removePhoneField(this)">
-          <i class="fas fa-trash"></i>
-        </button>
-      `;
-            phonesContainer.appendChild(div);
-          });
+    // Teléfonos
+    const phonesContainer = document.getElementById('phones-container');
+    phonesContainer.innerHTML = '';
+    (data.phones || []).forEach(phone => addPhoneField(phone));
 
-          const locationsContainer = document.getElementById('locations-container');
-          locationsContainer.innerHTML = '';
-          data.locations.forEach(loc => {
-            const div = document.createElement('div');
-            div.className = 'input-row';
-            div.innerHTML = `
-        <textarea class="form-input location-input">${loc}</textarea>
-        <button class="icon-btn danger" onclick="removeLocationField(this)">
-          <i class="fas fa-trash"></i>
-        </button>
-      `;
-            locationsContainer.appendChild(div);
-          });
+    // Ubicaciones
+    const locationsContainer = document.getElementById('locations-container');
+    locationsContainer.innerHTML = '';
+    (data.locations || []).forEach(loc => addLocationField(loc));
 
-          document.getElementById('facebook').value = data.socials.facebook || DEFAULTS.facebook;
-          document.getElementById('whatsapp').value = data.socials.whatsapp || DEFAULTS.whatsapp;
-          document.getElementById('instagram').value = data.socials.instagram || DEFAULTS.instagram;
-          document.getElementById('envelope').value = data.socials.email || DEFAULTS.email;
-        }
+    // Redes sociales
+    document.getElementById('facebook').value = data.socials?.facebook || DEFAULTS.facebook;
+    document.getElementById('whatsapp').value = data.socials?.whatsapp || DEFAULTS.whatsapp;
+    document.getElementById('instagram').value = data.socials?.instagram || DEFAULTS.instagram;
+    document.getElementById('envelope').value = data.socials?.email || DEFAULTS.email;
 
-        window.onload = cargarFooter;
+  } catch (err) {
+    console.warn("Footer no cargado:", err);
+  }
+}
+
+// Guardar datos del footer
+async function guardarFooter() {
+  const facebookValue = document.getElementById('facebook').value.trim() || DEFAULTS.facebook;
+  const whatsappValue = document.getElementById('whatsapp').value.trim() || DEFAULTS.whatsapp;
+  const instagramValue = document.getElementById('instagram').value.trim() || DEFAULTS.instagram;
+  const emailSocialValue = document.getElementById('envelope').value.trim() || DEFAULTS.email;
+
+  const footerData = {
+    emails: Array.from(document.querySelectorAll('.email-input'))
+                  .map(input => input.value.trim())
+                  .filter(v => v !== ''),
+    phones: Array.from(document.querySelectorAll('.phone-input'))
+                  .map(input => input.value.trim())
+                  .filter(v => v !== ''),
+    locations: Array.from(document.querySelectorAll('.location-input'))
+                    .map(textarea => textarea.value.trim())
+                    .filter(v => v !== ''),
+    socials: {
+      facebook: facebookValue,
+      whatsapp: whatsappValue,
+      instagram: instagramValue,
+      email: emailSocialValue
+    }
+  };
+
+  try {
+    const res = await fetch('/api/footer/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(footerData)
+    });
+
+    if (res.ok) {
+      alert('Configuración guardada exitosamente.');
+    } else {
+      const errorData = await res.json();
+      alert('Error al guardar footer:\n' + JSON.stringify(errorData, null, 2));
+    }
+  } catch (err) {
+    console.error('Error al guardar footer:', err);
+    alert('Error de red al guardar configuración.');
+  }
+}
+
+window.onload = cargarFooter;
