@@ -68,9 +68,7 @@
 
     /* Estilo Eliminar con patrón de cruz */
     .btn-eliminar {
-        background:
-
-            #e74c3c;
+        background: #e74c3c;
         color: #ffffff;
     }
 </style>
@@ -104,7 +102,7 @@
             <div class="div-informacion-pedidos"></div>
             <div id="lista-encargos" class="lista-encargos"></div>
         </section>
- 
+
         <section id="inicio" class="seccion-contenido">
             <h2 class="h2-title">🏠 Inicio</h2>
             <p class="p-seleccion">Bienvenido al panel de configuración</p>
@@ -160,7 +158,7 @@
                             <input type="email" id="correo" placeholder="ejemplo@dominio.com" required>
                         </div>
 
-                        <div class="form-group full-width" style.display = 'none'>
+                        <div class="form-group full-width" style.display='none'>
                             <label>Contraseña</label>
                             <div style="position: relative;">
                                 <input type="password" id="contrasena" placeholder="••••••••" required>
@@ -200,7 +198,7 @@
         <script src="{% static 'js/Carrito.js' %}"></script>
         <script src="{% static 'js/Usuarios-configuracion_usuario.js' %}"></script>
         <script>
-            
+
 
             // Funciones del menú
             function toggleMenuHamburguesa() {
@@ -265,18 +263,18 @@
 
         </script>
         <script src="{% static 'js/Admin-Manda.js' %}"></script>
-         <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const hash = window.location.hash;
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const hash = window.location.hash;
 
-  if (hash === "#mis-encargos") {
-    mostrarSeccion("mis-encargos");
-  }
+                if (hash === "#mis-encargos") {
+                    mostrarSeccion("mis-encargos");
+                }
 
-  // Puedes agregar más si quieres soportar otros accesos directos:
-  // if (hash === "#mi-perfil") mostrarSeccion("mi-perfil");
-});
-</script>
+                // Puedes agregar más si quieres soportar otros accesos directos:
+                // if (hash === "#mi-perfil") mostrarSeccion("mi-perfil");
+            });
+        </script>
 
 </body>
 
