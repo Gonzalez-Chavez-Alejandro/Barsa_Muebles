@@ -633,3 +633,127 @@ input:focus {
   background-color: #e74c3c; /* rojo */
 }
 
+
+
+
+
+/* Estilo Base del Botón */
+.btn-cancelar {
+  background-color: #fff;
+  color: #d32f2f; /* Rojo principal */
+  border: 2px solid #d32f2f;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.3, 0, 0.1, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo del Ícono */
+.btn-cancelar i.fas {
+  font-size: 1.15rem;
+  transition: transform 0.2s ease;
+  width: 1em;
+  text-align: center;
+}
+
+/* Efecto Hover */
+.btn-cancelar:hover {
+  background-color: #ffebee; /* Fondo rojo claro */
+  border-color: #b71c1c; /* Rojo más oscuro */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(215, 0, 0, 0.1);
+}
+
+/* Efecto Active (clic) */
+.btn-cancelar:active {
+  transform: translateY(0);
+  background-color: #ffcdd2;
+  box-shadow: none;
+}
+
+/* Focus Accesible */
+.btn-cancelar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.4);
+}
+
+/* Efecto de Pulso (opcional) */
+.btn-cancelar::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.btn-cancelar:focus:not(:active)::after {
+  animation: pulse 1s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.3, 0.3) translate(-50%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(20, 20) translate(-50%);
+    opacity: 0;
+  }
+}
+
+/* Versión Sólida (alternativa) */
+.btn-cancelar.solido {
+  background-color: #d32f2f;
+  color: white;
+  border-color: transparent;
+}
+
+.btn-cancelar.solido:hover {
+  background-color: #b71c1c;
+}
+
+/* Modo Oscuro */
+@media (prefers-color-scheme: dark) {
+  .btn-cancelar {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #f44336;
+    color: #ff8a80;
+  }
+  
+  .btn-cancelar:hover {
+    background-color: rgba(244, 67, 54, 0.15);
+  }
+  
+  .btn-cancelar.solido {
+    background-color: #f44336;
+    color: #fff;
+  }
+}
+
+/* Accesibilidad para Daltonismo */
+.btn-cancelar {
+  /* Patrón de textura para hover */
+  background-image: linear-gradient(to bottom, transparent 95%, rgba(0,0,0,0.05) 95%);
+}
+
+.btn-cancelar:hover {
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.05) 100%);
+}
