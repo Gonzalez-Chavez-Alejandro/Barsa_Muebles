@@ -170,45 +170,77 @@ document.addEventListener('click', async (e) => {
 });
 
 
-function generarPDF(encargo) {
+async function generarPDF(encargo) {
   console.log('usuarioActual:', usuarioActual);
+  
+  // Obtener datos del footer desde la API
+  let footerData = null;
+  try {
+    const response = await fetch('/api/footer/');
+    if (response.ok) {
+      footerData = await response.json();
+    }
+  } catch (error) {
+    console.error('Error al obtener datos del footer:', error);
+  }
+
   const doc = new window.jspdf.jsPDF();
   const lineHeight = 7;
-
+  const pageHeight = doc.internal.pageSize.height;
   const config = {
     logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
     logoConfig: { x: 15, y: 12, width: 40, height: 15 },
-    margins: { left: 45, right: 15, top: 50 },
-    colors: { primary: '#2d3748', secondary: '#4a5568', accent: '#4a5568' },
+    margins: { left: 45, right: 15, top: 50, bottom: 30 },
+    colors: { 
+      primary: '#000000',
+      secondary: '#4a5568',
+      accent: '#4a5568',
+      clientData: '#000000',  // Color para datos del cliente
+      companyContact: '#000000' // Color para contacto de la empresa
+    },
     companyName: "Distribuidora mueblera sahuayense Barsa muebles",
     pageWidth: 210
   };
 
+  // Encabezado con logo y nombre de la empresa
   doc.addImage(config.logoUrl, 'PNG', config.logoConfig.x, config.logoConfig.y, config.logoConfig.width, config.logoConfig.height);
   doc.setFontSize(10).setTextColor(config.colors.secondary);
   doc.text(config.companyName, config.logoConfig.x + 50, config.logoConfig.y + 5);
 
   let y = config.logoConfig.y + config.logoConfig.height + 10;
-  doc.setFontSize(12).setTextColor(config.colors.primary).setFont("helvetica", "bold");
-  doc.text("Información del Cliente:", config.margins.left, y);
+  
+  // Sección de Información del Cliente
+  doc.setFontSize(15).setTextColor(config.colors.primary).setFont("helvetica", "bold");
+  doc.text("INFORMACIÓN DEL CLIENTE", config.margins.left, y);
+  y += 7;
 
   doc.setFont("helvetica", "normal").setFontSize(10);
+  // Nombre del cliente
+  doc.setTextColor(config.colors.clientData);
+  doc.text(`Nombre: ${usuarioActual?.nombre || 'No especificado'}`, config.margins.left, y);
   y += 7;
-  doc.text(`Nombre: ${usuarioActual?.nombre || ''}`, config.margins.left, y);
+  
+  // Correo del cliente (destacado)
+  doc.setFont("helvetica", "bold");
+  doc.text(`Correo: `, config.margins.left, y);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${usuarioActual?.correo || 'No especificado'}`, config.margins.left + 20, y);
   y += 7;
-  doc.text(`Correo: ${usuarioActual?.correo || ''}`, config.margins.left, y);
-  y += 7;
-  doc.text(`Teléfono: ${usuarioActual?.telefono || ''}`, config.margins.left, y);
-
+  
+  // Teléfono del cliente
+  doc.text(`Teléfono: ${usuarioActual?.telefono || 'No especificado'}`, config.margins.left, y);
   y += 15;
-  doc.setFontSize(18).setFont("helvetica", "bold");
-  doc.text(`Encargo #${encargo.id}`, config.margins.left, y);
 
+  // Detalles del encargo
+  doc.setFontSize(18).setTextColor(config.colors.primary).setFont("helvetica", "bold");
+  doc.text(`ENCARGO #${encargo.id}`, config.margins.left, y);
   y += 10;
+
   doc.setFontSize(12).setFont("helvetica", "normal");
   doc.text(`Fecha: ${new Date(encargo.fecha).toLocaleDateString()}`, config.margins.left, y);
-
   y += 10;
+
+  // Tabla de productos
   doc.setFillColor(config.colors.accent);
   doc.rect(config.margins.left - 1, y, config.pageWidth - config.margins.left - config.margins.right + 10, 8, 'F');
   doc.setTextColor(255).setFontSize(12);
@@ -228,7 +260,7 @@ function generarPDF(encargo) {
     const precioOriginal = Number(item.producto?.priceFurniture) || 0;
     const precioConDescuento = Number(item.producto?.PrecioOferta) || 0;
 
-    if (precioOriginal === 0 || precioConDescuento === 0) {
+    if (precioOriginal === 0) {
       tieneProductoConPrecioCero = true;
     }
 
@@ -244,8 +276,14 @@ function generarPDF(encargo) {
     doc.text(textoPrecioConDescuento, 170, y);
 
     y += Math.max(productHeight, 8);
+    
+    if (y > pageHeight - 30) {
+      doc.addPage();
+      y = config.margins.top;
+    }
   });
 
+  // Total del encargo
   y += 10;
   doc.setFont("helvetica", "bold").setFontSize(12);
 
@@ -257,8 +295,92 @@ function generarPDF(encargo) {
     doc.text(`Total: $${Number(encargo.total).toFixed(2)}`, 150, y);
   }
 
+  // FOOTER - INFORMACIÓN DE CONTACTO DE LA EMPRESA
+  y += 20; // Espacio antes del footer
+  
+  // Línea separadora
+  doc.setDrawColor(200);
+  doc.line(config.margins.left, y, config.pageWidth - config.margins.right, y);
+  y += 10;
+
+  // Título "CONTACTO DE LA EMPRESA"
+  doc.setFontSize(10).setTextColor(config.colors.companyContact).setFont("helvetica", "bold");
+  doc.text("CONTACTO DE LA EMPRESA", config.margins.left, y);
+  y += 7;
+
+// Información de contacto de la empresa
+doc.setFontSize(10).setTextColor(config.colors.companyContact).setFont("helvetica", "normal");
+
+if (footerData) {
+  // Filtrar el correo del cliente si aparece en los datos del footer
+  const companyEmails = footerData.emails ? 
+    footerData.emails.filter(email => email !== usuarioActual?.correo) : [];
+  
+  // Mostrar emails de la empresa con manejo de texto multilínea
+  if (companyEmails.length > 0) {
+    const emailText = `Email: ${companyEmails.join(' | ')}`;
+    const emailLines = doc.splitTextToSize(emailText, config.pageWidth - config.margins.left - config.margins.right);
+    emailLines.forEach(line => {
+      if (y > pageHeight - 15) { // Verificar espacio para el footer
+        doc.addPage();
+        y = config.margins.top;
+      }
+      doc.text(line, config.margins.left, y);
+      y += 5;
+    });
+  }
+
+  // Mostrar teléfonos de la empresa con manejo de texto multilínea
+  if (footerData.phones && footerData.phones.length > 0) {
+    const phoneText = `Teléfono: ${footerData.phones.join(' | ')}`;
+    const phoneLines = doc.splitTextToSize(phoneText, config.pageWidth - config.margins.left - config.margins.right);
+    phoneLines.forEach(line => {
+      if (y > pageHeight - 15) {
+        doc.addPage();
+        y = config.margins.top;
+      }
+      doc.text(line, config.margins.left, y);
+      y += 5;
+    });
+  }
+
+  // Mostrar ubicaciones de la empresa con manejo de texto multilínea
+  if (footerData.locations && footerData.locations.length > 0) {
+    const locationText = `Ubicación: ${footerData.locations.join(' | ')}`;
+    const locationLines = doc.splitTextToSize(locationText, config.pageWidth - config.margins.left - config.margins.right);
+    locationLines.forEach(line => {
+      if (y > pageHeight - 15) {
+        doc.addPage();
+        y = config.margins.top;
+      }
+      doc.text(line, config.margins.left, y);
+      y += 5;
+    });
+  }
+} else {
+  // Datos por defecto con manejo de texto multilínea
+  const defaultEmail = 'Email: barsa@gmail.com';
+  const defaultPhone = 'Tel3333333éfono: +52 000 111 5522';
+  const defaultLocation = 'Ubicación: Carretera Sahuayo La Barca KM 5.4 | Juárez #100 Sahuayo Mich | Circunvalación #Jiquilpa';
+
+  [defaultEmail, defaultPhone, defaultLocation].forEach(text => {
+    const lines = doc.splitTextToSize(text, config.pageWidth - config.margins.left - config.margins.right);
+    lines.forEach(line => {
+      if (y > pageHeight - 15) {
+        doc.addPage();
+        y = config.margins.top;
+      }
+      doc.text(line, config.margins.left, y);
+      y += 5;
+    });
+  });
+}
+
   doc.save(`encargo-${encargo.id}.pdf`);
 }
+
+
+
 
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', async () => {
