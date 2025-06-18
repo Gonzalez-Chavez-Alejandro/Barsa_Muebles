@@ -77,9 +77,8 @@ async function cargarEncargosUsuario() {
             <div>
               <p><strong>${nombre}</strong></p>
               <p>Cantidad: ${cantidad}</p>
-              <p>Precio original: ${
-                precioOriginal === 0 ? 'Póngase en contacto con la empresa' : `$${precioOriginal.toFixed(2)}`
-              }</p>
+              <p>Precio original: ${precioOriginal === 0 ? 'Póngase en contacto con la empresa' : `$${precioOriginal.toFixed(2)}`
+          }</p>
               <p>Descuento: ${porcentajeDescuento}%</p>
               <p>Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
             </div>
@@ -172,7 +171,7 @@ document.addEventListener('click', async (e) => {
 
 async function generarPDF(encargo) {
   console.log('usuarioActual:', usuarioActual);
-  
+
   // Obtener datos del footer desde la API
   let footerData = null;
   try {
@@ -191,7 +190,7 @@ async function generarPDF(encargo) {
     logoUrl: 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png',
     logoConfig: { x: 15, y: 12, width: 40, height: 15 },
     margins: { left: 45, right: 15, top: 50, bottom: 30 },
-    colors: { 
+    colors: {
       primary: '#000000',
       secondary: '#4a5568',
       accent: '#4a5568',
@@ -208,7 +207,7 @@ async function generarPDF(encargo) {
   doc.text(config.companyName, config.logoConfig.x + 50, config.logoConfig.y + 5);
 
   let y = config.logoConfig.y + config.logoConfig.height + 10;
-  
+
   // Sección de Información del Cliente
   doc.setFontSize(15).setTextColor(config.colors.primary).setFont("helvetica", "bold");
   doc.text("INFORMACIÓN DEL CLIENTE", config.margins.left, y);
@@ -217,17 +216,19 @@ async function generarPDF(encargo) {
   doc.setFont("helvetica", "normal").setFontSize(10);
   // Nombre del cliente
   doc.setTextColor(config.colors.clientData);
+  doc.setFont("helvetica", "bold");
   doc.text(`Nombre: ${usuarioActual?.nombre || 'No especificado'}`, config.margins.left, y);
   y += 7;
-  
+
   // Correo del cliente (destacado)
   doc.setFont("helvetica", "bold");
-  doc.text(`Correo: `, config.margins.left, y);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${usuarioActual?.correo || 'No especificado'}`, config.margins.left + 20, y);
+  doc.text("Correo: ", config.margins.left, y);
+  doc.setFont("helvetica", "normal").setTextColor('#1a365d');
+  doc.text(usuarioActual?.correo || 'No especificado', config.margins.left + doc.getTextWidth("Correo: "), y);
   y += 7;
-  
+
   // Teléfono del cliente
+  doc.setFont("helvetica", "bold");
   doc.text(`Teléfono: ${usuarioActual?.telefono || 'No especificado'}`, config.margins.left, y);
   y += 15;
 
@@ -276,7 +277,7 @@ async function generarPDF(encargo) {
     doc.text(textoPrecioConDescuento, 170, y);
 
     y += Math.max(productHeight, 8);
-    
+
     if (y > pageHeight - 30) {
       doc.addPage();
       y = config.margins.top;
@@ -297,7 +298,7 @@ async function generarPDF(encargo) {
 
   // FOOTER - INFORMACIÓN DE CONTACTO DE LA EMPRESA
   y += 20; // Espacio antes del footer
-  
+
   // Línea separadora
   doc.setDrawColor(200);
   doc.line(config.margins.left, y, config.pageWidth - config.margins.right, y);
@@ -308,73 +309,73 @@ async function generarPDF(encargo) {
   doc.text("CONTACTO DE LA EMPRESA", config.margins.left, y);
   y += 7;
 
-// Información de contacto de la empresa
-doc.setFontSize(10).setTextColor(config.colors.companyContact).setFont("helvetica", "normal");
+  // Información de contacto de la empresa
+  doc.setFontSize(10).setTextColor(config.colors.companyContact).setFont("helvetica", "normal");
 
-if (footerData) {
-  // Filtrar el correo del cliente si aparece en los datos del footer
-  const companyEmails = footerData.emails ? 
-    footerData.emails.filter(email => email !== usuarioActual?.correo) : [];
-  
-  // Mostrar emails de la empresa con manejo de texto multilínea
-  if (companyEmails.length > 0) {
-    const emailText = `Email: ${companyEmails.join(' | ')}`;
-    const emailLines = doc.splitTextToSize(emailText, config.pageWidth - config.margins.left - config.margins.right);
-    emailLines.forEach(line => {
-      if (y > pageHeight - 15) { // Verificar espacio para el footer
-        doc.addPage();
-        y = config.margins.top;
-      }
-      doc.text(line, config.margins.left, y);
-      y += 5;
+  if (footerData) {
+    // Filtrar el correo del cliente si aparece en los datos del footer
+    const companyEmails = footerData.emails ?
+      footerData.emails.filter(email => email !== usuarioActual?.correo) : [];
+
+    // Mostrar emails de la empresa con manejo de texto multilínea
+    if (companyEmails.length > 0) {
+      const emailText = `Email: ${companyEmails.join(' | ')}`;
+      const emailLines = doc.splitTextToSize(emailText, config.pageWidth - config.margins.left - config.margins.right);
+      emailLines.forEach(line => {
+        if (y > pageHeight - 15) { // Verificar espacio para el footer
+          doc.addPage();
+          y = config.margins.top;
+        }
+        doc.text(line, config.margins.left, y);
+        y += 5;
+      });
+    }
+
+    // Mostrar teléfonos de la empresa con manejo de texto multilínea
+    if (footerData.phones && footerData.phones.length > 0) {
+      const phoneText = `Teléfono: ${footerData.phones.join(' | ')}`;
+      const phoneLines = doc.splitTextToSize(phoneText, config.pageWidth - config.margins.left - config.margins.right);
+      phoneLines.forEach(line => {
+        if (y > pageHeight - 15) {
+          doc.addPage();
+          y = config.margins.top;
+        }
+        doc.text(line, config.margins.left, y);
+        y += 5;
+      });
+    }
+
+    // Mostrar ubicaciones de la empresa con manejo de texto multilínea
+    if (footerData.locations && footerData.locations.length > 0) {
+      const locationText = `Ubicación: ${footerData.locations.join(' | ')}`;
+      const locationLines = doc.splitTextToSize(locationText, config.pageWidth - config.margins.left - config.margins.right);
+      locationLines.forEach(line => {
+        if (y > pageHeight - 15) {
+          doc.addPage();
+          y = config.margins.top;
+        }
+        doc.text(line, config.margins.left, y);
+        y += 5;
+      });
+    }
+  } else {
+    // Datos por defecto con manejo de texto multilínea
+    const defaultEmail = 'Email: barsa@gmail.com';
+    const defaultPhone = 'Tel3333333éfono: +52 000 111 5522';
+    const defaultLocation = 'Ubicación: Carretera Sahuayo La Barca KM 5.4 | Juárez #100 Sahuayo Mich | Circunvalación #Jiquilpa';
+
+    [defaultEmail, defaultPhone, defaultLocation].forEach(text => {
+      const lines = doc.splitTextToSize(text, config.pageWidth - config.margins.left - config.margins.right);
+      lines.forEach(line => {
+        if (y > pageHeight - 15) {
+          doc.addPage();
+          y = config.margins.top;
+        }
+        doc.text(line, config.margins.left, y);
+        y += 5;
+      });
     });
   }
-
-  // Mostrar teléfonos de la empresa con manejo de texto multilínea
-  if (footerData.phones && footerData.phones.length > 0) {
-    const phoneText = `Teléfono: ${footerData.phones.join(' | ')}`;
-    const phoneLines = doc.splitTextToSize(phoneText, config.pageWidth - config.margins.left - config.margins.right);
-    phoneLines.forEach(line => {
-      if (y > pageHeight - 15) {
-        doc.addPage();
-        y = config.margins.top;
-      }
-      doc.text(line, config.margins.left, y);
-      y += 5;
-    });
-  }
-
-  // Mostrar ubicaciones de la empresa con manejo de texto multilínea
-  if (footerData.locations && footerData.locations.length > 0) {
-    const locationText = `Ubicación: ${footerData.locations.join(' | ')}`;
-    const locationLines = doc.splitTextToSize(locationText, config.pageWidth - config.margins.left - config.margins.right);
-    locationLines.forEach(line => {
-      if (y > pageHeight - 15) {
-        doc.addPage();
-        y = config.margins.top;
-      }
-      doc.text(line, config.margins.left, y);
-      y += 5;
-    });
-  }
-} else {
-  // Datos por defecto con manejo de texto multilínea
-  const defaultEmail = 'Email: barsa@gmail.com';
-  const defaultPhone = 'Tel3333333éfono: +52 000 111 5522';
-  const defaultLocation = 'Ubicación: Carretera Sahuayo La Barca KM 5.4 | Juárez #100 Sahuayo Mich | Circunvalación #Jiquilpa';
-
-  [defaultEmail, defaultPhone, defaultLocation].forEach(text => {
-    const lines = doc.splitTextToSize(text, config.pageWidth - config.margins.left - config.margins.right);
-    lines.forEach(line => {
-      if (y > pageHeight - 15) {
-        doc.addPage();
-        y = config.margins.top;
-      }
-      doc.text(line, config.margins.left, y);
-      y += 5;
-    });
-  });
-}
 
   doc.save(`encargo-${encargo.id}.pdf`);
 }
