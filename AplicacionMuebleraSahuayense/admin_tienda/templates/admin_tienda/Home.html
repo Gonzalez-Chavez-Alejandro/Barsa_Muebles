@@ -122,7 +122,81 @@
   <script src="{% static 'js/header.js' %}"></script>
   <script src="{% static 'js/Home-Carrusel-Categorias.js' %}"></script>
   <script src="{% static 'js/Carrito.js' %}"></script>
-  <script src="{% static 'js/Admin-Contacto.js' %}"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const res = await fetch("/api/footer/");
+      if (!res.ok) throw new Error("No se pudo obtener datos del footer");
+
+      const data = await res.json();
+
+      // Teléfonos
+      const phoneList = document.getElementById("lista-telefonos-contactanos");
+      phoneList.innerHTML = '';
+      (data.phones || []).forEach(phone => {
+        const li = document.createElement("li");
+        li.textContent = phone;
+        phoneList.appendChild(li);
+      });
+
+      // Ubicaciones
+      const locationList = document.getElementById("lista-ubicaciones-contactanos");
+      locationList.innerHTML = '';
+      (data.locations || []).forEach(loc => {
+        const li = document.createElement("li");
+        li.textContent = loc;
+        locationList.appendChild(li);
+      });
+
+      // Redes sociales
+      const socialContainer = document.getElementById("lista-redes-contactanos");
+      socialContainer.innerHTML = '';
+      for (const [platform, url] of Object.entries(data.socials || {})) {
+        if (!url) continue;
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+
+        // Determinar clases para estilos y colores
+        let baseClass = "social-icon";
+        let platformClass = "";
+
+        switch (platform.toLowerCase()) {
+          case "facebook":
+            platformClass = "facebook";
+            break;
+          case "instagram":
+            platformClass = "instagram";
+            break;
+          case "whatsapp":
+            platformClass = "whatsapp";
+            break;
+          case "email":
+          case "gmail":
+            platformClass = "gmail";
+            break;
+          default:
+            platformClass = platform.toLowerCase(); // fallback
+        }
+
+        const iconClass = platform === "email" || platform === "gmail"
+          ? "fas fa-envelope"
+          : `fab fa-${platform.toLowerCase()}`;
+
+        // Aplicar clases definidas en tu CSS
+        a.className = `${baseClass} ${platformClass}`;
+        a.innerHTML = `<i class="${iconClass}"></i>`;
+        socialContainer.appendChild(a);
+      }
+
+    } catch (err) {
+      console.error("Error cargando datos de contacto:", err);
+    }
+  });
+</script>
+
   <script>
     const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
   </script>
