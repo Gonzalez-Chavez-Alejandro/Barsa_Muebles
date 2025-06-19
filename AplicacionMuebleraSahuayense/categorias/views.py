@@ -21,6 +21,7 @@ class CategoryView(APIView):
 
 class CategoryListView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         category = Categorias.objects.all()
         serializer = CategoriaSerializer(category, many=True)

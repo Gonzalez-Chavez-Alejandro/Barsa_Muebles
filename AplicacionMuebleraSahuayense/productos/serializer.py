@@ -20,7 +20,7 @@ class ProductoSerializer(serializers.ModelSerializer):
             'stateFurniture',#Precio con descuento
             'userID',
             'imageFurniture',
-            'PrecioOferta',
+            'PrecioOferta',# <- El precio de descuento no es este?
         ]
 
     def get_PrecioOferta(self, obj):

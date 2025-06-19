@@ -8,6 +8,7 @@ from autentication.serializers import RegisterSerializer
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -30,7 +31,7 @@ class ListUsersView(APIView):
     permission_classes = [IsAdminUser]  # Solo admins pueden acceder
 
     def get(self, request):
-        users = User.objects.all()
+        users = User.objects.filter(stateUser=True)
         data = []
         for u in users:
             data.append({
@@ -60,10 +61,14 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            return super().destroy(request, *args, **kwargs)
+            instance = self.get_object()
+            instance.stateUser = False
+            instance.save()
+            return Response({"detail": "El usuario ha sido eliminado correctamente"},
+                            status=status.HTTP_200_OK)
         except ProtectedError as e:
             return Response(
-                {"error": "No se puede eliminar el usuario porque tiene datos relacionados."},
+                {"error": "Ocurrio un error al tratar de eliminar el usuario."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:

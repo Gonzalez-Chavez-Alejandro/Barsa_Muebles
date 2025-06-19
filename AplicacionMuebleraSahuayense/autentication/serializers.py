@@ -29,9 +29,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 # serializers.py
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 class UserListSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
@@ -41,6 +38,7 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'ageUser', 'phoneUser', 'stateUser', 'is_superuser', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
+            'stateUser':{'read_only': True}, # <- Se cambio porque este campo indica eliminación
         }
 
     def update(self, instance, validated_data):
@@ -61,10 +59,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate
 
-User = get_user_model()
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username_field = 'username'
