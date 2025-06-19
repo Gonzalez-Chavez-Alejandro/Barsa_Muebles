@@ -380,9 +380,6 @@ async function generarPDF(encargo) {
   doc.save(`encargo-${encargo.id}.pdf`);
 }
 
-
-
-
 // Al cargar la página
 document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
