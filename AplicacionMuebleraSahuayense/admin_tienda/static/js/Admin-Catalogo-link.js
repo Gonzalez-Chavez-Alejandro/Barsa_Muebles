@@ -1,81 +1,62 @@
-// Admin-Catalogo-link.js
-const STORAGE_KEY = 'pdfConfig';
+const API_URL = '/catalogos/catalogo-api/';
 
-// Función para formatear enlaces de Google Drive
-function formatearEnlace(link) {
-    // Expresión regular para convertir cualquier formato de enlace a /preview
-    return link.replace(/\/d\/([a-zA-Z0-9-_]+)\/.*/, '/d/$1/preview')
-              .replace(/\/view\?usp=sharing$/, '/preview')
-              .replace(/\/edit\?usp=sharing$/, '/preview');
-}
- 
-// Función para validar enlaces de Google Drive
-function validarEnlace(link) {
-    const pattern = /^https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9-_]+\/preview$/;
-    return pattern.test(link);
-}
-
-// Cargar configuración inicial
-function cargarConfiguracion() {
-    const guardado = localStorage.getItem(STORAGE_KEY);
-    if (guardado) {
-        const enlaceFormateado = formatearEnlace(guardado);
-        if (validarEnlace(enlaceFormateado)) {
-            document.getElementById('nuevoEnlace').value = enlaceFormateado;
-            localStorage.setItem(STORAGE_KEY, enlaceFormateado); // Actualizar formato si es necesario
-        }
-    }
-}
-
-// Actualizar PDF con verificación y formato automático
-function actualizarPDF() {
-    let nuevoEnlace = document.getElementById('nuevoEnlace').value;
-    
-    // Formatear el enlace antes de validar
-    nuevoEnlace = formatearEnlace(nuevoEnlace);
-    
-    if (!validarEnlace(nuevoEnlace)) {
-        alert('Enlace inválido. Ejemplo válido:\nhttps://drive.google.com/file/d/TU_ID/preview');
+async function actualizarPDF() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+        alert("No estás autenticado.");
         return;
     }
 
-    // Actualizar el campo con la versión formateada
-    document.getElementById('nuevoEnlace').value = nuevoEnlace;
-    
-    // Guardar y notificar cambios
-    localStorage.setItem(STORAGE_KEY, nuevoEnlace);
-    window.dispatchEvent(new StorageEvent('storage', {
-        key: STORAGE_KEY,
-        newValue: nuevoEnlace
-    }));
-    
-    toggleAdmin();
-    alert('Catálogo actualizado correctamente:\n' + nuevoEnlace);
-}
+    const nuevoEnlace = document.getElementById('nuevoEnlace').value.trim();
 
-// Toggle panel admin
-function toggleAdmin() {
-    const panel = document.getElementById('adminPanel');
-    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-}
+    if (!esURLValida(nuevoEnlace)) {
+        alert("Por favor ingresa una URL válida.");
+        return;
+    }
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
-    cargarConfiguracion();
-    
-    // Escuchar cambios externos y formatear
-    window.addEventListener('storage', (e) => {
-        if (e.key === STORAGE_KEY) {
-            const enlaceFormateado = formatearEnlace(e.newValue);
-            document.getElementById('nuevoEnlace').value = enlaceFormateado;
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ url_pdf: nuevoEnlace })
+        });
+
+        let data;
+        const text = await response.text();
+
+        try {
+            data = JSON.parse(text);
+        } catch {
+            throw new Error("Respuesta inesperada del servidor: " + text);
         }
-    });
 
-    // Validación en tiempo real
-    document.getElementById('nuevoEnlace').addEventListener('input', function(e) {
-        this.value = formatearEnlace(this.value);
-    });
-});
+        if (!response.ok) {
+            throw new Error(data.error || 'Error al guardar el catálogo en el servidor');
+        }
+
+        alert('Catálogo actualizado correctamente.\nSe abrirá el PDF en una pestaña nueva.');
+        window.open(data.url_pdf, '_blank');  // Aquí abrimos en pestaña nueva
+
+    } catch (error) {
+        alert('Error al actualizar el catálogo:\n' + error.message);
+        console.error(error);
+    }
+}
+
+
+
 function limpiarCampo() {
-  document.getElementById('nuevoEnlace').value = '';
+    document.getElementById('nuevoEnlace').value = '';
+}
+
+function esURLValida(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
 }

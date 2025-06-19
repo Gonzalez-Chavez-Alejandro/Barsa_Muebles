@@ -25,47 +25,67 @@
   <!-- Botón para abrir administrador -->
 
 
+<!-- Catálogo de Productos -->
+<div id="catalogoContainer" style="text-align: center; font-family: 'Poppins', sans-serif; color: #333;">
+  <h2>Catálogo de Productos</h2>
+
+  <button id="abrirCatalogoBtn" 
+          type="button"
+          title="Abrir catálogo en Google Drive"
+          style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+    Ver Catálogo en Google Drive
+  </button>
+</div>
+
+{% include 'includes/foother.html' %}
+
+<script>
+(() => {
+  const STORAGE_KEY = 'pdfConfig';
+  const DEFAULT_LINK = 'https://drive.google.com/file/d/1LDLgEhEeGEHHfGCkimfqQ0-wD_NtsY88/view';
+  const API_URL = '/catalogo/catalogo-api/';  // Asegúrate que esta ruta responde GET sin auth
+
+  const abrirCatalogo = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const cargarDesdeAPI = async () => {
+    try {
+      const response = await fetch(API_URL);  // GET para obtener URL actual
+      if (!response.ok) throw new Error('Error al obtener catálogo');
+
+      const data = await response.json();
+      const urlPdf = data.url_pdf || DEFAULT_LINK;
+
+      // Guarda en localStorage para sincronizar con otros scripts
+      localStorage.setItem(STORAGE_KEY, urlPdf);
+
+      // Actualizar botón para abrir PDF
+      const btn = document.getElementById('abrirCatalogoBtn');
+      btn.onclick = () => abrirCatalogo(urlPdf);
+
+    } catch (error) {
+      console.error('No se pudo cargar el catálogo desde API:', error);
+
+      const enlaceLocal = localStorage.getItem(STORAGE_KEY) || DEFAULT_LINK;
+      const btn = document.getElementById('abrirCatalogoBtn');
+      btn.onclick = () => abrirCatalogo(enlaceLocal);
+    }
+  };
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY) {
+      const btn = document.getElementById('abrirCatalogoBtn');
+      btn.onclick = () => abrirCatalogo(e.newValue);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', cargarDesdeAPI);
+})();
+</script>
 
 
-  <!-- Catálogo de Productos -->
-  <div id="catalogoContainer">
-    <h2 style="text-align: center; font-family: 'Poppins', sans-serif; color: #333;">
-      Catálogo de Productos
-    </h2>
-    <iframe id="pdfViewer" src="https://drive.google.com/file/d/1LDLgEhEeGEHHfGCkimfqQ0-wD_NtsY88/preview"
-      style="border: none;">
-    </iframe>
-  </div>
 
-
-  {% include 'includes/foother.html' %}
-
-
-  <script>
-    // Catalogo.js
-    (() => {
-      const STORAGE_KEY = 'pdfConfig';
-      const DEFAULT_LINK = 'https://drive.google.com/file/d/1LDLgEhEeGEHHfGCkimfqQ0-wD_NtsY88/preview';
-
-      const actualizarVista = () => {
-        const enlace = localStorage.getItem(STORAGE_KEY) || DEFAULT_LINK;
-        const iframe = document.getElementById('pdfViewer');
-
-        // Forzar recarga del iframe
-        iframe.src = `${enlace}?timestamp=${Date.now()}`;
-      };
-
-      // Escuchar cambios en localStorage
-      window.addEventListener('storage', (e) => {
-        if (e.key === STORAGE_KEY) {
-          actualizarVista();
-        }
-      });
-
-      // Cargar inicial
-      document.addEventListener('DOMContentLoaded', actualizarVista);
-    })();
-  </script>
   <script src="{% static 'js/header.js' %}"></script>
   <script src="{% static 'js/Carrito.js' %}"></script>
   <script>
