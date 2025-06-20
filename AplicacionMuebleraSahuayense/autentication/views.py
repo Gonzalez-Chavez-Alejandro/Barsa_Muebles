@@ -31,7 +31,7 @@ class ListUsersView(APIView):
     permission_classes = [IsAdminUser]  # Solo admins pueden acceder
 
     def get(self, request):
-        users = User.objects.filter(stateUser=True)
+        users = User.objects.filter(stateUser=True) # <- Aqui filtra los usuarios por los que estan activos
         data = []
         for u in users:
             data.append({
