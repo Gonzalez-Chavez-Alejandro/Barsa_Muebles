@@ -14,6 +14,12 @@
   <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
   <link rel="stylesheet" href="{% static 'Css/catalogo.css' %}">
   <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Home-Principal-Catalogo.css' %}">
+  <style>
+    .obrasa-container {
+      margin-bottom: 2rem;
+    }
+  </style>
 </head>
 
 <body>
@@ -23,15 +29,23 @@
 
 
 <!-- Catálogo de Productos -->
-<div id="catalogoContainer" style="text-align: center; font-family: 'Poppins', sans-serif; color: #333;">
-  <h2>Catálogo de Productos</h2>
-
-  <button id="abrirCatalogoBtn" 
-          type="button"
-          title="Abrir catálogo en Google Drive"
-          style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
-    Ver Catálogo en Google Drive
-  </button>
+<div class="obrasa-container">
+    <div class="obrasa-image-section">
+        <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1750446909/Captura_de_pantalla_2025-03-05_102043-removebg-preview_wevaip.png" alt="Muebles Obrasa" class="obrasa-image">
+    </div>
+    
+    <div class="obrasa-content-section">
+        <div class="obrasa-header">
+            <h1 class="obrasa-title">Barsa</h1>
+            <p class="obrasa-subtitle">MUEBLES</p>
+        </div>
+        
+        <p class="obrasa-slogan">LLEVA LA VIDA A TU ESPACIO</p>
+        
+        <button id="abrirCatalogoBtn" class="obrasa-button">
+            Ver Catálogo
+        </button>
+    </div>
 </div>
 
 {% include 'includes/foother.html' %}
