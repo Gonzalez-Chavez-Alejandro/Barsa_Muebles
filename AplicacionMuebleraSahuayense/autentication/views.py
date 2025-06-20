@@ -61,9 +61,9 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            instance = self.get_object()
-            instance.stateUser = False
-            instance.save()
+            instance = self.get_object() # <- Esto es para obtener al usuario
+            instance.stateUser = False # <- Aqui cambias el valor de la variable
+            instance.save() # <- Y se vuelve a guardar
             return Response({"detail": "El usuario ha sido eliminado correctamente"},
                             status=status.HTTP_200_OK)
         except ProtectedError as e:
