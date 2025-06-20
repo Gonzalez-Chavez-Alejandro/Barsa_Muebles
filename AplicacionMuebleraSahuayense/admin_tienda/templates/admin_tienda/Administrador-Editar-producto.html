@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-editar-producto.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Mensaje-Error.css' %}">
   <style>
     
   </style>
@@ -33,7 +34,7 @@
   </header>
 
   <section class="form-card">
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="validar-formulario">
       {% csrf_token %}
 
       <label>
@@ -41,18 +42,27 @@
         Producto activo
       </label>
       <label>Nombre:</label>
-      <input type="text" name="nameFurniture" value="{{ producto.nameFurniture }}" required>
+      <input type="text" name="nameFurniture" id="nameData" value="{{ producto.nameFurniture }}" required>
+      <!-- Se agrego un span de error -->
+      <span id="errorNombreP" class="errorInputs"></span>
 
       <label>Descripción:</label>
-      <textarea name="descriptionFurniture">{{ producto.descriptionFurniture }}</textarea>
+      <!-- Se agregó un id al campo -->
+      <textarea name="descriptionFurniture" id="descripcionData">{{ producto.descriptionFurniture }}</textarea>
+      <!-- Se agrego un span de error -->
+      <span id="errorDescripcion" class="errorInputs"></span>
 
       <label>Precio:</label>
-      <input type="number" step="0.01" name="priceFurniture" value="{{ producto.priceFurniture }}" required>
+      <!-- Se agregó un id al campo -->
+      <input type="number" step="0.01" name="priceFurniture" id="priceData" value="{{ producto.priceFurniture }}" required>
+      <!-- Se agrego un span de error -->
+      <span id="errorPrecio" class="errorInputs"></span>
 
       <label>Descuento (%):</label>
-      <input type="number" name="porcentajeDescuento" value="{{ producto.porcentajeDescuento }}">
-
-
+      <!-- Se agregó un id al campo -->
+      <input type="number" name="porcentajeDescuento" id="descuentoData" value="{{ producto.porcentajeDescuento }}">
+      <!-- Se agrego un span de error -->
+      <span id="errorDescuento" class="errorInputs"></span>
 
       <label>Imágenes actuales:</label>
       {% if producto.imageFurniture %}
@@ -110,6 +120,7 @@
       document.getElementById('imagenes_a_eliminar_container').appendChild(input);
     }
   </script>
+ <script src="{% static 'js/Admin-validar-campos-productos-editar.js' %}"></script>
 </body>
 
 </html>

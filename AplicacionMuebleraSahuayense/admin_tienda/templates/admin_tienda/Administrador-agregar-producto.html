@@ -135,7 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
+        // if para validar campos antes de guardar
+        if(validarAgregarProductos()){
         // Limpiar errores anteriores
         document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
 
@@ -185,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Error en la petición:", error);
             alert("Error al procesar la solicitud.");
-        }
+        }}
     });
 
     // Preview imágenes
@@ -212,5 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+<script src="{% static 'js/Admin-validar-campos-producto.js' %}"></script>
 </body>
 </html>

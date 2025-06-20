@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="{% static 'Css/Alerts.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Buttons-Admin-Usuarios-Manda.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-catalogo-desing.css' %}">
+  <link rel="stylesheet" href="{% static 'Css/Admin-Mensaje-Error.css' %}">
   <!-- Incluir jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -639,10 +640,11 @@
       <span id="errorContrasena" class="error"></span>
 
       <div class="modal-acciones">
-        <button onclick="guardarCambios()" class="btn-agregar-categoria">
+         <button onclick="validarYGuardar()" class="btn-agregar-categoria">
           <i class="fas fa-user-plus"></i> Guardar
         </button>
-        <button class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
+          <!-- Se agrego un id para manejar el limpiar errores -->
+        <button id="btnCancelar" class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
       </div>
     </div>
   </div>
@@ -838,6 +840,8 @@
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+  <script src="{% static 'js/Admin-validar-usuarios-editar.js' %}"></script>
+
   <script>  document.addEventListener('DOMContentLoaded', () => {
       const token = localStorage.getItem('accessToken');
       console.log("token", token);
