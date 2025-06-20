@@ -374,6 +374,6 @@ async function eliminarProductoConfirmado() {
     }
   } catch (error) {
     console.error("Error en la eliminación:", error);
-    errorMensaje("Hubo un error inesperado.");
+    errorMensaje("Hubo un error inesperado. Verifica si tienes mandas pendientes antes de eliminar, puedes desactivar el producto.");
   }
 }
