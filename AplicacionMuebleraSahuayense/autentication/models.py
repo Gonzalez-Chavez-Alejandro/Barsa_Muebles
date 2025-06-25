@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     ageUser = models.PositiveIntegerField()
-    phoneUser = models.CharField(max_length=11)
+    phoneUser = models.CharField(max_length=20)
     stateUser = models.BooleanField(default=True)
 
     REQUIRED_FIELDS = ['email','ageUser', 'phoneUser']

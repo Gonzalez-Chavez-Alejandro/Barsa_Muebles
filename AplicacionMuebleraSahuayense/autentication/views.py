@@ -54,6 +54,13 @@ from .models import CustomUser
 from .serializers import UserListSerializer
 from .permissions import IsAdminOrIsSelf  # importa el permiso personalizado
 
+from django.db.models import ProtectedError
+from rest_framework import generics, status, permissions
+from rest_framework.response import Response
+from .models import CustomUser
+from .serializers import UserListSerializer
+from .permissions import IsAdminOrIsSelf
+
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserListSerializer
@@ -61,14 +68,15 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            instance = self.get_object() # <- Esto es para obtener al usuario
-            instance.stateUser = False # <- Aqui cambias el valor de la variable
-            instance.save() # <- Y se vuelve a guardar
-            return Response({"detail": "El usuario ha sido eliminado correctamente"},
-                            status=status.HTTP_200_OK)
-        except ProtectedError as e:
+            instance = self.get_object()  # Obtener el usuario
+            instance.delete()  # Eliminarlo permanentemente
             return Response(
-                {"error": "Ocurrio un error al tratar de eliminar el usuario."},
+                {"detail": "El usuario ha sido eliminado permanentemente."},
+                status=status.HTTP_204_NO_CONTENT
+            )
+        except ProtectedError:
+            return Response(
+                {"error": "No se puede eliminar este usuario porque tiene relaciones protegidas."},
                 status=status.HTTP_400_BAD_REQUEST
             )
         except Exception as e:
@@ -76,6 +84,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
                 {"error": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 
 # autentication/views.py
 

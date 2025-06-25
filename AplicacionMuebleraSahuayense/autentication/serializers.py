@@ -27,19 +27,54 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 
-# serializers.py
 from rest_framework import serializers
+from django.contrib.auth import password_validation
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class UserListSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'ageUser', 'phoneUser', 'stateUser', 'is_superuser', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
-            'stateUser':{'read_only': True}, # <- Se cambio porque este campo indica eliminación
+            'stateUser': {'read_only': True},  # Indica eliminación lógica
         }
+
+    def validate_email(self, value):
+        # Validar formato de email
+        try:
+            validate_email(value)
+        except DjangoValidationError:
+            raise serializers.ValidationError("Formato de correo electrónico inválido.")
+
+        # Validar que email sea único en otros usuarios (excepto el actual)
+        user_id = self.instance.id if self.instance else None
+        if User.objects.exclude(id=user_id).filter(email__iexact=value).exists():
+            raise serializers.ValidationError("Este correo electrónico ya está en uso.")
+
+        return value
+
+    def validate_ageUser(self, value):
+        # Validar que sea entero positivo
+        if not isinstance(value, int):
+            raise serializers.ValidationError("La edad debe ser un número entero.")
+        if value < 0:
+            raise serializers.ValidationError("La edad no puede ser negativa.")
+        return value
+
+    def validate_password(self, value):
+        if value:
+            if len(value) < 6:
+                raise serializers.ValidationError("La contraseña debe tener al menos 6 caracteres.")
+            # Validar usando validadores de Django (si tienes configurados)
+            password_validation.validate_password(value)
+        return value
 
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
@@ -50,6 +85,7 @@ class UserListSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
 
 
 

@@ -279,37 +279,81 @@ document.addEventListener("click", async function (event) {
 });
 
 // Guardar cambios:
-async function guardarCambios() {
+async function guardarCambios(event) {
+  event.preventDefault(); // Evita el submit tradicional que recarga la página
+
+  // Limpiar mensajes de error
+  ["Nombre", "Apellido", "Correo", "Telefono", "Contrasena"].forEach(field => {
+    document.getElementById("error" + field).textContent = "";
+  });
+
   const token = localStorage.getItem("access_token");
   const id = document.getElementById("modalEditar").dataset.userId;
 
-  // Aquí parseamos ageUser a número entero (o cadena si prefieres)
-  const ageUserValue = parseInt(document.getElementById("apellidoEditar").value.trim(), 10);
+  // Obtener valores y hacer trim
+  const nombre = document.getElementById("nombreEditar").value.trim();
+  const apellidoStr = document.getElementById("apellidoEditar").value.trim();
+  const correo = document.getElementById("correoEditar").value.trim();
+  const telefono = document.getElementById("telefonoEditar").value.trim();
+  const contrasena = document.getElementById("contrasenaEditar").value.trim();
 
-  if (isNaN(ageUserValue) || ageUserValue < 0) {
-    alert("Por favor ingresa un número válido para Años");
-    return;
+  let hasError = false;
+
+  // Validaciones simples
+
+  if (!nombre) {
+    document.getElementById("errorNombre").textContent = "El nombre es obligatorio.";
+    hasError = true;
   }
 
+  const edad = parseInt(apellidoStr, 10);
+  if (!apellidoStr || isNaN(edad) || edad < 0) {
+    document.getElementById("errorApellido").textContent = "Por favor ingresa una edad válida.";
+    hasError = true;
+  }
+
+  // Validar correo con regex básico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!correo || !emailRegex.test(correo)) {
+    document.getElementById("errorCorreo").textContent = "Correo electrónico inválido.";
+    hasError = true;
+  }
+
+  // Validar teléfono (solo que tenga números y mínimo 7 caracteres, puedes mejorar esto)
+  const telefonoRegex = /^[\d\s+()-]{7,}$/;
+  if (!telefono || !telefonoRegex.test(telefono)) {
+    document.getElementById("errorTelefono").textContent = "Teléfono inválido.";
+    hasError = true;
+  }
+
+  // Contraseña opcional, si está, mínimo 6 caracteres
+  if (contrasena && contrasena.length < 6) {
+    document.getElementById("errorContrasena").textContent = "La contraseña debe tener al menos 6 caracteres.";
+    hasError = true;
+  }
+
+  if (hasError) return; // Salir si hay errores
+
+  // Preparar datos para enviar
   const data = {
-    username: document.getElementById("nombreEditar").value.trim(),
-    email: document.getElementById("correoEditar").value.trim(),
-    phoneUser: document.getElementById("telefonoEditar").value.trim(),
-    ageUser: ageUserValue,
-    password: document.getElementById("contrasenaEditar").value.trim(),
+    username: nombre,
+    email: correo,
+    phoneUser: telefono,
+    ageUser: edad,
   };
 
-  // No enviar password vacío para no resetearla
-  if (!data.password) delete data.password;
+  if (contrasena) {
+    data.password = contrasena;
+  }
 
   try {
     const res = await fetch(`/api/users/${id}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
 
     if (res.ok) {
@@ -318,10 +362,10 @@ async function guardarCambios() {
       await cargarUsuarios(); // refresca la tabla
     } else {
       const err = await res.json();
-      console.error("Error al actualizar:", err);
-      alert("Error al actualizar usuario: " + (err.detail || res.status));
-    }
 
+      // Aquí puedes mejorar para mostrar errores específicos si vienen en err
+      alert("Error al actualizar usuario: " + (err.detail || JSON.stringify(err)));
+    }
   } catch (error) {
     console.error("Error al enviar actualización:", error);
     alert("Fallo al actualizar usuario");

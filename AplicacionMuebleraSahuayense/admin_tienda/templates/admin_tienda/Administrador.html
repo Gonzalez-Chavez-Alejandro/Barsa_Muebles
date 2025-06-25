@@ -210,6 +210,14 @@
 
   </main>
 
+
+<section id="registro-empledo" class="seccion">
+  <div class="admin-panel" id="adminPanel">
+    
+  </div>
+</section>
+
+
 <section id="catalogo" class="seccion">
   <div class="admin-panel" id="adminPanel">
     <h3><i class="fas fa-cog"></i> Administrar Catálogo</h3>
@@ -614,17 +622,19 @@
   <!-- ----------------------------------------------- -->
   <!-- Modal para editar usuario -->
   <!-- ----------------------------------------------- -->
-  <div id="modalEditar" class="modal">
-    <div class="modal-contenido">
-      <span class="cerrar-agregar-usuario-modal" onclick="cerrarModal()">&times;</span>
-      <h3>Editar Usuario</h3>
-      <label>Nombre:</label>
+ <div id="modalEditar" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar-agregar-usuario-modal" onclick="cerrarModal()">&times;</span>
+    <h3>Editar Usuario</h3>
+
+    <form id="formEditarUsuario" onsubmit="guardarCambios(event)">
+      <label>Nombre Completo:</label>
       <input type="text" id="nombreEditar" placeholder="Escribe el nombre del usuario." required>
       <span id="errorNombre" class="error"></span>
 
       <label>Años:</label>
       <input type="text" id="apellidoEditar" placeholder="Años" required>
-      <span id="errorapellido" class="error"></span>
+      <span id="errorApellido" class="error"></span>
 
       <label>Correo:</label>
       <input type="email" id="correoEditar" placeholder="Escribe el nombre de gmail." required>
@@ -635,17 +645,19 @@
       <span id="errorTelefono" class="error"></span>
 
       <label>Contraseña:</label>
-      <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." required />
+      <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." />
       <span id="errorContrasena" class="error"></span>
 
       <div class="modal-acciones">
-        <button onclick="guardarCambios()" class="btn-agregar-categoria">
+        <button type="submit" class="btn-agregar-categoria">
           <i class="fas fa-user-plus"></i> Guardar
         </button>
-        <button class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
+        <button type="button" class="editar-btn-categoria" onclick="cerrarModal()">Cancelar</button>
       </div>
-    </div>
+    </form>
   </div>
+</div>
+
 
   <!-- ----------------------------------------------- -->
   <!-- Modal de confirmación Usuario -->
