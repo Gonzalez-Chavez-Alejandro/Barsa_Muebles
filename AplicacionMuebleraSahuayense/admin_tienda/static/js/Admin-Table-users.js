@@ -280,9 +280,8 @@ document.addEventListener("click", async function (event) {
 
 // Guardar cambios:
 async function guardarCambios(event) {
-  event.preventDefault(); // Evita el submit tradicional que recarga la página
+  event.preventDefault();
 
-  // Limpiar mensajes de error
   ["Nombre", "Apellido", "Correo", "Telefono", "Contrasena"].forEach(field => {
     document.getElementById("error" + field).textContent = "";
   });
@@ -290,7 +289,6 @@ async function guardarCambios(event) {
   const token = localStorage.getItem("access_token");
   const id = document.getElementById("modalEditar").dataset.userId;
 
-  // Obtener valores y hacer trim
   const nombre = document.getElementById("nombreEditar").value.trim();
   const apellidoStr = document.getElementById("apellidoEditar").value.trim();
   const correo = document.getElementById("correoEditar").value.trim();
@@ -299,52 +297,53 @@ async function guardarCambios(event) {
 
   let hasError = false;
 
-  // Validaciones simples
-
   if (!nombre) {
     document.getElementById("errorNombre").textContent = "El nombre es obligatorio.";
     hasError = true;
   }
 
   const edad = parseInt(apellidoStr, 10);
-  if (!apellidoStr || isNaN(edad) || edad < 0) {
+  if (!apellidoStr || isNaN(edad) || edad < 1) {
     document.getElementById("errorApellido").textContent = "Por favor ingresa una edad válida.";
     hasError = true;
   }
 
-  // Validar correo con regex básico
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!correo || !emailRegex.test(correo)) {
     document.getElementById("errorCorreo").textContent = "Correo electrónico inválido.";
     hasError = true;
   }
 
-  // Validar teléfono (solo que tenga números y mínimo 7 caracteres, puedes mejorar esto)
   const telefonoRegex = /^[\d\s+()-]{7,}$/;
   if (!telefono || !telefonoRegex.test(telefono)) {
     document.getElementById("errorTelefono").textContent = "Teléfono inválido.";
     hasError = true;
   }
 
-  // Contraseña opcional, si está, mínimo 6 caracteres
   if (contrasena && contrasena.length < 6) {
     document.getElementById("errorContrasena").textContent = "La contraseña debe tener al menos 6 caracteres.";
     hasError = true;
   }
 
-  if (hasError) return; // Salir si hay errores
+  if (hasError) return;
 
-  // Preparar datos para enviar
   const data = {
     username: nombre,
     email: correo,
     phoneUser: telefono,
     ageUser: edad,
   };
-
   if (contrasena) {
     data.password = contrasena;
   }
+
+  const campoAMensaje = {
+    username: "Nombre de usuario",
+    email: "Correo electrónico",
+    phoneUser: "Teléfono",
+    ageUser: "Edad",
+    password: "Contraseña",
+  };
 
   try {
     const res = await fetch(`/api/users/${id}/`, {
@@ -359,18 +358,30 @@ async function guardarCambios(event) {
     if (res.ok) {
       alert("Usuario actualizado correctamente");
       document.getElementById("modalEditar").style.display = "none";
-      await cargarUsuarios(); // refresca la tabla
+      await cargarUsuarios();
     } else {
       const err = await res.json();
 
-      // Aquí puedes mejorar para mostrar errores específicos si vienen en err
-      alert("Error al actualizar usuario: " + (err.detail || JSON.stringify(err)));
+      if (typeof err === "object" && err !== null) {
+        const primerCampo = Object.keys(err)[0];
+        const mensajes = err[primerCampo];
+        const mensajeAmigable = Array.isArray(mensajes) ? mensajes[0] : mensajes;
+        const campoLegible = campoAMensaje[primerCampo] || primerCampo;
+        alert(`Error en ${campoLegible}: ${mensajeAmigable}`);
+      } else if (err.detail) {
+        alert("Error: " + err.detail);
+      } else {
+        alert("Error al actualizar usuario.");
+      }
     }
   } catch (error) {
     console.error("Error al enviar actualización:", error);
     alert("Fallo al actualizar usuario");
   }
 }
+
+
+
 
 function cerrarModal() {
   document.getElementById("modalEditar").style.display = "none";
