@@ -1,5 +1,9 @@
+# autentication/serializers.py
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 User = get_user_model()
 
@@ -10,8 +14,56 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'ageUser', 'phoneUser', 'password']
 
+    def validate(self, data):
+        if User.objects.filter(username__iexact=data['username']).exists():
+            raise serializers.ValidationError({"username": "Este nombre ya está en uso."})
+
+        if User.objects.filter(email__iexact=data['email']).exists():
+            raise serializers.ValidationError({"email": {
+                "duplicado": "Este correo ya está registrado."
+            }})
+
+        return data
+
+
+    def validate_username(self, value):
+        if User.objects.filter(username__iexact=value).exists():
+            raise serializers.ValidationError("Este nombre ya está en uso.")
+        return value
+
+    def validate_email(self, value):
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError as DjangoValidationError
+
+        # Validar formato de correo electrónico
+        try:
+            validate_email(value)
+        except DjangoValidationError:
+            raise serializers.ValidationError({"formato": "El formato del correo electrónico no es válido."})
+
+        # Validar dominio (por ejemplo, que sea @gmail.com)
+        if not value.lower().endswith("@gmail.com"):
+            raise serializers.ValidationError({"dominio": "Solo se permiten correos @gmail.com."})
+
+        # Validar duplicados
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError({"duplicado": "Este correo ya está registrado."})
+
+        return value
+
+
+    def validate_ageUser(self, value):
+        if not isinstance(value, int) or value < 0:
+            raise serializers.ValidationError("La edad debe ser un número positivo.")
+        return value
+
+    def validate_password(self, value):
+        if len(value) < 6:
+            raise serializers.ValidationError("La contraseña debe tener al menos 6 caracteres.")
+        return value
+
     def create(self, validated_data):
-        user = User.objects.create_user(
+        return User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             ageUser=validated_data['ageUser'],
@@ -19,7 +71,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
 
-        return user
     
 
 
@@ -108,13 +159,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         user = User.objects.filter(email=login).first() or User.objects.filter(username=login).first()
 
         if user is None:
-            raise serializers.ValidationError({"detail": "Usuario no encontrado."})
+            raise serializers.ValidationError({"username": ["Usuario no encontrado."]})
 
         if not user.check_password(password):
-            raise serializers.ValidationError({"detail": "Contraseña incorrecta."})
+            raise serializers.ValidationError({"password": ["Contraseña incorrecta."]})
 
         if not user.is_active:
-            raise serializers.ValidationError({"detail": "Cuenta inactiva."})
+            raise serializers.ValidationError({"username": ["Cuenta inactiva."]})
 
         data = super().validate({
             "username": user.username,

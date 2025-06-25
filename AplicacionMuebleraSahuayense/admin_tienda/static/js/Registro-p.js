@@ -49,6 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
       phoneUser: phoneUser,
       ageUser: edad
     };
+    ['nombre-error', 'correo-error', 'edad-error', 'contrasena-error', 'confirmar-error'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+      document.getElementById(id).textContent = '';
+    });
 
     // Registrar usuario
     fetch('/api/register/', {
@@ -91,9 +95,43 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = '/';
       })
       .catch(err => {
-        console.error('Error:', err);
-        alert('Ocurrió un error durante el registro o login. Intenta de nuevo.');
-      });
+  // Mostrar error de nombre
+ if (err.username) {
+  let mensaje = err.username[0];
+  if (mensaje === "A user with that username already exists.") {
+    mensaje = "Este nombre de usuario ya está en uso.";
+  }
+  document.getElementById('nombre-error').textContent = mensaje;
+  document.getElementById('nombre-error').style.display = 'block';
+}
+
+
+  // Mostrar error de correo
+  if (err.email) {
+  let mensaje = "";  // inicializa el mensaje
+  if (typeof err.email === 'string') {
+    mensaje = err.email;
+  } else if (typeof err.email === 'object') {
+    // Combina todos los mensajes del objeto (como duplicado, formato, etc.)
+    mensaje = Object.values(err.email).join(' ');
+  }
+  document.getElementById('correo-error').textContent = mensaje;
+  document.getElementById('correo-error').style.display = 'block';
+}
+
+
+  if (err.phoneUser) {
+    alert(err.phoneUser[0]);
+  }
+
+  if (err.password) {
+    document.getElementById('contrasena-error').textContent = err.password[0];
+    document.getElementById('contrasena-error').style.display = 'block';
+  }
+
+  console.error('Error:', err);
+});
+
   });
 
   // Obtener token CSRF para Django
