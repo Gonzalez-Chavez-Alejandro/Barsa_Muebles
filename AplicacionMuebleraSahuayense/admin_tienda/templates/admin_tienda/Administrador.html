@@ -212,6 +212,8 @@
 
 <section id="registro-empledo" class="seccion">
   <div class="admin-panel">
+    <div class="contener-formulario"> 
+
     <form id="form-superuser" method="post" class="form-grid">
       <!-- Usuario -->
       <div class="input-group">
@@ -270,10 +272,20 @@
         <p id="successMsg" class="success-message"></p>
       </div>
     </form>
+    </div>
   </div>
 </section>
 
 <style>
+.contener-formulario {
+  max-width: 800px;
+  margin: 3rem auto;
+  background-color: #ffffff;
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
 /* Estilos generales */
 #form-superuser {
   display: grid;
