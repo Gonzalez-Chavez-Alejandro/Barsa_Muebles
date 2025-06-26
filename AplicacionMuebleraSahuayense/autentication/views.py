@@ -113,3 +113,24 @@ class CrearSuperUserAPIView(APIView):
             serializer.save()
             return Response({"message": "Superusuario creado correctamente"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# autentication/views.py
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+
+class VerificarPasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        password = request.data.get('password')
+        user = request.user
+
+        if not password:
+            return Response({"error": "La contraseña es requerida."}, status=400)
+
+        if not user.check_password(password):
+            return Response({"valid": False}, status=200)
+
+        return Response({"valid": True}, status=200)

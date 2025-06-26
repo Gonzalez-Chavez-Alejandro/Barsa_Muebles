@@ -379,8 +379,250 @@ async function generarPDF(encargo) {
 
   doc.save(`encargo-${encargo.id}.pdf`);
 }
-// Al cargar la página
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
   await cargarEncargosUsuario();
+  rellenarFormularioUsuario();
+
+  function rellenarFormularioUsuario() {
+    const campos = {
+      nombre: "nombre",
+      telefono: "telefono",
+      correo: "correo"
+    };
+
+    for (const [clave, id] of Object.entries(campos)) {
+      const input = document.getElementById(id);
+      if (input && usuarioActual[clave] !== undefined) {
+        input.value = usuarioActual[clave];
+      }
+    }
+  }
 });
+
+const formulario = document.getElementById('form-configuracion');
+formulario.addEventListener('submit', async (e) => {
+  e.preventDefault(); // Evita que recargue la página
+
+  limpiarErrores();
+
+  const nombreInput = document.getElementById('nombre');
+  const telefonoInput = document.getElementById('telefono');
+  const correoInput = document.getElementById('correo');
+  const passvalidate = document.getElementById('validate').value.trim(); // contraseña actual
+  const nuevaPassword = document.getElementById('contrasena').value.trim();
+
+  // Validaciones con mensajes en toast y span debajo del input
+  if (!nombreInput.value.trim()) {
+    mostrarErrorToast("Por favor ingresa tu nombre completo.");
+    mostrarErrorEnSpan('error-nombre', "Por favor ingresa tu nombre completo.");
+    nombreInput.focus();
+    return;
+  }
+
+  if (!telefonoInput.value.trim()) {
+    mostrarErrorToast("Por favor ingresa tu teléfono.");
+    mostrarErrorEnSpan('error-telefono', "Por favor ingresa tu teléfono.");
+    telefonoInput.focus();
+    return;
+  }
+
+  if (!correoInput.value.trim()) {
+    mostrarErrorToast("Por favor ingresa tu correo electrónico.");
+    mostrarErrorEnSpan('error-correo', "Por favor ingresa tu correo electrónico.");
+    correoInput.focus();
+    return;
+  }
+
+  const validado = await verificarPassword(passvalidate);
+  if (!validado) {
+    mostrarErrorToast("La contraseña actual es incorrecta. No se guardaron los cambios.");
+    return;
+  }
+
+  const datos = {
+    username: nombreInput.value.trim(),
+    phoneUser: telefonoInput.value.trim(),
+    email: correoInput.value.trim(),
+  };
+
+  if (nuevaPassword) {
+    datos.password = nuevaPassword;
+  }
+
+  try {
+    await guardarConfiguracionUsuario(datos);
+    alert("¡Cambios guardados correctamente!");
+  } catch (error) {
+    console.error("Error al guardar configuración:", error);
+
+    let mensaje = "Ocurrió un error al guardar los cambios.";
+    try {
+      const errorData = JSON.parse(error.message.replace("Error al guardar: ", ""));
+      if (errorData.username) {
+        mensaje = "Usuario ya existe te agradeceriamos tu nombre completo";
+        mostrarErrorEnSpan('error-nombre', mensaje);
+      } 
+      if (errorData.email) {
+        mensaje = "Error en email: " + errorData.email.join(", ");
+        mostrarErrorEnSpan('error-correo', mensaje);
+      }
+    } catch {
+      // No se pudo parsear JSON, mensaje genérico queda
+    }
+
+    mostrarErrorToast(mensaje);
+  }
+});
+
+function mostrarErrorEnSpan(idSpan, mensaje) {
+  const span = document.getElementById(idSpan);
+  if (span) {
+    span.textContent = mensaje;
+    span.style.display = 'block';
+  }
+}
+
+function limpiarErrores() {
+  ['error-nombre', 'error-telefono', 'error-correo'].forEach(id => {
+    const span = document.getElementById(id);
+    if (span) {
+      span.textContent = '';
+      span.style.display = 'none';
+    }
+  });
+}
+
+async function verificarPassword(password) {
+  const token = localStorage.getItem('access_token');
+  try {
+    const res = await fetch('/api/verificar-password/', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ password })
+    });
+
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    return data.valid === true;
+  } catch (error) {
+    console.error("Error al verificar la contraseña:", error);
+    return false;
+  }
+}
+
+async function guardarConfiguracionUsuario(datos) {
+  const token = localStorage.getItem("access_token");
+
+  try {
+    const response = await fetch('/api/user-info/', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("No se pudo obtener la información del usuario.");
+    }
+
+    const usuario = await response.json();
+    const datosActualizados = { ...usuario, ...datos };
+
+    const res = await fetch(`/api/users/${usuario.id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(datosActualizados),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error("Error al guardar: " + JSON.stringify(errorData));
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("Error al guardar configuración:", error);
+    throw error; // Para que se capture en el catch del submit
+  }
+}
+
+// Función para mostrar un toast de error en la esquina superior izquierda
+function mostrarErrorToast(mensaje, duracion = 5000) {
+  const contenedorId = 'notificaciones';
+  let contenedor = document.getElementById(contenedorId);
+
+  if (!contenedor) {
+    contenedor = document.createElement('div');
+    contenedor.id = contenedorId;
+    contenedor.style.position = 'fixed';
+    contenedor.style.top = '20px';
+    contenedor.style.left = '20px';
+    contenedor.style.zIndex = '9999';
+    contenedor.style.display = 'flex';
+    contenedor.style.flexDirection = 'column';
+    contenedor.style.gap = '10px';
+    contenedor.style.maxWidth = '300px';
+    document.body.appendChild(contenedor);
+  }
+
+  const toast = document.createElement('div');
+  toast.textContent = mensaje;
+  toast.style.backgroundColor = '#f44336';
+  toast.style.color = 'white';
+  toast.style.padding = '12px 20px';
+  toast.style.borderRadius = '5px';
+  toast.style.boxShadow = '0 3px 6px rgba(0,0,0,0.2)';
+  toast.style.fontWeight = 'bold';
+  toast.style.cursor = 'pointer';
+  toast.style.animation = 'slideInLeft 0.3s ease forwards';
+
+  toast.addEventListener('click', () => {
+    if (contenedor.contains(toast)) contenedor.removeChild(toast);
+  });
+
+  contenedor.appendChild(toast);
+
+  setTimeout(() => {
+    if (contenedor.contains(toast)) contenedor.removeChild(toast);
+  }, duracion);
+}
+
+// Animación slideInLeft (agrega esto a tu CSS o inyecta con JS)
+const style = document.createElement('style');
+style.textContent = `
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+`;
+document.head.appendChild(style);

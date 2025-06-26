@@ -13,4 +13,10 @@ urlpatterns = [
     path('users/', ListUsersView.as_view(), name='list-users'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('crear-superuser/', CrearSuperUserAPIView.as_view(), name='crear-superuser'),
+    
+]
+from .views import VerificarPasswordView
+
+urlpatterns += [
+    path('verificar-password/', VerificarPasswordView.as_view(), name='verificar-password'),
 ]
