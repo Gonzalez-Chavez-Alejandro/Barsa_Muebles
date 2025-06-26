@@ -187,4 +187,37 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 
+# autentication/serializers.py
+
+# autentication/serializers.py
+
+from rest_framework import serializers
+from .models import CustomUser
+
+class SuperUserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'password', 'ageUser', 'phoneUser']
+        extra_kwargs = {
+            'email': {'required': True},
+            'ageUser': {'required': True},
+            'phoneUser': {'required': True},
+        }
+
+    def create(self, validated_data):
+        return CustomUser.objects.create_superuser(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password'],
+            ageUser=validated_data['ageUser'],
+            phoneUser=validated_data['phoneUser']
+        )
+
+    def validate_email(self, value):
+        if CustomUser.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Este correo ya está registrado.")
+        return value
+
 

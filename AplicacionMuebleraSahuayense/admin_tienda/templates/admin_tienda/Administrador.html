@@ -75,7 +75,7 @@
           <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios')">Lista de usuarios</a></li>
         </ul>
         <ul class="submenu">
-          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('usuarios-star-comment')">Comentarios Stars </a>
+          <li class="submenu-item"><a href="#" onclick="mostrarSeccion('registro-empledo')">Comentarios Stars </a>
           </li>
         </ul>
         <ul class="submenu">
@@ -176,7 +176,7 @@
           <p>Visualiza y administra comentarios y estrellas que los usuarios dejan.</p>
 
           </button>
-          <button class="card-btn" onclick="mostrarSeccion('usuarios-star-comment')">
+          <button class="card-btn" onclick="mostrarSeccion('registro-empledo')">
             <i class="fas fa-comments"></i> Ver Opiniones
           </button>
         </div>
@@ -210,12 +210,121 @@
 
   </main>
 
+<style>.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
 
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  padding: 10px 35px 10px 35px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.password-container {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.submit-btn {
+  padding: 12px 20px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
 <section id="registro-empledo" class="seccion">
-  <div class="admin-panel" id="adminPanel">
-    
+  <div class="admin-panel">
+    <form id="form-superuser" method="post" class="form-grid">
+      <!-- Usuario -->
+      <div class="input-group">
+        <label for="username">Nombre de usuario</label>
+        <div style="position: relative;">
+          <i class="fas fa-user input-icon"></i>
+          <input type="text" id="username" class="input-field" placeholder="Usuario único" required>
+        </div>
+        <small id="error-username" class="error-message" style="color: red; display: none;"></small>
+      </div>
+
+      <!-- Correo -->
+      <div class="input-group">
+        <label for="email">Correo electrónico</label>
+        <div style="position: relative;">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" id="email" class="input-field" placeholder="ejemplo@correo.com" required>
+        </div>
+        <small id="error-email" class="error-message" style="color: red; display: none;"></small>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <div class="password-container" style="position: relative;">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+          <button type="button" class="toggle-password"><i class="fas fa-eye-slash"></i></button>
+        </div>
+        <small id="error-password" class="error-message" style="color: red; display: none;">Mínimo 8 caracteres.</small>
+      </div>
+
+      <!-- Edad -->
+      <div class="input-group">
+        <label for="ageUser">Edad</label>
+        <div style="position: relative;">
+          <i class="fas fa-user input-icon"></i>
+          <input type="number" id="ageUser" class="input-field" placeholder="Tu edad" required>
+        </div>
+        <small id="error-ageUser" class="error-message" style="color: red; display: none;">Edad requerida.</small>
+      </div>
+
+      <!-- Teléfono -->
+      <div class="input-group">
+        <label for="phoneUser">Teléfono</label>
+        <div style="position: relative;">
+          <i class="fas fa-phone input-icon"></i>
+          <input type="tel" id="phoneUser" class="input-field" placeholder="+52 353 456 7890" maxlength="20" required>
+        </div>
+        <small id="error-phoneUser" class="error-message" style="color: red; display: none;">Número requerido.</small>
+      </div>
+
+      <!-- Botón -->
+      <div class="input-group" style="grid-column: span 2;">
+        <button type="submit" class="submit-btn">Crear Superusuario</button>
+        <p id="successMsg" style="color: green;"></p>
+      </div>
+    </form>
   </div>
 </section>
+
+
 
 
 <section id="catalogo" class="seccion">
@@ -850,6 +959,7 @@
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
+  <script src="{% static 'js/Admin-registro-empledo.js' %}"></script>
   <script>  document.addEventListener('DOMContentLoaded', () => {
       const token = localStorage.getItem('accessToken');
       console.log("token", token);

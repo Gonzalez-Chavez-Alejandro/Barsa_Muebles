@@ -274,11 +274,11 @@
     background: white;
     border: 1px solid #eaeaea;
     border-radius: 10px;
-    padding: 10px 15px;
+    padding: 15px;
     display: flex;
     align-items: center;
-    width: 350px;
-    height: 120px;
+    width: auto;
+    height: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
     transition: all 0.3s ease;
 }
@@ -289,7 +289,7 @@
 }
 
 .categoria-similar img {
-    width: 100px;
+    width: 35px;
     height: auto;
     object-fit: cover;
     border-radius: 8px;

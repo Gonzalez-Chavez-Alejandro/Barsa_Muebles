@@ -164,7 +164,7 @@ async function cargarCategoriasSimilares(productoId) {
 
             div.innerHTML = `
                 <img src="${imagen}" alt="${cat.nameCategory}" style="object-fit: cover; border-radius: 6px;" />
-                <h4>${cat.nameCategory}</h4>
+                <p>${cat.nameCategory}</p>
             `;
 
             // Hacer el div clickeable para redirigir a productos filtrados por categoría

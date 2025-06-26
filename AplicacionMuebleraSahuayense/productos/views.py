@@ -155,7 +155,7 @@ def vista_agregar_producto(request):
 
     urls_imagenes = []
     for img in files:
-        result = upload(img,folder='product/'),
+        result = upload(img,folder='product/')
         url = result.get('secure_url')
         if url:
             urls_imagenes.append(url)

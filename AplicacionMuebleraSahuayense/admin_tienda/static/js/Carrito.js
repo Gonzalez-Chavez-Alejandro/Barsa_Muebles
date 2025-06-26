@@ -305,3 +305,8 @@ document.addEventListener("DOMContentLoaded", () => {
 document.getElementById("btn-encargar")?.addEventListener("click", () => {
   carritoContainer.style.display = "block";
 });
+
+function VerficarSesion(){
+  const token = localStorage.getItem("accessToken");
+  token != null ? 0 : alert("Favor de iniciar sesion")
+}
