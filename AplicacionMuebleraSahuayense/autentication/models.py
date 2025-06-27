@@ -37,6 +37,8 @@ class CustomUser(AbstractUser):
     ageUser = models.PositiveIntegerField()
     phoneUser = models.CharField(max_length=20)
     stateUser = models.BooleanField(default=True)
+    ubicacionUser = models.TextField(blank=True, null=True)
+
 
     REQUIRED_FIELDS = ['email','ageUser', 'phoneUser']
 

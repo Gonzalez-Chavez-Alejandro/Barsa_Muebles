@@ -221,3 +221,11 @@ class SuperUserCreateSerializer(serializers.ModelSerializer):
         return value
 
 
+# autentication/serializers.py
+from rest_framework import serializers
+from .models import CustomUser
+
+class ActualizarUbicacionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['ubicacionUser']

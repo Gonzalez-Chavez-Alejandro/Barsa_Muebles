@@ -134,3 +134,29 @@ class VerificarPasswordView(APIView):
             return Response({"valid": False}, status=200)
 
         return Response({"valid": True}, status=200)
+
+
+
+
+
+
+
+
+# autentication/views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .models import CustomUser
+from .serializers import ActualizarUbicacionSerializer
+
+class ActualizarUbicacionView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        serializer = ActualizarUbicacionSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -94,16 +94,17 @@
     <div id="overlay-detalle"></div>
 
     <!-- Carrito -->
-    <section id="carrito" class="carrito" style="display: none;">
-        <h2>Tu Carrito</h2>
-        <div id="lista-carrito" class="contenedor-carrito"></div>
-        <button id="vaciar-carrito">Vaciar Carrito</button>
-        <button id="cerrar-carrito">Cerrar</button>
-        <div id="total-carrito">
-            <span>Total: $<span id="total-precio">0.00</span></span>
-        </div>
-        <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
-    </section>
+        <section id="carrito" class="carrito" style="display: none;">
+            <h2>Tu Carrito</h2>
+            <div id="lista-carrito" class="contenedor-carrito"></div>
+            <button id="vaciar-carrito">Vaciar Carrito</button>
+            <button id="cerrar-carrito">Cerrar</button>
+            <div id="total-carrito">
+                <span>Total: $<span id="total-precio">0.00</span></span>
+            </div>
+            <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
+            
+        </section>
 
       {% include 'includes/foother.html' %}
 
@@ -130,10 +131,10 @@
             document.getElementById("detalle-producto").classList.add("activo");
         }
     </script>
-
-    <script src="{% static 'js/Header.js' %}"></script>
-    <script src="{% static 'js/Home-contenedor-productos.js' %}"></script>
     <script src="{% static 'js/Carrito.js' %}"></script>
+  
+    <script src="{% static 'js/Home-contenedor-productos.js' %}"></script>
+    
     <script src="{% static 'js/Admin-Manda.js' %}"></script>
 </body>
 

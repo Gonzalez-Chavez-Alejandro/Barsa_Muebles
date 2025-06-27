@@ -14,14 +14,45 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
     return;
   }
 
-  // Recoger datos
-  const data = {
-    username: document.getElementById("username").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    password: document.getElementById("password").value,
-    ageUser: document.getElementById("ageUser").value,
-    phoneUser: document.getElementById("phoneUser").value.trim(),
+  // Obtener datos
+  const username = document.getElementById("username").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const ageUser = document.getElementById("ageUser").value.trim();
+  const phoneInput = document.getElementById("phoneUser");
+  const phoneUser = phoneInput.value.trim().replace(/\s+/g, '');
+  phoneInput.value = phoneUser;
+
+  let valid = true;
+
+  const mostrarError = (id, mensaje) => {
+    const campo = document.getElementById(`error-${id}`);
+    campo.textContent = mensaje;
+    campo.style.display = 'block';
+    valid = false;
   };
+
+  // Validaciones frontend
+  if (username === "") mostrarError("username", "El nombre de usuario es obligatorio.");
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) mostrarError("email", "Correo electrónico no válido.");
+
+  if (password.length < 8) mostrarError("password", "La contraseña debe tener al menos 8 caracteres.");
+
+  const edad = parseInt(ageUser);
+  if (isNaN(edad) || edad < 1 || edad > 100) {
+    mostrarError("ageUser", "Edad debe ser un número positivo.");
+  }
+
+  const telefonoRegex = /^\+?\d{10,20}$/;
+  if (!telefonoRegex.test(phoneUser)) {
+    mostrarError("phoneUser", "Número de teléfono inválido. Usa dígitos, opcional '+' y máximo 20 caracteres sin espacios.");
+  }
+
+  if (!valid) return;
+
+  const data = { username, email, password, ageUser, phoneUser };
 
   try {
     const res = await fetch("/api/crear-superuser/", {
@@ -35,53 +66,37 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
     const result = await res.json();
 
+    // Traducciones personalizadas
+    if (result.username?.includes("A user with that username already exists.")) {
+      mostrarError("username", "Ya existe un usuario con ese nombre de usuario.");
+    }
+    if (result.email?.includes("A user with that email already exists.")) {
+      mostrarError("email", "Ya existe un usuario con ese correo electrónico.");
+    }
+
     if (!res.ok) {
-      // Mostrar errores específicos por campo o generales
       if (typeof result === "object") {
         for (const field in result) {
-          const fieldSpan = document.getElementById(`error-${field}`);
-          if (fieldSpan) {
-            fieldSpan.textContent = result[field].join(" ");
-          } else {
-            // Errores generales (como detail)
+          const span = document.getElementById(`error-${field}`);
+          if (span && !span.textContent) {
+            span.textContent = result[field].join(" ");
+            span.style.display = 'block';
+          } else if (!span) {
             alert(result[field]);
           }
         }
       } else {
-        alert("Ocurrió un error desconocido.");
+        alert("Error inesperado al crear el superusuario.");
       }
       return;
     }
 
-    // Éxito
+    // Todo OK
     document.getElementById("successMsg").textContent = result.message || "¡Superusuario creado correctamente!";
     document.getElementById("form-superuser").reset();
 
   } catch (error) {
     console.error("Error al enviar solicitud:", error);
-    alert("Error de conexión con el servidor. Intenta de nuevo.");
+    alert("Error de conexión. Intenta nuevamente.");
   }
 });
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.toggle-password').forEach(button => {
-    button.addEventListener('click', function () {
-      const container = this.closest('.password-container');
-      const passwordInput = container.querySelector('input[type="password"], input[type="text"]');
-      const icon = this.querySelector('i');
-
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-      }
-    });
-  });
-});
-

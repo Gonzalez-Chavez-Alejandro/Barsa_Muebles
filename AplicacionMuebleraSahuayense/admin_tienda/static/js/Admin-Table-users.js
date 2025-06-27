@@ -1,7 +1,7 @@
 let usuarios = [];
 let usuariosFiltrados = [];
 let paginaActual = 1;
-const usuariosPorPagina = 3;
+const usuariosPorPagina = 10;
 let usuarioAEliminarId = null; // IMPORTANTE: Definir variable global
 
 // Obtener info usuario autenticado desde token guardado
