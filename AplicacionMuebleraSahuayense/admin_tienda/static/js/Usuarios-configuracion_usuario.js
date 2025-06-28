@@ -21,7 +21,9 @@ async function cargarUsuarioActual() {
     usuarioActual = {
       nombre: data.nameUser || data.nombre || data.username || '',
       correo: data.email || data.correo || '',
-      telefono: data.phoneUser || data.telefono || ''
+      telefono: data.phoneUser || data.telefono || '',
+      ubicacionUser: data.ubicacionUser || data.ubicacion || ''
+
     };
   } catch (error) {
     console.error('Error al cargar usuario:', error);
@@ -388,24 +390,18 @@ async function generarPDF(encargo) {
 
 
 
-
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
   await cargarEncargosUsuario();
   rellenarFormularioUsuario();
+console.log("Ubicación cargada:", usuarioActual.ubicacionUser);
 
   function rellenarFormularioUsuario() {
     const campos = {
       nombre: "nombre",
       telefono: "telefono",
-      correo: "correo"
+      correo: "correo",
+      ubicacionUser: "ubicacion"
     };
 
     for (const [clave, id] of Object.entries(campos)) {
@@ -419,35 +415,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 const formulario = document.getElementById('form-configuracion');
 formulario.addEventListener('submit', async (e) => {
-  e.preventDefault(); // Evita que recargue la página
+  e.preventDefault();
 
   limpiarErrores();
 
   const nombreInput = document.getElementById('nombre');
   const telefonoInput = document.getElementById('telefono');
   const correoInput = document.getElementById('correo');
-  const passvalidate = document.getElementById('validate').value.trim(); // contraseña actual
+  const ubicacionInput = document.getElementById('ubicacion');
+  const passvalidate = document.getElementById('validate').value.trim();
   const nuevaPassword = document.getElementById('contrasena').value.trim();
 
-  // Validaciones con mensajes en toast y span debajo del input
+  // Validaciones
   if (!nombreInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu nombre completo.");
     mostrarErrorEnSpan('error-nombre', "Por favor ingresa tu nombre completo.");
     nombreInput.focus();
     return;
   }
-
   if (!telefonoInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu teléfono.");
     mostrarErrorEnSpan('error-telefono', "Por favor ingresa tu teléfono.");
     telefonoInput.focus();
     return;
   }
-
   if (!correoInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu correo electrónico.");
     mostrarErrorEnSpan('error-correo', "Por favor ingresa tu correo electrónico.");
     correoInput.focus();
+    return;
+  }
+  if (!ubicacionInput.value.trim()) {
+    mostrarErrorToast("Por favor ingresa tu ubicación.");
+    mostrarErrorEnSpan('error-ubicacion', "Por favor ingresa tu ubicación.");
+    ubicacionInput.focus();
     return;
   }
 
@@ -457,37 +458,74 @@ formulario.addEventListener('submit', async (e) => {
     return;
   }
 
-  const datos = {
-    username: nombreInput.value.trim(),
-    phoneUser: telefonoInput.value.trim(),
-    email: correoInput.value.trim(),
-  };
-
-  if (nuevaPassword) {
-    datos.password = nuevaPassword;
-  }
+  const token = localStorage.getItem("access_token");
 
   try {
-    await guardarConfiguracionUsuario(datos);
+    // Actualizar usuario (nombre, teléfono, correo, password si hay)
+    const responseUserInfo = await fetch('/api/user-info/', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (!responseUserInfo.ok) throw new Error("No se pudo obtener la información del usuario.");
+    const usuario = await responseUserInfo.json();
+
+    const datosUsuario = {
+      username: nombreInput.value.trim(),
+      phoneUser: telefonoInput.value.trim(),
+      email: correoInput.value.trim(),
+    };
+    if (nuevaPassword) datosUsuario.password = nuevaPassword;
+
+    const resActualizarUsuario = await fetch(`/api/users/${usuario.id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(datosUsuario)
+    });
+    if (!resActualizarUsuario.ok) {
+      const errorData = await resActualizarUsuario.json();
+      throw new Error("Error al guardar usuario: " + JSON.stringify(errorData));
+    }
+
+    // Actualizar ubicación separado en otra API
+    const resActualizarUbicacion = await fetch('/api/actualizar-ubicacion/', {
+      method: "PATCH", // o "PUT" según tu backend
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ ubicacionUser: ubicacionInput.value.trim() })
+    });
+    if (!resActualizarUbicacion.ok) {
+      const errorUbicacion = await resActualizarUbicacion.json();
+      throw new Error("Error al guardar ubicación: " + JSON.stringify(errorUbicacion));
+    }
+
     alert("¡Cambios guardados correctamente!");
   } catch (error) {
     console.error("Error al guardar configuración:", error);
 
     let mensaje = "Ocurrió un error al guardar los cambios.";
     try {
-      const errorData = JSON.parse(error.message.replace("Error al guardar: ", ""));
+      const errorData = JSON.parse(error.message.replace(/Error al guardar.*?:\s*/, ""));
       if (errorData.username) {
-        mensaje = "Usuario ya existe te agradeceriamos tu nombre completo";
+        mensaje = "Usuario ya existe, te agradeceríamos tu nombre completo";
         mostrarErrorEnSpan('error-nombre', mensaje);
-      } 
+      }
       if (errorData.email) {
         mensaje = "Error en email: " + errorData.email.join(", ");
         mostrarErrorEnSpan('error-correo', mensaje);
       }
+      if (errorData.ubicacion) {
+        mensaje = "Error en ubicación: " + errorData.ubicacion.join(", ");
+        mostrarErrorEnSpan('error-ubicacion', mensaje);
+      }
     } catch {
-      // No se pudo parsear JSON, mensaje genérico queda
+      // no parseable JSON, mensaje por defecto
     }
-
     mostrarErrorToast(mensaje);
   }
 });
@@ -501,7 +539,7 @@ function mostrarErrorEnSpan(idSpan, mensaje) {
 }
 
 function limpiarErrores() {
-  ['error-nombre', 'error-telefono', 'error-correo'].forEach(id => {
+  ['error-nombre', 'error-telefono', 'error-correo', 'error-ubicacion'].forEach(id => {
     const span = document.getElementById(id);
     if (span) {
       span.textContent = '';
@@ -517,13 +555,11 @@ async function verificarPassword(password) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ password })
     });
-
     if (!res.ok) return false;
-
     const data = await res.json();
     return data.valid === true;
   } catch (error) {
@@ -532,49 +568,10 @@ async function verificarPassword(password) {
   }
 }
 
-async function guardarConfiguracionUsuario(datos) {
-  const token = localStorage.getItem("access_token");
-
-  try {
-    const response = await fetch('/api/user-info/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error("No se pudo obtener la información del usuario.");
-    }
-
-    const usuario = await response.json();
-    const datosActualizados = { ...usuario, ...datos };
-
-    const res = await fetch(`/api/users/${usuario.id}/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(datosActualizados),
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error("Error al guardar: " + JSON.stringify(errorData));
-    }
-
-    return await res.json();
-  } catch (error) {
-    console.error("Error al guardar configuración:", error);
-    throw error; // Para que se capture en el catch del submit
-  }
-}
-
-// Función para mostrar un toast de error en la esquina superior izquierda
+// Función para mostrar un toast de error
 function mostrarErrorToast(mensaje, duracion = 5000) {
   const contenedorId = 'notificaciones';
   let contenedor = document.getElementById(contenedorId);
-
   if (!contenedor) {
     contenedor = document.createElement('div');
     contenedor.id = contenedorId;
@@ -588,7 +585,6 @@ function mostrarErrorToast(mensaje, duracion = 5000) {
     contenedor.style.maxWidth = '300px';
     document.body.appendChild(contenedor);
   }
-
   const toast = document.createElement('div');
   toast.textContent = mensaje;
   toast.style.backgroundColor = '#f44336';
@@ -599,19 +595,15 @@ function mostrarErrorToast(mensaje, duracion = 5000) {
   toast.style.fontWeight = 'bold';
   toast.style.cursor = 'pointer';
   toast.style.animation = 'slideInLeft 0.3s ease forwards';
-
   toast.addEventListener('click', () => {
     if (contenedor.contains(toast)) contenedor.removeChild(toast);
   });
-
   contenedor.appendChild(toast);
-
   setTimeout(() => {
     if (contenedor.contains(toast)) contenedor.removeChild(toast);
   }, duracion);
 }
 
-// Animación slideInLeft (agrega esto a tu CSS o inyecta con JS)
 const style = document.createElement('style');
 style.textContent = `
 @keyframes slideInLeft {

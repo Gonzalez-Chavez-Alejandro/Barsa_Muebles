@@ -160,10 +160,18 @@
                                 style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
                         </div>
 
+                        <div class="form-group">
+                            <label>Ubicación</label>
+                            <input type="text" id="ubicacion" name="user_ubicacion" placeholder="Ej: Sahuayo, Michoacán" required autocomplete="off">
+                            <span id="error-ubicacion" class="error-message"
+                                style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
+                        </div>
+
+
                         <div class="form-group full-width">
                             <label>Contraseña actual <small>(para confirmar cambios)</small></label>
                             <div style="position: relative;">
-                                <input type="password" id="validate" placeholder="••••••••" required autocomplete="off">
+                                <input type="password" id="validate" name="confirmar_cambios" placeholder="••••••••" required autocomplete="off" inputmode="text">
                                 <button type="button" class="toggle-password">
                                     <i class="fas fa-eye-slash"></i>
                                 </button>

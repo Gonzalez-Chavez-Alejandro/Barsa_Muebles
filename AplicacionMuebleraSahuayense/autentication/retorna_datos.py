@@ -15,7 +15,10 @@ class UserInfoView(APIView):
             "phoneUser": user.phoneUser,
             "stateUser": user.stateUser,
             "ageUser": user.ageUser,  # <--- agregar este campo
+            "ubicacionUser": user.ubicacionUser,
+
             "is_superuser": user.is_superuser,
+
         }
         return Response(data)
 
