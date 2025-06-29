@@ -9,37 +9,47 @@ async function cargarUsuarioActual() {
   }
 
   try {
-    // Añade timestamp para evitar caché
     const res = await fetch(`/api/user-info/?t=${Date.now()}`, {
       headers: { 
         'Authorization': `Bearer ${token}`,
-        'Cache-Control': 'no-store'
-      }
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      },
+      cache: 'no-store'
     });
 
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     const data = await res.json();
-    console.log('Datos API:', data); // Verifica en consola
-
-    // Asigna los datos limpios
-    usuarioActual = {
+    
+    usuarioActual = Object.freeze({
       nombre: data.username || '',
       correo: data.email || '',
       telefono: data.phoneUser || '',
-      ubicacionUser: data.ubicacionUser || ''
-    };
+      ubicacionUser: data.ubicacionUser || '',
+      ageUser: data.ageUser || null
+    });
+
+    // Limpiar caché del navegador para el campo de correo
+    const correoInput = document.getElementById('correo');
+    if (correoInput) {
+      correoInput.value = ''; // Limpiar primero
+      setTimeout(() => {
+        correoInput.value = usuarioActual.correo || '';
+        correoInput.dispatchEvent(new Event('change'));
+      }, 100);
+    }
 
     // Fuerza la actualización del DOM
     const ubicacionInput = document.getElementById('ubicacion');
     if (ubicacionInput) {
       ubicacionInput.value = usuarioActual.ubicacionUser || '';
-      ubicacionInput.dispatchEvent(new Event('input')); // Dispara eventos de cambio
+      ubicacionInput.dispatchEvent(new Event('change'));
     }
 
   } catch (error) {
     console.error('Error:', error);
-    // Limpia datos corruptos
     localStorage.removeItem('accessToken');
     sessionStorage.clear();
     window.location.href = '/login?session=expired';
@@ -378,7 +388,7 @@ async function generarPDF(encargo) {
   } else {
     // Datos por defecto con manejo de texto multilínea
     const defaultEmail = 'Email: barsa@gmail.com';
-    const defaultPhone = 'Tel3333333éfono: +52 000 111 5522';
+    const defaultPhone = 'Teléfono: +52 000 111 5522';
     const defaultLocation = 'Ubicación: Carretera Sahuayo La Barca KM 5.4 | Juárez #100 Sahuayo Mich | Circunvalación #Jiquilpa';
 
     [defaultEmail, defaultPhone, defaultLocation].forEach(text => {
@@ -412,20 +422,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 console.log("Ubicación cargada:", usuarioActual.ubicacionUser);
 
   function rellenarFormularioUsuario() {
-    const campos = {
-      nombre: "nombre",
-      telefono: "telefono",
-      correo: "correo",
-      ubicacionUser: "ubicacion"
-    };
+  console.log("Datos al rellenar formulario:", usuarioActual); // Verifica aquí
+  const campos = {
+    nombre: "nombre",
+    telefono: "telefono",
+    correo: "correo",
+    ubicacionUser: "ubicacion"
+  };
 
-    for (const [clave, id] of Object.entries(campos)) {
-      const input = document.getElementById(id);
-      if (input && usuarioActual[clave] !== undefined) {
-        input.value = usuarioActual[clave];
-      }
+  for (const [clave, id] of Object.entries(campos)) {
+    const input = document.getElementById(id);
+    if (input && usuarioActual[clave] !== undefined) {
+      console.log(`Asignando ${clave}:`, usuarioActual[clave]); // Depuración
+      input.value = usuarioActual[clave];
     }
   }
+}
 });
 
 const formulario = document.getElementById('form-configuracion');
@@ -489,6 +501,7 @@ formulario.addEventListener('submit', async (e) => {
       username: nombreInput.value.trim(),
       phoneUser: telefonoInput.value.trim(),
       email: correoInput.value.trim(),
+      ageUser: usuarioActual.ageUser,
     };
     if (nuevaPassword) datosUsuario.password = nuevaPassword;
 
