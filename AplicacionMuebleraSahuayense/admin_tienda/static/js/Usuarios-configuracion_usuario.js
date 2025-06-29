@@ -4,30 +4,45 @@ let usuarioActual = null;
 async function cargarUsuarioActual() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    alert('No estás autenticado. Inicia sesión primero.');
     window.location.href = '/login';
     return;
   }
 
   try {
-    const res = await fetch('/api/user-info/', {
-      headers: { 'Authorization': `Bearer ${token}` }
+    // Añade timestamp para evitar caché
+    const res = await fetch(`/api/user-info/?t=${Date.now()}`, {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Cache-Control': 'no-store'
+      }
     });
 
-    if (!res.ok) throw new Error('Error al obtener usuario');
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     const data = await res.json();
+    console.log('Datos API:', data); // Verifica en consola
 
+    // Asigna los datos limpios
     usuarioActual = {
-      nombre: data.nameUser || data.nombre || data.username || '',
-      correo: data.email || data.correo || '',
-      telefono: data.phoneUser || data.telefono || '',
-      ubicacionUser: data.ubicacionUser || data.ubicacion || ''
-
+      nombre: data.username || '',
+      correo: data.email || '',
+      telefono: data.phoneUser || '',
+      ubicacionUser: data.ubicacionUser || ''
     };
+
+    // Fuerza la actualización del DOM
+    const ubicacionInput = document.getElementById('ubicacion');
+    if (ubicacionInput) {
+      ubicacionInput.value = usuarioActual.ubicacionUser || '';
+      ubicacionInput.dispatchEvent(new Event('input')); // Dispara eventos de cambio
+    }
+
   } catch (error) {
-    console.error('Error al cargar usuario:', error);
-    alert('No se pudo cargar la información del usuario.');
+    console.error('Error:', error);
+    // Limpia datos corruptos
+    localStorage.removeItem('accessToken');
+    sessionStorage.clear();
+    window.location.href = '/login?session=expired';
   }
 }
 

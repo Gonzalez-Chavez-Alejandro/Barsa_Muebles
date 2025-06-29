@@ -162,10 +162,12 @@
 
                         <div class="form-group">
                             <label>Ubicación</label>
-                            <input type="text" id="ubicacion" name="user_ubicacion" placeholder="Ej: Sahuayo, Michoacán" required autocomplete="off">
-                            <span id="error-ubicacion" class="error-message"
-                                style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
-                        </div>
+                            <input type="text" id="ubicacion" name="user_ubicacion" 
+                                    autocomplete="off" readonly 
+                                    onfocus="this.removeAttribute('readonly')"
+                                    placeholder="Ej: Sahuayo, Michoacán" required>
+                            <span id="error-ubicacion" class="error-message"></span>
+                            </div>
 
 
                         <div class="form-group full-width">
