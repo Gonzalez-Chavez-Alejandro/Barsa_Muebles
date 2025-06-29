@@ -460,18 +460,29 @@ formulario.addEventListener('submit', async (e) => {
     nombreInput.focus();
     return;
   }
+
   if (!telefonoInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu teléfono.");
     mostrarErrorEnSpan('error-telefono', "Por favor ingresa tu teléfono.");
     telefonoInput.focus();
     return;
   }
+
+  const telefonoRegex = /^\+?\d{10,15}$/;
+  if (!telefonoRegex.test(telefonoInput.value.trim())) {
+    mostrarErrorToast("El teléfono ingresado no es válido.");
+    mostrarErrorEnSpan('error-telefono', "Debe contener entre 10 y 15 dígitos, opcional el '+'.");
+    telefonoInput.focus();
+    return;
+  }
+
   if (!correoInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu correo electrónico.");
     mostrarErrorEnSpan('error-correo', "Por favor ingresa tu correo electrónico.");
     correoInput.focus();
     return;
   }
+
   if (!ubicacionInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu ubicación.");
     mostrarErrorEnSpan('error-ubicacion', "Por favor ingresa tu ubicación.");
@@ -481,14 +492,15 @@ formulario.addEventListener('submit', async (e) => {
 
   const validado = await verificarPassword(passvalidate);
   if (!validado) {
-    mostrarErrorToast("La contraseña actual es incorrecta. No se guardaron los cambios.");
+    mostrarErrorToast("La contraseña actual es incorrecta.");
+    mostrarErrorToast("No se guardaron los cambios.");
     return;
   }
 
   const token = localStorage.getItem("access_token");
 
   try {
-    // Actualizar usuario (nombre, teléfono, correo, password si hay)
+    // Obtener información del usuario
     const responseUserInfo = await fetch('/api/user-info/', {
       headers: {
         Authorization: `Bearer ${token}`
@@ -501,10 +513,11 @@ formulario.addEventListener('submit', async (e) => {
       username: nombreInput.value.trim(),
       phoneUser: telefonoInput.value.trim(),
       email: correoInput.value.trim(),
-      ageUser: usuarioActual.ageUser,
+      ageUser: usuario.ageUser, // corregido usuarioActual -> usuario
     };
     if (nuevaPassword) datosUsuario.password = nuevaPassword;
 
+    // Actualizar datos del usuario
     const resActualizarUsuario = await fetch(`/api/users/${usuario.id}/`, {
       method: "PUT",
       headers: {
@@ -513,20 +526,22 @@ formulario.addEventListener('submit', async (e) => {
       },
       body: JSON.stringify(datosUsuario)
     });
+
     if (!resActualizarUsuario.ok) {
       const errorData = await resActualizarUsuario.json();
       throw new Error("Error al guardar usuario: " + JSON.stringify(errorData));
     }
 
-    // Actualizar ubicación separado en otra API
+    // Actualizar ubicación
     const resActualizarUbicacion = await fetch('/api/actualizar-ubicacion/', {
-      method: "PATCH", // o "PUT" según tu backend
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ ubicacionUser: ubicacionInput.value.trim() })
     });
+
     if (!resActualizarUbicacion.ok) {
       const errorUbicacion = await resActualizarUbicacion.json();
       throw new Error("Error al guardar ubicación: " + JSON.stringify(errorUbicacion));
@@ -540,7 +555,7 @@ formulario.addEventListener('submit', async (e) => {
     try {
       const errorData = JSON.parse(error.message.replace(/Error al guardar.*?:\s*/, ""));
       if (errorData.username) {
-        mensaje = "Usuario ya existe, te agradeceríamos tu nombre completo";
+        mensaje = "Usuario ya existe, te agradeceríamos tu nombre completo.";
         mostrarErrorEnSpan('error-nombre', mensaje);
       }
       if (errorData.email) {
@@ -552,11 +567,12 @@ formulario.addEventListener('submit', async (e) => {
         mostrarErrorEnSpan('error-ubicacion', mensaje);
       }
     } catch {
-      // no parseable JSON, mensaje por defecto
+      // No se pudo interpretar el error como JSON
     }
     mostrarErrorToast(mensaje);
   }
 });
+
 
 function mostrarErrorEnSpan(idSpan, mensaje) {
   const span = document.getElementById(idSpan);
@@ -597,7 +613,7 @@ async function verificarPassword(password) {
 }
 
 // Función para mostrar un toast de error
-function mostrarErrorToast(mensaje, duracion = 5000) {
+function mostrarErrorToast(mensaje, duracion = 10000) {
   const contenedorId = 'notificaciones';
   let contenedor = document.getElementById(contenedorId);
   if (!contenedor) {

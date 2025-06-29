@@ -147,7 +147,8 @@
 
                         <div class="form-group">
                             <label>Teléfono</label>
-                            <input type="tel" id="telefono" placeholder="+52 55 1234 5678" required autocomplete="off">
+                            <input type="tel" id="telefono" placeholder="+52 55 1234 5678" required autocomplete="off"
+                                oninput="this.value = this.value.replace(/[A-Za-z]/g, '')">
                             <span id="error-telefono" class="error-message"
                                 style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
                         </div>
@@ -208,40 +209,84 @@
                 </form>
             </div>
         </section>
-        <style>
-            .toast-error {
-                background-color: #f44336;
-                color: white;
-                padding: 12px 20px;
-                border-radius: 5px;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-                font-weight: bold;
-                animation: slideInLeft 0.3s ease forwards;
-                cursor: pointer;
-            }
+<style>
+  /* Contenedor de notificaciones */
+  #notificaciones {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    width: 100%;
+  }
 
-            @keyframes slideInLeft {
-                from {
-                    transform: translateX(-100%);
-                    opacity: 0;
-                }
+  /* Toast Base */
+  .toast {
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
 
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        </style>
-        <div id="notificaciones" style="
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 300px;
-"></div>
+  /* Toast de Error con tachito */
+  .toast-error {
+    background: linear-gradient(135deg, #ff4d4d, #f44336);
+    color: white;
+    border-left: 4px solid #d32f2f;
+  }
+
+  /* Tachito (×) estilizado */
+  .toast-error::before {
+    content: "×"; /* Tachito Unicode */
+    margin-right: 12px;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Barra de progreso */
+  .toast-error::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    animation: progressBar 5s linear forwards;
+  }
+
+  /* Animaciones */
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes progressBar {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+
+  /* Efecto hover */
+  .toast:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<div id="notificaciones"></div>
 
 
         <!-- Carrito -->
