@@ -203,6 +203,10 @@ button.editar-btn-categoria {
   button.editar-btn-categoria {
     max-width: 426px;
     max-height: 36px;
-    margin-top: -30px;
+    
   }
 }
+
+          .modal-contenido {
+              margin: 5% auto; 
+          }

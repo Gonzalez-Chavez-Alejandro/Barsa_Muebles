@@ -91,7 +91,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'ageUser', 'phoneUser', 'stateUser', 'is_superuser', 'password']
+        fields = ['id', 'username', 'email', 'ageUser', 'phoneUser','ubicacionUser',  'stateUser', 'is_superuser', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
             'stateUser': {'read_only': True},  # Indica eliminación lógica

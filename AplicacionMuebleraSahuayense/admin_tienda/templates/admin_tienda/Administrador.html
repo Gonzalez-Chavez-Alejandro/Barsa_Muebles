@@ -345,6 +345,7 @@
               <th scope="col">Nombre</th>
               <th scope="col">Correo</th>
               <th>Teléfono</th>
+              <th>Ubicacion</th>
               <th>Contraseña</th>
               <th>Acciones</th>
             </tr>
@@ -722,7 +723,15 @@
         oninput="this.value = this.value.replace(/[A-Za-z]/g, '')"
         required>
         <span id="errorTelefono" class="error"></span>
-
+        
+      
+          <label>Ubicación</label>
+          <textarea id="ubicacionEditar" name="user_ubicacion" autocomplete="off"
+          onfocus="this.removeAttribute('readonly')" placeholder="Ej: Sahuayo, Michoacán" required
+          rows="3"></textarea>
+          <span id="error-ubicacion" class="error-message"></span>
+      
+        
         <label>Contraseña:</label>
         <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." />
         <span id="errorContrasena" class="error"></span>

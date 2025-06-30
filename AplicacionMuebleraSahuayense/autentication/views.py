@@ -39,6 +39,7 @@ class ListUsersView(APIView):
                 'username': u.username,
                 'email': u.email,
                 'phoneUser': u.phoneUser,
+                'ubicacionUser': u.ubicacionUser,
                 'is_superuser': u.is_superuser,
                 # agrega campos extra que uses, como phoneUser, etc
             })

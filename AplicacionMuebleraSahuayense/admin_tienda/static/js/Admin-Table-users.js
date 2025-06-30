@@ -51,6 +51,7 @@ async function cargarUsuarios() {
       return;
     }
     usuarios = await response.json();
+    console.log("Usuarios cargados desde la API:", usuarios);
     usuariosFiltrados = [...usuarios];
     mostrarUsuarios(paginaActual);
 
@@ -83,6 +84,7 @@ function mostrarUsuarios(pagina = 1) {
       <td>${usuario.username}</td>
       <td>${usuario.email}</td>
       <td>${usuario.phoneUser || ''}</td>
+      <td>${usuario.ubicacionUser || ''}</td>
       <td>*******</td>
       <td>
         <button class="btn-admin-desing-edit" data-id="${usuario.id}"><i class="fas fa-edit"></i></button>
@@ -267,6 +269,7 @@ document.addEventListener("click", async function (event) {
       document.getElementById("apellidoEditar").value = usuario.ageUser || "";  
       document.getElementById("correoEditar").value = usuario.email || "";
       document.getElementById("telefonoEditar").value = usuario.phoneUser || "";
+      document.getElementById("ubicacionEditar").value = usuario.ubicacionUser || "";
       document.getElementById("contrasenaEditar").value = ""; // Nunca mostramos contraseñas
 
       document.getElementById("modalEditar").dataset.userId = usuario.id; // Guardamos ID en modal
@@ -325,6 +328,14 @@ async function guardarCambios(event) {
     hasError = true;
   }
 
+  const ubicacion = document.getElementById("ubicacionEditar").value.trim();
+
+if (!ubicacion) {
+  document.getElementById("errorUbicacion").textContent = "La ubicación no puede estar vacía.";
+  hasError = true;
+}
+
+
   if (hasError) return;
 
   const data = {
@@ -332,11 +343,13 @@ async function guardarCambios(event) {
     email: correo,
     phoneUser: telefono,
     ageUser: edad,
+    ubicacionUser: ubicacion,
   };
   if (contrasena) {
     data.password = contrasena;
   }
-
+// ✅ Mostrar en consola lo que se enviará al backend
+console.log("## Datos a enviar        :", data);
   const campoAMensaje = {
     username: "Nombre de usuario",
     email: "Correo electrónico",
