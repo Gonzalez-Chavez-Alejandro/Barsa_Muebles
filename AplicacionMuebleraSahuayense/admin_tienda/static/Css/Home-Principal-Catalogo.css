@@ -2,7 +2,8 @@
 .obrasa-container {
     font-family: 'Montserrat', sans-serif;
     display: flex;
-    max-width: 1000px;
+    max-width: 1200px;
+    margin: 2rem 11rem;
     margin: 0 auto;
     background-color: #f8f5f2; /* Fondo beige claro */
     border-radius: 15px;

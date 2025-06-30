@@ -93,6 +93,9 @@ def configuracion_usuario(request):
     return render(request, 'admin_tienda/configuracion_usuario.html')
 
 
+def contacto(request):
+    return render(request, 'admin_tienda/contacto.html')
+
 #def administrador_agregar_producto(request):
 #    return render(request, 'admin_tienda/Administrador-agregar-producto.html')
 
