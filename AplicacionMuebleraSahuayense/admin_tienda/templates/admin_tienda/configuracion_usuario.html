@@ -299,8 +299,10 @@
                 <span>Total: $<span id="total-precio">0.00</span></span>
             </div>
             <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
-
         </section>
+        {% include 'includes/toast.html' %}
+    <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
+
     </div>
     <div class="overlay-menu" id="overlayMenu" onclick="toggleMenuHamburguesa()"></div>
 
