@@ -36,7 +36,7 @@ async function obtenerUsuarioAutenticado() {
 async function cargarUsuarios() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    alert("No autenticado"); // Alerta: no autenticado
+    mostrarToast("No autenticado"); // Alerta: no autenticado
     return;
   }
 
@@ -47,7 +47,7 @@ async function cargarUsuarios() {
       }
     });
     if (!response.ok) {
-      alert("Error al cargar usuarios"); // Alerta: error al cargar usuarios
+      mostrarToast("Error al cargar usuarios"); // Alerta: error al cargar usuarios
       return;
     }
     usuarios = await response.json();
@@ -110,13 +110,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const usuario = await obtenerUsuarioAutenticado();
 
   if (!usuario) {
-    alert("No estás autenticado. Por favor inicia sesión."); // Alerta: no autenticado
+    mostrarToast("No estás autenticado. Por favor inicia sesión."); // Alerta: no autenticado
     window.location.href = "/login";
     return;
   }
 
   if (!usuario.is_superuser) {
-    alert("No tienes permisos para acceder a esta sección"); // Alerta: sin permisos
+    mostrarToast("No tienes permisos para acceder a esta sección"); // Alerta: sin permisos
     document.querySelector(".admin-table").style.display = "none";
     document.getElementById("buscador").style.display = "none";
     document.getElementById("paginaAnterior").style.display = "none";
@@ -215,11 +215,11 @@ async function confirmarEliminacion() {
     });
 
     if (response.ok) {
-      alert("Usuario eliminado correctamente");
+      mostrarToast("Usuario eliminado correctamente");
       await cargarUsuarios();
     } else {
       const data = await response.json();
-      alert(data.error || "Error al eliminar el usuario");
+      mostrarToast(data.error || "Error al eliminar el usuario");
     }
 
   } catch (error) {
@@ -276,7 +276,7 @@ document.addEventListener("click", async function (event) {
 
     } catch (err) {
       console.error("Error cargando usuario para editar:", err);
-      alert("No se pudo cargar la información del usuario");
+      mostrarToast("No se pudo cargar la información del usuario");
     }
   }
 });
@@ -369,7 +369,7 @@ console.log("## Datos a enviar        :", data);
     });
 
     if (res.ok) {
-      alert("Usuario actualizado correctamente");
+      mostrarToast("Usuario actualizado correctamente");
       document.getElementById("modalEditar").style.display = "none";
       await cargarUsuarios();
     } else {
@@ -380,16 +380,16 @@ console.log("## Datos a enviar        :", data);
         const mensajes = err[primerCampo];
         const mensajeAmigable = Array.isArray(mensajes) ? mensajes[0] : mensajes;
         const campoLegible = campoAMensaje[primerCampo] || primerCampo;
-        alert(`Error en ${campoLegible}: ${mensajeAmigable}`);
+        mostrarToast(`Error en ${campoLegible}: ${mensajeAmigable}`);
       } else if (err.detail) {
-        alert("Error: " + err.detail);
+        mostrarToast("Error: " + err.detail);
       } else {
-        alert("Error al actualizar usuario.");
+        mostrarToast("Error al actualizar usuario.");
       }
     }
   } catch (error) {
     console.error("Error al enviar actualización:", error);
-    alert("Fallo al actualizar usuario");
+    mostrarToast("Fallo al actualizar usuario");
   }
 }
 
@@ -399,3 +399,37 @@ console.log("## Datos a enviar        :", data);
 function cerrarModal() {
   document.getElementById("modalEditar").style.display = "none";
 }
+function mostrarToast(mensaje, tipo = "info") {
+  const toast = document.getElementById("toast");
+  const icon = document.getElementById("toastIcon");
+  const texto = document.getElementById("toastMessage");
+
+  // Cambiar mensaje
+  texto.textContent = mensaje;
+
+  // Estilos según tipo
+  toast.className = ""; // Limpia clases anteriores
+  if (tipo === "success") {
+    toast.classList.add("success");
+    icon.className = "fas fa-check-circle";
+  } else if (tipo === "error") {
+    toast.classList.add("error");
+    icon.className = "fas fa-times-circle";
+  } else {
+    toast.classList.add("info");
+    icon.className = "fas fa-info-circle";
+  }
+
+  // Mostrar
+  toast.style.display = "flex";
+  toast.style.opacity = 1;
+
+  // Ocultar después de 3 segundos
+  setTimeout(() => {
+    toast.style.opacity = 0;
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 300);
+  }, 3000);
+}
+

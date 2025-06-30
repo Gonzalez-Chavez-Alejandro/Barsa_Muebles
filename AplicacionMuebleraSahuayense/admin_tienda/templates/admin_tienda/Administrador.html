@@ -689,9 +689,42 @@
 
   <!-- ---------------------------------------------------------------------------------------------------- -->
   <!-- Contenedor para mensajes flotantes -->
-  <div id="mensaje-flotante" class="mensaje-oculto">
-    <i id="icono-mensaje" class="fas fa-check-circle icono-mensaje"></i>
-    <span id="texto-mensaje"></span>
+
+  <style>
+    /* Opcional: en tu CSS */
+    #toast.success {
+      background-color: #2ecc71;
+    }
+
+    #toast.error {
+      background-color: #e74c3c;
+    }
+
+    #toast.info {
+      background-color: #3498db;
+    }
+  </style>
+  <div id="toast" style="
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  font-family: sans-serif;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+">
+    <i id="toastIcon" class="fas fa-info-circle"></i>
+    <span id="toastMessage">Mensaje</span>
   </div>
 
   </main>
@@ -717,11 +750,13 @@
         <span id="errorNombre" class="error"></span>
 
         <label>Años:</label>
-        <input type="number" id="apellidoEditar" placeholder="Años" required>
+        <input type="number" id="apellidoEditar" placeholder="Años" min="1" max="100"
+          oninput="this.value = Math.max(1, Math.min(100, parseInt(this.value) || ''))" required>
         <span id="errorApellido" class="error"></span>
 
         <label>Correo:</label>
-        <input type="email" id="correoEditar" placeholder="Escribe el nombre de gmail." required>
+        <input type="text" id="correoEditar" placeholder="ejemplo@gmail.com"
+          oninput="this.value = this.value.replace(/[^\w.@+-]/g, '')" required>
         <span id="errorCorreo" class="error"></span>
 
         <label>Teléfono:</label>
@@ -732,12 +767,12 @@
 
         <label>Ubicación</label>
         <textarea id="ubicacionEditar" name="user_ubicacion" autocomplete="off"
-          onfocus="this.removeAttribute('readonly')" placeholder="Ej: Sahuayo, Michoacán" required rows="3"></textarea>
+          onfocus="this.removeAttribute('readonly')" placeholder="Ej: Sahuayo, Michoacán" rows="3"></textarea>
         <span id="error-ubicacion" class="error-message"></span>
 
 
         <label>Contraseña:</label>
-        <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." />
+        <input type="password" id="contrasenaEditar" placeholder="Escribe la contraseña." minlength="8">
         <span id="errorContrasena" class="error"></span>
 
         <div class="modal-acciones">
@@ -949,6 +984,7 @@
       console.log("token", token);
     });
   </script>
+
 </body>
 
 </html>
