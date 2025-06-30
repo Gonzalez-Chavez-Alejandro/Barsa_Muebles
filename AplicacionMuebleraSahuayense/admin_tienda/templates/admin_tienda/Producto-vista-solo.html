@@ -1,4 +1,6 @@
 {% load static %}
+<script src="{% static 'js/Header.js' %}"></script>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,11 +42,13 @@
 
             <p id="detalle-ahorro" class="ahorro"></p>
 
-            <button id="agregar-carrito-detalle" class="boton-compra" onclick="VerficarSesion()">
+            <button id="agregar-carrito-detalle" class="boton-compra">
                 <img src="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430694/Carrito_rdywow.png"
                     alt="Carrito" class="icono-carrito-svg">
-                <span id="agregar-carrito-detalle-span">Agregar al carrito </span>
+                <span id="agregar-carrito-detalle-span">Agregar al carrito</span>
             </button>
+
+
         </div>
     </div>
 
@@ -73,10 +77,11 @@
     </section>
 
     {% include 'includes/foother.html' %}
-    <script src="{% static 'js/Header.js' %}"></script>
+    
     <script src="{% static 'js/Producto-vista-solo.js' %}"></script>
     <script src="{% static 'js/Carrito.js' %}"></script>
     <script src="{% static 'js/Admin-Manda.js' %}"></script>
+   
 
 </body>
 
