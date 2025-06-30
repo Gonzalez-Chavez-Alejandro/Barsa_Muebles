@@ -703,13 +703,20 @@
     #toast.info {
       background-color: #3498db;
     }
+    #toast {
+  pointer-events: none;
+}
+
+#toast.visible {
+  pointer-events: auto;
+}
+
   </style>
   <div id="toast" style="
   display: none;
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #333;
   color: #fff;
   padding: 12px 20px;
   border-radius: 8px;
@@ -723,6 +730,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 ">
+
     <i id="toastIcon" class="fas fa-info-circle"></i>
     <span id="toastMessage">Mensaje</span>
   </div>
@@ -923,7 +931,7 @@
 
 
 
-
+  <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
 
   <!-- ------------------------------------------------ -->
   <!----- Scripts ----->
@@ -967,7 +975,7 @@
         });
     }
   </script>
-  <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
+
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>

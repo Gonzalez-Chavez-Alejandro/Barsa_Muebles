@@ -75,9 +75,52 @@
         </div>
         <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
     </section>
+<style>
+    /* Opcional: en tu CSS */
+    #toast.success {
+      background-color: #2ecc71;
+    }
 
+    #toast.error {
+      background-color: #e74c3c;
+    }
+
+    #toast.info {
+      background-color: #3498db;
+    }
+    #toast {
+  pointer-events: none;
+}
+
+#toast.visible {
+  pointer-events: auto;
+}
+
+  </style>
+  <div id="toast" style="
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  font-family: sans-serif;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+">
+    <i id="toastIcon" class="fas fa-info-circle"></i>
+    <span id="toastMessage">Mensaje</span>
+  </div>
     {% include 'includes/foother.html' %}
-    
+    <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
     <script src="{% static 'js/Producto-vista-solo.js' %}"></script>
     <script src="{% static 'js/Carrito.js' %}"></script>
     <script src="{% static 'js/Admin-Manda.js' %}"></script>

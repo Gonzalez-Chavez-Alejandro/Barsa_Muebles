@@ -6,16 +6,16 @@ function mostrarToast(mensaje, tipo = "info") {
   // Cambiar mensaje
   texto.textContent = mensaje;
 
-  // Estilos según tipo
-  toast.className = ""; // Limpia clases anteriores
+  // Limpiar clases anteriores
+  toast.className = ""; 
+  toast.classList.add(tipo, "visible");
+
+  // Cambiar ícono
   if (tipo === "success") {
-    toast.classList.add("success");
     icon.className = "fas fa-check-circle";
   } else if (tipo === "error") {
-    toast.classList.add("error");
     icon.className = "fas fa-times-circle";
   } else {
-    toast.classList.add("info");
     icon.className = "fas fa-info-circle";
   }
 
@@ -26,9 +26,11 @@ function mostrarToast(mensaje, tipo = "info") {
   // Ocultar después de 3 segundos
   setTimeout(() => {
     toast.style.opacity = 0;
+    toast.classList.remove("visible");  // Desactiva pointer-events
     setTimeout(() => {
       toast.style.display = "none";
     }, 300);
   }, 3000);
 }
+
 

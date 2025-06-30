@@ -193,7 +193,8 @@ document.getElementById("btn-encargar").addEventListener("click", () => {
   // Obtener usuario logueado (puedes adaptar según cómo guardes el usuario)
   const usuario = JSON.parse(localStorage.getItem('accessToken'));
   if (!usuario) {
-    alert("No estás autenticado. Por favor inicia sesión.");
+   mostrarToast( "No estás autenticado.");
+
     window.location.href = "/login"; // O ruta que uses
     return;
   }
