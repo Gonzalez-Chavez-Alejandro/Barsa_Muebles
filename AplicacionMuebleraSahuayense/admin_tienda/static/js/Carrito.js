@@ -243,36 +243,41 @@ document.addEventListener("DOMContentLoaded", () => {
     if (carritoContainer?.style) carritoContainer.style.display = "none";
   });
 
-async function procesarEncargo() {
-  const token = localStorage.getItem("accessToken");
-  if (!token || !carritoActual?.id) {
-    alert("No hay pedido activo para procesar.");
-    return;
-  }
-
-  try {
-    const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      alert("Error al procesar pedido: " + (errorData.detail || "Error desconocido"));
+  async function procesarEncargo() {
+    const token = localStorage.getItem("accessToken");
+    if (!token || !carritoActual?.id) {
+      alert("No hay pedido activo para procesar.");
       return;
     }
 
-    alert("✅ Pedido procesado con éxito.");
-    carritoActual = null;
-    actualizarCarritoUIAPI();
-    window.location.href = "/configuracion_usuario/#mis-encargos";
-  } catch {
-    alert("Error inesperado al procesar pedido.");
+    try {
+      const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert("Error al procesar pedido: " + (errorData.detail || "Error desconocido"));
+        return;
+      }
+
+      alert("✅ Pedido procesado con éxito.");
+      carritoActual = null;
+      actualizarCarritoUIAPI();
+      window.location.href = "/configuracion_usuario/#mis-encargos";
+    } catch {
+      alert("Error inesperado al procesar pedido.");
+    }
   }
-}
 
 
   btnEncargar?.addEventListener("click", async () => {
+    if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
+      alert("No puedes encargar sin productos.");
+      return;
+    }
+
     if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
       alert("No puedes encargar sin productos.");
       return;
