@@ -182,11 +182,22 @@ async function cargarCategoriasSimilares(productoId) {
 }
 
 
-
+document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
+  
+  const usuario = JSON.parse(localStorage.getItem('accessToken'));
+  if (!usuario) {
+   mostrarToast?.("No estás autenticado. Inicia secion", "error");
+   
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 5000); // espera 2 segundos antes de redirigir
+    return;
+  }
+})
 
 document.getElementById("btn-encargar").addEventListener("click", () => {
   if (carrito.length === 0) {
-    alert("Tu carrito está vacío. Agrega productos antes de encargar.");
+    mostrarToast("Tu carrito está vacío. Agrega productos antes de encargar.", "error");
     return;
   }
 
