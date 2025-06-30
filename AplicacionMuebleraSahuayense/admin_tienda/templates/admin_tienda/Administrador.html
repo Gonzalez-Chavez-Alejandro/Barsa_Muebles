@@ -16,6 +16,12 @@
   <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <!-- Toastify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   <link rel="stylesheet" href="{% static 'Css/Administrador.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Administrador-General.css' %}">
   <link rel="stylesheet" href="{% static 'Css/Admin-Lista-Usuarios.css' %}">
@@ -271,12 +277,12 @@
             <div class="input-wrapper">
               <i class="fas fa-mobile-alt input-icon"></i>
               <input type="tel" id="phoneUser" class="input-field" placeholder="+52 353 456 7890" maxlength="20"
-                required>
+                oninput="this.value = this.value.replace(/[A-Za-z]/g, '')" required>
             </div>
             <small id="error-phoneUser" class="error-message">Número requerido.</small>
           </div>
 
-        
+
 
 
           <!-- Botón -->
@@ -719,19 +725,17 @@
         <span id="errorCorreo" class="error"></span>
 
         <label>Teléfono:</label>
-        <input type="text" id="telefonoEditar" placeholder="Escribe el numero telefonico. +52 353 000 0000" 
-        oninput="this.value = this.value.replace(/[A-Za-z]/g, '')"
-        required>
+        <input type="text" id="telefonoEditar" placeholder="Escribe el numero telefonico. +52 353 000 0000"
+          oninput="this.value = this.value.replace(/[A-Za-z]/g, '')" required>
         <span id="errorTelefono" class="error"></span>
-        
-      
-          <label>Ubicación</label>
-          <textarea id="ubicacionEditar" name="user_ubicacion" autocomplete="off"
-          onfocus="this.removeAttribute('readonly')" placeholder="Ej: Sahuayo, Michoacán" required
-          rows="3"></textarea>
-          <span id="error-ubicacion" class="error-message"></span>
-      
-        
+
+
+        <label>Ubicación</label>
+        <textarea id="ubicacionEditar" name="user_ubicacion" autocomplete="off"
+          onfocus="this.removeAttribute('readonly')" placeholder="Ej: Sahuayo, Michoacán" required rows="3"></textarea>
+        <span id="error-ubicacion" class="error-message"></span>
+
+
         <label>Contraseña:</label>
         <input type="text" id="contrasenaEditar" placeholder="Escribe la contraseña." />
         <span id="errorContrasena" class="error"></span>
