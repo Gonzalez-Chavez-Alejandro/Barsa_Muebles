@@ -111,19 +111,9 @@
   </div>
 
 
-  <!-- Carrito -->
-  <section id="carrito" class="carrito" style="display: none;">
-    <h2>Tu Carrito</h2>
-    <div id="lista-carrito" class="contenedor-carrito"></div>
-    <button id="vaciar-carrito">Vaciar Carrito</button>
-    <button id="cerrar-carrito">Cerrar</button>
-    <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
-    <div id="total-carrito">
-      <span>Total: $<span id="total-precio">0.00</span></span>
-    </div>
-  </section>
 
 
+  {% include 'includes/carrito.html' %}
   {% include 'includes/foother.html' %}
   {% include 'includes/toast.html' %}
     <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
