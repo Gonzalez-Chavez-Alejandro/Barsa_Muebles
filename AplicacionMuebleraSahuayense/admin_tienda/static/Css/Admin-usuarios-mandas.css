@@ -225,25 +225,24 @@
 
 /* Estilos del botón de completado/eliminación */
 #usuarios-mandas .um-btn-eliminar {
-    background: #10b981; /* Color verde para indicar acción positiva */
+    background-color: #d32f2f; /* Color verde para indicar acción positiva */
     color: white;
     border: none;
-    padding: 0.7rem 1.5rem;
+    padding: 0.5rem 1.5rem;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    font-size: 0.95rem;
     font-weight: 500;
     box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
 }
 
 #usuarios-mandas .um-btn-eliminar:hover {
-    background: #059669; /* Tono más oscuro al hacer hover */
+    background: #6b0a0a; /* Tono más oscuro al hacer hover */
     transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.25);
+    /*box-shadow: 0 4px 8px rgba(16, 185, 129, 0.25);*/
 }
 
 #usuarios-mandas .um-btn-eliminar:active {

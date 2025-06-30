@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
     let pedidos = [];
     let estadoActivo = "todos";
     let pedidosMostrados = [];
@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputBuscar = document.getElementById("um-input-buscar");
 
     console.log("📦 DOMContentLoaded - Script iniciado");
+    await cargarPedidosDesdeAPI();
 
     async function cargarPedidosDesdeAPI() {
         try {
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const puedeEliminar = (pedido.estado === 'entregado' || pedido.estado === 'papelera');
         const btnEliminar = puedeEliminar
-            ? `<button class="um-btn-eliminar" data-id="${pedido.id}">
+            ? `<button type="button" class="um-btn-eliminar" data-id="${pedido.id}">
                   <i class="fas fa-trash-alt"></i> Eliminar
                </button>`
             : '';
@@ -81,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <ul class="um-productos-lista">${productosHTML}</ul>
 
                 <footer class="um-pedido-footer">
-                    <button class="um-btn-pdf" data-id="${pedido.id}">
+                    <button type="button" class="um-btn-pdf" data-id="${pedido.id}">
                         <i class="fas fa-file-pdf"></i> Generar PDF
                     </button>
 
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         ${opcionesEstado}
                     </select>
 
-                    <button class="um-btn-papelera" data-id="${pedido.id}">
+                    <button type="button" class="um-btn-papelera" data-id="${pedido.id}">
                     <i class="fas fa-trash"></i> Papelera
                     </button>
 
@@ -239,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (typeof cargarEncargos === "function") {
                     await cargarEncargos();  // Espera que se recargue correctamente
                 } else {
-                    location.reload();  // Fallback si no está definida
+                    //location.reload();  // Fallback si no está definida
                 }
 
             } catch (err) {
@@ -309,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (typeof cargarEncargos === "function") {
                     await cargarEncargos();
                 } else {
-                    location.reload();
+                   // location.reload();
                 }
 
             } catch (err) {
@@ -318,9 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
-
-
-
 
     async function obtenerImagenBase64(url) {
         const response = await fetch(url);

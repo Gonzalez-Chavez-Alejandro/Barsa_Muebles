@@ -273,14 +273,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   btnEncargar?.addEventListener("click", async () => {
-    if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
-      mostrarToast("No puedes encargar sin productos.", "error");
-
+    if (!usuarioActual) {
+      mostrarToast("Debes iniciar sesión para encargar.", "error");
       return;
     }
 
-    if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
-      alert("No puedes encargar sin productos.");
+    if (!carritoActual?.productos_encargados?.length) {
+      mostrarToast("Tu carrito está vacío.", "error");
       return;
     }
 
@@ -294,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     await procesarEncargo();
   });
+
 
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
     if (!window.producto?.id) {
