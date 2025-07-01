@@ -1,6 +1,7 @@
 from django.db import models
 from autentication.models import CustomUser
 from productos.models import Productos
+from simple_history.models import HistoricalRecords
 
 class Encargo(models.Model):
     ESTADOS = (
@@ -18,7 +19,9 @@ class Encargo(models.Model):
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='carrito')
     ubicacion_entrega = models.TextField(blank=True, null=True)
-    
+
+    history = HistoricalRecords()  # Aquí agregas historial
+
     def __str__(self):
         return f"Encargo #{self.id} de {self.usuario.username} - Estado: {self.get_estado_display()}"
 

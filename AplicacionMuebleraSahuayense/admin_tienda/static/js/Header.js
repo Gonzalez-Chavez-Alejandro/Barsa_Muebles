@@ -120,9 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-
-
-
 /*************************************************************/
 /*********************** Foother *****************************/
 window.addEventListener("DOMContentLoaded", async () => {

@@ -30,10 +30,6 @@ window.productos = [
   { id: idCounterproductos++, nombre: "jSilla moderna", descripcion: "Silla de madera con respaldo", precio: 1200, oferta: true, precioOferta: 999, nombreimagenes: "https://res.cloudinary.com/dacrpsl5p/image/upload/v1746330867/CARPETA1/Disney%20Universe%2012_22_2024%204_18_43%20PM.png", categoriaId: 1 },
 ];
 
-
-
-
-
 let idCounterCategoria = 1;
 
 window.categorias = [
@@ -59,16 +55,12 @@ window.categorias = [
   { id: idCounterCategoria++, nombre: "Juguetero", descripcion: "Mueble organizador ideal para guardar juguetes y objetos pequeños", imagen: "https://res.cloudinary.com/dacrpsl5p/image/upload/v1746636669/categorias/shelf.png" }
 ];
 
-
-
 let idCounterComentarios = 1;
 window.comentarios = [
   { id: idCounterComentarios++, usuarioId: 1, productoId: 1, texto: "Muy cómodo y elegante", estrellas: 5 },
   { id: idCounterComentarios++, usuarioId: 1, productoId: 1, texto: "Lo volvería a comprar", estrellas: null }, // sin duplicar estrellas
   { id: idCounterComentarios++, usuarioId: 2, productoId: 1, texto: "Me llegó en buen estado", estrellas: 4 },
 ];
-
-
 
 let idCounter = 1;
 
@@ -82,20 +74,6 @@ window.usuarios = [
   { id: idCounter++, nombre: 'José Pérez', correo: 'jose@correo.com', telefono: '3344556677', contrasena: 'qrst' }
 ];
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function editarProducto(producto) {

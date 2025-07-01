@@ -24,7 +24,7 @@
   width: 300px;
   font-weight: bold;
 }
- 
+
 .modal-content-confirm .botones {
   margin-top: 15px;
   display: flex;
@@ -44,12 +44,12 @@
   color: white;
   margin-bottom: 10px;
 }
- 
+
 
 /* Botón mejorado */
 .btn-agregar-usuario {
   position: relative;
-  background-color: #ffffff; 
+  background-color: #ffffff;
   color: #2c3e50;
   border: 1.5px solid #2c3e50;
   padding: 9px 20px;

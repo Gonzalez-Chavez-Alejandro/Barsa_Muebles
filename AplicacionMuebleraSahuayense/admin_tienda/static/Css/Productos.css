@@ -102,7 +102,7 @@ main.contenido-principal {
 
 .tarjeta-producto .descripcion {
     display: -webkit-box;
-    
+
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -212,6 +212,7 @@ main.contenido-principal {
     box-sizing: border-box;
     flex-direction: column;
 }
+
 /*=================== GALERÍA ===================*/
 .galeria-producto {
     flex: 1;

@@ -271,7 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   btnEncargar?.addEventListener("click", async () => {
     if (!usuarioActual) {
       mostrarToast("Debes iniciar sesión para encargar.", "error");

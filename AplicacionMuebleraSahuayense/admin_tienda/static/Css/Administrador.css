@@ -8,7 +8,7 @@
 h1 {
   color: #2c3e50;
 }
- 
+
 /* Menú lateral */
 .menu-lateral {
   width: 250px;
@@ -976,13 +976,16 @@ label {
 /*-----------------*/
 .salir_Admin {
   display: flex;
-  justify-content: flex-end; /* Alinear a la derecha */
+  justify-content: flex-end;
+  /* Alinear a la derecha */
   padding: 10px 20px;
-  background-color: #f0f0f0; /* fondo neutro */
+  background-color: #f0f0f0;
+  /* fondo neutro */
 }
 
 .btn-salir {
-  background-color: #004085; /* azul oscuro, buen contraste para daltónicos */
+  background-color: #004085;
+  /* azul oscuro, buen contraste para daltónicos */
   color: #ffffff;
   border: 2px solid #003366;
   padding: 8px 16px;
@@ -1006,10 +1009,7 @@ label {
 
 /* Para accesibilidad */
 .btn-salir:focus-visible {
-  outline: 3px solid #ffbf47; /* amarillo para foco accesible */
+  outline: 3px solid #ffbf47;
+  /* amarillo para foco accesible */
   outline-offset: 2px;
 }
-
-
-
-

@@ -196,7 +196,7 @@ form.form-agregar-producto label.categoria-label {
     color: #2c3e50;
     cursor: pointer;
     user-select: none;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
     transition: background-color 0.25s ease;
 }
 
@@ -267,7 +267,7 @@ form.form-agregar-producto .categorias-container {
     font-size: 16px;
     line-height: 26px;
     cursor: pointer;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
     transition: background-color 0.3s ease;
 }
 

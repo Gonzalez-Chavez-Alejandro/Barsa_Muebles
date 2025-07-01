@@ -1,4 +1,5 @@
 #models.py categorias 
+from simple_history.models import HistoricalRecords
 from cloudinary.models import CloudinaryField
 import cloudinary.uploader
 from django.db import models
@@ -12,6 +13,7 @@ class Categorias(models.Model):
         overwrite=True,
         resource_type='image',
     )
+    history = HistoricalRecords()  
 
     def __str__(self):
         return self.nameCategory

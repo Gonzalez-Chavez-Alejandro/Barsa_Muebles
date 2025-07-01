@@ -11,11 +11,11 @@
 }
 
 button.editar-btn-categoria {
-    max-width: 88px;
-    margin: 0 4px 1px 3px;
-    border: 2px solid black;
+  max-width: 88px;
+  margin: 0 4px 1px 3px;
+  border: 2px solid black;
 }
- 
+
 .btn-agregar-categoria i {
   font-size: 16px;
 }
@@ -73,7 +73,7 @@ button.editar-btn-categoria {
   max-width: 90%;
   z-index: 1000;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
+
 }
 
 .delete-btn-categoria {
@@ -203,10 +203,10 @@ button.editar-btn-categoria {
   button.editar-btn-categoria {
     max-width: 426px;
     max-height: 36px;
-    
+
   }
 }
 
-          .modal-contenido {
-              margin: 5% auto; 
-          }
+.modal-contenido {
+  margin: 5% auto;
+}

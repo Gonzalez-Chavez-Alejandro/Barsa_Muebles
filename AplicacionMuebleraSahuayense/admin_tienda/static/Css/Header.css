@@ -567,18 +567,21 @@ img.Barsa-Muebles-Principio-hero {
         width: 38%;
         margin-top: 0rem;
     }
+
     .home-principio-page {
         gap: 0rem;
     }
 }
+
 /* Mostrar en pantallas grandes (PC/Tablet) */
 .icono-sillon {
-  display: block; /* o inline-block, según tu diseño */
+    display: block;
+    /* o inline-block, según tu diseño */
 }
 
 /* Ocultar en móviles (ancho menor a 768px) */
 @media (max-width: 768px) {
-  .icono-sillon {
-    display: none;
-  }
+    .icono-sillon {
+        display: none;
+    }
 }

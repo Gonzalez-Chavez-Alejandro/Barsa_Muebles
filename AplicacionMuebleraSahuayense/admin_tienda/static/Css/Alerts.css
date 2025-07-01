@@ -3,7 +3,8 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #4a6fa5; /* éxito por defecto */
+  background-color: #4a6fa5;
+  /* éxito por defecto */
   color: white;
   padding: 15px 20px;
   border-radius: 8px;
@@ -19,7 +20,8 @@
 
 #mensaje-flotante .icono-mensaje {
   font-size: 20px;
-  color: #d0e6ff; /* éxito */
+  color: #d0e6ff;
+  /* éxito */
 }
 
 #mensaje-flotante.mensaje-visible {

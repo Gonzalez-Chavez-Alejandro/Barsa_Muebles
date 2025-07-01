@@ -1,10 +1,10 @@
-
 /* Estilos generales del footer */
 footer {
     background-color: #333;
     color: white;
     padding: 20px 0px 0px;
 }
+
 .p-Muebles-Barsa {
     margin-top: 1px;
     line-clamp: initial;
@@ -13,7 +13,8 @@ footer {
 /* Contenedor principal con Grid */
 .footer-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columnas iguales */
     gap: 20px;
     width: 90%;
     margin: 20px auto;
@@ -25,7 +26,8 @@ footer {
 .footer-section-left {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el contenido */
+    align-items: center;
+    /* Centra el contenido */
     text-align: center;
 }
 
@@ -35,7 +37,8 @@ footer {
     margin: 0;
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Alinea los elementos hacia la izquierda */
+    align-items: flex-start;
+    /* Alinea los elementos hacia la izquierda */
 }
 
 /* Estilo para los enlaces dentro de la lista */
@@ -47,8 +50,8 @@ footer {
 
 /* Estilos para los puntos blancos */
 .footer-section-left .dot {
-    width: 5px; 
-    height: 5px; 
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background-color: white;
     margin-right: 8px;
@@ -72,11 +75,13 @@ footer {
     justify-content: center;
     gap: 10px;
     font-size: 16px;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 /* Márgenes para correo y teléfono */
-.p-Correo, .p-telefono,.p-Ubicacion {
+.p-Correo,
+.p-telefono,
+.p-Ubicacion {
     margin: 0px 0;
 }
 
@@ -92,8 +97,8 @@ footer {
 
 /* Estilo para cada número de teléfono con punto */
 .phone-list li::before {
-    content: "\2022"; 
-    color: white; 
+    content: "\2022";
+    color: white;
     font-size: 20px;
     margin-right: 10px;
 }
@@ -123,25 +128,27 @@ footer {
 /* Estilos para los íconos de redes sociales */
 .social-icons {
     display: flex;
-    justify-content: center; /* Centrado horizontal */
-    gap: 15px; /* Espaciado entre los iconos */
+    justify-content: center;
+    /* Centrado horizontal */
+    gap: 15px;
+    /* Espaciado entre los iconos */
     margin-top: 20px;
 }
 
 .social-icons a {
-    color: white; 
-    font-size: 30px; 
+    color: white;
+    font-size: 30px;
     transition: color 0.3s;
 }
 
 .social-icons a:hover {
-    color: #ff6347; /* Color al pasar el mouse sobre los iconos */
+    color: #ff6347;
+    /* Color al pasar el mouse sobre los iconos */
 }
 
 /* Sección de Ubicación (ajustada como Teléfono) */
 .footer-section-right {
-    display: flex
-;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
@@ -174,8 +181,8 @@ footer {
 
 /* Estilos para los puntos de ubicación */
 .footer-section-right li::before {
-    content: "\2022"; 
-    color: white; 
+    content: "\2022";
+    color: white;
     font-size: 20px;
     margin-right: 10px;
 }
@@ -188,7 +195,9 @@ footer {
     }
 
     /* Estilos responsivos para el contenido de los teléfonos */
-    .contact-info, .phone-list, .footer-section-right {
+    .contact-info,
+    .phone-list,
+    .footer-section-right {
         align-items: center;
     }
 }
@@ -207,20 +216,26 @@ footer {
 
 
 .email-list li {
-  margin-bottom: 6px; /* espacio entre correos */
+    margin-bottom: 6px;
+    /* espacio entre correos */
 }
 
 .email-list a {
-  color: inherit;          /* hereda el color del texto padre */
-  text-decoration: none;   /* quita el subrayado */
-  cursor: default;         /* cambia el cursor para que no parezca enlace, si quieres */
+    color: inherit;
+    /* hereda el color del texto padre */
+    text-decoration: none;
+    /* quita el subrayado */
+    cursor: default;
+    /* cambia el cursor para que no parezca enlace, si quieres */
 }
 
 /* Opcional: si quieres que al pasar el mouse cambie color o se subraye */
 .email-list a:hover {
-  color: #007bff;          /* un azul suave al pasar mouse */
-  text-decoration: underline;
-  cursor: pointer;         /* vuelve cursor pointer solo al hover */
+    color: #007bff;
+    /* un azul suave al pasar mouse */
+    text-decoration: underline;
+    cursor: pointer;
+    /* vuelve cursor pointer solo al hover */
 }
 
 ul#dynamic-emails {

@@ -9,11 +9,6 @@
     --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-
-
-
-
-
 .admin-panel {
     padding: 25px;
 }
@@ -309,7 +304,8 @@ th.th-acciones {
     max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-} 
+}
+
 /***************************************************************************/
 /* Estilo para el botón de cerrar */
 .cerrar {
@@ -326,7 +322,7 @@ th.th-acciones {
     color: #333;
 }
 
-.cerrar-agregar-usuario-modal{
+.cerrar-agregar-usuario-modal {
     position: absolute;
     right: 20px;
     top: 15px;
@@ -412,8 +408,8 @@ th.th-acciones {
     float: left;
     letter-spacing: 1.2px;
     font-size: 12px;
-    display: inline-flex;       
-    align-items: center;       
+    display: inline-flex;
+    align-items: center;
 }
 
 .btn-agregar-categoria:hover {
@@ -428,8 +424,10 @@ th.th-acciones {
 
 .buttons-agregar-categoria {
     display: flex;
-    justify-content: center;  /* Centrado horizontal */
-    align-items: center;     /* Centrado vertical */
+    justify-content: center;
+    /* Centrado horizontal */
+    align-items: center;
+    /* Centrado vertical */
     gap: 30px;
     width: 100%;
     margin: 0;

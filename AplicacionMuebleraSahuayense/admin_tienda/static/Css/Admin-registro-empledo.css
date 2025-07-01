@@ -78,13 +78,17 @@
 }
 
 #form-superuser .input-field:focus {
-  border: 2px solid #007acc; /* Aumenta grosor de 1px a 2px */
-  box-shadow: 0 0 6px rgba(0, 122, 204, 0.4); /* Sombra más visible */
+  border: 2px solid #007acc;
+  /* Aumenta grosor de 1px a 2px */
+  box-shadow: 0 0 6px rgba(0, 122, 204, 0.4);
+  /* Sombra más visible */
   outline: none;
 }
+
 #form-superuser .input-field {
   transition: border 0.2s, box-shadow 0.2s;
 }
+
 /* Botón de mostrar/ocultar contraseña */
 #form-superuser .toggle-password {
   position: absolute;
@@ -185,8 +189,8 @@
   margin-bottom: 2rem;
 }
 
-p.form-subtitle{
-    margin-top: 0px;
+p.form-subtitle {
+  margin-top: 0px;
 }
 
 /* Añadiendo a tu CSS existente */

@@ -47,7 +47,6 @@ async function actualizarPDF() {
 }
 
 
-
 function limpiarCampo() {
     document.getElementById('nuevoEnlace').value = '';
 }

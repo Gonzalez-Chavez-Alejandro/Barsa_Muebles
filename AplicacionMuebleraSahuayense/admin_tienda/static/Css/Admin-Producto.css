@@ -172,7 +172,7 @@ input#ofertaProducto {
 
   .admin-table th,
   .admin-table td {
-    padding: 6px 10px; 
+    padding: 6px 10px;
   }
 }
 
@@ -198,7 +198,7 @@ input#ofertaProducto {
   background-color: #e3e5e7;
   border-bottom: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .grupo-busqueda-filtros {
@@ -255,7 +255,8 @@ input#ofertaProducto {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #2563eb; /* azul profesional */
+  background-color: #2563eb;
+  /* azul profesional */
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;

@@ -1,8 +1,12 @@
 :root {
-  --primary-color: #111827; /* Negro suave */
-  --secondary-color: #374151; /* Gris azulado */
-  --accent-color: #ef4444; /* Rojo elegante */
-  --background-color: #f9fafb; /* Fondo suave */
+  --primary-color: #111827;
+  /* Negro suave */
+  --secondary-color: #374151;
+  /* Gris azulado */
+  --accent-color: #ef4444;
+  /* Rojo elegante */
+  --background-color: #f9fafb;
+  /* Fondo suave */
   --card-background: #ffffff;
   --shadow-color: rgba(0, 0, 0, 0.08);
 }
@@ -17,10 +21,10 @@ body {
 .card-contacto {
   background: var(--card-background);
   padding: 3rem;
-  
+
   box-shadow: 0 18px 45px var(--shadow-color);
   max-width: 1300px;
-  margin:  auto;
+  margin: auto;
   animation: fadeInUp 0.8s ease both;
 }
 
@@ -154,30 +158,54 @@ body {
 }
 
 /* Colores específicos */
-.facebook { background-color: #3b5998; }
-.whatsapp { background-color: #25d366; }
+.facebook {
+  background-color: #3b5998;
+}
+
+.whatsapp {
+  background-color: #25d366;
+}
+
 .instagram {
   background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
 }
-.gmail { background-color: #db4437; }
+
+.gmail {
+  background-color: #db4437;
+}
 
 /* Animaciones */
 @keyframes float {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeInUp {
-  0%   { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .container-ubicacion-tel {
     grid-template-columns: 1fr;
-   
+
   }
 
   .ilustracion {
@@ -187,44 +215,49 @@ body {
   .contacto {
     padding: 2rem;
   }
+
   .card-contacto {
     padding: 2rem 0rem;
-}
-.contacto h1 {
+  }
+
+  .contacto h1 {
     font-size: 2.0rem;
+  }
+
+  .contacto::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 20%;
+    /* para centrar verticalmente: (100% - 60%) / 2 = 20% */
+    width: 4px;
+    height: 60%;
+    background: linear-gradient(180deg, #ef4444, #b91c1c);
+    border-radius: 2px;
+    box-shadow: 0 0 6px #ef4444aa;
+  }
 }
-.contacto::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 20%;       /* para centrar verticalmente: (100% - 60%) / 2 = 20% */
-  width: 4px;
-  height: 60%;
-  background: linear-gradient(180deg, #ef4444, #b91c1c);
-  border-radius: 2px;
-  box-shadow: 0 0 6px #ef4444aa;
-}
-}
+
 .social-container a {
   text-decoration: none;
 }
+
 /* Quitar margin-left para evitar overflow */
 .contacto {
   position: relative;
-  padding-left: 1.5rem; /* espacio para la línea */
-  margin-left: 0; /* quitar */
-  box-sizing: border-box; /* que el padding no aumente el ancho */
+  padding-left: 1.5rem;
+  /* espacio para la línea */
+  margin-left: 0;
+  /* quitar */
+  box-sizing: border-box;
+  /* que el padding no aumente el ancho */
   width: 100%;
 }
 
 /* Asegurarnos que el contenedor padre tiene padding */
 .container-ubicacion-tel {
-  padding-left: 1.5rem; /* opcional para no pegar todo al borde */
+  padding-left: 1.5rem;
+  /* opcional para no pegar todo al borde */
   padding-right: 1.5rem;
   box-sizing: border-box;
 }
-
-
-
-
-

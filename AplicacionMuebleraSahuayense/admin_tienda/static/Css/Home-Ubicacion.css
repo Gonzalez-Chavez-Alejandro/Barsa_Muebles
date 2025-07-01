@@ -17,7 +17,8 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   max-width: 1200px;
-  margin: 2rem 11rem; /* ✅ Centrado horizontal */
+  margin: 2rem 11rem;
+  /* ✅ Centrado horizontal */
 }
 
 /* Sección de contacto */
@@ -68,7 +69,8 @@ body {
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-  justify-content: center; /* ✅ centrado */
+  justify-content: center;
+  /* ✅ centrado */
 }
 
 .social-icon {
@@ -106,7 +108,8 @@ body {
 
 
 a.social-icon.gmail {
-  background-color: #D44638; /* Un poco más oscuro al pasar el cursor */
+  background-color: #D44638;
+  /* Un poco más oscuro al pasar el cursor */
 }
 
 
@@ -149,5 +152,5 @@ a.social-icon.gmail {
 }
 
 li {
-    margin: 0 0 0 0px;
+  margin: 0 0 0 0px;
 }

@@ -5,11 +5,12 @@
     max-width: 1200px;
     margin: 2rem 11rem;
     margin: 0 auto;
-    background-color: #f8f5f2; /* Fondo beige claro */
+    background-color: #f8f5f2;
+    /* Fondo beige claro */
     border-radius: 15px;
     overflow: hidden;
     margin-top: 3rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     margin-bottom: 5rem;
 }
 
@@ -19,7 +20,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f8f5f2; /* Fondo más oscuro para la sección de imagen */
+    background-color: #f8f5f2;
+    /* Fondo más oscuro para la sección de imagen */
 }
 
 .obrasa-image {
@@ -33,7 +35,8 @@
     flex: 1;
     padding: 20px;
     padding-top: 5rem;
-    color: #3a3a3a; /* Color de texto más oscuro */
+    color: #3a3a3a;
+    /* Color de texto más oscuro */
 }
 
 /* Texto */
@@ -66,7 +69,8 @@
 
 /* Botón */
 .obrasa-button {
-    background-color: #8b7355; /* Color tierra */
+    background-color: #8b7355;
+    /* Color tierra */
     color: white;
     border: none;
     padding: 15px 30px;
@@ -89,23 +93,23 @@
     .obrasa-container {
         flex-direction: column;
     }
-    
+
     .obrasa-image-section {
-        display: none; /* Oculta la sección de imagen en móviles */
+        display: none;
+        /* Oculta la sección de imagen en móviles */
     }
-    
+
     .obrasa-content-section {
         padding: 30px;
         width: 100%;
     }
-    
+
     .obrasa-title {
         font-size: 2.2rem;
     }
-    
+
     .obrasa-slogan {
         font-size: 1.4rem;
         margin-bottom: 30px;
     }
 }
-

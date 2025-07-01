@@ -1,15 +1,19 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-html, body {
+
+html,
+body {
   height: 100%;
 }
+
 body {
-    background: #f3f3f4;
-    font-family: 'OpenDyslexic', 'Open Sans', 'Arial', sans-serif !important;
+  background: #f3f3f4;
+  font-family: 'OpenDyslexic', 'Open Sans', 'Arial', sans-serif !important;
 }
-label{
+
+label {
   font-family: 'OpenDyslexic', 'Open Sans', 'Arial', sans-serif !important;
 }
