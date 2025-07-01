@@ -17,7 +17,8 @@ class Encargo(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     estado = models.CharField(max_length=20, choices=ESTADOS, default='carrito')
-
+    ubicacion_entrega = models.TextField(blank=True, null=True)
+    
     def __str__(self):
         return f"Encargo #{self.id} de {self.usuario.username} - Estado: {self.get_estado_display()}"
 

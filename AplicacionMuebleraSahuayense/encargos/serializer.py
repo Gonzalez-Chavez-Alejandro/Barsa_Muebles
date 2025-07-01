@@ -21,6 +21,7 @@ class EncargoSerializer(serializers.ModelSerializer):
     usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
     usuario_correo = serializers.CharField(source='usuario.email', read_only=True)
     usuario_telefono = serializers.CharField(source='usuario.phoneUser', read_only=True)  # Ajusta nombre si es distinto
+    ubicacion_entrega = serializers.CharField(read_only=True)
 
     class Meta:
         model = Encargo
