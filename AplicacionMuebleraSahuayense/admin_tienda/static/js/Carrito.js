@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("accessToken");
   let usuarioActual = null;
   let carritoActual = null;
+  let productoPendiente = null;
+let cantidadPendiente = 1;
+let origenModalUbicacion = null; // puede ser "encargo" o "carrito"
+
 
   // Agregar modal de ubicación
   document.body.insertAdjacentHTML("beforeend", `
@@ -31,35 +35,61 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("guardar-ubicacion")?.addEventListener("click", async () => {
-    const input = document.getElementById("input-ubicacion").value.trim();
-    if (!input) return alert("Debes ingresar una ubicación.");
-    try {
-      const res = await fetch("/api/actualizar-ubicacion/", {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ ubicacionUser: input })
-      });
+  const input = document.getElementById("input-ubicacion").value.trim();
+  if (!input) return alert("Debes ingresar una ubicación.");
 
-      if (!res.ok) {
-        const error = await res.json().catch(() => ({}));
-        throw new Error(error.detail || JSON.stringify(error));
-      }
+  try {
+    const res = await fetch("/api/actualizar-ubicacion/", {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ubicacionUser: input })
+    });
 
-      const userData = await res.json();
-      usuarioActual.ubicacionUser = userData.ubicacionUser;
-      document.getElementById("modal-ubicacion").style.display = "none";
-
-      if (carritoActual?.productos_encargados?.length) {
-        await procesarEncargo();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert(`No se pudo guardar la ubicación: ${error.message}`);
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      throw new Error(error.detail || JSON.stringify(error));
     }
-  });
+
+    const userData = await res.json();
+    usuarioActual.ubicacionUser = userData.ubicacionUser;
+
+    // Recarga carrito para tener datos frescos
+    await recargarCarrito();
+
+    document.getElementById("modal-ubicacion").style.display = "none";
+
+    if (origenModalUbicacion === "encargo") {
+      await procesarEncargo();
+    } else if (origenModalUbicacion === "carrito" && productoPendiente) {
+      await agregarAlCarritoAPI(productoPendiente, cantidadPendiente);
+      productoPendiente = null;
+      cantidadPendiente = 1;
+    }
+
+    origenModalUbicacion = null;
+
+  } catch (error) {
+    console.error("Error:", error);
+    alert(`No se pudo guardar la ubicación: ${error.message}`);
+  }
+});
+
+
+async function recargarCarrito() {
+  try {
+    const res = await fetch("/encargos/obtener-carrito/", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok && res.status !== 204) throw new Error("No se pudo obtener el carrito");
+    carritoActual = (res.status === 204) ? null : await res.json();
+    actualizarCarritoUIAPI();
+  } catch (error) {
+    console.error("Error recargando carrito:", error);
+  }
+}
 
   async function validarTokenYUsuario() {
     if (!token) return renderLoginPrompt();
@@ -271,14 +301,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
   btnEncargar?.addEventListener("click", async () => {
-    if (!usuarioActual) {
-      mostrarToast("Debes iniciar sesión para encargar.", "error");
+    if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
+      mostrarToast("No puedes encargar sin productos.", "error");
+
       return;
     }
 
-    if (!carritoActual?.productos_encargados?.length) {
-      mostrarToast("Tu carrito está vacío.", "error");
+    if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
+      alert("No puedes encargar sin productos.");
       return;
     }
 
@@ -286,13 +318,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const mostrarModal = !ubicacion || (typeof ubicacion === "string" && ubicacion.trim() === "");
 
     if (mostrarModal) {
+      origenModalUbicacion = "encargo";
       document.getElementById("modal-ubicacion").style.display = "flex";
       return;
     }
 
     await procesarEncargo();
   });
-
 
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
     if (!window.producto?.id) {
@@ -303,64 +335,78 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   async function agregarAlCarritoAPI(producto, cantidad) {
-    if (!token) return;
+  if (!token) return;
 
-    const precio = parseFloat(producto.precioOferta) > 0
-      ? parseFloat(producto.precioOferta)
-      : parseFloat(producto.precio);
+  // Verificar si usuario tiene ubicación
+  const ubicacion = usuarioActual?.ubicacionUser;
+  const mostrarModal = !ubicacion || (typeof ubicacion === "string" && ubicacion.trim() === "");
 
-    try {
-      if (!carritoActual?.id) {
-        const res = await fetch("/encargos/crear/", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ productos: [] })
-        });
+  if (mostrarModal) {
+    // Guardar producto y cantidad pendientes para usar luego
+    productoPendiente = producto;
+    cantidadPendiente = cantidad;
+    origenModalUbicacion = "carrito";
+    document.getElementById("modal-ubicacion").style.display = "flex";
+    return;
+  }
 
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.detail || "No se pudo crear el carrito");
-        }
+  const precio = parseFloat(producto.precioOferta) > 0
+    ? parseFloat(producto.precioOferta)
+    : parseFloat(producto.precio);
 
-        carritoActual = await res.json();
-
-        if (!carritoActual?.id) {
-          const resCarrito = await fetch("/encargos/obtener-carrito/", {
-            headers: { Authorization: `Bearer ${token}` }
-          });
-          if (!resCarrito.ok) throw new Error("No se pudo obtener el carrito creado");
-          carritoActual = await resCarrito.json();
-        }
-      }
-
-      const resAgregar = await fetch(`/encargos/agregar/${carritoActual.id}/`, {
-        method: "PATCH",
+  try {
+    if (!carritoActual?.id) {
+      const res = await fetch("/encargos/crear/", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          producto_id: producto.id,
-          cantidad,
-          precio_unitario: precio
-        })
+        body: JSON.stringify({ productos: [] })
       });
 
-      if (!resAgregar.ok) {
-        const err = await resAgregar.json();
-        throw new Error(err.detail || JSON.stringify(err));
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || "No se pudo crear el carrito");
       }
 
-      carritoActual = await resAgregar.json();
-      actualizarCarritoUIAPI();
-    } catch (error) {
-      console.error("Error al agregar al carrito:", error);
-      alert("❌ Ocurrió un error al agregar el producto.");
+      carritoActual = await res.json();
+
+      if (!carritoActual?.id) {
+        const resCarrito = await fetch("/encargos/obtener-carrito/", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!resCarrito.ok) throw new Error("No se pudo obtener el carrito creado");
+        carritoActual = await resCarrito.json();
+      }
     }
+
+    const resAgregar = await fetch(`/encargos/agregar/${carritoActual.id}/`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        producto_id: producto.id,
+        cantidad,
+        precio_unitario: precio
+      })
+    });
+
+    if (!resAgregar.ok) {
+      const err = await resAgregar.json();
+      throw new Error(err.detail || JSON.stringify(err));
+    }
+
+    carritoActual = await resAgregar.json();
+    actualizarCarritoUIAPI();
+  } catch (error) {
+    console.error("Error al agregar al carrito:", error);
+    alert("❌ Ocurrió un error al agregar el producto.");
   }
+}
+
 
   validarTokenYUsuario();
 });

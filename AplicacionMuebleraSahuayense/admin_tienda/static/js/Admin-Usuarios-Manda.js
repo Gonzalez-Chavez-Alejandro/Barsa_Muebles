@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", async() => {
             const nombreProducto = p.producto.nameFurniture || 'Sin nombre';
             const cantidad = p.cantidad || 0;
             const precio = Number(p.precio_unitario).toFixed(2) || '0.00';
-
             return `
         <li class="um-producto-item">
             <a href="/productos_vista/?producto_id=${p.producto.id}" target="_blank">
@@ -77,6 +76,8 @@ document.addEventListener("DOMContentLoaded", async() => {
                     <div class="um-info-item"><i class="fas fa-user um-fas"></i> ${nombreUsuario}</div>
                     <div class="um-info-item"><i class="fas fa-envelope um-fas"></i> ${correoUsuario}</div>
                     <div class="um-info-item"><i class="fas fa-phone um-fas"></i> ${telefonoUsuario}</div>
+                    <div class="um-info-item"><i class="fas fa-map-marker-alt um-fas"></i> ${pedido.ubicacion_entrega}</div>
+
                 </div>
 
                 <ul class="um-productos-lista">${productosHTML}</ul>
