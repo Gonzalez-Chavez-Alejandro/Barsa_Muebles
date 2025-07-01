@@ -56,7 +56,7 @@ def administrador_editar_producto(request, id):
         producto.categoryID.set(request.POST.getlist('categoryID[]'))
 
         messages.success(request, "Producto actualizado correctamente.")
-        return redirect('administrador')
+        return redirect('/administrador/?abrir=section-productos')
 
     return render(request, 'admin_tienda/Administrador-Editar-producto.html', {
         'producto': producto,

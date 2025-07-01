@@ -1003,6 +1003,22 @@
       console.log("token", token);
     });
   </script>
+<script>document.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash;
+  if (hash === "#section-productos" || hash === "#abrir-productos") {
+    mostrarSeccion("section-productos");
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const abrir = params.get('abrir');
+    if (abrir === 'section-productos') {
+        mostrarSeccion('section-productos');  // Función que tú ya tienes para mostrar esa sección
+    }
+});
+</script>
 
 </body>
 
