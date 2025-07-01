@@ -210,7 +210,6 @@ document.addEventListener("DOMContentLoaded", async() => {
         });
     });
 
-    cargarPedidosDesdeAPI();
 
     document.addEventListener("click", async function (e) {
         if (e.target.closest(".um-btn-papelera")) {
@@ -598,8 +597,6 @@ document.getElementById("um-exportar-todos").addEventListener("click", async () 
 
     doc.save(`pedidos_${estadoActivo}.pdf`);
 });
-
-
 
 });
 

@@ -998,28 +998,9 @@
   <script src="{% static 'js/Admin-Catalogo-link.js' %}"></script>
   <script src="{% static 'js/Admin-registro-empledo.js' %}"></script>
   <script src="{% static 'js/ojo.js' %}"></script>
-  <script>  document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('accessToken');
-      console.log("token", token);
-    });
-  </script>
-<script>document.addEventListener("DOMContentLoaded", () => {
-  const hash = window.location.hash;
-  if (hash === "#section-productos" || hash === "#abrir-productos") {
-    mostrarSeccion("section-productos");
-  }
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const abrir = params.get('abrir');
-    if (abrir === 'section-productos') {
-        mostrarSeccion('section-productos');  // Función que tú ya tienes para mostrar esa sección
-    }
-});
+  <script src="{% static 'js/Admin-section-productos-editar.js' %}"></script>
+  <script>  
 </script>
 
 </body>
-
 </html>
