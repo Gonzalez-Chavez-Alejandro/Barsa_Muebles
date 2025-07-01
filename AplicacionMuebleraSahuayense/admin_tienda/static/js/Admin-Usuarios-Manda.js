@@ -379,6 +379,8 @@ async function generarPDF(pedido) {
     doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
     posY += 7;
     doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+    posY += 7;
+    doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
 
     if (estadoActivo === "todos") {
         posY += 7;
@@ -514,6 +516,8 @@ document.getElementById("um-exportar-todos").addEventListener("click", async () 
         doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
         posY += 7;
         doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+        posY += 7;
+        doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
 
         if (estadoActivo === "todos" && pedido.estado !== "papelera") {
             posY += 7;
