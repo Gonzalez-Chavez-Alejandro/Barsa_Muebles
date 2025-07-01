@@ -9,10 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("accessToken");
   let usuarioActual = null;
   let carritoActual = null;
-  let productoPendiente = null;
-let cantidadPendiente = 1;
-let origenModalUbicacion = null; // puede ser "encargo" o "carrito"
-
 
   // Agregar modal de ubicación
   document.body.insertAdjacentHTML("beforeend", `
@@ -34,62 +30,7 @@ let origenModalUbicacion = null; // puede ser "encargo" o "carrito"
     document.getElementById("modal-ubicacion").style.display = "none";
   });
 
-  document.getElementById("guardar-ubicacion")?.addEventListener("click", async () => {
-  const input = document.getElementById("input-ubicacion").value.trim();
-  if (!input) return alert("Debes ingresar una ubicación.");
 
-  try {
-    const res = await fetch("/api/actualizar-ubicacion/", {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ ubicacionUser: input })
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({}));
-      throw new Error(error.detail || JSON.stringify(error));
-    }
-
-    const userData = await res.json();
-    usuarioActual.ubicacionUser = userData.ubicacionUser;
-
-    // Recarga carrito para tener datos frescos
-    await recargarCarrito();
-
-    document.getElementById("modal-ubicacion").style.display = "none";
-
-    if (origenModalUbicacion === "encargo") {
-      await procesarEncargo();
-    } else if (origenModalUbicacion === "carrito" && productoPendiente) {
-      await agregarAlCarritoAPI(productoPendiente, cantidadPendiente);
-      productoPendiente = null;
-      cantidadPendiente = 1;
-    }
-
-    origenModalUbicacion = null;
-
-  } catch (error) {
-    console.error("Error:", error);
-    alert(`No se pudo guardar la ubicación: ${error.message}`);
-  }
-});
-
-
-async function recargarCarrito() {
-  try {
-    const res = await fetch("/encargos/obtener-carrito/", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    if (!res.ok && res.status !== 204) throw new Error("No se pudo obtener el carrito");
-    carritoActual = (res.status === 204) ? null : await res.json();
-    actualizarCarritoUIAPI();
-  } catch (error) {
-    console.error("Error recargando carrito:", error);
-  }
-}
 
   async function validarTokenYUsuario() {
     if (!token) return renderLoginPrompt();
@@ -273,33 +214,116 @@ async function recargarCarrito() {
     if (carritoContainer?.style) carritoContainer.style.display = "none";
   });
 
-  async function procesarEncargo() {
-    const token = localStorage.getItem("accessToken");
-    if (!token || !carritoActual?.id) {
-      alert("No hay pedido activo para procesar.");
-      return;
-    }
+  document.getElementById("guardar-ubicacion")?.addEventListener("click", async () => {
+    const input = document.getElementById("input-ubicacion").value.trim();
+    if (!input) return alert("Debes ingresar una ubicación.");
+
+    console.log("📍 Ubicación enviada:", input);
 
     try {
-      const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await fetch("/api/actualizar-ubicacion/", {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ubicacionUser: input })
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-        alert("Error al procesar pedido: " + (errorData.detail || "Error desconocido"));
-        return;
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.detail || JSON.stringify(error));
       }
 
-      alert("✅ Pedido procesado con éxito.");
-      carritoActual = null;
-      actualizarCarritoUIAPI();
-      window.location.href = "/configuracion_usuario/#mis-encargos";
-    } catch {
-      alert("Error inesperado al procesar pedido.");
+      // Refrescar los datos del usuario para obtener la ubicación actualizada
+      const resUser = await fetch("/api/user-info/", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!resUser.ok) throw new Error("Error al refrescar datos del usuario");
+
+      usuarioActual = await resUser.json();
+
+      // Ocultar el modal de ubicación
+      document.getElementById("modal-ubicacion").style.display = "none";
+
+      // Si hay productos en el carrito, procesar el encargo
+      if (carritoActual?.productos_encargados?.length) {
+        await procesarEncargo();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`No se pudo guardar la ubicación: ${error.message}`);
     }
+  });
+
+
+
+
+  async function procesarEncargo() {
+  const token = localStorage.getItem("accessToken");
+  if (!token || !carritoActual?.id) {
+    alert("No hay pedido activo para procesar.");
+    return;
   }
+
+  console.log("Objeto usuarioActual completo:", usuarioActual);
+  console.log("ubicacionUser:", usuarioActual.ubicacionUser);
+
+  // Refrescar los datos del usuario para tener la última ubicación
+  const resUser = await fetch("/api/user-info/", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  if (!resUser.ok) throw new Error("Error al refrescar datos del usuario");
+
+  usuarioActual = await resUser.json();
+  console.log("Objeto usuarioActual actualizado:", usuarioActual);
+  console.log("ubicacionUser:", usuarioActual.ubicacionUser);
+
+  // Actualizar la ubicación en el encargo antes de procesar
+  if (usuarioActual.ubicacionUser && usuarioActual.ubicacionUser.trim() !== "") {
+    const resActualizar = await fetch(`/encargos/actualizar-ubicacion/${carritoActual.id}/`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ubicacion_entrega: usuarioActual.ubicacionUser.trim() })
+    });
+
+    if (!resActualizar.ok) {
+      const error = await resActualizar.json().catch(() => ({}));
+      alert("Error al actualizar ubicación: " + (error.detail || "Error desconocido"));
+      return;
+    }
+  } else {
+    alert("Debes ingresar una ubicación válida antes de procesar el pedido.");
+    return;
+  }
+
+  // Finalmente, procesar el pedido
+  try {
+    const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      alert("Error al procesar pedido: " + (errorData.detail || "Error desconocido"));
+      return;
+    }
+
+    alert("✅ Pedido procesado con éxito.");
+    carritoActual = null;
+    actualizarCarritoUIAPI();
+    window.location.href = "/configuracion_usuario/#mis-encargos";
+  } catch {
+    alert("Error inesperado al procesar pedido.");
+  }
+}
+
 
 
   btnEncargar?.addEventListener("click", async () => {
@@ -318,7 +342,6 @@ async function recargarCarrito() {
     const mostrarModal = !ubicacion || (typeof ubicacion === "string" && ubicacion.trim() === "");
 
     if (mostrarModal) {
-      origenModalUbicacion = "encargo";
       document.getElementById("modal-ubicacion").style.display = "flex";
       return;
     }
@@ -334,21 +357,8 @@ async function recargarCarrito() {
     agregarAlCarritoAPI(window.producto, 1);
   });
 
-  async function agregarAlCarritoAPI(producto, cantidad) {
+ async function agregarAlCarritoAPI(producto, cantidad) {
   if (!token) return;
-
-  // Verificar si usuario tiene ubicación
-  const ubicacion = usuarioActual?.ubicacionUser;
-  const mostrarModal = !ubicacion || (typeof ubicacion === "string" && ubicacion.trim() === "");
-
-  if (mostrarModal) {
-    // Guardar producto y cantidad pendientes para usar luego
-    productoPendiente = producto;
-    cantidadPendiente = cantidad;
-    origenModalUbicacion = "carrito";
-    document.getElementById("modal-ubicacion").style.display = "flex";
-    return;
-  }
 
   const precio = parseFloat(producto.precioOferta) > 0
     ? parseFloat(producto.precioOferta)
@@ -356,13 +366,20 @@ async function recargarCarrito() {
 
   try {
     if (!carritoActual?.id) {
+      // Construir el body dinámicamente para evitar ubicacion_entrega vacía
+      const bodyData = { productos: [] };
+
+      if (usuarioActual?.ubicacionUser?.trim()) {
+        bodyData.ubicacion_entrega = usuarioActual.ubicacionUser.trim();
+      }
+
       const res = await fetch("/encargos/crear/", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ productos: [] })
+        body: JSON.stringify(bodyData)
       });
 
       if (!res.ok) {

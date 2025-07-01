@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     let pedidos = [];
     let estadoActivo = "todos";
     let pedidosMostrados = [];
-
+    
     const container = document.getElementById("pedidos-container");
     const inputBuscar = document.getElementById("um-input-buscar");
 
@@ -517,8 +517,10 @@ document.getElementById("um-exportar-todos").addEventListener("click", async () 
         posY += 7;
         doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
         posY += 7;
-        doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
+       doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
+     
 
+posY += 7;
         if (estadoActivo === "todos" && pedido.estado !== "papelera") {
             posY += 7;
             doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);

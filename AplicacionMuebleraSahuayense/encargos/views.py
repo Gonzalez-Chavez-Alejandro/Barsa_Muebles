@@ -19,13 +19,18 @@ def crear_encargo(request):
     usuario = request.user
     productos = request.data.get('productos', [])
     total = 0
+
+    ubicacion_entrega = request.data.get('ubicacion_entrega') or usuario.ubicacionUser or ""
+
+    print(f"Ubicación de entrega asignada: '{ubicacion_entrega}'")
+
     advertencias = []
 
     encargo = Encargo.objects.create(
         usuario=usuario, 
         total=0,
-        ubicacion_entrega=usuario.ubicacionUser
-        )
+        ubicacion_entrega=ubicacion_entrega
+    )
 
     for p in productos:
         producto_id = p.get('producto_id')
@@ -33,14 +38,15 @@ def crear_encargo(request):
         precio_unitario = p.get('precio_unitario')
 
         if producto_id is None or cantidad is None or precio_unitario is None:
-            continue  # Datos incompletos
+            continue
 
         cantidad = int(cantidad)
         precio_unitario = float(precio_unitario)
 
-        # Registrar advertencia si el precio es 0
         if precio_unitario == 0:
-            advertencias.append(f"Producto con ID {producto_id} precio no definido. Póngase en contacto para cotización.")
+            advertencias.append(
+                f"Producto con ID {producto_id} precio no definido. Póngase en contacto para cotización."
+            )
 
         ProductoEncargado.objects.create(
             encargo=encargo,
@@ -53,12 +59,30 @@ def crear_encargo(request):
 
     encargo.total = total
     encargo.save()
+
     serializer = EncargoSerializer(encargo)
 
     return Response({
         "encargo": serializer.data,
         "advertencias": advertencias
     }, status=201)
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from encargos.models import Encargo
+from django.shortcuts import get_object_or_404
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def actualizar_ubicacion_encargo(request, encargo_id):
+    encargo = get_object_or_404(Encargo, id=encargo_id, usuario=request.user)
+    ubicacion = request.data.get('ubicacion_entrega')
+    if ubicacion is None:
+        return Response({"detail": "ubicacion_entrega es requerida."}, status=400)
+    encargo.ubicacion_entrega = ubicacion
+    encargo.save()
+    return Response({"detail": "Ubicación actualizada correctamente."})
 
 
 
