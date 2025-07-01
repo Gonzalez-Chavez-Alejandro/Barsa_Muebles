@@ -21,7 +21,11 @@ def crear_encargo(request):
     total = 0
     advertencias = []
 
-    encargo = Encargo.objects.create(usuario=usuario, total=0)
+    encargo = Encargo.objects.create(
+        usuario=usuario, 
+        total=0,
+        ubicacion_entrega=usuario.ubicacionUser
+        )
 
     for p in productos:
         producto_id = p.get('producto_id')

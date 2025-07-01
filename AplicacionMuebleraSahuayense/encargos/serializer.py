@@ -27,7 +27,7 @@ class EncargoSerializer(serializers.ModelSerializer):
         model = Encargo
         fields = [
             'id', 'usuario', 'usuario_nombre', 'usuario_correo', 'usuario_telefono',
-            'fecha', 'total', 'estado', 'productos_encargados'
+            'fecha', 'total', 'estado','ubicacion_entrega', 'productos_encargados'
         ]
 
 
