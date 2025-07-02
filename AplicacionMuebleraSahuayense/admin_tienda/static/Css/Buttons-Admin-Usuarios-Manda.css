@@ -268,3 +268,51 @@
   background-color: #efebe9;
   color: #6d4c41;
 }
+
+
+
+
+.um-pedido-card {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+/* Colores por estado */
+
+
+.um-pedido-card.estado-pendiente,
+.um-pedido-card.estado-procesado,
+.um-pedido-card.estado-enviado {
+  box-shadow: 0 0 0 3px rgba(14, 12, 3, 0.3); /* color unificado */
+}
+
+
+.um-pedido-card.estado-entregado {
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.4); /* verde */
+}
+
+.um-pedido-card.estado-cancelado {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.507); /* rojo */
+}
+
+.um-pedido-card.estado-papelera {
+  box-shadow: 0 0 0 3px rgba(161, 161, 170, 0.4); /* gris */
+}
+
+.filtro-estado {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Cuando se hace clic (activo) */
+.filtro-estado.active {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}

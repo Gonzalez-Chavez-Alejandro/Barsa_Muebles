@@ -499,13 +499,6 @@ formulario.addEventListener('submit', async (e) => {
     return;
   }
 
-  const telefonoRegex = /^\+?\d{10,15}$/;
-  if (!telefonoRegex.test(telefonoInput.value.trim())) {
-    mostrarErrorToast("El teléfono ingresado no es válido.");
-    mostrarErrorEnSpan('error-telefono', "Debe contener entre 10 y 15 dígitos, opcional el '+'.");
-    telefonoInput.focus();
-    return;
-  }
 
   if (!correoInput.value.trim()) {
     mostrarErrorToast("Por favor ingresa tu correo electrónico.");

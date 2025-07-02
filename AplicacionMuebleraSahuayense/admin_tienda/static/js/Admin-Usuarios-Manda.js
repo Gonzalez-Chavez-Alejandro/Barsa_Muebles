@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", async() => {
         const nombreUsuario = pedido.usuario_nombre || 'Desconocido';
         const correoUsuario = pedido.usuario_correo || 'No proporcionado';
         const telefonoUsuario = pedido.usuario_telefono || 'No proporcionado';
+const btnPapelera = pedido.estado !== 'papelera'
+    ? `<button type="button" class="um-btn-papelera" data-id="${pedido.id}">
+           <i class="fas fa-trash"></i> Papelera
+       </button>`
+    : '';
 
         const productosHTML = (pedido.productos_encargados || []).map(p => {
             const imgUrl = p.imagen || 'https://via.placeholder.com/100';
@@ -63,7 +68,8 @@ document.addEventListener("DOMContentLoaded", async() => {
         ).join('');
 
         return `
-            <article class="um-pedido-card" data-id="${pedido.id}">
+            <article class="um-pedido-card estado-${pedido.estado}" data-id="${pedido.id}">
+
                 <header class="um-pedido-header">
                     <div class="um-pedido-id">#${pedido.id}</div>
                     <time>${new Date(pedido.fecha).toLocaleDateString('es-ES', {
@@ -92,9 +98,8 @@ document.addEventListener("DOMContentLoaded", async() => {
                         ${opcionesEstado}
                     </select>
 
-                    <button type="button" class="um-btn-papelera" data-id="${pedido.id}">
-                    <i class="fas fa-trash"></i> Papelera
-                    </button>
+                    ${btnPapelera}
+
 
 
                     ${btnEliminar}
@@ -193,6 +198,8 @@ document.addEventListener("DOMContentLoaded", async() => {
 
                 const pedido = pedidos.find(p => p.id == pedidoId);
                 if (pedido) pedido.estado = nuevoEstado;
+                renderPedidos(filtrarPedidos());
+
 
                 console.log(`✅ Estado pedido #${pedidoId} actualizado a '${nuevoEstado}'`);
             } catch (error) {
@@ -237,11 +244,12 @@ document.addEventListener("DOMContentLoaded", async() => {
                 const data = await res.json();
                 alert(data.mensaje || "Encargo movido a papelera");
 
-                if (typeof cargarEncargos === "function") {
-                    await cargarEncargos();  // Espera que se recargue correctamente
-                } else {
-                    //location.reload();  // Fallback si no está definida
-                }
+                const index = pedidos.findIndex(p => p.id == encargoId);
+if (index !== -1) {
+    pedidos[index].estado = "papelera";
+    renderPedidos(filtrarPedidos());  // Vuelve a renderizar con los datos actualizados
+}
+
 
             } catch (err) {
                 console.error("Error al mover a papelera:", err);
@@ -646,3 +654,17 @@ document.getElementById('um-exportar-visibles').addEventListener('click', async 
     alert(`✅ Se generaron ${pedidosMostrados.length} PDFs del estado "${estadoActivo}".`);
 });
 */
+
+
+filtros.forEach(filtro => {
+    filtro.addEventListener('click', function () {
+        filtros.forEach(f => f.classList.remove('active'));
+        this.classList.add('active');
+
+        if (this.getAttribute('data-estado') === 'papelera') {
+            btnVaciarPapelera.classList.add('visible');
+        } else {
+            btnVaciarPapelera.classList.remove('visible');
+        }
+    });
+});

@@ -132,25 +132,32 @@
     color: #718096;
     font-size: 0.85rem;
 }
-
 #usuarios-mandas .um-usuario-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 1rem;
 }
 
 #usuarios-mandas .um-info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #4a5568;
-    font-size: 0.9rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.5rem;
+  color: #4a5568;
+  font-size: 0.9rem;
+  word-break: break-word;
+  user-select: text;
 }
 
 #usuarios-mandas .um-fas {
-    color: #718096;
-    width: 1rem;
+  color: #718096;
+  width: 1rem;
+  flex-shrink: 0;
+  user-select: none;
+  font-size: 1rem;
 }
 
 #usuarios-mandas .um-productos-lista {
