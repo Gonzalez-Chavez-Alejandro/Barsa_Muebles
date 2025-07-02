@@ -175,6 +175,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Encargo
+from .utils import enviar_correo_a_empresa
+from .utils_user import enviar_correo_info_footer  # importa la función del nuevo utils_user.py
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -184,15 +187,22 @@ def procesar_pedido(request, encargo_id):
     except Encargo.DoesNotExist:
         return Response({"detail": "Encargo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
-    # Aquí puedes validar si el encargo tiene productos
+    # Validar si el encargo tiene productos
     if not encargo.productos_encargados.exists():
         return Response({"detail": "El encargo está vacío"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Cambiar estado del encargo para marcarlo como procesado
-    encargo.estado = 'procesado'  # Asegúrate que tu modelo tenga este campo y este valor válido
+    encargo.estado = 'procesado'  # Asegúrate que el campo y valor existan en tu modelo
     encargo.save()
 
+    # Enviar correo a la empresa con los detalles del pedido
+    enviar_correo_a_empresa(request.user, encargo)
+
+    # Enviar correo al usuario con info del footer/contacto
+    enviar_correo_info_footer(request.user.email, request.user.username)
+
     return Response({"detail": "Pedido procesado exitosamente"})
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -301,3 +311,6 @@ def cambiar_estado_encargo(request, encargo_id):
 
     serializer = EncargoSerializer(encargo)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+

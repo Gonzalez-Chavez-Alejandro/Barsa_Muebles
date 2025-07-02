@@ -289,6 +289,12 @@ async function generarPDF(encargo) {
   doc.setFont("helvetica", "bold");
   doc.text(`Teléfono: ${usuarioActual?.telefono || 'No especificado'}`, config.margins.left, y);
   y += 15;
+  doc.setFont("helvetica", "bold");
+doc.text("Ubicación de entrega:", config.margins.left, y);
+doc.setFont("helvetica", "normal");
+doc.text(encargo.ubicacion_entrega || 'No especificada', config.margins.left + doc.getTextWidth("Ubicación de entrega: ") + 1, y);
+y += 15;
+
 
   // Detalles del encargo
   doc.setFontSize(18).setTextColor(config.colors.primary).setFont("helvetica", "bold");

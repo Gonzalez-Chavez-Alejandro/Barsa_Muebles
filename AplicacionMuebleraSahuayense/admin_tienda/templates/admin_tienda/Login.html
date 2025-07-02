@@ -1,118 +1,378 @@
 {% load static %}
-
-<script src="{% static 'js/Header.js' %}"></script>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
-  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png"
-    type="image/x-icon">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic/webkit/OpenDyslexic.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/Login.css' %}">
-  <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
-</head>
-
-<body>
+  <link rel="icon" href="https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430696/Logo-Negro-B_c6wznv.png" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic/webkit/OpenDyslexic.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'Css/Principal.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/Header.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/Login.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/foother.css' %}" />
   <style>
     .Home-Categorias {
       background-color: #f8f9fa;
     }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 400px;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
+</head>
+
+<body>
 
   {% include 'includes/header.html' %}
 
   <main>
     {% block content %}
-    <!-- Aquí va el contenido específico de cada página -->
     {% endblock %}
   </main>
 
   <div class="login-container">
     <div class="logo-con-iniciar-secion">
-      <!-- Agrega tu logo aquí -->
       <h1 class="h1-iniciar-secion-login">Iniciar Sesión</h1>
     </div>
 
-
-    <form id="login-form">
+    <form id="login-form" autocomplete="off">
       <div class="input-group">
         <label for="email">Gmail</label>
         <div style="position: relative;">
           <i class="fas fa-user input-icon"></i>
-          <input type="text" class="input-field" id="email" name="correo" placeholder="ejemplo@correo.com" required>
+          <input
+            type="text"
+            class="input-field"
+            id="email"
+            name="correo"
+            placeholder="ejemplo@correo.com"
+            required
+            autocomplete="username"
+          />
         </div>
-        <span id="error-username" class="error-message" style="color: red; font-size: 0.8em; display: none;"></span>
+        <span
+          id="error-username"
+          class="error-message"
+          style="color: red; font-size: 0.8em; display: none;"
+        ></span>
       </div>
 
       <div class="input-group">
         <label for="password">Contraseña</label>
         <div class="password-container">
           <i class="fas fa-lock input-icon"></i>
-          <input type="password" class="input-field" id="password" name="contrasena" placeholder="••••••••" required>
+          <input
+            type="password"
+            class="input-field"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+          />
           <button type="button" class="toggle-password">
             <i class="fas fa-eye-slash"></i>
           </button>
         </div>
-        <span id="error-password" class="error-message" style="color: red; font-size: 0.8em; display: none;"></span>
+        <span
+          id="error-password"
+          class="error-message"
+          style="color: red; font-size: 0.8em; display: none;"
+        ></span>
       </div>
 
-
       <div class="forgot-password">
-        <a href="#" style="display:none;">¿Olvidaste tu contraseña? </a>
+        <a href="#">¿Olvidaste tu contraseña?</a>
       </div>
 
       <button type="submit" class="submit-btn">Ingresar</button>
-
-      <div class="divider" style="display:none;">
-        <div class="divider-line"></div>
-        <span>o continuar con</span>
-        <div class="divider-line"></div>
-      </div>
-
-      <button type="button" class="google-btn" style="display:none;">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path fill="#4285F4"
-            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-          <path fill="#34A853"
-            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-          <path fill="#FBBC05"
-            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-          <path fill="#EA4335"
-            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-        </svg>
-        Google
-      </button>
     </form>
   </div>
 
+  <!-- Modal 1: Solicitar correo -->
+  <div id="modal-solicitar-correo" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modal-solicitar-correo')"
+        >&times;</span
+      >
+      <h2>¿Olvidaste tu contraseña?</h2>
+      <p>Ingresa tu correo y te enviaremos un código de verificación.</p>
+      <input type="email" id="correo-recuperacion" placeholder="Correo electrónico" />
+      <button onclick="enviarCodigoRecuperacion()">Enviar código</button>
+      <p id="mensaje-correo" class="error-message"></p>
+    </div>
+  </div>
 
+  <!-- Modal 2: Verificar código -->
+  <div id="modal-verificar-codigo" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modal-verificar-codigo')"
+        >&times;</span
+      >
+      <h2>Verificación de código</h2>
+      <p>Introduce el código que recibiste por correo.</p>
+      <input type="text" id="codigo-verificacion" placeholder="Código de 6 dígitos" />
+      <button onclick="verificarCodigo()">Verificar código</button>
+      <p id="mensaje-codigo" class="error-message"></p>
+    </div>
+  </div>
 
-
-
-
-
-
-
+  <!-- Modal 3: Nueva contraseña -->
+  <div id="modal-nueva-password" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" onclick="cerrarModal('modal-nueva-password')"
+        >&times;</span
+      >
+      <h2>Establecer nueva contraseña</h2>
+      <form onsubmit="cambiarPassword(); return false;" autocomplete="off">
+        <input
+          type="password"
+          id="nueva-password"
+          placeholder="Nueva contraseña"
+          autocomplete="new-password"
+          required
+        />
+        <input
+          type="password"
+          id="confirmar-password"
+          placeholder="Confirmar contraseña"
+          autocomplete="new-password"
+          required
+        />
+        <button type="submit">Guardar nueva contraseña</button>
+        <p id="mensaje-password" class="error-message"></p>
+      </form>
+    </div>
+  </div>
 
   {% include 'includes/carrito.html' %}
   {% include 'includes/foother.html' %}
   {% include 'includes/toast.html' %}
-    <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
 
+  <script src="{% static 'js/Header.js' %}"></script>
+  <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Carrito.js' %}"></script>
   <script src="{% static 'js/Admin-Manda.js' %}"></script>
   <script src="{% static 'js/Login.js' %}"></script>
+
+<script>
+  const loginForm = document.getElementById("login-form");
+  const errorUsername = document.getElementById("error-username");
+  const errorPassword = document.getElementById("error-password");
+
+  // ------------- LOGIN NORMAL --------------
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorUsername.style.display = "none";
+    errorPassword.style.display = "none";
+
+    const loginData = {
+      username: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+    };
+
+    try {
+      const response = await fetch("/api/login/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const msg = (data.detail || "").toLowerCase();
+        if (msg.includes("usuario") || msg.includes("no encontrado")) {
+          errorUsername.style.display = "block";
+          errorUsername.textContent = data.detail;
+        } else if (msg.includes("contraseña") || msg.includes("password")) {
+          errorPassword.style.display = "block";
+          errorPassword.textContent = data.detail;
+        } else {
+          errorUsername.style.display = "block";
+          errorUsername.textContent = data.detail || "Credenciales inválidas.";
+        }
+        return;
+      }
+
+      // Guarda tokens para uso futuro
+      localStorage.setItem("access_token", data.access);
+localStorage.setItem("refresh_token", data.refresh);
+
+localStorage.setItem("accessToken", data.access);
+localStorage.setItem("refreshToken", data.refresh);
+
+
+      // Obtiene info del usuario con token en Authorization
+      const userRes = await fetch("/api/user-info/", {
+        headers: { Authorization: `Bearer ${data.access}` },
+      });
+
+      if (!userRes.ok) {
+        console.error("Error obteniendo info del usuario");
+        return;
+      }
+
+      const userInfo = await userRes.json();
+
+      // Redirige según rol
+      if (userInfo.is_superuser) {
+        window.location.href = "/administrador";
+      } else {
+        window.location.href = "/configuracion_usuario";
+      }
+    } catch (error) {
+      errorUsername.style.display = "block";
+      errorUsername.textContent = "Error de conexión.";
+    }
+  });
+
+  // ------------- RECUPERAR CONTRASEÑA -------------
+  let emailRecuperacion = "";
+
+  document.querySelector(".forgot-password a").addEventListener("click", () => {
+    abrirModal("modal-solicitar-correo");
+  });
+
+  function abrirModal(id) {
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  function cerrarModal(id) {
+    document.getElementById(id).classList.add("hidden");
+  }
+
+  async function enviarCodigoRecuperacion() {
+    const email = document.getElementById("correo-recuperacion").value.trim();
+    const mensajeCorreo = document.getElementById("mensaje-correo");
+    mensajeCorreo.textContent = "";
+
+    if (!email.endsWith("@gmail.com")) {
+      mensajeCorreo.textContent = "Solo se aceptan correos @gmail.com.";
+      return;
+    }
+
+    try {
+      const res = await fetch("/password_reset/send-code/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        mensajeCorreo.textContent = data.detail || "Correo no encontrado.";
+        return;
+      }
+
+      emailRecuperacion = email;
+      cerrarModal("modal-solicitar-correo");
+      abrirModal("modal-verificar-codigo");
+    } catch (err) {
+      mensajeCorreo.textContent = "Error de red.";
+    }
+  }
+
+  function verificarCodigo() {
+    const code = document.getElementById("codigo-verificacion").value.trim();
+    const mensajeCodigo = document.getElementById("mensaje-codigo");
+    mensajeCodigo.textContent = "";
+
+    if (!/^\d{6}$/.test(code)) {
+      mensajeCodigo.textContent = "El código debe tener 6 dígitos.";
+      return;
+    }
+
+    // Guardar código temporalmente para enviar después
+    localStorage.setItem("codigo_verificacion", code);
+
+    cerrarModal("modal-verificar-codigo");
+    abrirModal("modal-nueva-password");
+  }
+
+  async function cambiarPassword() {
+    const nueva = document.getElementById("nueva-password").value;
+    const confirmar = document.getElementById("confirmar-password").value;
+    const mensajePassword = document.getElementById("mensaje-password");
+    mensajePassword.textContent = "";
+
+    if (nueva !== confirmar) {
+      mensajePassword.textContent = "Las contraseñas no coinciden.";
+      return;
+    }
+
+    if (nueva.length < 6) {
+      mensajePassword.textContent = "Debe tener al menos 6 caracteres.";
+      return;
+    }
+
+    try {
+      const res = await fetch("/password_reset/verify-code/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailRecuperacion,
+          code: localStorage.getItem("codigo_verificacion"),
+          new_password: nueva,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        mensajePassword.textContent = data.detail || "No se pudo cambiar la contraseña.";
+        return;
+      }
+
+      cerrarModal("modal-nueva-password");
+      alert("✅ Contraseña actualizada correctamente.");
+
+      // Opcional: limpiar localStorage del código después de éxito a247wolf247a@gmail.com
+      localStorage.removeItem("codigo_verificacion");
+    } catch (err) {
+      mensajePassword.textContent = "Error en el servidor.";
+    }
+  }
+</script>
+
+
 </body>
 
 </html>

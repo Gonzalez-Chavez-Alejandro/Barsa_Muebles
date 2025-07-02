@@ -267,42 +267,40 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  console.log("Objeto usuarioActual completo:", usuarioActual);
-  console.log("ubicacionUser:", usuarioActual.ubicacionUser);
-
-  // Refrescar los datos del usuario para tener la última ubicación
+  // Refrescar los datos del usuario
   const resUser = await fetch("/api/user-info/", {
     headers: { Authorization: `Bearer ${token}` }
   });
 
-  if (!resUser.ok) throw new Error("Error al refrescar datos del usuario");
+  if (!resUser.ok) {
+    alert("Error al refrescar los datos del usuario.");
+    return;
+  }
 
   usuarioActual = await resUser.json();
-  console.log("Objeto usuarioActual actualizado:", usuarioActual);
-  console.log("ubicacionUser:", usuarioActual.ubicacionUser);
 
-  // Actualizar la ubicación en el encargo antes de procesar
-  if (usuarioActual.ubicacionUser && usuarioActual.ubicacionUser.trim() !== "") {
-    const resActualizar = await fetch(`/encargos/actualizar-ubicacion/${carritoActual.id}/`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ ubicacion_entrega: usuarioActual.ubicacionUser.trim() })
-    });
-
-    if (!resActualizar.ok) {
-      const error = await resActualizar.json().catch(() => ({}));
-      alert("Error al actualizar ubicación: " + (error.detail || "Error desconocido"));
-      return;
-    }
-  } else {
+  if (!usuarioActual.ubicacionUser || usuarioActual.ubicacionUser.trim() === "") {
     alert("Debes ingresar una ubicación válida antes de procesar el pedido.");
     return;
   }
 
-  // Finalmente, procesar el pedido
+  // Actualizar ubicación en el encargo
+  const resActualizar = await fetch(`/encargos/actualizar-ubicacion/${carritoActual.id}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ ubicacion_entrega: usuarioActual.ubicacionUser.trim() })
+  });
+
+  if (!resActualizar.ok) {
+    const error = await resActualizar.json().catch(() => ({}));
+    alert("Error al actualizar ubicación: " + (error.detail || "Error desconocido"));
+    return;
+  }
+
+  // Procesar el pedido
   try {
     const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
       method: "POST",
@@ -315,14 +313,38 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    alert("✅ Pedido procesado con éxito.");
+    // Obtener información de contacto del footer
+    let mensaje = "✅ Pedido procesado con éxito.\n\n";
+    mensaje += "📦 Puedes contactarnos para verificar tu pedido, ver si tiene coste de envio o consultar sobre precios por mayoreo:\n\n";
+
+    try {
+      const footerRes = await fetch("/api/footer/");
+      if (footerRes.ok) {
+        const footerData = await footerRes.json();
+
+        if (footerData.emails?.length) {
+          mensaje += "📧 Correos:\n" + footerData.emails.map(e => `  - ${e}`).join("\n") + "\n";
+        }
+        if (footerData.phones?.length) {
+          mensaje += "📱 Teléfonos:\n" + footerData.phones.map(p => `  - ${p}`).join("\n") + "\n";
+        }
+        if (footerData.locations?.length) {
+          mensaje += "📍 Direcciones:\n" + footerData.locations.map(l => `  - ${l}`).join("\n") + "\n";
+        }
+      }
+    } catch (error) {
+      console.warn("No se pudo cargar información del footer:", error);
+    }
+
+    alert(mensaje);
     carritoActual = null;
     actualizarCarritoUIAPI();
     window.location.href = "/configuracion_usuario/#mis-encargos";
-  } catch {
+  } catch (error) {
     alert("Error inesperado al procesar pedido.");
   }
 }
+
 
 
 

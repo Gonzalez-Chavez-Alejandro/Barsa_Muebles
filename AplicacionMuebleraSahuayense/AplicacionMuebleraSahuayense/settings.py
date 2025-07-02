@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'encargos',
     'footer',
     'catalogos',
+    'password_reset',
 ]
 AUTH_USER_MODEL = 'autentication.CustomUser'
 
@@ -181,3 +182,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'imgbarsamueblespaginaweb@gmail.com'  # Reemplaza con tu correo real
+EMAIL_HOST_PASSWORD = 'bshomfbgadhqwyda'  # Tu clave de aplicación sin espacios
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
