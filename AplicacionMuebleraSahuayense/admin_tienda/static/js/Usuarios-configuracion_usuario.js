@@ -134,21 +134,30 @@ const telefonoUsuario = encargo.usuario_telefono || 'No especificado';
         <div class="encargo-header">
        
           <div>
-            <h3>Encargo #${idDisplay}</h3>
-             <div class="um-usuario-info">
-    <div class="um-info-item"><i class="fas fa-user um-fas"></i> ${nombreUsuario}</div>
-    <div class="um-info-item"><i class="fas fa-envelope um-fas"></i> ${correoUsuario}</div>
-    <div class="um-info-item"><i class="fas fa-phone um-fas"></i> ${telefonoUsuario}</div>
-    <div class="um-info-item"><i class="fas fa-map-marker-alt um-fas"></i> ${encargo.ubicacion_entrega || 'No especificada'}</div>
-  </div>
+            <h3 class="h3-encargo">Encargo #${idDisplay} <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span></h3>
+              <div class="um-usuario-info">
+                <div class="um-info-item" title="${nombreUsuario}">
+                  <i class="fas fa-user um-fas"></i> ${nombreUsuario}
+                </div>
+                <div class="um-info-item" title="${correoUsuario}">
+                  <i class="fas fa-envelope um-fas"></i> ${correoUsuario}
+                </div>
+                <div class="um-info-item" title="${telefonoUsuario}">
+                  <i class="fas fa-phone um-fas"></i> ${telefonoUsuario}
+                </div>
+                <div class="um-info-item" title="${encargo.ubicacion_entrega || 'No especificada'}">
+                  <i class="fas fa-map-marker-alt um-fas"></i> ${encargo.ubicacion_entrega || 'No especificada'}
+              </div>
+            </div>
+
             <h3>Estado:
               <p class="encargo-estado estado-${estadoMostrar.toLowerCase()}">
                 <strong>${estadoMostrar.charAt(0).toUpperCase() + estadoMostrar.slice(1)}</strong>
               </p>
-              <small class="encargo-id">${encargoId}</small>
+             
             </h3>
           </div>
-          <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
+          
         </div>
 
         <div class="encargo-productos">${productosHTML}</div>
