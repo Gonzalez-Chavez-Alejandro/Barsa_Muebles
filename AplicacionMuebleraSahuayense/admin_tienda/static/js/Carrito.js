@@ -366,12 +366,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   try {
     if (!carritoActual?.id) {
-      // Construir el body dinámicamente para evitar ubicacion_entrega vacía
-      const bodyData = { productos: [] };
+      // ✅ Verificar que el usuario tenga una ubicación válida
+      const ubicacion = usuarioActual?.ubicacionUser?.trim();
 
-      if (usuarioActual?.ubicacionUser?.trim()) {
-        bodyData.ubicacion_entrega = usuarioActual.ubicacionUser.trim();
-      }
+     
+
+      // Construir el body solo si hay ubicación
+      const bodyData = {
+        ubicacion_entrega: ubicacion,
+        productos: []
+      };
 
       const res = await fetch("/encargos/crear/", {
         method: "POST",
@@ -423,6 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("❌ Ocurrió un error al agregar el producto.");
   }
 }
+
 
 
   validarTokenYUsuario();

@@ -74,11 +74,13 @@ async function cargarEncargosUsuario() {
 
     if (!res.ok) throw new Error('Error al cargar encargos');
 
-    const encargosUsuario = await res.json();
-    const contenedor = document.getElementById('lista-encargos');
+    const encargosUsuario = await res.json(); // <-- Falta esta línea para obtener los datos
+    const contenedor = document.getElementById('lista-encargos'); // <-- Falta obtener el contenedor
     contenedor.innerHTML = '';
 
-    if (!Array.isArray(encargosUsuario) || encargosUsuario.length === 0) {
+    const encargosFiltrados = encargosUsuario.filter(encargo => encargo.estado !== 'carrito');
+
+    if (!Array.isArray(encargosFiltrados) || encargosFiltrados.length === 0) {
       contenedor.innerHTML = `
         <div class="encargo-card">
           <p class="messaje-no-tienes-encargos-registrados">
@@ -88,7 +90,16 @@ async function cargarEncargosUsuario() {
       return;
     }
 
-    encargosUsuario.forEach(encargo => {
+    encargosFiltrados.forEach(encargo => {
+      const tieneProductoSinPrecio = (encargo.productos_encargados || []).some(item => {
+  const precio = Number(item.producto?.priceFurniture || 0);
+  return precio === 0;
+});
+
+const totalHTML = tieneProductoSinPrecio
+  ? `<div class="encargo-total" style="color: red"><strong>Total:</strong> Póngase en contacto con la empresa</div>`
+  : `<div class="encargo-total">Total: $${Number(encargo.total).toFixed(2)}</div>`;
+
       const productosHTML = (encargo.productos_encargados || []).map(item => {
         const producto = item.producto || {};
         const imagen = item.imagen || 'https://via.placeholder.com/100';
@@ -104,8 +115,7 @@ async function cargarEncargosUsuario() {
             <div>
               <p><strong>${nombre}</strong></p>
               <p>Cantidad: ${cantidad}</p>
-              <p>Precio original: ${precioOriginal === 0 ? 'Póngase en contacto con la empresa' : `$${precioOriginal.toFixed(2)}`
-          }</p>
+              <p>Precio original: ${precioOriginal === 0 ? 'Póngase en contacto con la empresa' : `$${precioOriginal.toFixed(2)}`}</p>
               <p>Descuento: ${porcentajeDescuento}%</p>
               <p>Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
             </div>
@@ -117,25 +127,36 @@ async function cargarEncargosUsuario() {
       const encargoId = encargo.id.toString();
       const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
       const estadoMostrar = (encargo.estado === 'procesado') ? 'procesando' : (encargo.estado || 'desconocido');
-
-      // Aquí se añade el estado visible en la cabecera
+const nombreUsuario = encargo.usuario_nombre || 'No especificado';
+const correoUsuario = encargo.usuario_correo || 'No especificado';
+const telefonoUsuario = encargo.usuario_telefono || 'No especificado';
       encargoElement.innerHTML = `
         <div class="encargo-header">
+       
           <div>
             <h3>Encargo #${idDisplay}</h3>
+             <div class="um-usuario-info">
+    <div class="um-info-item"><i class="fas fa-user um-fas"></i> ${nombreUsuario}</div>
+    <div class="um-info-item"><i class="fas fa-envelope um-fas"></i> ${correoUsuario}</div>
+    <div class="um-info-item"><i class="fas fa-phone um-fas"></i> ${telefonoUsuario}</div>
+    <div class="um-info-item"><i class="fas fa-map-marker-alt um-fas"></i> ${encargo.ubicacion_entrega || 'No especificada'}</div>
+  </div>
             <h3>Estado:
-            <p class="encargo-estado estado-${estadoMostrar.toLowerCase()}">
-  <strong>${estadoMostrar.charAt(0).toUpperCase() + estadoMostrar.slice(1)}</strong>
-</p>
-
-            <small class="encargo-id">${encargoId}</small>
+              <p class="encargo-estado estado-${estadoMostrar.toLowerCase()}">
+                <strong>${estadoMostrar.charAt(0).toUpperCase() + estadoMostrar.slice(1)}</strong>
+              </p>
+              <small class="encargo-id">${encargoId}</small>
             </h3>
-
           </div>
           <span class="encargo-fecha">${new Date(encargo.fecha).toLocaleDateString()}</span>
         </div>
+
         <div class="encargo-productos">${productosHTML}</div>
-        <div class="encargo-total">Total: $${Number(encargo.total).toFixed(2)}</div>
+
+        
+
+        ${totalHTML}
+
         <div class="encargo-acciones">
           <button class="btn-pdf" data-encargo='${encodeURIComponent(JSON.stringify(encargo))}'>
             <i class="fas fa-file-pdf"></i> PDF
@@ -153,6 +174,7 @@ async function cargarEncargosUsuario() {
     alert('Error al cargar los encargos del usuario.');
   }
 }
+
 
 
 

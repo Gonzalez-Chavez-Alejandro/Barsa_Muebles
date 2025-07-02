@@ -351,14 +351,7 @@
           border: 1px solid #e2e8f0;
         }
 
-        .encargo-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-          border-bottom: 2px solid #f1f5f9;
-          padding-bottom: 0.5rem;
-        }
+      
 
         .encargo-id {
           font-size: 0.9rem;
