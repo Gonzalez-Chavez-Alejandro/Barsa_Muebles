@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
-      alert("No puedes encargar sin productos.");
+      mostrarToast("No puedes encargar sin productos.", "error");
       return;
     }
 
@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
     if (!window.producto?.id) {
-      alert("⚠️ Producto no cargado aún.");
+     mostrarToast("Producto no cargado aún.", "warning");
       return;
     }
     agregarAlCarritoAPI(window.producto, 1);

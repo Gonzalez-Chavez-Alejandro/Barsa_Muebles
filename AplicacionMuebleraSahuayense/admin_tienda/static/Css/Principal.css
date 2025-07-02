@@ -8,6 +8,12 @@ html,
 body {
   height: 100%;
 }
+html, body {
+  height: 100%;
+  overflow-y: auto; /* activa scroll vertical */
+  margin: 0;
+  padding: 0;
+}
 
 body {
   background: #f3f3f4;

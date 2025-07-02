@@ -10,15 +10,27 @@ main {
 
 /* Estilos del header */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 0 38px;
-    border-bottom: 1px solid #ccc;
-    position: relative;
-    height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  flex-wrap: wrap;
 }
+.menu-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+#menu-elements {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
 
 /* Logo */
 .logo img {
@@ -194,10 +206,10 @@ nav ul li a.contact:hover {
 
 /* Botón de carrito */
 .btn-carrito {
-    background-color: #e69500;
-    color: white;
-    border: none;
-    padding: 10px 18px;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
+    padding: 0.5rem 0.8rem;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
@@ -205,14 +217,34 @@ nav ul li a.contact:hover {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .btn-carrito:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+   
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
 }
+/* Brillo del contador al pasar el mouse */
+.btn-carrito:hover .carrito-contador,
+.btn-carrito:focus .carrito-contador {
+    background-color: #FFFFFF;
+    color: #000000;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
+                0 0 14px rgba(255, 255, 255, 0.5);
+}
+
+.header_usuario_carrito {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* O space-between si quieres separar nav y usuario/carrito */
+  gap: 20px; /* Espacio entre usuario y carrito */
+  padding: 10px 20px;
+  position: relative;
+}
+
 
 /* Contenedor de usuario y carrito */
 .usuario-carrito {
@@ -240,7 +272,9 @@ img.Barsa-Muebles-Principio-hero {
     margin: 0 0 230px 24px;
 }
 
-
+header {
+    border-bottom: 2px solid #d2caca;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -260,6 +294,14 @@ img.Barsa-Muebles-Principio-hero {
     .btn-carrito span {
         display: none;
     }
+    #menu-elements {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 1rem;
+}
 
     .btn-carrito {
         background-color: #e6e6e6;

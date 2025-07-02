@@ -1,31 +1,52 @@
- <style>
-        /* Opcional: en tu CSS */
-        #toast.success {
-            background-color: #2ecc71;
-        }
+<style>
+    #toast.success { background-color: #2ecc71; }
+    #toast.error { background-color: #e74c3c; }
+    #toast.info { background-color: #3498db; }
+    #toast.warning { background-color: #f39c12; }
+  #toast.success #toastIcon {
+  color: #2ecc71;
+}
 
-        #toast.error {
-            background-color: #e74c3c;
-        }
+#toast.error #toastIcon {
+  color: #e74c3c;
+}
 
-        #toast.info {
-            background-color: #3498db;
-        }
+#toast.info #toastIcon {
+  color: #3498db;
+}
 
-        #toast {
-            pointer-events: none;
-        }
+#toast.warning #toastIcon {
+  color: #f39c12;
+}
+    #toast {
+        pointer-events: none;
+    }
 
-        #toast.visible {
-            pointer-events: auto;
-        }
-    </style>
-    <div id="toast" style="
+    #toast.visible {
+        pointer-events: auto;
+    }
+
+    /* Estilo para el icono circular blanco */
+    #toastIcon {
+        background-color: #ffffff;
+        color: inherit;
+        border-radius: 50%;
+        padding: 6px;
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+
+<div id="toast" style="
   display: none;
   position: fixed;
   top: 20px;
   right: 20px;
-  
   color: #fff;
   padding: 12px 20px;
   border-radius: 8px;
@@ -37,8 +58,7 @@
   align-items: center;
   gap: 10px;
   opacity: 0;
-  transition: opacity 0.3s ease;
-">
-        <i id="toastIcon" class="fas fa-info-circle"></i>
-        <span id="toastMessage">Mensaje</span>
-    </div>
+  transition: opacity 0.3s ease;">
+    <i id="toastIcon" class="fas fa-info-circle"></i>
+    <span id="toastMessage">Mensaje</span>
+</div>

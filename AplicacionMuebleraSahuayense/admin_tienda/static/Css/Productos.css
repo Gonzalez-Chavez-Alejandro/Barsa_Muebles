@@ -401,6 +401,7 @@ p#detalle-ahorro,
         width: 100%;
         border-right: none;
         border-bottom: 1px solid #ddd;
+        margin-top: 1rem;
     }
 
     .sidebar ul {
