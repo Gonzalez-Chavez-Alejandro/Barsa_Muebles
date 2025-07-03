@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
       carritoActual = await res.json();
       actualizarCarritoUIAPI();
     } catch (error) {
-      alert("❌ Error inesperado al actualizar cantidad.");
+      alert("❌ Error inesperado al actualizar cantidad.");//aqui
     }
   }
 

@@ -75,7 +75,6 @@ window.usuarios = [
 ];
 */
 
-
 function editarProducto(producto) {
   localStorage.setItem("productoEditar", JSON.stringify(producto));
 }

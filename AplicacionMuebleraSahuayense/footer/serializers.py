@@ -1,3 +1,4 @@
+#serializer/foother
 from rest_framework import serializers
 from .models import FooterData
 

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{% static 'Css/Modal-Agregar-Producto.css' %}" />
 </head>
 <body>
+     {% include 'includes/spinner.html' %}
 <header>
     <div class="agregar-producto-breadcrumb-container">
         <div class="agregar-producto-breadcrumb">
@@ -31,7 +32,7 @@
     <form id="form-agregar-producto" enctype="multipart/form-data" class="form-agregar-producto">
 
         <label for="nameFurniture">Nombre:</label><br>
-        <input type="text" name="nameFurniture" id="nameFurniture" oninput="this.value = this.value.replace(/[A-Za-z]/g, '')"/>
+        <input type="text" name="nameFurniture" id="nameFurniture" />
         <span class="error-text" id="error-nameFurniture"></span>
         <br />
 
@@ -145,8 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('form-agregar-producto');
 
     form.addEventListener('submit', async (e) => {
+        
         e.preventDefault();
-
+        mostrarSpinner();
         // Limpiar errores anteriores
         document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
         const descuento = document.getElementById('priceFurniture').value.trim()!="0"? document.getElementById('porcentajeDescuento').value.trim(): 0
@@ -168,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < files.length; i++) {
             formData.append('imageFurniture', files[i]);
         }
-
+       
         try {
             const response = await fetch('/productos/api/vista_agregar_producto/', {
                 method: 'POST',
@@ -178,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: formData
             });
-
+            
             const result = await response.json();
 
             if (!response.ok) {
@@ -191,13 +193,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert("Error al agregar producto.");
                 }
             } else {
-                alert("Producto agregado correctamente");
+              //  alert("Producto agregado correctamente");
                 window.location.href = "/productos/administrador_agregar_producto/";  // Cambia la URL a donde quieras redirigir
             }
         } catch (error) {
             console.error("Error en la petición:", error);
             alert("Error al procesar la solicitud.");
-        }
+        }finally {
+        ocultarSpinner(); 
+    }
+
     });
 
     // Preview imágenes

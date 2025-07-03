@@ -4,7 +4,7 @@ from django.urls import path
 from .views import ActualizarUbicacionView, CrearSuperUserAPIView, CustomTokenObtainPairView, RegisterView, ListUsersView, UserDetailView
 from rest_framework_simplejwt.views import TokenRefreshView
 from autentication.retorna_datos import UserInfoView
-
+from rest_framework_simplejwt.views import TokenObtainPairView
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='registerUser'),
     path('login/', CustomTokenObtainPairView.as_view(), name='login'),  # <-- aquí usas tu view
@@ -20,4 +20,5 @@ from .views import VerificarPasswordView
 urlpatterns += [
     path('verificar-password/', VerificarPasswordView.as_view(), name='verificar-password'),
     path('actualizar-ubicacion/', ActualizarUbicacionView.as_view()),
+     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]

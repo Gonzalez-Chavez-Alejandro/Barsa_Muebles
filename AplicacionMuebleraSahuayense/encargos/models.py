@@ -20,7 +20,7 @@ class Encargo(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS, default='carrito')
     ubicacion_entrega = models.TextField(blank=True, null=True)
 
-    history = HistoricalRecords()  # Aquí agregas historial
+    history = HistoricalRecords()  
 
     def __str__(self):
         return f"Encargo #{self.id} de {self.usuario.username} - Estado: {self.get_estado_display()}"

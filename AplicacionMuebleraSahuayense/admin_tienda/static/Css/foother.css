@@ -9,7 +9,6 @@ footer {
     margin-top: 1px;
     line-clamp: initial;
 }
-
 /* Contenedor principal con Grid */
 .footer-container {
     display: grid;
@@ -237,7 +236,6 @@ footer {
     cursor: pointer;
     /* vuelve cursor pointer solo al hover */
 }
-
 ul#dynamic-emails {
     margin: 0 0 0 34px;
 }

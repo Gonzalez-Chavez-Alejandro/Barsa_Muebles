@@ -4,8 +4,8 @@ from .models import Encargo, ProductoEncargado
 from productos.serializer import ProductoSerializer
 
 class ProductoEncargadoSerializer(serializers.ModelSerializer):
-    producto = ProductoSerializer()  # Incluye datos completos del producto
-    imagen = serializers.SerializerMethodField()  # <- necesitas declarar esto
+    producto = ProductoSerializer()  
+    imagen = serializers.SerializerMethodField()  
 
     class Meta:
         model = ProductoEncargado
@@ -20,7 +20,7 @@ class EncargoSerializer(serializers.ModelSerializer):
     productos_encargados = ProductoEncargadoSerializer(many=True, read_only=True)
     usuario_nombre = serializers.CharField(source='usuario.username', read_only=True)
     usuario_correo = serializers.CharField(source='usuario.email', read_only=True)
-    usuario_telefono = serializers.CharField(source='usuario.phoneUser', read_only=True)  # Ajusta nombre si es distinto
+    usuario_telefono = serializers.CharField(source='usuario.phoneUser', read_only=True)  
     ubicacion_entrega = serializers.CharField(read_only=True)
 
     class Meta:
