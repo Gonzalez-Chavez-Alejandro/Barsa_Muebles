@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Error al actualizar ubicación: " + (error.detail || "Error desconocido"));
     return;
   }
-
+  mostrarSpinner();
   // Procesar el pedido
   try {
     const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
