@@ -133,7 +133,7 @@
       <h2>¿Olvidaste tu contraseña?</h2>
       <p>Ingresa tu correo y te enviaremos un código de verificación.</p>
       <input type="email" id="correo-recuperacion" placeholder="Correo electrónico" />
-      <button onclick="enviarCodigoRecuperacion()">Enviar código</button>
+      <button id="btn_EnviarCodigo" onclick="enviarCodigoRecuperacion()">Enviar código</button>
       <p id="mensaje-correo" class="error-message"></p>
     </div>
   </div>
@@ -192,76 +192,78 @@
   <script src="{% static 'js/Login.js' %}"></script>
 
 <script>
+
   const loginForm = document.getElementById("login-form");
   const errorUsername = document.getElementById("error-username");
   const errorPassword = document.getElementById("error-password");
 
   // ------------- LOGIN NORMAL --------------
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    errorUsername.style.display = "none";
-    errorPassword.style.display = "none";
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  errorUsername.style.display = "none";
+  errorPassword.style.display = "none";
 
-    const loginData = {
-      username: document.getElementById("email").value,
-      password: document.getElementById("password").value,
-    };
+  const loginData = {
+    username: document.getElementById("email").value,
+    password: document.getElementById("password").value,
+  };
 
-    try {
-      const response = await fetch("/api/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(loginData),
-      });
+  try {
+    const response = await fetch("/api/login/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(loginData),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
+    console.log("data.detail", data.detail);
 
-      if (!response.ok) {
-        const msg = (data.detail || "").toLowerCase();
-        if (msg.includes("usuario") || msg.includes("no encontrado")) {
-          errorUsername.style.display = "block";
-          errorUsername.textContent = data.detail;
-        } else if (msg.includes("contraseña") || msg.includes("password")) {
-          errorPassword.style.display = "block";
-          errorPassword.textContent = data.detail;
-        } else {
-          errorUsername.style.display = "block";
-          errorUsername.textContent = data.detail || "Credenciales inválidas.";
-        }
-        return;
-      }
+    if (!response.ok) {
+      const msg = data.username?.[0] || data.password?.[0] || data.detail || "Credenciales inválidas.";
 
-      // Guarda tokens para uso futuro
-      localStorage.setItem("access_token", data.access);
-localStorage.setItem("refresh_token", data.refresh);
-
-localStorage.setItem("accessToken", data.access);
-localStorage.setItem("refreshToken", data.refresh);
-
-
-      // Obtiene info del usuario con token en Authorization
-      const userRes = await fetch("/api/user-info/", {
-        headers: { Authorization: `Bearer ${data.access}` },
-      });
-
-      if (!userRes.ok) {
-        console.error("Error obteniendo info del usuario");
-        return;
-      }
-
-      const userInfo = await userRes.json();
-
-      // Redirige según rol
-      if (userInfo.is_superuser) {
-        window.location.href = "/administrador";
+      if (data.username?.length) {
+        errorUsername.style.display = "block";
+        errorUsername.textContent = msg;
+      } else if (data.password?.length) {
+        errorPassword.style.display = "block";
+        errorPassword.textContent = msg;
       } else {
-        window.location.href = "/configuracion_usuario";
+        errorUsername.style.display = "block";
+        errorUsername.textContent = msg;
       }
-    } catch (error) {
-      errorUsername.style.display = "block";
-      errorUsername.textContent = "Error de conexión.";
+
+      return;
     }
-  });
+
+    // Autenticación correcta: guardar token y redirigir
+    //localStorage.setItem("accessToken", data.access);
+    //localStorage.setItem("refreshToken", data.refresh);
+
+    const userRes = await fetch("/api/user-info/", {
+      headers: { Authorization: `Bearer ${data.access}` },
+    });
+
+    if (!userRes.ok) {
+      console.error("Error obteniendo info del usuario");
+      return;
+    }
+    localStorage.setItem('access_token', data.access);
+    localStorage.setItem('accessToken', data.access);
+    localStorage.setItem('refreshToken', data.refresh);
+
+    const userInfo = await userRes.json();
+
+    if (userInfo.is_superuser) {
+      window.location.href = "/administrador";
+    } else {
+      window.location.href = "/configuracion_usuario";
+    }
+  } catch (error) {
+    console.error("Error de conexión:", error);
+    errorUsername.style.display = "block";
+    errorUsername.textContent = "Error de conexión: " + error.message;
+  }
+});
 
   // ------------- RECUPERAR CONTRASEÑA -------------
   let emailRecuperacion = "";
@@ -281,7 +283,10 @@ localStorage.setItem("refreshToken", data.refresh);
   async function enviarCodigoRecuperacion() {
     const email = document.getElementById("correo-recuperacion").value.trim();
     const mensajeCorreo = document.getElementById("mensaje-correo");
+    const button = document.getElementById("btn_EnviarCodigo");
     mensajeCorreo.textContent = "";
+    button.textContent = "Enviando..."
+
 
     if (!email.endsWith("@gmail.com")) {
       mensajeCorreo.textContent = "Solo se aceptan correos @gmail.com.";
@@ -303,11 +308,13 @@ localStorage.setItem("refreshToken", data.refresh);
       }
 
       emailRecuperacion = email;
+      //
       cerrarModal("modal-solicitar-correo");
       abrirModal("modal-verificar-codigo");
     } catch (err) {
       mensajeCorreo.textContent = "Error de red.";
     }
+    button.textContent = "Enviar código"
   }
 
   function verificarCodigo() {

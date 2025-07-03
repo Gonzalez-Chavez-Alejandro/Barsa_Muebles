@@ -8,7 +8,7 @@ urlpatterns = [
     path('productos/', include('productos.urls')),
     path('encargos/', include('encargos.urls')),
     path('api/footer/', include('footer.urls')),
-     path('catalogos/', include('catalogos.urls')),
+    path('catalogos/', include('catalogos.urls')),
     path('password_reset/', include('password_reset.urls')),
 
 

@@ -31,7 +31,7 @@
     <form id="form-agregar-producto" enctype="multipart/form-data" class="form-agregar-producto">
 
         <label for="nameFurniture">Nombre:</label><br>
-        <input type="text" name="nameFurniture" id="nameFurniture" />
+        <input type="text" name="nameFurniture" id="nameFurniture" oninput="this.value = this.value.replace(/[A-Za-z]/g, '')"/>
         <span class="error-text" id="error-nameFurniture"></span>
         <br />
 
@@ -46,7 +46,7 @@
         <br />
 
         <label for="porcentajeDescuento">Porcentaje de descuento:</label><br>
-        <input type="number" name="porcentajeDescuento" id="porcentajeDescuento" min="0" max="100" value="0" />
+        <input type="number" name="porcentajeDescuento" id="porcentajeDescuento" min="0" max="100" value="0" oninput="validarDescuento(this)" />
         <span class="error-text" id="error-porcentajeDescuento"></span>
         <br />
 
@@ -81,6 +81,17 @@
     <div class="footer"></div>
 </footer>
 <script>
+      function validarDescuento(input) {
+    let valor = parseInt(input.value, 10);
+
+    if (isNaN(valor)) {
+      input.value = '';
+    } else if (valor < 0) {
+      input.value = 0;
+    } else if (valor > 100) {
+      input.value = 100;
+    }
+  }
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -138,12 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Limpiar errores anteriores
         document.querySelectorAll('.error-text').forEach(el => el.textContent = '');
-
+        const descuento = document.getElementById('priceFurniture').value.trim()!="0"? document.getElementById('porcentajeDescuento').value.trim(): 0
+        console.log("descuento",descuento)
         const formData = new FormData();
         formData.append('nameFurniture', document.getElementById('nameFurniture').value.trim());
         formData.append('descriptionFurniture', document.getElementById('descriptionFurniture').value.trim());
         formData.append('priceFurniture', document.getElementById('priceFurniture').value.trim());
-        formData.append('porcentajeDescuento', document.getElementById('porcentajeDescuento').value.trim());
+        formData.append('porcentajeDescuento', descuento);
         formData.append('stateFurniture', document.getElementById('stateFurniture').checked ? 'on' : 'off');
 
         // Categorías - aquí se envían múltiples inputs con mismo nombre 'categoryID'
