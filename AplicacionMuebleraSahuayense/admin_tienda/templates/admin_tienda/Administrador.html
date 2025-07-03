@@ -807,22 +807,26 @@
       </div>
     </div>
   </div>
-<script>document.getElementById('subirImagen').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  const previewImg = document.getElementById('vistaPreviaAgregarImagen');
+<script>document.addEventListener('DOMContentLoaded', () => {
+  
+  document.getElementById('subirImagen').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    const previewImg = document.getElementById('vistaPreviaAgregarImagen');
 
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      previewImg.src = event.target.result;
-      previewImg.style.display = 'block'; // Mostrar la imagen
-    };
-    reader.readAsDataURL(file);
-  } else {
-    previewImg.src = '';
-    previewImg.style.display = 'none'; // Ocultar si no hay imagen
-  }
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        previewImg.src = event.target.result;
+        previewImg.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+    }
+  });
 });
+
 </script>
   <!-- ------------------------------------------------ -->
   <!-- Modal Editar Categoría -->

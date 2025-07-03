@@ -184,6 +184,9 @@ function cerrarModalAgregarCategoria() {
   document.getElementById('nombreCategoria').value = '';
   document.getElementById('descripcionCategoria').value = '';
   document.getElementById('subirImagen').value = '';
+  const previewImg = document.getElementById('vistaPreviaAgregarImagen');
+  previewImg.src = '';
+  previewImg.style.display = 'none';
 }
 
 // Abrir modal para editar categoría
@@ -370,16 +373,7 @@ async function eliminarCategoria(nombreCategoria) {
 }
 
 // Mostrar vista previa de imagen al seleccionar
-document.getElementById('subirImagen').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      // Puedes mostrar la vista previa aquí si agregas un elemento img al modal de agregar
-    };
-    reader.readAsDataURL(file);
-  }
-});
+
 
 document.getElementById('editarImagenArchivo').addEventListener('change', function (e) {
   const file = e.target.files[0];
@@ -460,6 +454,7 @@ mostrarSpinner();
     errorMensaje('Error inesperado al eliminar');
   }finally {
     ocultarSpinner();  // 👈 Siempre ocultar al final
+    
   }
 }
 
