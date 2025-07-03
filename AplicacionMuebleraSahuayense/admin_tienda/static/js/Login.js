@@ -92,7 +92,7 @@ loginForm.addEventListener("submit", async (e) => {
     const button = document.getElementById("btn_EnviarCodigo");
     mensajeCorreo.textContent = "";
     button.textContent = "Enviando..."
-
+     mostrarSpinner();
 
     if (!email.endsWith("@gmail.com")) {
       mensajeCorreo.textContent = "Solo se aceptan correos @gmail.com.";
@@ -100,12 +100,13 @@ loginForm.addEventListener("submit", async (e) => {
     }
 
     try {
+        
       const res = await fetch("/password_reset/send-code/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
+       ocultarSpinner()
       const data = await res.json();
 
       if (!res.ok) {
@@ -141,6 +142,7 @@ loginForm.addEventListener("submit", async (e) => {
   }
 
   async function cambiarPassword() {
+    mostrarSpinner();
     const nueva = document.getElementById("nueva-password").value;
     const confirmar = document.getElementById("confirmar-password").value;
     const mensajePassword = document.getElementById("mensaje-password");
@@ -157,6 +159,7 @@ loginForm.addEventListener("submit", async (e) => {
     }
 
     try {
+        
       const res = await fetch("/password_reset/verify-code/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -166,6 +169,7 @@ loginForm.addEventListener("submit", async (e) => {
           new_password: nueva,
         }),
       });
+      ocultarSpinner()
 
       const data = await res.json();
 
