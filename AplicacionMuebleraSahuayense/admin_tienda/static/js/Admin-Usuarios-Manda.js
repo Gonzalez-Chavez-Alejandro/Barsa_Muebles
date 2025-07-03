@@ -639,23 +639,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-/*
-document.getElementById('um-exportar-visibles').addEventListener('click', async () => {
-    if (!pedidosMostrados || pedidosMostrados.length === 0) {
-        alert("No hay pedidos visibles para exportar.");
-        return;
-    }
-
-    for (const pedido of pedidosMostrados) {
-        await generarPDF(pedido);
-    }
-
-    alert(`✅ Se generaron ${pedidosMostrados.length} PDFs del estado "${estadoActivo}".`);
-});
-*/
-
-
 filtros.forEach(filtro => {
     filtro.addEventListener('click', function () {
         filtros.forEach(f => f.classList.remove('active'));

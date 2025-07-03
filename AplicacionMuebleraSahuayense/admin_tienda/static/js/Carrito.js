@@ -345,9 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 }
 
-
-
-
   btnEncargar?.addEventListener("click", async () => {
     if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
       mostrarToast("No puedes encargar sin productos.", "error");
