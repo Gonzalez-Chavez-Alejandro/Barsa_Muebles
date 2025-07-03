@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Obtener información de contacto del footer
     let mensaje = "✅ Pedido procesado con éxito.\n\n";
-    mensaje += "📦 Puedes contactarnos para verificar tu pedido, ver si tiene coste de envio o consultar sobre precios por mayoreo:\n\n";
+    mensaje += "📦 Puedes contactarnos para verificar tu pedido, ver si tiene coste de envio y aclarar como se realizara el pago, o consultar sobre precios por mayoreo:\n\n";
 
     try {
       const footerRes = await fetch("/api/footer/");

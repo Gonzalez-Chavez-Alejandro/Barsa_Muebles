@@ -288,12 +288,12 @@ async function generarPDF(encargo) {
   // Teléfono del cliente
   doc.setFont("helvetica", "bold");
   doc.text(`Teléfono: ${usuarioActual?.telefono || 'No especificado'}`, config.margins.left, y);
-  y += 15;
+  y += 7;
   doc.setFont("helvetica", "bold");
-doc.text("Ubicación de entrega:", config.margins.left, y);
-doc.setFont("helvetica", "normal");
-doc.text(encargo.ubicacion_entrega || 'No especificada', config.margins.left + doc.getTextWidth("Ubicación de entrega: ") + 1, y);
-y += 15;
+  doc.text("Ubicación de entrega:", config.margins.left, y);
+  doc.setFont("helvetica", "normal");
+  doc.text(encargo.ubicacion_entrega || 'No especificada', config.margins.left + doc.getTextWidth("Ubicación de entrega: ") + 1, y);
+  y += 15;
 
 
   // Detalles del encargo
