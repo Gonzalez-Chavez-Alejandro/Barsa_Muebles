@@ -237,7 +237,7 @@ const yaExiste = window.categorias.some(cat =>
 );
 
 if (yaExiste) {
-  errorMensaje('Ya existe una categoría con ese nombre.');
+  mostrarToast("Ya existe una categoría con ese nombre.", "error");
   return;
 }
 
@@ -257,7 +257,7 @@ mostrarSpinner();
     });
 
     if (response.ok) {
-      mostrarMensaje('Categoría guardada con éxito');
+      mostrarToast('Categoría guardada con éxito');
       cerrarModalAgregarCategoria();
       await cargarCategorias();
     } else {
@@ -295,7 +295,7 @@ const yaExiste = window.categorias.some(cat =>
 );
 
 if (yaExiste) {
-  errorMensaje('Ya existe una categoría con ese nombre.');
+  mostrarToast("Ya existe una categoría con ese nombre.", "error");
   return;
 }
 
