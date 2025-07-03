@@ -33,7 +33,7 @@ async function cargarCategorias() {
     errorMensaje("No estás autenticado");
     return;
   }
-
+  
   try {
     const response = await fetch('/categorias/consulta/', {
       method: 'GET',
@@ -215,6 +215,7 @@ function cerrarModalEditarCategoria() {
 
 // Guardar nueva categoría
 async function guardarCategoria() {
+ 
   const token = localStorage.getItem('accessToken');
   if (!token) {
     errorMensaje('No estás autenticado. Por favor inicia sesión.');
@@ -230,11 +231,22 @@ async function guardarCategoria() {
     return;
   }
 
+  // Verificar si ya existe una categoría con ese nombre
+const yaExiste = window.categorias.some(cat =>
+  cat.nombre.toLowerCase() === nombre.toLowerCase()
+);
+
+if (yaExiste) {
+  errorMensaje('Ya existe una categoría con ese nombre.');
+  return;
+}
+
+
   const formData = new FormData();
   formData.append('nameCategory', nombre);
   formData.append('descriptionCategory', descripcion);
   formData.append('imagenCategory', imagenFile);
-
+mostrarSpinner();
   try {
     const response = await fetch('/categorias/registro/', {
       method: 'POST',
@@ -255,7 +267,9 @@ async function guardarCategoria() {
   } catch (error) {
     console.error('Error al guardar categoría:', error);
     errorMensaje('Error de conexión: ' + error.message);
-  }
+  }finally {
+  ocultarSpinner();
+}
 }
 
 // Guardar edición de categoría
@@ -274,6 +288,16 @@ async function guardarEdicionCategorias() {
     // alert('El nombre de la categoría es obligatorio');
     return;
   }
+// Verifica si ya existe una categoría con ese nombre
+const yaExiste = window.categorias.some(cat =>
+  cat.nombre.toLowerCase() === nuevoNombre.toLowerCase() &&
+  cat.nombre !== categoriaNombreSeleccionada // exceptuamos la actual
+);
+
+if (yaExiste) {
+  errorMensaje('Ya existe una categoría con ese nombre.');
+  return;
+}
 
   const formData = new FormData();
   formData.append('nameCategory', nuevoNombre);
@@ -281,7 +305,7 @@ async function guardarEdicionCategorias() {
   if (imagenFile) {
     formData.append('imagenCategory', imagenFile);
   }
-
+mostrarSpinner();
   try {
     const response = await fetch(`/categorias/actualizar/${categoriaNombreSeleccionada}/`, {
       method: 'PATCH',
@@ -302,7 +326,9 @@ async function guardarEdicionCategorias() {
   } catch (error) {
     console.error('Error al actualizar categoría:', error);
     errorMensaje('Error de conexión: ' + error.message);
-  }
+  }finally {
+  ocultarSpinner();
+}
 }
 
 // Eliminar categoría
@@ -316,7 +342,7 @@ async function eliminarCategoria(nombreCategoria) {
     errorMensaje('No estás autenticado. Por favor inicia sesión.');
     return;
   }
-
+  mostrarSpinner(); 
   try {
     const response = await fetch(`/categorias/actualizar/${nombreCategoria}/`, {
       method: 'DELETE',
@@ -336,7 +362,9 @@ async function eliminarCategoria(nombreCategoria) {
   } catch (error) {
     console.error('Error al eliminar categoría:', error);
     errorMensaje('Error de conexión: ' + error.message);
-  }
+  }finally {
+  ocultarSpinner();
+}
 }
 
 // Mostrar vista previa de imagen al seleccionar
@@ -379,13 +407,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
-
-
-
-
-
-
 let categoriaIdEliminar = null;
 
 function abrirModalEliminarCategoria(id) {
@@ -399,11 +420,10 @@ function cerrarModalEliminarCategoria() {
 }
 
 
-
-
 async function confirmarEliminarCategoria() {
+  
   if (!categoriaIdEliminar) return;
-
+mostrarSpinner(); 
   try {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -436,6 +456,8 @@ async function confirmarEliminarCategoria() {
   } catch (error) {
     console.error('Error:', error);
     errorMensaje('Error inesperado al eliminar');
+  }finally {
+    ocultarSpinner();  // 👈 Siempre ocultar al final
   }
 }
 
