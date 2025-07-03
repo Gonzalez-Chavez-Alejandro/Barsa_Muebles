@@ -30,7 +30,7 @@ function normalizeImageUrl(url) {
 async function cargarCategorias() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    errorMensaje("No estás autenticado");
+    mostrarToast("No estás autenticado", "warning");
     return;
   }
   
@@ -64,7 +64,7 @@ async function cargarCategorias() {
     mostrarCategorias();
   } catch (error) {
     console.error('Error al cargar categorías:', error);
-    errorMensaje('Error al cargar categorías: ' + error.message);
+    mostrarToast('Error al cargar categorías: ' + error.message, 'error');
   }
 }
 
@@ -190,7 +190,7 @@ function cerrarModalAgregarCategoria() {
 function editarCategoria(nombreCategoria) {
   const categoria = window.categorias.find(cat => cat.nombre === nombreCategoria);
   if (!categoria) {
-    errorMensaje('Categoría no encontrada');
+    mostrarToast("Categoría no encontrada","warning");
     return;
   }
 
@@ -218,7 +218,7 @@ async function guardarCategoria() {
  
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    errorMensaje('No estás autenticado. Por favor inicia sesión.');
+    mostrarToast("No estás autenticado. Por favor inicia sesión.","error");
     return;
   }
 
@@ -227,7 +227,7 @@ async function guardarCategoria() {
   const imagenFile = document.getElementById('subirImagen').files[0];
 
   if (!nombre || !imagenFile) {
-    alert('Nombre e imagen son obligatorios.');
+    mostrarToast("Nombre e imagen son obligatorios.", "error");
     return;
   }
 
@@ -257,16 +257,16 @@ mostrarSpinner();
     });
 
     if (response.ok) {
-      mostrarToast('Categoría guardada con éxito');
+      mostrarToast('Categoría guardada con éxito', 'success');
       cerrarModalAgregarCategoria();
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      errorMensaje('Error al guardar: ' + (errorData.message || JSON.stringify(errorData)));
+      mostrarToast('Error al guardar: ' + (errorData.message || JSON.stringify(errorData)),'error');
     }
   } catch (error) {
     console.error('Error al guardar categoría:', error);
-    errorMensaje('Error de conexión: ' + error.message);
+    mostrarToast('Error de conexión: ' + error.message,'error');
   }finally {
   ocultarSpinner();
 }
@@ -276,7 +276,7 @@ mostrarSpinner();
 async function guardarEdicionCategorias() {
   const token = localStorage.getItem('accessToken');
   if (!token || !categoriaNombreSeleccionada) {
-    errorMensaje('No estás autenticado o no hay categoría seleccionada');
+    mostrarToast('No estás autenticado o no hay categoría seleccionada','warning');
     return;
   }
 
@@ -285,7 +285,7 @@ async function guardarEdicionCategorias() {
   const imagenFile = document.getElementById('editarImagenArchivo').files[0];
 
   if (!nuevoNombre) {
-    // alert('El nombre de la categoría es obligatorio');
+     mostrarToast('El nombre de la categoría es obligatorio', 'warning');
     return;
   }
 // Verifica si ya existe una categoría con ese nombre
@@ -316,16 +316,18 @@ mostrarSpinner();
     });
 
     if (response.ok) {
-      mostrarMensaje('Categoría actualizada con éxito');
+      mostrarToast('Categoría actualizada con éxito','success');
       cerrarModalEditarCategoria();
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      errorMensaje(errorData);
+      const mensaje = errorData.message || Object.values(errorData).flat().join(' ') || 'Error desconocido';
+
+      mostrarToast(mensaje, 'error');
     }
   } catch (error) {
     console.error('Error al actualizar categoría:', error);
-    errorMensaje('Error de conexión: ' + error.message);
+    mostrarToast('Error de conexión: ' + error.message,'error');
   }finally {
   ocultarSpinner();
 }
@@ -339,7 +341,7 @@ async function eliminarCategoria(nombreCategoria) {
 
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    errorMensaje('No estás autenticado. Por favor inicia sesión.');
+    mostrarToast('No estás autenticado. Por favor inicia sesión.','error');
     return;
   }
   mostrarSpinner(); 
@@ -353,15 +355,15 @@ async function eliminarCategoria(nombreCategoria) {
     });
 
     if (response.ok) {
-      mostrarMensaje('Categoría eliminada con éxito');
+      mostrarToast('Categoría eliminada con éxito','success');
       await cargarCategorias();
     } else {
       const errorData = await response.json();
-      errorMensaje('Error al eliminar: ' + (errorData.message || JSON.stringify(errorData)));
+      mostrarToast('Error al eliminar: ' + (errorData.message || JSON.stringify(errorData)),'error');
     }
   } catch (error) {
     console.error('Error al eliminar categoría:', error);
-    errorMensaje('Error de conexión: ' + error.message);
+    mostrarToast('Error de conexión: ' + error.message,'error');
   }finally {
   ocultarSpinner();
 }

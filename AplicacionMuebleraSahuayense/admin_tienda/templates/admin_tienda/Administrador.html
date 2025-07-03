@@ -795,6 +795,9 @@
       <!-- Botón que activa el input file -->
       <button id="imagenCategoriaBtn" onclick="document.getElementById('subirImagen').click()">Elegir imagen</button>
 
+<!-- Aquí va la imagen de vista previa -->
+<img id="vistaPreviaAgregarImagen" src="" alt="Vista previa de imagen" style="max-width: 150px; margin-top: 10px; border: 1px solid #ccc; display: none;">
+
       <div class="buttons-agregar-categoria">
         <button id="btnGuardarCategoria" class="btn-agregar-categoria">
           <i class="fas fa-save" style="margin-right: 8px;"></i>Guardar
@@ -804,7 +807,23 @@
       </div>
     </div>
   </div>
+<script>document.getElementById('subirImagen').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  const previewImg = document.getElementById('vistaPreviaAgregarImagen');
 
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      previewImg.src = event.target.result;
+      previewImg.style.display = 'block'; // Mostrar la imagen
+    };
+    reader.readAsDataURL(file);
+  } else {
+    previewImg.src = '';
+    previewImg.style.display = 'none'; // Ocultar si no hay imagen
+  }
+});
+</script>
   <!-- ------------------------------------------------ -->
   <!-- Modal Editar Categoría -->
   <!-- ------------------------------------------------ -->

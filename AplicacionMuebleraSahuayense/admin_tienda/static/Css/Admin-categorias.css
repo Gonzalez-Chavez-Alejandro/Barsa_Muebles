@@ -366,8 +366,8 @@ th.th-acciones {
 /* Estilo para el botón de imagen */
 #imagenCategoriaBtn {
     width: 100%;
-    padding: 60px 20px;
-    margin-bottom: 15px;
+    padding: 6px 20px;
+    margin-bottom: 1rem;
     background-color: #f8f9fa;
     border: 2px dashed #ccc;
     border-radius: 5px;
