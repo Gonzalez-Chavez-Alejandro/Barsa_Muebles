@@ -1,9 +1,16 @@
 const DEFAULTS = {
+  facebook: "",
+  whatsapp: "",
+  instagram: "",
+  email: ""
+};
+
+/*const DEFAULTS = {
   facebook: "https://www.facebook.com/share/18dEbL8gtP/",
-  whatsapp: "https://wa.me/5235351750",
+  whatsapp: "",
   instagram: "https://www.instagram.com/barsa_muebles/",
   email: "mailto:barsamuebles@gmail.com"
-};
+};*/
 
 const token = localStorage.getItem('accessToken');
 if (!token) {
@@ -74,6 +81,7 @@ async function cargarFooter() {
         'Authorization': `Bearer ${token}`
       }
     });
+    mostrarSpinner();
     if (!res.ok) throw new Error('No se pudo cargar el footer');
     const data = await res.json();
 
@@ -137,6 +145,7 @@ async function guardarFooter() {
   };
 
   try {
+    mostrarSpinner();
     const res = await fetch('/api/footer/', {
       method: 'PUT',
       headers: {
