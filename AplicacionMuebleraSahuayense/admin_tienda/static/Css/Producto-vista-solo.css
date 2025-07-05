@@ -36,13 +36,30 @@
 }
 
 .miniaturas {
+    max-width: 100%;   /* para que no se salga del contenedor padre */
     display: flex;
     gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;      /* evita salto de línea */
+    overflow-x: auto;       /* agrega scroll horizontal si es necesario */
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    scroll-behavior: smooth;
+    box-sizing: border-box; /* para que padding no aumente el ancho total */
 }
 
+.miniaturas {
+    width: 320px;
+    overflow-x: auto;
+    display: flex;
+    gap: 12px;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+}
+
+
+
 .miniaturas img {
+    flex-shrink: 0;
     width: 80px;
     height: 80px;
     object-fit: cover;

@@ -41,6 +41,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- Font Awesome -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
 <style>
   .ubicacion-expandible {
     max-height: 1.5em;
@@ -239,6 +243,7 @@
             <i class="fas fa-box-open"></i> Ver Mandas
           </button>
         </div>
+
 
 
       </div>
@@ -532,7 +537,31 @@
     </div>
   </section>
 
+<style>.btn-exportar-excel {
+  background-color: #207245;      /* Verde típico de Excel */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 3px 6px rgba(32, 114, 69, 0.4);
+}
 
+.btn-exportar-excel i {
+  font-size: 20px;
+}
+
+.btn-exportar-excel:hover {
+  background-color: #145a33;  /* Verde más oscuro al pasar el mouse */
+  box-shadow: 0 5px 10px rgba(20, 90, 51, 0.6);
+}
+</style>
   <!-- ----------------------------------------------- -->
   <!-- Sección de Productos -->
   <!-- ----------------------------------------------- -->
@@ -573,7 +602,9 @@
                   </select>
                 </div>
               </div>
-
+              <button onclick="exportarProductosAExcel()" class="btn-exportar-excel">
+                <i class="fas fa-file-excel"></i> Exportar a Excel
+              </button>
               <!-- Botón Agregar -->
               <div class="agregar-producto">
                 <a href="{% url 'administrador_agregar_producto' %}" class="btn-agregar">
@@ -982,6 +1013,7 @@
         });
     }
   </script>
+  <script src="{% static 'js/Admin-Excel.js' %}"></script>
   <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>
@@ -995,9 +1027,5 @@
   <script src="{% static 'js/Admin-registro-empledo.js' %}"></script>
   <script src="{% static 'js/ojo.js' %}"></script>
   <script src="{% static 'js/Admin-section-productos-editar.js' %}"></script>
-   
-  <script>  
-</script>
-
 </body>
 </html>

@@ -1,11 +1,24 @@
-<!-- Carrito -->
-    <section id="carrito" class="carrito" style="display: none;">
-        <h2>Tu Carrito</h2>
-        <div id="lista-carrito" class="contenedor-carrito"></div>
-        <button id="vaciar-carrito">Vaciar Carrito</button>
-        <button id="cerrar-carrito">Cerrar</button>
-        <div id="total-carrito">
-            <span>Total: <span id="total-precio">0.00</span></span>
-        </div>
-        <button id="btn-encargar">Encargar</button> <!-- Nuevo botón -->
-    </section>
+<!-- Carrito Lateral -->
+<section id="carrito" class="carrito" style="display: none;">
+  <div class="carrito-header">
+    <h2>🛒 Tu Carrito</h2>
+    <button id="cerrar-carrito" title="Cerrar" class="cerrar-carrito">&times;</button>
+  </div>
+
+  <div id="lista-carrito" class="contenedor-carrito">
+    <!-- Productos se insertan aquí dinámicamente -->
+  </div>
+
+  <div id="total-carrito">
+    <span>Total:</span>
+    <span id="total-precio">$0.00</span>
+  </div>
+
+  <div class="botones-carrito">
+    <button id="vaciar-carrito" class="btn-danger">Vaciar</button>
+    <button id="btn-encargar" class="btn-primary">Encargar</button>
+  </div>
+</section>
+
+<!-- Overlay opcional -->
+<div id="overlay-carrito" class="overlay" style="display: none;"></div>

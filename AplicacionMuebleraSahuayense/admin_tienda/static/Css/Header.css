@@ -10,24 +10,25 @@ main {
 
 /* Estilos del header */
 header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 30px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 30px;
+    flex-wrap: wrap;
 }
+
 .menu-nav {
-  flex: 1;
-  display: flex;
-  justify-content: center;
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
 #menu-elements {
-  display: flex;
-  gap: 24px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 
@@ -222,10 +223,11 @@ nav ul li a.contact:hover {
 }
 
 .btn-carrito:hover {
-   
+
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2);
     transform: scale(1.03);
 }
+
 /* Brillo del contador al pasar el mouse */
 .btn-carrito:hover .carrito-contador,
 .btn-carrito:focus .carrito-contador {
@@ -233,16 +235,18 @@ nav ul li a.contact:hover {
     color: #000000;
     transform: scale(1.1);
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.7),
-                0 0 14px rgba(255, 255, 255, 0.5);
+        0 0 14px rgba(255, 255, 255, 0.5);
 }
 
 .header_usuario_carrito {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end; /* O space-between si quieres separar nav y usuario/carrito */
-  gap: 20px; /* Espacio entre usuario y carrito */
-  padding: 10px 20px;
-  position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* O space-between si quieres separar nav y usuario/carrito */
+    gap: 20px;
+    /* Espacio entre usuario y carrito */
+    padding: 10px 20px;
+    position: relative;
 }
 
 
@@ -294,14 +298,16 @@ header {
     .btn-carrito span {
         display: none;
     }
+
     #menu-elements {
-    display: flex;
-    gap: 8px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 1rem;
-}
+        display: flex;
+        gap: 8px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
 
     .btn-carrito {
         background-color: #e6e6e6;
@@ -411,6 +417,7 @@ header {
 
     .Elements {
         display: block;
+        border-bottom: 2px solid #d2caca;
     }
 }
 

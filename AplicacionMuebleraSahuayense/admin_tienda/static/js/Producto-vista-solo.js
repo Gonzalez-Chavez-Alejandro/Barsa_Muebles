@@ -1,13 +1,33 @@
+let imagenesProducto = [];
+let indiceActual = 0;
+
 document.getElementById("imagen-grande").addEventListener("click", function () {
     const modal = document.getElementById("modalImagen");
     const modalImg = document.getElementById("imagenModalContenido");
-    modal.style.display = "block";
-    modalImg.src = this.src;
+    modal.style.display = "flex";
+
+    indiceActual = imagenesProducto.findIndex(img => img === this.src);
+    if (indiceActual === -1) indiceActual = 0;
+
+    modalImg.src = imagenesProducto[indiceActual];
 });
+
+
 
 function cerrarModalImagen() {
     document.getElementById("modalImagen").style.display = "none";
 }
+document.getElementById("prev-img").addEventListener("click", () => {
+    if (imagenesProducto.length === 0) return;
+    indiceActual = (indiceActual - 1 + imagenesProducto.length) % imagenesProducto.length;
+    document.getElementById("imagenModalContenido").src = imagenesProducto[indiceActual];
+});
+
+document.getElementById("next-img").addEventListener("click", () => {
+    if (imagenesProducto.length === 0) return;
+    indiceActual = (indiceActual + 1) % imagenesProducto.length;
+    document.getElementById("imagenModalContenido").src = imagenesProducto[indiceActual];
+});
 
 const detalleNombre = document.getElementById("detalle-nombre");
 const detalleDescripcion = document.getElementById("detalle-descripcion");
@@ -56,6 +76,7 @@ async function cargarProducto() {
 
 function mostrarProducto(producto) {
     const imagenes = producto.nombreimagenes?.split(",") || [];
+    imagenesProducto = imagenes.map(img => img.trim());
 
     if (imagenes.length > 0) {
         detalleImagen.src = imagenes[0].trim();
@@ -79,7 +100,8 @@ function mostrarProducto(producto) {
     }
 
     detalleNombre.textContent = producto.nombre || "Sin nombre";
-    detalleDescripcion.textContent = producto.descripcion || "Sin descripción";
+    detalleDescripcion.innerHTML = (producto.descripcion || "Sin descripción").replace(/\n/g, "<br>");
+
 
     const precio = parseFloat(producto.precio);
     const oferta = parseFloat(producto.precioOferta);

@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Producto-vista-solo.css' %}">
     <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
+    
 </head>
 
 <body>
@@ -33,7 +34,7 @@
 
         <div class="info-producto">
             <h1 id="detalle-nombre"></h1>
-            <p id="detalle-descripcion"></p>
+            <p id="detalle-descripcion" style="text-align: justify;"></p>
 
             <div class="precios">
                 <span id="detalle-precio" class="precio-oferta"></span>
@@ -52,7 +53,36 @@
 
         </div>
     </div>
+<style>.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 0 15px;
+}
 
+.left-btn {
+  left: 10px;
+}
+
+.right-btn {
+  right: 10px;
+}
+
+@media (max-width: 768px) {
+  .nav-btn {
+    font-size: 2rem;
+    color: #ffd700; /* dorado o cualquier otro color */
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 12px;
+  }
+}
+</style>
     <!-- Categorías Similares -->
     <div id="categorias-similares" class="contenedor-categorias-similares">
         <h2>Categorías similares</h2>
@@ -61,9 +91,13 @@
 
     <!-- Modal de imagen en pantalla completa -->
     <div id="modalImagen" class="modal-imagen">
-        <span class="cerrar-modal" onclick="cerrarModalImagen()">&times;</span>
-        <img id="imagenModalContenido" src="" alt="Vista ampliada">
-    </div>
+    <span class="cerrar-modal" onclick="cerrarModalImagen()">&times;</span>
+
+    <!-- Botones anterior/siguiente -->
+    <button id="prev-img" class="nav-btn left-btn">⟨</button>
+    <img id="imagenModalContenido" src="" alt="Vista ampliada">
+    <button id="next-img" class="nav-btn right-btn">⟩</button>
+</div>
 
  
     {% include 'includes/carrito.html' %}
