@@ -13,8 +13,12 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return Response({"message": "El usuario se creo correctamente"}, status=status.HTTP_201_CREATED)
+            return Response({
+                "message": "El usuario se creo correctamente",
+                "username": user.username  # <-- Devuelve el username aquí
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

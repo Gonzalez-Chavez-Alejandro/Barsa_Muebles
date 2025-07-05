@@ -1,36 +1,36 @@
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('registro-form');
-const inputEdad = document.getElementById('edad');
+  const inputEdad = document.getElementById('edad');
 
-inputEdad.addEventListener('keydown', function (e) {
-  if (
-    e.key === 'Backspace' ||
-    e.key === 'Tab' ||
-    e.key === 'ArrowLeft' ||
-    e.key === 'ArrowRight' ||
-    e.key === 'Delete'
-  ) {
-    return;
-  }
-  if (!/^[0-9]$/.test(e.key)) {
-    e.preventDefault();
-  }
-});
-
-inputEdad.addEventListener('input', function () {
-  // Eliminar caracteres no numéricos
-  this.value = this.value.replace(/[^0-9]/g, '');
-
-  // Validar rango de 1 a 100
-  let val = parseInt(this.value, 10);
-  if (!isNaN(val)) {
-    if (val < 1) {
-      this.value = '1';
-    } else if (val > 100) {
-      this.value = '100';
+  inputEdad.addEventListener('keydown', function (e) {
+    if (
+      e.key === 'Backspace' ||
+      e.key === 'Tab' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight' ||
+      e.key === 'Delete'
+    ) {
+      return;
     }
-  }
-});
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  });
+
+  inputEdad.addEventListener('input', function () {
+    // Eliminar caracteres no numéricos
+    this.value = this.value.replace(/[^0-9]/g, '');
+
+    // Validar rango de 1 a 100
+    let val = parseInt(this.value, 10);
+    if (!isNaN(val)) {
+      if (val < 1) {
+        this.value = '1';
+      } else if (val > 100) {
+        this.value = '100';
+      }
+    }
+  });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -76,20 +76,21 @@ inputEdad.addEventListener('input', function () {
     }
 
     // Preparar datos para API
-    const username = firstName.replace(/\s+/g, '_');
-  // <--- CAMBIO AQUÍ
+    const last_name = firstName;
+    // <--- CAMBIO AQUÍ
     const payload = {
-      username: username,
+      last_name: last_name,
       email: email,
       password: password,
       phoneUser: phoneUser,
       ageUser: edad
     };
+
     ['nombre-error', 'correo-error', 'edad-error', 'contrasena-error', 'confirmar-error'].forEach(id => {
       document.getElementById(id).style.display = 'none';
       document.getElementById(id).textContent = '';
     });
-mostrarSpinner();
+    mostrarSpinner();
     // Registrar usuario
     fetch('/api/register/', {
       method: 'POST',
@@ -106,18 +107,20 @@ mostrarSpinner();
         return res.json();
       })
       .then(data => {
-        // Registro exitoso, login automático
-        return fetch('/api/login/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password
-          })
-        });
-      })
+  // Ya sabes el username porque usaste last_name en create_user como username
+  const username = firstName.trim(); // O si en backend haces strip o reemplazo de espacios, hazlo igual aquí
+  return fetch('/api/login/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: username,
+      password: password
+    })
+  });
+})
+
       .then(res => {
         if (!res.ok) {
           return res.json().then(err => { throw err; });
@@ -167,10 +170,10 @@ mostrarSpinner();
         }
 
         console.error('Error:', err);
-      })  .finally(() => {
-    // Siempre oculta el spinner, sin importar éxito o error
-    ocultarSpinner();
-  });
+      }).finally(() => {
+        // Siempre oculta el spinner, sin importar éxito o error
+        ocultarSpinner();
+      });
 
   });
 

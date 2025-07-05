@@ -183,6 +183,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("Error cargando footer:", err);
-    mostrarToast("Error cargando datos del footer.", "error");
+    //mostrarToast("Error cargando datos del footer.", "error");
   }
 });

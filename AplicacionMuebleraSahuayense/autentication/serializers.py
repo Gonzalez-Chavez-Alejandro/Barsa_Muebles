@@ -1,5 +1,3 @@
-# autentication/serializers.py
-
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
@@ -9,48 +7,24 @@ User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    last_name = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'ageUser', 'phoneUser', 'password']
-
-    def validate(self, data):
-        if User.objects.filter(username__iexact=data['username']).exists():
-            raise serializers.ValidationError({"username": "Este nombre ya está en uso."})
-
-        if User.objects.filter(email__iexact=data['email']).exists():
-            raise serializers.ValidationError({"email": {
-                "duplicado": "Este correo ya está registrado."
-            }})
-
-        return data
-
-
-    def validate_username(self, value):
-        if User.objects.filter(username__iexact=value).exists():
-            raise serializers.ValidationError("Este nombre ya está en uso.")
-        return value
+        fields = ['last_name', 'email', 'ageUser', 'phoneUser', 'password']
 
     def validate_email(self, value):
-        from django.core.validators import validate_email
-        from django.core.exceptions import ValidationError as DjangoValidationError
-
-        # Validar formato de correo electrónico
         try:
             validate_email(value)
         except DjangoValidationError:
             raise serializers.ValidationError({"formato": "El formato del correo electrónico no es válido."})
 
-        # Validar dominio (por ejemplo, que sea @gmail.com)
         if not value.lower().endswith("@gmail.com"):
             raise serializers.ValidationError({"dominio": "Solo se permiten correos @gmail.com."})
 
-        # Validar duplicados
         if User.objects.filter(email__iexact=value).exists():
             raise serializers.ValidationError({"duplicado": "Este correo ya está registrado."})
-
         return value
-
 
     def validate_ageUser(self, value):
         if not isinstance(value, int) or value < 0:
@@ -63,16 +37,24 @@ class RegisterSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        last_name = validated_data.pop('last_name').strip()
+        base_username = last_name
+        username = base_username
+        counter = 1
+
+        # Asegura un username único, aunque tengan el mismo last_name
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username} {counter}"
+            counter += 1
+
         return User.objects.create_user(
-            username=validated_data['username'],
+            username=username,
+            last_name=last_name,
             email=validated_data['email'],
             ageUser=validated_data['ageUser'],
             phoneUser=validated_data['phoneUser'],
             password=validated_data['password']
         )
-
-    
-
 
 
 
