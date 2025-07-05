@@ -178,3 +178,7 @@
        .forgot-password a {
            letter-spacing: 0.5px;
        }
+
+       button.submit-btn {
+           margin-top: 0.3rem;
+       }

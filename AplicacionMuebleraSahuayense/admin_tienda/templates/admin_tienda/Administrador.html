@@ -41,6 +41,27 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+  .ubicacion-expandible {
+    max-height: 1.5em;
+    overflow: hidden;
+    cursor: pointer;
+    transition: max-height 0.3s ease;
+  }
+
+  .ubicacion-expandible.expandido {
+    max-height: 1000px; /* valor suficientemente grande */
+  }
+ 
+  .telefono-user {
+    width: 150px; /* o el tamaño que prefieras */
+    min-width: 100px;  /* para que no se haga más pequeño */
+    max-width: 200px;  /* para que no se expanda demasiado */
+    text-align: center; /* opcional: para alinear el texto */
+  }
+
+
+</style>
 </head>
 
 <body>
@@ -317,9 +338,9 @@
           <button class="admin-btn" onclick="actualizarPDF()">
             <i class="fas fa-sync-alt"></i> Actualizar
           </button>
-          <a href="/catalogo/descargar/" target="_blank" class="admin-btn" style="background-color: #28a745;">
-            <i class="fas fa-eye"></i> Ver Catálogo Actual
-          </a>
+          <button id="abrirCatalogoBtn" class="obrasa-button">
+            Ver Catálogo
+        </button>
         </div>
       </div>
     </div>
@@ -357,9 +378,9 @@
               <th scope="col">ID</th>
               <th scope="col">Nombre</th>
               <th scope="col">Correo</th>
-              <th>Teléfono</th>
+              <th class="telefono-user">Teléfono</th>
               <th>Ubicacion</th>
-              <th>Contraseña</th>
+              <!--<th>Contraseña</th>-->
               <th>Acciones</th>
             </tr>
           </thead>

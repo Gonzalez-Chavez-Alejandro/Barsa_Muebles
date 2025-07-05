@@ -45,11 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCerrarSesion = document.getElementById('btnCerrarSesion');
   if (btnCerrarSesion) {
     btnCerrarSesion.addEventListener('click', () => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      console.log("no entra ")
-      window.location.href = '/login/';
+      mostrarSpinner();
+      try {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refresh_token');
+        sessionStorage.clear();
+
+        mostrarToast("Sesión cerrada correctamente", "success");
+      } catch (error) {
+        mostrarToast("Ocurrió un error al cerrar sesión", "error"); // Manejo de error
+        console.error(error);
+      } finally {
+        setTimeout(() => {
+          ocultarSpinner();
+          window.location.href = '/login/';
+        }, 1500);
+      }
     });
   }
 });
-

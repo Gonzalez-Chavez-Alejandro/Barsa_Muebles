@@ -7,7 +7,7 @@ const DEFAULTS = {
 
 const token = localStorage.getItem('accessToken');
 if (!token) {
-  alert("No estás autenticado. Inicia sesión primero.");
+  mostrarToast("No estás autenticado. Inicia sesión primero.", "error");
   window.location.href = "/login";  // O redirige donde corresponda
 }
 
@@ -67,6 +67,7 @@ function removeLocationField(btn) {
 
 // Cargar datos del footer
 async function cargarFooter() {
+  mostrarSpinner();
   try {
     const res = await fetch('/api/footer/', {
       headers: {
@@ -103,11 +104,15 @@ async function cargarFooter() {
 
   } catch (err) {
     console.warn("Footer no cargado:", err);
+    mostrarToast("Error al cargar el footer", "error");
+  }finally {
+    ocultarSpinner();
   }
 }
 
 // Guardar datos del footer
 async function guardarFooter() {
+  mostrarSpinner();
   const facebookValue = document.getElementById('facebook').value.trim() || DEFAULTS.facebook;
   const whatsappValue = document.getElementById('whatsapp').value.trim() || DEFAULTS.whatsapp;
   const instagramValue = document.getElementById('instagram').value.trim() || DEFAULTS.instagram;
@@ -142,14 +147,16 @@ async function guardarFooter() {
     });
 
     if (res.ok) {
-      alert('Configuración guardada exitosamente.');
+      mostrarToast('Configuración guardada exitosamente.', "success");
     } else {
       const errorData = await res.json();
-      alert('Error al guardar footer:\n' + JSON.stringify(errorData, null, 2));
+      mostrarToast('Error al guardar footer: ' + JSON.stringify(errorData, null, 2), "error");
     }
   } catch (err) {
     console.error('Error al guardar footer:', err);
-    alert('Error de red al guardar configuración.');
+    mostrarToast('Error de red al guardar configuración.', "error");
+  }finally {
+    ocultarSpinner();
   }
 }
 

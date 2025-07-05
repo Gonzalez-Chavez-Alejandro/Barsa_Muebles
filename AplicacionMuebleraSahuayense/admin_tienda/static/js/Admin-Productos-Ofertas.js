@@ -10,6 +10,7 @@ document.getElementById('ofertaProducto').addEventListener('change', function() 
       descuentoInput.disabled = true;
       descuentoInput.value = "";
       precioOferta.value = "";
+      mostrarToast("Descuento desactivado", "info");
     }
   });
   
@@ -43,6 +44,7 @@ document.getElementById('ofertaProducto').addEventListener('change', function() 
     } else {
       // Si no es válido, vacía el campo de descuento
       document.getElementById("precioProductoDescuento").value = "";
+      mostrarToast("Descuento inválido. Debe ser entre 0 y 100", "error");
     }
   }
   

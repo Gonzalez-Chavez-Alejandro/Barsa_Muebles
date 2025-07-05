@@ -43,11 +43,44 @@
   width: 100%;
   background-color: #0f172a !important;
   /* Fondo más oscuro para el input */
-
+ color: aliceblue;
   transition: all 0.3s ease;
 }
 
 
+
+.obrasa-button {
+  background-color: white;           /* Fondo blanco */
+  color: #333333;                   /* Texto gris oscuro */
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid #333333;        /* Borde gris oscuro */
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.obrasa-button:hover {
+  background-color: #333333;         /* Fondo gris oscuro */
+  color: white;                     /* Texto blanco */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
+}
+
+.obrasa-button:active {
+  background-color: #222222;         /* Fondo más oscuro al hacer click */
+  color: white;
+  transform: translateY(0);
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+}
+
+.obrasa-button:focus {
+  outline: 2px solid #555555;       /* Outline accesible */
+  outline-offset: 2px;
+}
 
 
 

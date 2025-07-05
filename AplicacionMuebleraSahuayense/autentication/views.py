@@ -69,8 +69,16 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            instance = self.get_object()  # Obtener el usuario
-            instance.delete()  # Eliminarlo permanentemente
+            instance = self.get_object()
+
+            # Verificar si el usuario tiene encargos relacionados
+            if hasattr(instance, 'encargos') and instance.encargos.exists():
+                return Response(
+                    {"error": "No se puede eliminar este usuario porque tiene pedidos asociados."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            instance.delete()
             return Response(
                 {"detail": "El usuario ha sido eliminado permanentemente."},
                 status=status.HTTP_204_NO_CONTENT

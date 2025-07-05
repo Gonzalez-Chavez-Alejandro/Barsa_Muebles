@@ -92,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
 /*************************************************************/
 
 function checkAuthRedirect() {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('accessToken')|| localStorage.getItem('access_token');
+  
   if (!token) {
     window.location.href = '/'; // Página principal o login
   }
@@ -182,5 +183,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     console.error("Error cargando footer:", err);
+    mostrarToast("Error cargando datos del footer.", "error");
   }
 });

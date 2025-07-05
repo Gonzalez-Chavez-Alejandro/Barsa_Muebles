@@ -8,7 +8,7 @@ let modoFiltrado = false;
 async function mostrarProductos() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    errorMensaje("No estás autenticado");
+    mostrarToast("No estás autenticado", "error");
     return;
   }
 
@@ -33,7 +33,7 @@ async function mostrarProductos() {
 
   } catch (err) {
     console.error("Error al cargar productos:", err);
-    errorMensaje("Error al cargar productos: " + err.message);
+    mostrarToast("Error al cargar productos: " + err.message, "error");
   }
 }
 
@@ -104,9 +104,6 @@ function mostrarProductosView() {
     const categoriasNombres = Array.isArray(producto.categorias_nombres)
   ? producto.categorias_nombres.join(", ")
   : "";
-
-
-
     const tr = document.createElement("tr");
     tr.innerHTML =
       `<td>${producto.id || ''}</td>
@@ -159,7 +156,7 @@ function actualizarControlesPaginacion(totalPaginas = 0) {
 async function cargarCategoriasProductos() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    errorMensaje("No estás autenticado");
+    mostrarToast("No estás autenticado", "error");
     return;
   }
 
@@ -184,7 +181,7 @@ async function cargarCategoriasProductos() {
 
   } catch (err) {
     console.error("Error al cargar categorías:", err);
-    errorMensaje("Error al cargar categorías: " + err.message);
+    mostrarToast("Error al cargar categorías: " + err.message, "error");
   }
 }
 
@@ -353,6 +350,7 @@ async function eliminarProductoConfirmado() {
   }
 
   try {
+    mostrarSpinner();
     const csrfToken = getCSRFToken();
 
     const response = await fetch(`/productos/eliminar-producto/${productoIdAEliminar}/`, {
@@ -367,13 +365,17 @@ async function eliminarProductoConfirmado() {
     if (response.redirected || response.ok) {
       cerrarModalEliminarProducto();
       await mostrarProductos(); // recarga productos actualizados
+      mostrarToast("Producto eliminado con éxito", "success");
     } else {
       const errorData = await response.json();
       console.error("Error del servidor:", errorData);
-      errorMensaje("Error al eliminar el producto.");
+      mostrarToast("Error al eliminar el producto.", "error");
     }
   } catch (error) {
     console.error("Error en la eliminación:", error);
-    errorMensaje("Hubo un error inesperado. Verifica si tienes mandas pendientes antes de eliminar, puedes desactivar el producto.");
+    mostrarToast("Hubo un error inesperado. Verifica si tienes mandas pendientes antes de eliminar, puedes desactivar el producto.", "error");
+  }
+  finally {
+    ocultarSpinner(); 
   }
 }

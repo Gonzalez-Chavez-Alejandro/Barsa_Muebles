@@ -3,17 +3,17 @@ const API_URL = '/catalogos/catalogo-api/';
 async function actualizarPDF() {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-        alert("No estás autenticado.");
+        mostrarToast("No estás autenticado.", "error");
         return;
     }
 
     const nuevoEnlace = document.getElementById('nuevoEnlace').value.trim();
 
     if (!esURLValida(nuevoEnlace)) {
-        alert("Por favor ingresa una URL válida.");
+        mostrarToast("Por favor ingresa una URL válida.", "error");
         return;
     }
-
+    mostrarSpinner();
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -37,18 +37,22 @@ async function actualizarPDF() {
             throw new Error(data.error || 'Error al guardar el catálogo en el servidor');
         }
 
-        alert('Catálogo actualizado correctamente.\nSe abrirá el PDF en una pestaña nueva.');
+        mostrarToast('Catálogo actualizado correctamente.\nSe abrirá el PDF en una pestaña nueva.', "success");
         window.open(data.url_pdf, '_blank');  // Aquí abrimos en pestaña nueva
 
     } catch (error) {
-        alert('Error al actualizar el catálogo:\n' + error.message);
+        mostrarToast('Error al actualizar el catálogo: ' + error.message, "error");
         console.error(error);
-    }
+    }finally {
+    ocultarSpinner();
+  }
 }
 
 
 function limpiarCampo() {
-    document.getElementById('nuevoEnlace').value = '';
+    const inputEnlace = document.getElementById('nuevoEnlace');
+    inputEnlace.value = '';  // Limpias el campo
+    inputEnlace.focus(); 
 }
 
 function esURLValida(url) {
@@ -59,3 +63,52 @@ function esURLValida(url) {
         return false;
     }
 }
+
+
+(() => {
+  const STORAGE_KEY = 'pdfConfig';
+  const API_URL = '/catalogos/catalogo-api/';
+  const DEFAULT_LINK = 'https://example.com/catalogo.pdf'; // Pon tu URL por defecto
+
+  const abrirCatalogo = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  const cargarDesdeAPI = async () => {
+    mostrarSpinner();  // <-- Mostrar spinner al inicio
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error('Error al obtener catálogo');
+
+      const data = await response.json();
+      const urlPdf = data.url_pdf?.trim() || DEFAULT_LINK;
+
+      localStorage.setItem(STORAGE_KEY, urlPdf);
+
+      const btn = document.getElementById('abrirCatalogoBtn');
+      if (btn) btn.onclick = () => abrirCatalogo(urlPdf);
+
+      console.log('Catálogo cargado correctamente'); // Toast éxito
+
+    } catch (error) {
+      console.error('No se pudo cargar el catálogo desde API:', error);
+
+      const enlaceLocal = localStorage.getItem(STORAGE_KEY) || DEFAULT_LINK;
+      const btn = document.getElementById('abrirCatalogoBtn');
+      if (btn) btn.onclick = () => abrirCatalogo(enlaceLocal);
+
+      mostrarToast('Error al cargar catálogo: ' + error.message, 'error'); // Toast error
+    } finally {
+      ocultarSpinner(); // <-- Ocultar spinner siempre al final
+    }
+  };
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === STORAGE_KEY) {
+      const btn = document.getElementById('abrirCatalogoBtn');
+      if (btn) btn.onclick = () => abrirCatalogo(e.newValue);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', cargarDesdeAPI);
+})();

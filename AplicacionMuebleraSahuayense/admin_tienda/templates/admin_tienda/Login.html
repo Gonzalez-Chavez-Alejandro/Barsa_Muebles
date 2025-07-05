@@ -117,68 +117,217 @@
       </div>
 
       <div class="forgot-password">
-        <a href="#">¿Olvidaste tu contraseña?</a>
+        <a class="a_olvidaste_tu_password" href="#">¿Olvidaste tu contraseña?</a>
       </div>
 
       <button type="submit" class="submit-btn">Ingresar</button>
     </form>
   </div>
+<style>
+/* Estilos específicos para recuperación de contraseña */
+.recuperacion-password .modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.recuperacion-password .close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.recuperacion-password .input-group {
+  margin-bottom: 20px;
+}
+
+.recuperacion-password .input-field {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.recuperacion-password .btn-primary {
+  width: 100%;
+  padding: 12px;
+  background-color: #0066ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recuperacion-password .btn-primary:hover {
+  background-color: #0055dd;
+}
+
+.recuperacion-password .email-destino {
+  font-weight: bold;
+  color: #333;
+  margin: 10px 0 20px;
+  text-align: center;
+}
+
+.recuperacion-password .resend-container {
+  text-align: center;
+  margin: 15px 0;
+  color: #666;
+}
+
+.recuperacion-password .resend-container a {
+  color: #0066ff;
+  text-decoration: none;
+}
+
+.recuperacion-password .security-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #999;
+  font-size: 12px;
+}
+
+.recuperacion-password .error-message {
+  color: #ff3333;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.recuperacion-password .spinner {
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top: 2px solid white;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.recuperacion-password .hidden {
+  display: none;
+}
+</style>
 
   <!-- Modal 1: Solicitar correo -->
   <div id="modal-solicitar-correo" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" onclick="cerrarModal('modal-solicitar-correo')"
-        >&times;</span
-      >
-      <h2>¿Olvidaste tu contraseña?</h2>
-      <p>Ingresa tu correo y te enviaremos un código de verificación.</p>
-      <input type="email" id="correo-recuperacion" placeholder="Correo electrónico" />
-      <button id="btn_EnviarCodigo" onclick="enviarCodigoRecuperacion()">Enviar código</button>
-      <p id="mensaje-correo" class="error-message"></p>
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-solicitar-correo')">&times;</span>
+    <h2>Recuperar contraseña</h2>
+    <p>Ingresa tu correo para recibir un código de verificación</p>
+    
+    <div class="input-group">
+      <input 
+        type="email" 
+        id="correo-recuperacion" 
+        placeholder="Correo electrónico" 
+        class="input-field"
+      />
+    </div>
+    
+    <button id="btn_EnviarCodigo" class="btn-primary" onclick="enviarCodigoRecuperacion()">
+      <span id="btn-text">Enviar código</span>
+      <span id="btn-spinner" class="spinner hidden"></span>
+    </button>
+    
+    <p id="mensaje-correo" class="error-message"></p>
+    
+    <div class="security-footer">
+      <p>Secured by YourApp</p>
     </div>
   </div>
+</div>
 
   <!-- Modal 2: Verificar código -->
   <div id="modal-verificar-codigo" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" onclick="cerrarModal('modal-verificar-codigo')"
-        >&times;</span
-      >
-      <h2>Verificación de código</h2>
-      <p>Introduce el código que recibiste por correo.</p>
-      <input type="text" id="codigo-verificacion" placeholder="Código de 6 dígitos" />
-      <button onclick="verificarCodigo()">Verificar código</button>
-      <p id="mensaje-codigo" class="error-message"></p>
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-verificar-codigo')">&times;</span>
+    <h2>Verificar código</h2>
+    <p>Ingresa el código enviado a:</p>
+    <p class="email-destino" id="email-verificacion">user@example.com</p>
+    
+    <div class="input-group">
+      <input 
+        type="text" 
+        id="codigo-verificacion" 
+        placeholder="Código de 6 dígitos" 
+        maxlength="6"
+        class="input-field"
+      />
+    </div>
+    
+    <div class="resend-container">
+      <p>¿No recibiste el código? <a href="#" onclick="reenviarCodigo()">Reenviar</a> <span id="resend-timer" class="hidden">(60)</span></p>
+    </div>
+    
+    <button class="btn-primary" onclick="verificarCodigo()">Continuar ►</button>
+    
+    <p id="mensaje-codigo" class="error-message"></p>
+    
+    <div class="security-footer">
+      <p>Secured by YourApp</p>
     </div>
   </div>
+</div>
 
   <!-- Modal 3: Nueva contraseña -->
   <div id="modal-nueva-password" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" onclick="cerrarModal('modal-nueva-password')"
-        >&times;</span
-      >
-      <h2>Establecer nueva contraseña</h2>
-      <form onsubmit="cambiarPassword(); return false;" autocomplete="off">
+  <div class="modal-content">
+    <span class="close" onclick="cerrarModal('modal-nueva-password')">&times;</span>
+    <h2>Nueva contraseña</h2>
+    <p>Crea una nueva contraseña segura</p>
+    
+    <form onsubmit="cambiarPassword(); return false;" autocomplete="off">
+      <div class="input-group">
         <input
           type="password"
           id="nueva-password"
           placeholder="Nueva contraseña"
+          class="input-field"
           autocomplete="new-password"
           required
         />
+      </div>
+      
+      <div class="input-group">
         <input
           type="password"
           id="confirmar-password"
           placeholder="Confirmar contraseña"
+          class="input-field"
           autocomplete="new-password"
           required
         />
-        <button type="submit">Guardar nueva contraseña</button>
-        <p id="mensaje-password" class="error-message"></p>
-      </form>
-    </div>
+      </div>
+      
+      <button type="submit" class="btn-primary">
+        <span id="btn-save-text">Guardar contraseña</span>
+        <span id="btn-save-spinner" class="spinner hidden"></span>
+      </button>
+      
+      <p id="mensaje-password" class="error-message"></p>
+      
+      <div class="security-footer">
+        <p>Secured by YourApp</p>
+      </div>
+    </form>
   </div>
+</div>
 
   {% include 'includes/carrito.html' %}
   {% include 'includes/foother.html' %}

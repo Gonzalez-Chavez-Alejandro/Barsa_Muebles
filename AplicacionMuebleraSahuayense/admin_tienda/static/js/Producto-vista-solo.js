@@ -243,7 +243,8 @@ document.getElementById("btn-encargar").addEventListener("click", () => {
   guardarCarrito();
   actualizarCarritoUI();
 
-  alert("Encargo realizado con éxito. Nos pondremos en contacto contigo pronto.");
+  mostrarToast("Encargo realizado con éxito. Nos pondremos en contacto contigo pronto.", "success");
+
 });
 
 // Función para generar un id único (puedes usar una versión simple)

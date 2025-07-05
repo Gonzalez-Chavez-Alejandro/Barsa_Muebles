@@ -76,7 +76,8 @@ inputEdad.addEventListener('input', function () {
     }
 
     // Preparar datos para API
-    const username = firstName;  // <--- CAMBIO AQUÍ
+    const username = firstName.replace(/\s+/g, '_');
+  // <--- CAMBIO AQUÍ
     const payload = {
       username: username,
       email: email,
@@ -136,6 +137,7 @@ mostrarSpinner();
           if (mensaje === "A user with that username already exists.") {
             mensaje = "Este nombre de usuario ya está en uso.";
           }
+          mostrarToast(mensaje, "error");
           document.getElementById('nombre-error').textContent = mensaje;
           document.getElementById('nombre-error').style.display = 'block';
         }

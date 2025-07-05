@@ -10,7 +10,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
   const token = localStorage.getItem("accessToken");
   if (!token) {
-    alert("Debes iniciar sesión como superusuario.");
+    mostrarToast("Debes iniciar sesión como Administrador.", "error");
     return;
   }
 
@@ -55,6 +55,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
   const data = { username, email, password, ageUser, phoneUser };
 
   try {
+     mostrarSpinner();
     const res = await fetch("/api/crear-superuser/", {
       method: "POST",
       headers: {
@@ -82,11 +83,11 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
             span.textContent = result[field].join(" ");
             span.style.display = 'block';
           } else if (!span) {
-            alert(result[field]);
+            mostrarToast(result[field], "error");
           }
         }
       } else {
-        alert("Error inesperado al crear el superusuario.");
+        mostrarToast("Error inesperado al crear el superusuario.", "error");
       }
       return;
     }
@@ -97,6 +98,8 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
   } catch (error) {
     console.error("Error al enviar solicitud:", error);
-    alert("Error de conexión. Intenta nuevamente.");
+    mostrarToast("Error de conexión. Intenta nuevamente.", "error");
+  }finally {
+    ocultarSpinner();
   }
 });

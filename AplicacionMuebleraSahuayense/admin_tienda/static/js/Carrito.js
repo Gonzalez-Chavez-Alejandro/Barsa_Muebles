@@ -100,7 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
       actualizarCarritoUIAPI();
     } catch (error) {
       console.error("Error al cargar el carrito:", error);
-      alert("Hubo un problema al cargar el carrito.");
+      mostrarToast("Hubo un problema al cargar el carrito.", "error");
+
     }
   }
 
@@ -182,14 +183,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const data = await res.json();
-        alert("❌ Error al actualizar cantidad: " + (data.detail || JSON.stringify(data)));
+        mostrarToast("❌ Error al actualizar cantidad: " + (data.detail || JSON.stringify(data)), "error");
         return;
       }
 
       carritoActual = await res.json();
       actualizarCarritoUIAPI();
     } catch (error) {
-      alert("❌ Error inesperado al actualizar cantidad.");//aqui
+      mostrarToast("Error inesperado al actualizar cantidad.", "error");
     }
   }
 
@@ -204,9 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
       await Promise.all(carritoActual.productos_encargados.map(pe =>
         eliminarProductoCarrito(pe.producto.id)
       ));
-      alert("Carrito vaciado.");
+      mostrarToast("🧺 Carrito vaciado.", "success");
     } catch {
-      alert("Error vaciando carrito.");
+      mostrarToast("Error al vaciar el carrito.", "error");
     }
   });
 
@@ -253,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert(`No se pudo guardar la ubicación: ${error.message}`);
+      mostrarToast(`No se pudo guardar la ubicación: ${error.message}`, "error");
     }
   });
 
@@ -261,89 +262,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   async function procesarEncargo() {
-  const token = localStorage.getItem("accessToken");
-  if (!token || !carritoActual?.id) {
-    alert("No hay pedido activo para procesar.");
-    return;
-  }
-
-  // Refrescar los datos del usuario
-  const resUser = await fetch("/api/user-info/", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-
-  if (!resUser.ok) {
-    alert("Error al refrescar los datos del usuario.");
-    return;
-  }
-
-  usuarioActual = await resUser.json();
-
-  if (!usuarioActual.ubicacionUser || usuarioActual.ubicacionUser.trim() === "") {
-    alert("Debes ingresar una ubicación válida antes de procesar el pedido.");
-    return;
-  }
-
-  // Actualizar ubicación en el encargo
-  const resActualizar = await fetch(`/encargos/actualizar-ubicacion/${carritoActual.id}/`, {
-    method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ ubicacion_entrega: usuarioActual.ubicacionUser.trim() })
-  });
-
-  if (!resActualizar.ok) {
-    const error = await resActualizar.json().catch(() => ({}));
-    alert("Error al actualizar ubicación: " + (error.detail || "Error desconocido"));
-    return;
-  }
-  mostrarSpinner();
-  // Procesar el pedido
-  try {
-    const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!res.ok) {
-      const errorData = await res.json();
-      alert("Error al procesar pedido: " + (errorData.detail || "Error desconocido"));
+    const token = localStorage.getItem("accessToken");
+    if (!token || !carritoActual?.id) {
+      mostrarToast("No hay pedido activo para procesar.", "error");
       return;
     }
 
-    // Obtener información de contacto del footer
-    let mensaje = "✅ Pedido procesado con éxito.\n\n";
-    mensaje += "📦 Puedes contactarnos para verificar tu pedido, ver si tiene coste de envio y aclarar como se realizara el pago, o consultar sobre precios por mayoreo:\n\n";
+    // Refrescar los datos del usuario
+    const resUser = await fetch("/api/user-info/", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-    try {
-      const footerRes = await fetch("/api/footer/");
-      if (footerRes.ok) {
-        const footerData = await footerRes.json();
-
-        if (footerData.emails?.length) {
-          mensaje += "📧 Correos:\n" + footerData.emails.map(e => `  - ${e}`).join("\n") + "\n";
-        }
-        if (footerData.phones?.length) {
-          mensaje += "📱 Teléfonos:\n" + footerData.phones.map(p => `  - ${p}`).join("\n") + "\n";
-        }
-        if (footerData.locations?.length) {
-          mensaje += "📍 Direcciones:\n" + footerData.locations.map(l => `  - ${l}`).join("\n") + "\n";
-        }
-      }
-    } catch (error) {
-      console.warn("No se pudo cargar información del footer:", error);
+    if (!resUser.ok) {
+      mostrarToast("Error al refrescar los datos del usuario.", "error");
+      return;
     }
 
-    alert(mensaje);
-    carritoActual = null;
-    actualizarCarritoUIAPI();
-    window.location.href = "/configuracion_usuario/#mis-encargos";
-  } catch (error) {
-    alert("Error inesperado al procesar pedido.");
+    usuarioActual = await resUser.json();
+
+    if (!usuarioActual.ubicacionUser || usuarioActual.ubicacionUser.trim() === "") {
+      mostrarToast("Debes ingresar una ubicación válida antes de procesar el pedido.", "warning");
+      return;
+    }
+
+    // Actualizar ubicación en el encargo
+    const resActualizar = await fetch(`/encargos/actualizar-ubicacion/${carritoActual.id}/`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ubicacion_entrega: usuarioActual.ubicacionUser.trim() })
+    });
+
+    if (!resActualizar.ok) {
+      const error = await resActualizar.json().catch(() => ({}));
+      mostrarToast("Error al actualizar ubicación: " + (error.detail || "Error desconocido"), "error");
+      return;
+    }
+    mostrarSpinner();
+    // Procesar el pedido
+    try {
+      const res = await fetch(`/encargos/procesar-pedido/${carritoActual.id}/`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        mostrarToast("Error al procesar pedido: " + (errorData.detail || "Error desconocido"), "error");
+        return;
+      }
+
+      // Obtener información de contacto del footer
+      let mensaje = "✅ Pedido procesado con éxito.\n\n";
+      mensaje += "📦 Puedes contactarnos para verificar tu pedido, ver si tiene coste de envio y aclarar como se realizara el pago, o consultar sobre precios por mayoreo:\n\n";
+
+      try {
+        const footerRes = await fetch("/api/footer/");
+        if (footerRes.ok) {
+          const footerData = await footerRes.json();
+
+          if (footerData.emails?.length) {
+            mensaje += "📧 Correos:\n" + footerData.emails.map(e => `  - ${e}`).join("\n") + "\n";
+          }
+          if (footerData.phones?.length) {
+            mensaje += "📱 Teléfonos:\n" + footerData.phones.map(p => `  - ${p}`).join("\n") + "\n";
+          }
+          if (footerData.locations?.length) {
+            mensaje += "📍 Direcciones:\n" + footerData.locations.map(l => `  - ${l}`).join("\n") + "\n";
+          }
+        }
+      } catch (error) {
+        console.warn("No se pudo cargar información del footer:", error);
+      }
+
+      alert(mensaje);
+      carritoActual = null;
+      actualizarCarritoUIAPI();
+      window.location.href = "/configuracion_usuario/#mis-encargos";
+    } catch (error) {
+      mostrarToast("Error inesperado al procesar pedido.", "error");
+    }
   }
-}
 
   btnEncargar?.addEventListener("click", async () => {
     if (!usuarioActual || !carritoActual?.productos_encargados?.length) {
@@ -370,85 +371,80 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
     if (!window.producto?.id) {
-     mostrarToast("Producto no cargado aún.", "warning");
+      mostrarToast("Producto no cargado aún.", "warning");
       return;
     }
     agregarAlCarritoAPI(window.producto, 1);
   });
 
- async function agregarAlCarritoAPI(producto, cantidad) {
-  if (!token) return;
+  async function agregarAlCarritoAPI(producto, cantidad) {
+    if (!token) return;
 
-  const precio = parseFloat(producto.precioOferta) > 0
-    ? parseFloat(producto.precioOferta)
-    : parseFloat(producto.precio);
+    const precio = parseFloat(producto.precioOferta) > 0
+      ? parseFloat(producto.precioOferta)
+      : parseFloat(producto.precio);
 
-  try {
-    if (!carritoActual?.id) {
-      // ✅ Verificar que el usuario tenga una ubicación válida
-      const ubicacion = usuarioActual?.ubicacionUser?.trim();
+    try {
+      if (!carritoActual?.id) {
+        //Verificar que el usuario tenga una ubicación válida
+        const ubicacion = usuarioActual?.ubicacionUser?.trim();
 
-     
+        // Construir el body solo si hay ubicación
+        const bodyData = {
+          ubicacion_entrega: ubicacion,
+          productos: []
+        };
 
-      // Construir el body solo si hay ubicación
-      const bodyData = {
-        ubicacion_entrega: ubicacion,
-        productos: []
-      };
+        const res = await fetch("/encargos/crear/", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(bodyData)
+        });
 
-      const res = await fetch("/encargos/crear/", {
-        method: "POST",
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.detail || "No se pudo crear el carrito");
+        }
+
+        carritoActual = await res.json();
+
+        if (!carritoActual?.id) {
+          const resCarrito = await fetch("/encargos/obtener-carrito/", {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          if (!resCarrito.ok) throw new Error("No se pudo obtener el carrito creado");
+          carritoActual = await resCarrito.json();
+        }
+      }
+
+      const resAgregar = await fetch(`/encargos/agregar/${carritoActual.id}/`, {
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(bodyData)
+        body: JSON.stringify({
+          producto_id: producto.id,
+          cantidad,
+          precio_unitario: precio
+        })
       });
 
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.detail || "No se pudo crear el carrito");
+      if (!resAgregar.ok) {
+        const err = await resAgregar.json();
+        throw new Error(err.detail || JSON.stringify(err));
       }
 
-      carritoActual = await res.json();
-
-      if (!carritoActual?.id) {
-        const resCarrito = await fetch("/encargos/obtener-carrito/", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        if (!resCarrito.ok) throw new Error("No se pudo obtener el carrito creado");
-        carritoActual = await resCarrito.json();
-      }
+      carritoActual = await resAgregar.json();
+      actualizarCarritoUIAPI();
+    } catch (error) {
+      console.error("Error al agregar al carrito:", error);
+      mostrarToast("Ocurrió un error al agregar el producto.", "error");
     }
-
-    const resAgregar = await fetch(`/encargos/agregar/${carritoActual.id}/`, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        producto_id: producto.id,
-        cantidad,
-        precio_unitario: precio
-      })
-    });
-
-    if (!resAgregar.ok) {
-      const err = await resAgregar.json();
-      throw new Error(err.detail || JSON.stringify(err));
-    }
-
-    carritoActual = await resAgregar.json();
-    actualizarCarritoUIAPI();
-  } catch (error) {
-    console.error("Error al agregar al carrito:", error);
-    alert("❌ Ocurrió un error al agregar el producto.");
   }
-}
-
-
-
   validarTokenYUsuario();
 });
 

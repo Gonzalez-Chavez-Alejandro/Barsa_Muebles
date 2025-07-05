@@ -56,5 +56,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Error al cargar categorías:", error);
     carousel.innerHTML = "<p>Error al cargar categorías.</p>";
+    mostrarToast("Error al cargar categorías.", "error");
   }
 });

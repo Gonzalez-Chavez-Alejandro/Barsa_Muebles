@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", async() => {
+document.addEventListener("DOMContentLoaded", async () => {
     let pedidos = [];
     let estadoActivo = "todos";
     let pedidosMostrados = [];
-    
+
     const container = document.getElementById("pedidos-container");
     const inputBuscar = document.getElementById("um-input-buscar");
 
@@ -30,11 +30,11 @@ document.addEventListener("DOMContentLoaded", async() => {
         const nombreUsuario = pedido.usuario_nombre || 'Desconocido';
         const correoUsuario = pedido.usuario_correo || 'No proporcionado';
         const telefonoUsuario = pedido.usuario_telefono || 'No proporcionado';
-const btnPapelera = pedido.estado !== 'papelera'
-    ? `<button type="button" class="um-btn-papelera" data-id="${pedido.id}">
+        const btnPapelera = pedido.estado !== 'papelera'
+            ? `<button type="button" class="um-btn-papelera" data-id="${pedido.id}">
            <i class="fas fa-trash"></i> Papelera
        </button>`
-    : '';
+            : '';
 
         const productosHTML = (pedido.productos_encargados || []).map(p => {
             const imgUrl = p.imagen || 'https://via.placeholder.com/100';
@@ -170,7 +170,7 @@ const btnPapelera = pedido.estado !== 'papelera'
                 if (pedido) {
                     generarPDF(pedido);
                 } else {
-                    alert('Pedido no encontrado para generar PDF');
+                    mostrarToast('Pedido no encontrado para generar PDF', 'error');
                 }
             }
         }
@@ -203,7 +203,7 @@ const btnPapelera = pedido.estado !== 'papelera'
 
                 console.log(`✅ Estado pedido #${pedidoId} actualizado a '${nuevoEstado}'`);
             } catch (error) {
-                alert('Error al actualizar estado: ' + error.message);
+                mostrarToast('Error al actualizar estado: ' + error.message, 'error');
                 const pedido = pedidos.find(p => p.id == pedidoId);
                 if (pedido) select.value = pedido.estado;
             }
@@ -242,18 +242,17 @@ const btnPapelera = pedido.estado !== 'papelera'
                 }
 
                 const data = await res.json();
-                alert(data.mensaje || "Encargo movido a papelera");
+                mostrarToast(data.mensaje || "Encargo movido a papelera", "success");
 
                 const index = pedidos.findIndex(p => p.id == encargoId);
-if (index !== -1) {
-    pedidos[index].estado = "papelera";
-    renderPedidos(filtrarPedidos());  // Vuelve a renderizar con los datos actualizados
-}
-
+                if (index !== -1) {
+                    pedidos[index].estado = "papelera";
+                    renderPedidos(filtrarPedidos());  // Vuelve a renderizar con los datos actualizados
+                }
 
             } catch (err) {
                 console.error("Error al mover a papelera:", err);
-                alert("Ocurrió un error al mover el pedido a la papelera.");
+                mostrarToast("Ocurrió un error al mover el pedido a la papelera.", "error");
             }
         }
     });
@@ -263,6 +262,7 @@ if (index !== -1) {
         if (!confirmar) return;
 
         try {
+            mostrarSpinner();
             const res = await fetch("/encargos/papelera/eliminar/", {
                 method: "DELETE",
                 headers: {
@@ -277,7 +277,8 @@ if (index !== -1) {
             }
 
             const data = await res.json();
-            alert(data.mensaje || "Papelera vaciada");
+            mostrarToast(data.mensaje || "Papelera vaciada", "success");
+
 
             if (typeof cargarEncargos === "function") {
                 await cargarEncargos();
@@ -287,7 +288,9 @@ if (index !== -1) {
 
         } catch (err) {
             console.error("Error al eliminar papelera:", err);
-            alert("Error al eliminar pedidos de la papelera.");
+            mostrarToast("Ocurrió un error al eliminar pedidos de la papelera.", "error");
+        } finally {
+            ocultarSpinner();
         }
     });
     document.addEventListener("click", async function (e) {
@@ -299,6 +302,7 @@ if (index !== -1) {
             if (!confirmar) return;
 
             try {
+                mostrarSpinner();
                 const res = await fetch(`/encargos/eliminar/${encargoId}/`, {
                     method: "DELETE",
                     headers: {
@@ -313,18 +317,22 @@ if (index !== -1) {
                 }
 
                 const data = await res.json();
-                alert(data.mensaje || "Encargo eliminado correctamente");
+                mostrarToast(data.mensaje || "Encargo eliminado correctamente", "success");
+
 
                 if (typeof cargarEncargos === "function") {
                     await cargarEncargos();
                 } else {
-                   // location.reload();
+                    // location.reload();
                 }
 
             } catch (err) {
                 console.error("Error al eliminar el encargo:", err);
-                alert("Ocurrió un error al eliminar el encargo.");
+                mostrarToast("Ocurrió un error al eliminar el encargo.", "error");
             }
+            finally {
+            ocultarSpinner(); // siempre se oculta el spinner
+        }
         }
     });
 
@@ -340,160 +348,21 @@ if (index !== -1) {
         });
     }
 
-async function generarPDF(pedido) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    async function generarPDF(pedido) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-    const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+        const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
 
-    let logoBase64;
-    try {
-        logoBase64 = await obtenerImagenBase64(logoUrl);
-    } catch (e) {
-        console.warn('No se pudo cargar el logo:', e);
-    }
-
-    let headerHeight = 0;
-
-    if (logoBase64) {
-        const imgProps = doc.getImageProperties(logoBase64);
-        const logoWidth = 40;
-        const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
-        const x = 14;
-        const y = 10;
-
-        doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
-
-        headerHeight = y + logoHeight + 5;
-
-        doc.setDrawColor(0, 0, 0);
-        doc.setLineWidth(0.5);
-        doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
-    }
-
-    let posY = headerHeight + 10;
-
-    doc.setFontSize(18);
-    doc.text(`Pedido #${pedido.id}`, 14, posY);
-
-    posY += 10;
-    const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
-    doc.setFontSize(12);
-    doc.text(`Fecha: ${fechaStr}`, 14, posY);
-
-    posY += 10;
-    doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
-    posY += 7;
-    doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
-    posY += 7;
-    doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
-    posY += 7;
-    doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
-
-    if (estadoActivo === "todos") {
-        posY += 7;
-        doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
-    }
-
-    posY += 12;
-
-    const columnas = [
-        { header: 'Producto', dataKey: 'producto' },
-        { header: 'Cantidad', dataKey: 'cantidad' },
-        { header: 'Precio Original', dataKey: 'precio_original' },
-        { header: '% Descuento', dataKey: 'descuento' },
-        { header: 'Precio Descuento', dataKey: 'precio_descuento' },
-        { header: 'Subtotal', dataKey: 'subtotal' }
-    ];
-
-    const productos = pedido.productos_encargados || [];
-
-    // Validar si hay productos con todos los valores 0
-    const hayProductoConCamposCero = productos.some(p => {
-        const prod = p.producto || {};
-        const precioOriginal = Number(prod.priceFurniture || 0);
-        const porcentajeDescuento = Number(prod.porcentajeDescuento || 0);
-        const precioDescuento = (!isNaN(prod.PrecioOferta) && prod.PrecioOferta !== null)
-            ? Number(prod.PrecioOferta)
-            : precioOriginal;
-        return precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0;
-    });
-
-    const filas = productos.map(p => {
-        const producto = p.producto || {};
-        const cantidad = Number(p.cantidad) || 0;
-
-        const precioOriginal = Number(producto.priceFurniture || 0);
-        const porcentajeDescuento = Number(producto.porcentajeDescuento || 0);
-        const precioDescuento = (!isNaN(producto.PrecioOferta) && producto.PrecioOferta !== null)
-            ? Number(producto.PrecioOferta)
-            : precioOriginal;
-
-        const subtotal = porcentajeDescuento === 0
-            ? precioOriginal * cantidad
-            : precioDescuento * cantidad;
-
-        const camposSinValor = (precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0);
-
-        return {
-            producto: producto.nameFurniture || 'Sin nombre',
-            cantidad: cantidad.toString(),
-            precio_original: camposSinValor ? 'No definido' : `$${precioOriginal.toFixed(2)}`,
-            descuento: camposSinValor ? 'No definido' : `${porcentajeDescuento}%`,
-            precio_descuento: camposSinValor ? 'No definido' : `$${precioDescuento.toFixed(2)}`,
-            subtotal: camposSinValor ? 'No definido' : `$${subtotal.toFixed(2)}`
-        };
-    });
-
-    doc.autoTable({
-        startY: posY,
-        head: [columnas.map(col => col.header)],
-        body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
-        styles: { fontSize: 10 },
-        headStyles: { fillColor: [73, 84, 104] },
-        margin: { left: 14, right: 14 }
-    });
-
-    const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
-    doc.setFontSize(14);
-
-    if (hayProductoConCamposCero) {
-        doc.text("Póngase en contacto con la empresa", 14, finalY);
-    } else {
-        doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
-    }
-
-    doc.save(`pedido_${pedido.id}.pdf`);
-}
-
-
-
-document.getElementById("um-exportar-todos").addEventListener("click", async () => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
-
-    let logoBase64;
-    try {
-        logoBase64 = await obtenerImagenBase64(logoUrl);
-    } catch (e) {
-        console.warn('No se pudo cargar el logo:', e);
-    }
-
-    const pedidosAExportar = pedidos.filter(p => {
-        const coincideEstado = estadoActivo === "todos" || p.estado === estadoActivo;
-        return coincideEstado && p.estado !== "carrito";
-    });
-
-    if (pedidosAExportar.length === 0) {
-        alert("No hay pedidos para exportar.");
-        return;
-    }
-
-    for (let i = 0; i < pedidosAExportar.length; i++) {
-        const pedido = pedidosAExportar[i];
+        let logoBase64;
+        try {
+            logoBase64 = await obtenerImagenBase64(logoUrl);
+        } catch (e) {
+            console.warn('No se pudo cargar el logo:', e);
+        }
 
         let headerHeight = 0;
+
         if (logoBase64) {
             const imgProps = doc.getImageProperties(logoBase64);
             const logoWidth = 40;
@@ -502,7 +371,9 @@ document.getElementById("um-exportar-todos").addEventListener("click", async () 
             const y = 10;
 
             doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
+
             headerHeight = y + logoHeight + 5;
+
             doc.setDrawColor(0, 0, 0);
             doc.setLineWidth(0.5);
             doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
@@ -525,11 +396,9 @@ document.getElementById("um-exportar-todos").addEventListener("click", async () 
         posY += 7;
         doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
         posY += 7;
-       doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
-     
+        doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
 
-posY += 7;
-        if (estadoActivo === "todos" && pedido.estado !== "papelera") {
+        if (estadoActivo === "todos") {
             posY += 7;
             doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
         }
@@ -547,7 +416,7 @@ posY += 7;
 
         const productos = pedido.productos_encargados || [];
 
-        // Aquí la clave: detectamos si existe algún producto con todos valores en 0
+        // Validar si hay productos con todos los valores 0
         const hayProductoConCamposCero = productos.some(p => {
             const prod = p.producto || {};
             const precioOriginal = Number(prod.priceFurniture || 0);
@@ -555,7 +424,6 @@ posY += 7;
             const precioDescuento = (!isNaN(prod.PrecioOferta) && prod.PrecioOferta !== null)
                 ? Number(prod.PrecioOferta)
                 : precioOriginal;
-            // Si todos ceros
             return precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0;
         });
 
@@ -598,20 +466,162 @@ posY += 7;
         doc.setFontSize(14);
 
         if (hayProductoConCamposCero) {
-            // Si hay al menos un producto con 0 en todos los valores
             doc.text("Póngase en contacto con la empresa", 14, finalY);
         } else {
-            // Caso normal, muestra total normal
             doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
         }
 
-        if (i < pedidosAExportar.length - 1) {
-            doc.addPage();
-        }
+        doc.save(`pedido_${pedido.id}.pdf`);
+        mostrarToast(`PDF del pedido #${pedido.id} generado correctamente.`, 'success');
     }
 
-    doc.save(`pedidos_${estadoActivo}.pdf`);
-});
+
+
+    document.getElementById("um-exportar-todos").addEventListener("click", async () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const logoUrl = 'https://res.cloudinary.com/dacrpsl5p/image/upload/v1745430695/Logo-Negro_nfvywi.png';
+
+        let logoBase64;
+        try {
+            logoBase64 = await obtenerImagenBase64(logoUrl);
+        } catch (e) {
+            console.warn('No se pudo cargar el logo:', e);
+        }
+
+        const pedidosAExportar = pedidos.filter(p => {
+            const coincideEstado = estadoActivo === "todos" || p.estado === estadoActivo;
+            return coincideEstado && p.estado !== "carrito";
+        });
+
+        if (pedidosAExportar.length === 0) {
+            mostrarToast("No hay pedidos para exportar.", "info");
+            return;
+        }
+
+        for (let i = 0; i < pedidosAExportar.length; i++) {
+            const pedido = pedidosAExportar[i];
+
+            let headerHeight = 0;
+            if (logoBase64) {
+                const imgProps = doc.getImageProperties(logoBase64);
+                const logoWidth = 40;
+                const logoHeight = (imgProps.height * logoWidth) / imgProps.width;
+                const x = 14;
+                const y = 10;
+
+                doc.addImage(logoBase64, 'PNG', x, y, logoWidth, logoHeight);
+                headerHeight = y + logoHeight + 5;
+                doc.setDrawColor(0, 0, 0);
+                doc.setLineWidth(0.5);
+                doc.line(14, headerHeight, doc.internal.pageSize.getWidth() - 14, headerHeight);
+            }
+
+            let posY = headerHeight + 10;
+
+            doc.setFontSize(18);
+            doc.text(`Pedido #${pedido.id}`, 14, posY);
+
+            posY += 10;
+            const fechaStr = new Date(pedido.fecha).toLocaleString('es-ES');
+            doc.setFontSize(12);
+            doc.text(`Fecha: ${fechaStr}`, 14, posY);
+
+            posY += 10;
+            doc.text(`Usuario: ${pedido.usuario_nombre || 'Desconocido'}`, 14, posY);
+            posY += 7;
+            doc.text(`Correo: ${pedido.usuario_correo || 'No proporcionado'}`, 14, posY);
+            posY += 7;
+            doc.text(`Teléfono: ${pedido.usuario_telefono || 'No proporcionado'}`, 14, posY);
+            posY += 7;
+            doc.text(`Ubicacion: ${pedido.ubicacion_entrega || 'No proporcionado'}`, 14, posY);
+
+
+            posY += 7;
+            if (estadoActivo === "todos" && pedido.estado !== "papelera") {
+                posY += 7;
+                doc.text(`Estado: ${pedido.estado || 'Sin estado'}`, 14, posY);
+            }
+
+            posY += 12;
+
+            const columnas = [
+                { header: 'Producto', dataKey: 'producto' },
+                { header: 'Cantidad', dataKey: 'cantidad' },
+                { header: 'Precio Original', dataKey: 'precio_original' },
+                { header: '% Descuento', dataKey: 'descuento' },
+                { header: 'Precio Descuento', dataKey: 'precio_descuento' },
+                { header: 'Subtotal', dataKey: 'subtotal' }
+            ];
+
+            const productos = pedido.productos_encargados || [];
+
+            // Aquí la clave: detectamos si existe algún producto con todos valores en 0
+            const hayProductoConCamposCero = productos.some(p => {
+                const prod = p.producto || {};
+                const precioOriginal = Number(prod.priceFurniture || 0);
+                const porcentajeDescuento = Number(prod.porcentajeDescuento || 0);
+                const precioDescuento = (!isNaN(prod.PrecioOferta) && prod.PrecioOferta !== null)
+                    ? Number(prod.PrecioOferta)
+                    : precioOriginal;
+                // Si todos ceros
+                return precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0;
+            });
+
+            const filas = productos.map(p => {
+                const producto = p.producto || {};
+                const cantidad = Number(p.cantidad) || 0;
+
+                const precioOriginal = Number(producto.priceFurniture || 0);
+                const porcentajeDescuento = Number(producto.porcentajeDescuento || 0);
+                const precioDescuento = (!isNaN(producto.PrecioOferta) && producto.PrecioOferta !== null)
+                    ? Number(producto.PrecioOferta)
+                    : precioOriginal;
+
+                const subtotal = porcentajeDescuento === 0
+                    ? precioOriginal * cantidad
+                    : precioDescuento * cantidad;
+
+                const camposSinValor = (precioOriginal === 0 && porcentajeDescuento === 0 && precioDescuento === 0);
+
+                return {
+                    producto: producto.nameFurniture || 'Sin nombre',
+                    cantidad: cantidad.toString(),
+                    precio_original: camposSinValor ? 'No definido' : `$${precioOriginal.toFixed(2)}`,
+                    descuento: camposSinValor ? 'No definido' : `${porcentajeDescuento}%`,
+                    precio_descuento: camposSinValor ? 'No definido' : `$${precioDescuento.toFixed(2)}`,
+                    subtotal: camposSinValor ? 'No definido' : `$${subtotal.toFixed(2)}`
+                };
+            });
+
+            doc.autoTable({
+                startY: posY,
+                head: [columnas.map(col => col.header)],
+                body: filas.map(fila => columnas.map(col => fila[col.dataKey])),
+                styles: { fontSize: 10 },
+                headStyles: { fillColor: [73, 84, 104] },
+                margin: { left: 14, right: 14 }
+            });
+
+            const finalY = doc.lastAutoTable.finalY + 10 || posY + 50;
+            doc.setFontSize(14);
+
+            if (hayProductoConCamposCero) {
+                // Si hay al menos un producto con 0 en todos los valores
+                doc.text("Póngase en contacto con la empresa", 14, finalY);
+            } else {
+                // Caso normal, muestra total normal
+                doc.text(`Total: $${Number(pedido.total).toFixed(2)}`, 14, finalY);
+            }
+
+            if (i < pedidosAExportar.length - 1) {
+                doc.addPage();
+            }
+        }
+
+        doc.save(`pedidos_${estadoActivo}.pdf`);
+        mostrarToast(`PDF con todos los pedidos (${estadoActivo}) generado correctamente.`, 'success');
+    });
 
 });
 

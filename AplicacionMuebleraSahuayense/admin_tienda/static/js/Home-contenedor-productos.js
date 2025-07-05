@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     } catch (error) {
         console.error("Error al cargar productos o categorías:", error);
+        mostrarToast("Error al cargar productos.", "error");
         document.getElementById("contenedor-productos").innerHTML = "<p>Error al cargar productos.</p>";
     }
 

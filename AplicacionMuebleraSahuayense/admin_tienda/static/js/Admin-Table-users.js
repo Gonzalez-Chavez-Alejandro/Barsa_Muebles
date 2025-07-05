@@ -2,7 +2,7 @@ let usuarios = [];
 let usuariosFiltrados = [];
 let paginaActual = 1;
 const usuariosPorPagina = 10;
-let usuarioAEliminarId = null; // IMPORTANTE: Definir variable global
+let usuarioAEliminarId = null; 
 
 // Obtener info usuario autenticado desde token guardado
 async function obtenerUsuarioAutenticado() {
@@ -28,6 +28,7 @@ async function obtenerUsuarioAutenticado() {
 
   } catch (error) {
     console.error("Error al obtener info del usuario:", error); // Consola: error en fetch
+    mostrarToast("No se pudo obtener la información del usuario", "error");
     return null;
   }
 }
@@ -36,10 +37,10 @@ async function obtenerUsuarioAutenticado() {
 async function cargarUsuarios() {
   const token = localStorage.getItem("access_token");
   if (!token) {
-    mostrarToast("No autenticado"); // Alerta: no autenticado
+    mostrarToast("No autenticado", "error"); // Alerta: no autenticado
     return;
   }
-
+  // mostrarSpinner();
   try {
     const response = await fetch("/api/users/", {
       headers: {
@@ -47,7 +48,7 @@ async function cargarUsuarios() {
       }
     });
     if (!response.ok) {
-      mostrarToast("Error al cargar usuarios"); // Alerta: error al cargar usuarios
+      mostrarToast("Error al cargar usuarios", "error"); // Alerta: error al cargar usuarios
       return;
     }
     usuarios = await response.json();
@@ -57,6 +58,9 @@ async function cargarUsuarios() {
 
   } catch (error) {
     console.error("Error al cargar usuarios:", error); // Consola: error fetch usuarios
+    mostrarToast("Error al cargar usuarios", "error");
+  } finally {
+    ocultarSpinner(); // <-- Ocultar spinner siempre
   }
 }
 
@@ -84,8 +88,11 @@ function mostrarUsuarios(pagina = 1) {
       <td>${usuario.username}</td>
       <td>${usuario.email}</td>
       <td>${usuario.phoneUser || ''}</td>
-      <td>${usuario.ubicacionUser || ''}</td>
-      <td>*******</td>
+      <td title="${usuario.ubicacionUser}">
+      <div class="ubicacion-expandible" onclick="this.classList.toggle('expandido')">
+        ${usuario.ubicacionUser || 'No especificado'}
+      </div>
+    </td>
       <td>
         <button class="btn-admin-desing-edit" data-id="${usuario.id}"><i class="fas fa-edit"></i></button>
         <button class="btn-admin-desing-delete" data-id="${usuario.id}"><i class="fas fa-trash-alt"></i></button>
@@ -110,13 +117,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const usuario = await obtenerUsuarioAutenticado();
 
   if (!usuario) {
-    mostrarToast("No estás autenticado. Por favor inicia sesión."); // Alerta: no autenticado
-    window.location.href = "/login";
+    mostrarToast("No estás autenticado. Por favor inicia sesión.", "error");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 1500); // 1.5 segundos de espera para mostrar el toast
     return;
   }
 
+
   if (!usuario.is_superuser) {
-    mostrarToast("No tienes permisos para acceder a esta sección"); // Alerta: sin permisos
+    mostrarToast("No tienes permisos para acceder a esta sección", "error");
     document.querySelector(".admin-table").style.display = "none";
     document.getElementById("buscador").style.display = "none";
     document.getElementById("paginaAnterior").style.display = "none";
@@ -205,6 +215,9 @@ async function confirmarEliminacion() {
   if (!usuarioAEliminarId) return;
 
   const token = localStorage.getItem("access_token");
+  const btnEliminar = document.getElementById("btnConfirmarEliminar");
+  btnEliminar.disabled = true;
+  mostrarSpinner();
 
   try {
     const response = await fetch(`/api/users/${usuarioAEliminarId}/`, {
@@ -215,19 +228,23 @@ async function confirmarEliminacion() {
     });
 
     if (response.ok) {
-      mostrarToast("Usuario eliminado correctamente");
+      mostrarToast("Usuario eliminado correctamente", "success");
       await cargarUsuarios();
     } else {
       const data = await response.json();
-      mostrarToast(data.error || "Error al eliminar el usuario");
+      mostrarToast(data.error || "Error al eliminar el usuario", "error");
     }
 
   } catch (error) {
-    console.error("Error al eliminar usuario:", error); // Consola: error eliminar usuario
+    console.error("Error al eliminar usuario:", error);
+    mostrarToast("Ocurrió un error al intentar eliminar el usuario", "error");
   } finally {
     cancelarEliminacion();
+    ocultarSpinner();
+    btnEliminar.disabled = false;
   }
 }
+
 
 // Cerrar modal al hacer clic fuera de él
 window.addEventListener("click", function (e) {
@@ -244,15 +261,12 @@ window.addEventListener("keydown", function (e) {
   }
 });
 
-
-
-
 // Al cargar el usuario para editar:
 document.addEventListener("click", async function (event) {
   if (event.target.closest(".btn-admin-desing-edit")) {
     const idUsuario = event.target.closest(".btn-admin-desing-edit").getAttribute("data-id");
     const token = localStorage.getItem("access_token");
-
+    mostrarSpinner();
     try {
       const res = await fetch(`/api/users/${idUsuario}/`, {
         headers: { "Authorization": `Bearer ${token}` }
@@ -266,7 +280,7 @@ document.addEventListener("click", async function (event) {
 
       document.getElementById("nombreEditar").value = usuario.username || "";
       // Aquí asignamos ageUser al campo 'apellidoEditar' (años)
-      document.getElementById("apellidoEditar").value = usuario.ageUser || "";  
+      document.getElementById("apellidoEditar").value = usuario.ageUser || "";
       document.getElementById("correoEditar").value = usuario.email || "";
       document.getElementById("telefonoEditar").value = usuario.phoneUser || "";
       document.getElementById("ubicacionEditar").value = usuario.ubicacionUser || "";
@@ -276,7 +290,10 @@ document.addEventListener("click", async function (event) {
 
     } catch (err) {
       console.error("Error cargando usuario para editar:", err);
-      mostrarToast("No se pudo cargar la información del usuario");
+      mostrarToast("No se pudo cargar la información del usuario", "error");
+
+    } finally {
+      ocultarSpinner();
     }
   }
 });
@@ -330,11 +347,7 @@ async function guardarCambios(event) {
 
   const ubicacion = document.getElementById("ubicacionEditar").value.trim();
 
-if (!ubicacion) {
-  document.getElementById("errorUbicacion").textContent = "La ubicación no puede estar vacía.";
-  hasError = true;
-}
-
+  document.getElementById("error-ubicacion").textContent = "";
 
   if (hasError) return;
 
@@ -348,8 +361,8 @@ if (!ubicacion) {
   if (contrasena) {
     data.password = contrasena;
   }
-// ✅ Mostrar en consola lo que se enviará al backend
-console.log("## Datos a enviar        :", data);
+  // ✅ Mostrar en consola lo que se enviará al backend
+  console.log("## Datos a enviar        :", data);
   const campoAMensaje = {
     username: "Nombre de usuario",
     email: "Correo electrónico",
@@ -369,7 +382,7 @@ console.log("## Datos a enviar        :", data);
     });
 
     if (res.ok) {
-      mostrarToast("Usuario actualizado correctamente");
+      mostrarToast("Usuario actualizado correctamente", "success");
       document.getElementById("modalEditar").style.display = "none";
       await cargarUsuarios();
     } else {
@@ -380,21 +393,18 @@ console.log("## Datos a enviar        :", data);
         const mensajes = err[primerCampo];
         const mensajeAmigable = Array.isArray(mensajes) ? mensajes[0] : mensajes;
         const campoLegible = campoAMensaje[primerCampo] || primerCampo;
-        mostrarToast(`Error en ${campoLegible}: ${mensajeAmigable}`);
+        mostrarToast(`Error en ${campoLegible}: ${mensajeAmigable}`, "error");
       } else if (err.detail) {
-        mostrarToast("Error: " + err.detail);
+        mostrarToast("Error: " + err.detail, "error");
       } else {
-        mostrarToast("Error al actualizar usuario.");
+        mostrarToast("Error al actualizar usuario.", "error");
       }
     }
   } catch (error) {
     console.error("Error al enviar actualización:", error);
-    mostrarToast("Fallo al actualizar usuario");
+    mostrarToast("Fallo al actualizar usuario", "error");
   }
 }
-
-
-
 
 function cerrarModal() {
   document.getElementById("modalEditar").style.display = "none";

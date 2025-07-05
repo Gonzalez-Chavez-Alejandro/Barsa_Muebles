@@ -10,7 +10,7 @@ async function cargarUsuarioActual() {
 
   try {
     const res = await fetch(`/api/user-info/?t=${Date.now()}`, {
-      headers: { 
+      headers: {
         'Authorization': `Bearer ${token}`,
         'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
@@ -22,7 +22,7 @@ async function cargarUsuarioActual() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     const data = await res.json();
-    
+
     usuarioActual = Object.freeze({
       nombre: data.username || '',
       correo: data.email || '',
@@ -59,11 +59,12 @@ async function cargarUsuarioActual() {
 async function cargarEncargosUsuario() {
   const token = localStorage.getItem('accessToken');
   if (!token) {
-    alert('No estás autenticado. Inicia sesión primero.');
+    mostrarToast('No estás autenticado. Inicia sesión primero.', 'error');
+
     window.location.href = '/login';
     return;
   }
-
+  mostrarSpinner();
   try {
     const res = await fetch('/encargos/mis-encargos/', {
       headers: {
@@ -92,13 +93,13 @@ async function cargarEncargosUsuario() {
 
     encargosFiltrados.forEach(encargo => {
       const tieneProductoSinPrecio = (encargo.productos_encargados || []).some(item => {
-  const precio = Number(item.producto?.priceFurniture || 0);
-  return precio === 0;
-});
+        const precio = Number(item.producto?.priceFurniture || 0);
+        return precio === 0;
+      });
 
-const totalHTML = tieneProductoSinPrecio
-  ? `<div class="encargo-total" style="color: red"><strong>Total:</strong> Póngase en contacto con la empresa</div>`
-  : `<div class="encargo-total">Total: $${Number(encargo.total).toFixed(2)}</div>`;
+      const totalHTML = tieneProductoSinPrecio
+        ? `<div class="encargo-total" style="color: red"><strong>Total:</strong> Póngase en contacto con la empresa</div>`
+        : `<div class="encargo-total">Total: $${Number(encargo.total).toFixed(2)}</div>`;
 
       const productosHTML = (encargo.productos_encargados || []).map(item => {
         const producto = item.producto || {};
@@ -127,9 +128,9 @@ const totalHTML = tieneProductoSinPrecio
       const encargoId = encargo.id.toString();
       const idDisplay = encargoId.includes('-') ? encargoId.split('-')[0] : encargoId;
       const estadoMostrar = (encargo.estado === 'procesado') ? 'procesando' : (encargo.estado || 'desconocido');
-const nombreUsuario = encargo.usuario_nombre || 'No especificado';
-const correoUsuario = encargo.usuario_correo || 'No especificado';
-const telefonoUsuario = encargo.usuario_telefono || 'No especificado';
+      const nombreUsuario = encargo.usuario_nombre || 'No especificado';
+      const correoUsuario = encargo.usuario_correo || 'No especificado';
+      const telefonoUsuario = encargo.usuario_telefono || 'No especificado';
       encargoElement.innerHTML = `
         <div class="encargo-header">
        
@@ -180,12 +181,11 @@ const telefonoUsuario = encargo.usuario_telefono || 'No especificado';
 
   } catch (error) {
     console.error(error);
-    alert('Error al cargar los encargos del usuario.');
+    mostrarToast('Error al cargar los encargos del usuario.', 'error');
+  } finally {
+    ocultarSpinner();
   }
 }
-
-
-
 
 // Escucha eventos para generar PDF y eliminar encargos
 // Evento global para delegar acciones
@@ -217,11 +217,11 @@ document.addEventListener('click', async (e) => {
       });
 
       if (!res.ok) throw new Error('Error al cancelar el pedido');
-      alert('Pedido cancelado correctamente');
+      mostrarToast('Pedido cancelado correctamente', 'success');
       cargarEncargosUsuario();  // recargar lista
     } catch (err) {
       console.error(err);
-      alert('Hubo un error al cancelar el pedido.');
+      mostrarToast('Hubo un error al cancelar el pedido.', 'error');
     }
   }
 });
@@ -456,25 +456,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   await cargarUsuarioActual();
   await cargarEncargosUsuario();
   rellenarFormularioUsuario();
-console.log("Ubicación cargada:", usuarioActual.ubicacionUser);
+  console.log("Ubicación cargada:", usuarioActual.ubicacionUser);
 
   function rellenarFormularioUsuario() {
-  console.log("Datos al rellenar formulario:", usuarioActual); // Verifica aquí
-  const campos = {
-    nombre: "nombre",
-    telefono: "telefono",
-    correo: "correo",
-    ubicacionUser: "ubicacion"
-  };
+    console.log("Datos al rellenar formulario:", usuarioActual); // Verifica aquí
+    const campos = {
+      nombre: "nombre",
+      telefono: "telefono",
+      correo: "correo",
+      ubicacionUser: "ubicacion"
+    };
 
-  for (const [clave, id] of Object.entries(campos)) {
-    const input = document.getElementById(id);
-    if (input && usuarioActual[clave] !== undefined) {
-      console.log(`Asignando ${clave}:`, usuarioActual[clave]); // Depuración
-      input.value = usuarioActual[clave];
+    for (const [clave, id] of Object.entries(campos)) {
+      const input = document.getElementById(id);
+      if (input && usuarioActual[clave] !== undefined) {
+        console.log(`Asignando ${clave}:`, usuarioActual[clave]); // Depuración
+        input.value = usuarioActual[clave];
+      }
     }
   }
-}
 });
 
 const formulario = document.getElementById('form-configuracion');
