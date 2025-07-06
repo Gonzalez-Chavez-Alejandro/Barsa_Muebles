@@ -81,6 +81,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
+STATIC_ROOT = BASE_DIR / 'static'
 
 ROOT_URLCONF = 'AplicacionMuebleraSahuayense.urls'
 
