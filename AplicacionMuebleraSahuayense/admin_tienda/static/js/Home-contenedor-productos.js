@@ -150,12 +150,20 @@ function renderCategorias() {
 }
 
 function aplicarFiltros() {
-    const termino = document.getElementById("buscador").value.toLowerCase();
+    const terminoOriginal = document.getElementById("buscador").value.trim().toLowerCase();
+    const termino = removerAcentos(terminoOriginal);
 
     const lista = productos.filter(p => {
+        const nombre = removerAcentos(p.nombre.toLowerCase());
+        const descripcion = removerAcentos(p.descripcion.toLowerCase());
+        const categoriasTexto = Array.isArray(p.categoriasNombres)
+            ? removerAcentos(p.categoriasNombres.join(" ").toLowerCase())
+            : "";
+
         const coincideBusqueda =
-            p.nombre.toLowerCase().includes(termino) ||
-            p.descripcion.toLowerCase().includes(termino);
+            nombre.includes(termino) ||
+            descripcion.includes(termino) ||
+            categoriasTexto.includes(termino);
 
         const coincideCategoria =
             categoriaSeleccionada === "all" ||
@@ -166,6 +174,11 @@ function aplicarFiltros() {
 
     renderTarjetas(lista);
 }
+
+function removerAcentos(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 
 function enviarpagina(id) {
     const producto = productos.find(p => p.id === id);

@@ -194,3 +194,49 @@ class PublicProductListView(ListAPIView):
     queryset = Productos.objects.filter(stateFurniture=True)
     serializer_class = ProductoSerializer
     permission_classes = [AllowAny]  # Pública
+
+
+
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Productos
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def cambiar_estado_producto(request, id):
+    try:
+        producto = Productos.objects.get(id=id)
+        nuevo_estado = request.data.get("stateFurniture")
+        if nuevo_estado is not None:
+            # request.data viene como string, convertir a bool
+            if isinstance(nuevo_estado, str):
+                nuevo_estado = nuevo_estado.lower() in ['true', '1', 'on']
+            producto.stateFurniture = nuevo_estado
+            producto.save()
+            return Response({"message": "Estado actualizado correctamente"})
+        else:
+            return Response({"error": "Falta el campo 'stateFurniture'"}, status=status.HTTP_400_BAD_REQUEST)
+    except Productos.DoesNotExist:
+        return Response({"error": "Producto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def cambiar_estado_todos_productos(request):
+    nuevo_estado = request.data.get("stateFurniture")
+    if nuevo_estado is None:
+        return Response({"error": "Falta el campo 'stateFurniture'"}, status=400)
+    
+    if isinstance(nuevo_estado, str):
+        nuevo_estado = nuevo_estado.lower() in ['true', '1', 'on']
+    
+    # Actualizar todos los productos de ese usuario o todos en general (ajusta según lógica)
+    Productos.objects.all().update(stateFurniture=nuevo_estado)
+    
+    return Response({"message": f"Todos los productos han sido {'activados' if nuevo_estado else 'desactivados'}."})

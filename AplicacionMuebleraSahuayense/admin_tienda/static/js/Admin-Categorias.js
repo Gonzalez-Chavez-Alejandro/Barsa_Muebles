@@ -75,10 +75,14 @@ function mostrarCategorias() {
 
   const buscador = document.getElementById("buscadorCategorias").value.toLowerCase();
 
-  const categoriasFiltradas = window.categorias.filter(cat =>
+  // Filtrar categorías por búsqueda
+  let categoriasFiltradas = window.categorias.filter(cat =>
     cat.nombre.toLowerCase().includes(buscador) ||
     cat.descripcion.toLowerCase().includes(buscador)
   );
+
+  // Ordenar categorías por ID ascendente
+  categoriasFiltradas.sort((a, b) => a.id - b.id);
 
   const totalCategorias = categoriasFiltradas.length;
   const totalPaginas = Math.ceil(totalCategorias / itemsPorPaginaCategoria);
@@ -89,32 +93,32 @@ function mostrarCategorias() {
 
   const inicio = (paginaActualCategoria - 1) * itemsPorPaginaCategoria;
   const fin = inicio + itemsPorPaginaCategoria;
+
   const categoriasPagina = categoriasFiltradas.slice(inicio, fin);
 
   categoriasPagina.forEach(categoria => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-            <td>${categoria.id || 'N/A'}</td> <!-- Nueva columna para ID -->
-
-            <td>${categoria.nombre}</td>
-            <td>${categoria.descripcion}</td>
-            <td>
-                <img src="${categoria.imagen || getPlaceholderImage()}" 
-                     alt="${categoria.nombre}" 
-                     width="80" 
-                     style="border:1px solid #ccc;"
-                     onerror="this.src='${getPlaceholderImage()}'">
-            </td>
-            <td class="acciones-categoria">
-                <button class="btn-admin-desing-edits btn-editar-categoria" 
-                    onclick="editarCategoria('${categoria.nombre}')">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-admin-desing-deletes-eliminar" onclick="abrirModalEliminarCategoria('${categoria.id}')">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-            </td>
-        `;
+      <td>${categoria.id || 'N/A'}</td>
+      <td>${categoria.nombre}</td>
+      <td>${categoria.descripcion}</td>
+      <td>
+        <img src="${categoria.imagen || getPlaceholderImage()}" 
+             alt="${categoria.nombre}" 
+             width="80" 
+             style="border:1px solid #ccc;"
+             onerror="this.src='${getPlaceholderImage()}'">
+      </td>
+      <td class="acciones-categoria">
+        <button class="btn-admin-desing-edits btn-editar-categoria" 
+                onclick="editarCategoria('${categoria.nombre}')">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn-admin-desing-deletes-eliminar" onclick="abrirModalEliminarCategoria('${categoria.id}')">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+      </td>
+    `;
     tbody.appendChild(tr);
   });
 
@@ -124,6 +128,7 @@ function mostrarCategorias() {
   document.getElementById("paginaActualCategoria").textContent = `Página ${paginaActualCategoria}`;
   document.getElementById("totalPaginasCategoria").textContent = totalPaginas || 1;
 }
+
 // ========== [CORREGIDO] Eventos de paginación ==========
 function anteriorPagina() {
   if (paginaActualCategoria > 1) {

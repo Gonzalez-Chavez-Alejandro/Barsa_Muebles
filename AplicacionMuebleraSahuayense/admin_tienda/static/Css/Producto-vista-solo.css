@@ -48,6 +48,8 @@
 }
 
 .miniaturas {
+    padding: 0.7rem 0.5;
+    margin-top: 1rem;
     width: 320px;
     overflow-x: auto;
     display: flex;

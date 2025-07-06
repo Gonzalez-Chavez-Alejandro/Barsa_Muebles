@@ -85,7 +85,10 @@ function mostrarProductosView() {
   const tbody = document.getElementById("tabla-productos");
   tbody.innerHTML = "";
 
-  const productos = modoFiltrado ? productosFiltrados : productosGlobal;
+  const productos = (modoFiltrado ? productosFiltrados : productosGlobal)
+  .slice()
+  .sort((a, b) => a.id - b.id);
+
 
   if (!productos.length) {
     tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;">${modoFiltrado ? 'No se encontraron productos.' : 'No hay productos disponibles.'}</td></tr>`;
@@ -107,7 +110,14 @@ function mostrarProductosView() {
     const tr = document.createElement("tr");
     tr.innerHTML =
       `<td>${producto.id || ''}</td>
-      <td>${producto.stateFurniture ? 'Activo' : 'Inactivo'}</td>
+      <td>
+  <button class="btn-toggle-estado" 
+          data-id="${producto.id}" 
+          data-estado="${producto.stateFurniture}">
+    ${producto.stateFurniture ? 'Activo' : 'Inactivo'}
+  </button>
+</td>
+
        <td>${producto.nameFurniture || ''}</td>
        <td>${producto.descriptionFurniture || ''}</td>
        <td>$${Number(producto.priceFurniture).toFixed(2)}</td>
@@ -126,10 +136,92 @@ function mostrarProductosView() {
        </td>`;
     tbody.appendChild(tr);
   });
+document.querySelectorAll('.btn-toggle-estado').forEach(btn => {
+  btn.addEventListener('click', async function () {
+    const id = this.dataset.id;
+    const estadoActual = this.dataset.estado === 'true';
+    const nuevoEstado = !estadoActual;
+
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      mostrarToast("No estás autenticado", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/productos/cambiar-estado/${id}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ stateFurniture: nuevoEstado })
+      });
+
+      if (!response.ok) throw new Error("Error al cambiar el estado");
+
+      // Actualiza el botón visualmente
+      this.textContent = nuevoEstado ? 'Activo' : 'Inactivo';
+      this.dataset.estado = nuevoEstado;
+      mostrarToast("Estado actualizado", "success");
+    } catch (error) {
+      console.error(error);
+      mostrarToast("No se pudo cambiar el estado", "error");
+    }
+  });
+});
+
+async function cambiarEstadoTodosProductos(nuevoEstado) {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    mostrarToast("No estás autenticado", "error");
+    return;
+  }
+  try {
+    const response = await fetch('/productos/cambiar-estado-todos/', {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ stateFurniture: nuevoEstado })
+    });
+    if (!response.ok) throw new Error("Error al cambiar el estado de todos los productos");
+  } catch (error) {
+    console.error(error);
+    mostrarToast("No se pudo cambiar el estado de todos los productos", "error");
+  }
+}
+
+document.getElementById('btn-toggle-todos').addEventListener('click', async () => {
+  await cambiarEstadoTodosProductos(false); // desactivar todos
+
+  // 🔁 Actualiza el array local
+  productosGlobal.forEach(p => p.stateFurniture = false);
+  productosFiltrados.forEach(p => p.stateFurniture = false); // por si estás usando modoFiltrado
+
+  mostrarToast("Todos los productos desactivados", "success");
+  await mostrarProductosView(); // refrescar tabla con los datos actualizados
+});
+
+document.getElementById('btn-activar-todos').addEventListener('click', async () => {
+  await cambiarEstadoTodosProductos(true); // activar todos
+
+  // 🔁 Actualiza el array local
+  productosGlobal.forEach(p => p.stateFurniture = true);
+  productosFiltrados.forEach(p => p.stateFurniture = true); // por si estás usando modoFiltrado
+
+  mostrarToast("Todos los productos activados", "success");
+  await mostrarProductosView(); // refrescar tabla con los datos actualizados
+});
+
 
   const totalPaginas = Math.ceil(productos.length / cantidadPorPagina);
   actualizarControlesPaginacion(totalPaginas);
+
+
 }
+
 
 
 function obtenerNombresCategorias(ids) {
