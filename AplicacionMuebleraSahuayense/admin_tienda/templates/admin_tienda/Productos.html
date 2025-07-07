@@ -13,8 +13,8 @@
 
     <title>Producto</title>
     <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
+      <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
-    <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Home.css' %}">
     <link rel="stylesheet" href="{% static 'Css/Productos.css' %}">
     <link rel="stylesheet" href="{% static 'Css/foother.css' %}">
@@ -98,6 +98,7 @@
         {% include 'includes/foother.html' %}
         {% include 'includes/toast.html' %}
         <script src="{% static 'js/Header.js' %}"></script>
+        <script src="{% static 'js/header.js' %}"></script>
     <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
     <script src="{% static 'js/variables.js' %}"></script>
 
@@ -105,13 +106,6 @@
         const urlConfiguracionUsuario = "{% url 'configuracion_usuario' %}";
     </script>
     <script>
-        document.getElementById("btn-regresar").addEventListener("click", function () {
-            // Oculta la sección de detalle de producto
-            document.getElementById("detalle-producto").classList.remove("activo");
-
-            // Muestra el contenido principal
-            document.querySelector("main.contenido-principal").style.display = "block";
-        });
 
         // Para mostrar el detalle del producto (por ejemplo, cuando haces clic en un producto)
         function mostrarDetalleProducto() {
