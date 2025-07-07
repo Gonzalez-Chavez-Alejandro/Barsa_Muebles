@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const texto = e.target.value.toLowerCase();
     usuariosFiltrados = usuarios.filter(u =>
       (u.nombre?.toLowerCase().includes(texto) || u.username?.toLowerCase().includes(texto)) ||
+      (u.nombres?.toLowerCase().includes(texto) || u.last_name?.toLowerCase().includes(texto)) ||
       (u.correo?.toLowerCase().includes(texto) || u.email?.toLowerCase().includes(texto)) ||
       (u.telefono?.toLowerCase().includes(texto) || u.phoneUser?.toLowerCase().includes(texto))
     );

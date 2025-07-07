@@ -199,7 +199,7 @@ def procesar_pedido(request, encargo_id):
     enviar_correo_a_empresa(request.user, encargo)
 
     # Enviar correo al usuario con info del footer/contacto
-    enviar_correo_info_footer(request.user.email, request.user.username)
+    enviar_correo_info_footer(request.user.email, request.user.last_name)
 
     return Response({"detail": "Pedido procesado exitosamente"})
 

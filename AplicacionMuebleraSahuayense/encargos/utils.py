@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 def enviar_correo_a_empresa(usuario, pedido):
-    asunto = f"📦 Nuevo pedido #{pedido.id} - Cliente: {usuario.username}"
+    asunto = f"📦 Nuevo pedido #{pedido.id} - Cliente: {usuario.last_name}"
 
     productos = pedido.productos_encargados.select_related('producto').all()
 

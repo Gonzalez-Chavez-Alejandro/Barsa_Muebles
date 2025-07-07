@@ -1,4 +1,5 @@
 let usuarioActual = null;
+let usernameOriginal = null;  // <-- Aquí guardamos username para enviar luego
 
 // Carga datos del usuario desde la API y guarda en usuarioActual
 async function cargarUsuarioActual() {
@@ -22,9 +23,11 @@ async function cargarUsuarioActual() {
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
     const data = await res.json();
+    usernameOriginal = data.username;
 
     usuarioActual = Object.freeze({
-      nombre: data.username || '',
+      
+      nombre: data.last_name || '',
       correo: data.email || '',
       telefono: data.phoneUser || '',
       ubicacionUser: data.ubicacionUser || '',
@@ -540,7 +543,11 @@ formulario.addEventListener('submit', async (e) => {
     const usuario = await responseUserInfo.json();
 
     const datosUsuario = {
-      username: nombreInput.value.trim(),
+      username: usuario.username.replace(/\s+/g, '_'),
+
+
+      last_name: nombreInput.value.trim(),
+      
       phoneUser: telefonoInput.value.trim(),
       email: correoInput.value.trim(),
       ageUser: usuario.ageUser, // corregido usuarioActual -> usuario
@@ -584,10 +591,7 @@ formulario.addEventListener('submit', async (e) => {
     let mensaje = "Ocurrió un error al guardar los cambios.";
     try {
       const errorData = JSON.parse(error.message.replace(/Error al guardar.*?:\s*/, ""));
-      if (errorData.username) {
-        mensaje = "Usuario ya existe, te agradeceríamos tu nombre completo.";
-        mostrarErrorEnSpan('error-nombre', mensaje);
-      }
+      
       if (errorData.email) {
         mensaje = "Error en email: " + errorData.email.join(", ");
         mostrarErrorEnSpan('error-correo', mensaje);

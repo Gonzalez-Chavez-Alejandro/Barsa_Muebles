@@ -11,6 +11,7 @@ class UserInfoView(APIView):
         data = {
             "id": user.id,
             "username": user.username,
+            "last_name":user.last_name,
             "email": user.email,
             "phoneUser": user.phoneUser,
             "stateUser": user.stateUser,
