@@ -41,10 +41,12 @@ class ListUsersView(APIView):
             data.append({
                 'id': u.id,
                 'username': u.username,
+                'last_name': u.last_name,
                 'email': u.email,
                 'phoneUser': u.phoneUser,
                 'ubicacionUser': u.ubicacionUser,
                 'is_superuser': u.is_superuser,
+
                 # agrega campos extra que uses, como phoneUser, etc
             })
         return Response(data, status=status.HTTP_200_OK)

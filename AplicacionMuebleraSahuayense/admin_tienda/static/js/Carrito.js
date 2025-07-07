@@ -448,3 +448,13 @@ document.addEventListener("DOMContentLoaded", () => {
   validarTokenYUsuario();
 });
 
+
+document.addEventListener("DOMContentLoaded", function () {
+  const hash = window.location.hash;
+
+  if (hash === "#mi-perfil") {
+    if (typeof mostrarSeccion === "function") {
+      mostrarSeccion("mi-perfil");
+    }
+  }
+});
