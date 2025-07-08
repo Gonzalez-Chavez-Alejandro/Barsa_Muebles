@@ -103,17 +103,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'AplicacionMuebleraSahuayense.wsgi.application'
 
-# Base de datos (PostgreSQL)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
+        'ENGINE': 'django.db.backends.mysql',  # motor MySQL
+        'NAME': config('DB_NAME'),       # coincide con .env
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+        # Opcional: 'OPTIONS': {...} si necesitas configurar algo más
     }
 }
+
+
+
 
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
