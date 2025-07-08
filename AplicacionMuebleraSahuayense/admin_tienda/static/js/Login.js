@@ -57,14 +57,18 @@ loginForm.addEventListener("submit", async (e) => {
     const userInfo = await userRes.json();
 
     if (userInfo.is_superuser) {
+      mostrarSpinner();
       window.location.href = "/administrador";
     } else {
+      mostrarSpinner();
       window.location.href = "/configuracion_usuario";
     }
   } catch (error) {
     console.error("Error de conexión:", error);
     errorUsername.style.display = "block";
     errorUsername.textContent = "Error de conexión: " + error.message;
+  }finally {
+    ocultarSpinner(); 
   }
 });
 
