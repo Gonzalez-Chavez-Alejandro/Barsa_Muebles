@@ -103,15 +103,28 @@ def agregar_producto_a_encargo(request, encargo_id):
 
 
     # Buscar si ya hay producto en el encargo
-    producto_encargado, creado = ProductoEncargado.objects.get_or_create(
+    # Buscar si ya hay productos duplicados
+    productos_repetidos = ProductoEncargado.objects.filter(
         encargo=encargo,
-        producto_id=producto_id,
-        defaults={'cantidad': cantidad, 'precio_unitario': precio_unitario}
+        producto_id=producto_id
     )
 
-    if not creado:
-        producto_encargado.cantidad += cantidad
-        producto_encargado.save()
+    if productos_repetidos.exists():
+        # Si hay más de uno, conserva el primero y elimina los demás
+        principal = productos_repetidos.first()
+        for duplicado in productos_repetidos.exclude(id=principal.id):
+            duplicado.delete()
+        # Suma la cantidad al existente
+        principal.cantidad += cantidad
+        principal.save()
+    else:
+        # Crear nuevo
+        ProductoEncargado.objects.create(
+            encargo=encargo,
+            producto_id=producto_id,
+            cantidad=cantidad,
+            precio_unitario=precio_unitario
+        )
 
     # Recalcular total
     total = sum(p.cantidad * p.precio_unitario for p in encargo.productos_encargados.all())
