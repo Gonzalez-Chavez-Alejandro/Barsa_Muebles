@@ -1,6 +1,6 @@
 let usuarioActual = null;
 let usernameOriginal = null;  // <-- Aquí guardamos username para enviar luego
-
+let usernameOriginal1 = null;
 // Carga datos del usuario desde la API y guarda en usuarioActual
 async function cargarUsuarioActual() {
   const token = localStorage.getItem('accessToken');
@@ -539,8 +539,10 @@ formulario.addEventListener('submit', async (e) => {
         Authorization: `Bearer ${token}`
       }
     });
+    const data = await res.json();
+    usernameOriginal = data.username;
     if (!responseUserInfo.ok) throw new Error("No se pudo obtener la información del usuario.");
-    const usuario = await responseUserInfo.json();
+    const usernameOriginal = await responseUserInfo.json();
 
     const datosUsuario = {
       
