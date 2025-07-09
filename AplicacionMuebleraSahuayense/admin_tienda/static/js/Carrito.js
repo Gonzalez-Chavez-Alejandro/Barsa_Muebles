@@ -368,12 +368,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     await procesarEncargo();
   });
-
-  
-  validarTokenYUsuario();
-});
-
-
 document.addEventListener("DOMContentLoaded", function () {
   const hash = window.location.hash;
 
@@ -459,3 +453,8 @@ document.getElementById("agregar-carrito-detalle")?.addEventListener("click", ()
       mostrarToast("Ocurrió un error al agregar el producto.", "error");
     }
   }
+  
+  validarTokenYUsuario();
+});
+
+
