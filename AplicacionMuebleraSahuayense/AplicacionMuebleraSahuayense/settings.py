@@ -105,7 +105,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'AplicacionMuebleraSahuayense.wsgi.application'
-
+from decouple import config
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # motor MySQL
