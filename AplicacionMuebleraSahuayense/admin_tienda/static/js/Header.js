@@ -137,9 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } catch (error) {
     console.error("Error con localStorage u otro problema:", error);
   }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const btnCarrito = document.querySelector(".btn-carrito");
   const carrito = document.getElementById("carrito");
 
@@ -149,6 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
     carrito.style.display = carrito.style.display === "block" ? "none" : "block";
   });
 });
+
+
 
 /*************************************************************/
                   /* Validacion del Token */
