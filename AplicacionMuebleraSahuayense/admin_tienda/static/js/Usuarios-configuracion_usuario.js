@@ -1,5 +1,5 @@
 let usuarioActual = null;
-let usernameOriginal = null;  // <-- Aquí guardamos username para enviar luego
+let usernameOriginal = data.username;  // <-- Aquí guardamos username para enviar luego
 
 // Carga datos del usuario desde la API y guarda en usuarioActual
 async function cargarUsuarioActual() {
