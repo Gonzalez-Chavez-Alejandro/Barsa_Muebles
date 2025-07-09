@@ -140,7 +140,9 @@ USE_TZ = True
 STATIC_URL = config('STATIC_URL', default='/static/')
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://barsa-muebles.onrender.com"
+]
 
 # ID automático
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
