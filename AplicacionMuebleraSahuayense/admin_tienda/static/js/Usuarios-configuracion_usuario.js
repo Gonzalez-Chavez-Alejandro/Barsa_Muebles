@@ -543,9 +543,9 @@ formulario.addEventListener('submit', async (e) => {
     const usuario = await responseUserInfo.json();
 
     const datosUsuario = {
-      last_name: nombreInput.value.trim(),
+      
 
-
+      username: usuario.username,
 
       last_name: nombreInput.value.trim(),
       
