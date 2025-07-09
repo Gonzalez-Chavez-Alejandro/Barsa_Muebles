@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("Datos usuario:", data);
         menu.innerHTML = `
           <div class="user-info">
-            <h1 class="user-greeting">Hola, ${data.last_name}</h1>
+            <h1 class="user-greeting">Hola, ${data.last_name.replace(/_/g, ' ')}</h1>
             <p class="email">${data.email}</p>
             <a href="/configuracion_usuario/" id="btn-configuracion-usuario">
               <i class="fas fa-cog"></i> Configuración

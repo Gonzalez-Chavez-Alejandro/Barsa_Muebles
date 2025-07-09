@@ -1,6 +1,6 @@
 let usuarioActual = null;
 let usernameOriginal = null;  // <-- Aquí guardamos username para enviar luego
-let usernameOriginal1 = null;
+
 // Carga datos del usuario desde la API y guarda en usuarioActual
 async function cargarUsuarioActual() {
   const token = localStorage.getItem('accessToken');
@@ -539,17 +539,12 @@ formulario.addEventListener('submit', async (e) => {
         Authorization: `Bearer ${token}`
       }
     });
-    
     if (!responseUserInfo.ok) throw new Error("No se pudo obtener la información del usuario.");
-    const usernameOriginal1 = await responseUserInfo.json();
+    const usuario = await responseUserInfo.json();
 
     const datosUsuario = {
-      
-
-      username: usernameOriginal1,
-
+      username: usuario.username.replace(/\s+/g, '_'),
       last_name: nombreInput.value.trim(),
-      
       phoneUser: telefonoInput.value.trim(),
       email: correoInput.value.trim(),
       ageUser: usuario.ageUser, // corregido usuarioActual -> usuario
@@ -592,7 +587,7 @@ formulario.addEventListener('submit', async (e) => {
 
     let mensaje = "Ocurrió un error al guardar los cambios.";
     try {
-      
+      const errorData = JSON.parse(error.message.replace(/Error al guardar.*?:\s*/, ""));
       
       if (errorData.email) {
         mensaje = "Error en email: " + errorData.email.join(", ");
