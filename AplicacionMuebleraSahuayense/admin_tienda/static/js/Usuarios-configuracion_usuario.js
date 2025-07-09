@@ -539,15 +539,14 @@ formulario.addEventListener('submit', async (e) => {
         Authorization: `Bearer ${token}`
       }
     });
-    const data = await res.json();
-    usernameOriginal = data.username;
+    
     if (!responseUserInfo.ok) throw new Error("No se pudo obtener la información del usuario.");
-    const usernameOriginal = await responseUserInfo.json();
+    const usernameOriginal1 = await responseUserInfo.json();
 
     const datosUsuario = {
       
 
-      username: usernameOriginal,
+      username: usernameOriginal1,
 
       last_name: nombreInput.value.trim(),
       
