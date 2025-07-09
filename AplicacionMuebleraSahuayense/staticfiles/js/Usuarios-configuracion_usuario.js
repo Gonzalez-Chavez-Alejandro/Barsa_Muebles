@@ -544,10 +544,7 @@ formulario.addEventListener('submit', async (e) => {
 
     const datosUsuario = {
       username: usuario.username.replace(/\s+/g, '_'),
-
-
       last_name: nombreInput.value.trim(),
-      
       phoneUser: telefonoInput.value.trim(),
       email: correoInput.value.trim(),
       ageUser: usuario.ageUser, // corregido usuarioActual -> usuario
