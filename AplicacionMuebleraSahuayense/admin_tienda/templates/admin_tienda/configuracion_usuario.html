@@ -139,6 +139,7 @@
 
 <body>
     {% include 'includes/header.html' %}
+    {% include 'includes/carrito.html' %}
     {% include 'includes/spinner.html' %}
     <button class="menu-hamburguesa" onclick="toggleMenuHamburguesa()">
         <i class="fas fa-bars"></i>
@@ -400,7 +401,7 @@ h3.h3-encargo {
 
 <div id="notificaciones"></div>
 
-        {% include 'includes/carrito.html' %}
+        
         {% include 'includes/toast.html' %}
     <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
 
