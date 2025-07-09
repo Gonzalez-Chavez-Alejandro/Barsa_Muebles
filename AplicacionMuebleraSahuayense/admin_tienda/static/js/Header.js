@@ -59,6 +59,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error cargando footer:", err);
     //mostrarToast("Error cargando datos del footer.", "error");
+    const btnCarrito = document.querySelector(".btn-carrito");
+  const carrito = document.getElementById("carrito");
+
+  if (!btnCarrito || !carrito) return;
+
+  btnCarrito.addEventListener("click", () => {
+    carrito.style.display = carrito.style.display === "block" ? "none" : "block";
+  });
   }
 });
 document.addEventListener("DOMContentLoaded", () => {
