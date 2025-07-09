@@ -2,13 +2,16 @@ from datetime import timedelta
 from pathlib import Path
 import cloudinary
 from decouple import config
-
+from decouple import config, Csv
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Seguridad
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
+
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
+
 
 import os
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
