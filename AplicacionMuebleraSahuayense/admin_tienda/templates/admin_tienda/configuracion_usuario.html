@@ -1,5 +1,6 @@
 {% load static %}
 <script src="{% static 'js/Header.js' %}"></script>
+<script src="{% static 'js/Carrito.js' %}"></script>
 <!DOCTYPE html>
 <html lang="es">
 <meta charset="UTF-8">
@@ -11,7 +12,7 @@
 <link rel="stylesheet" href="{% static 'Css/Usuario-Menu.css' %}">
 <link rel="stylesheet" href="{% static 'Css/Principal.css' %}">
 <link rel="stylesheet" href="{% static 'Css/Header.css' %}">
-<link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
+
 <link rel="stylesheet" href="{% static 'Css/Login.css' %}">
 <link rel="stylesheet" href="{% static 'Css/configuracion_usuario.css' %}">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -253,6 +254,7 @@ h3.h3-encargo {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   }
 </style>
+<link rel="stylesheet" href="{% static 'Css/Carrito.css' %}">
 </head>
 
 <body>
@@ -411,7 +413,7 @@ h3.h3-encargo {
     <div class="overlay-menu" id="overlayMenu" onclick="toggleMenuHamburguesa()"></div>
 
     <head>
-        <script src="{% static 'js/Carrito.js' %}"></script>
+        
         <script src="{% static 'js/Usuarios-configuracion_usuario.js' %}"></script>
         <script>
             // Funciones del menú
