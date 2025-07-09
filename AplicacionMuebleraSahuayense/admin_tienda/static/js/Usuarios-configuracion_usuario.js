@@ -591,7 +591,7 @@ formulario.addEventListener('submit', async (e) => {
 
     let mensaje = "Ocurrió un error al guardar los cambios.";
     try {
-      const errorData = JSON.parse(error.message.replace(/Error al guardar.*?:\s*/, ""));
+      
       
       if (errorData.email) {
         mensaje = "Error en email: " + errorData.email.join(", ");
