@@ -208,28 +208,7 @@ async function cargarCategoriasSimilares(productoId) {
 
 // Aquí asumimos que tienes definida la variable global carrito y funciones guardarCarrito(), actualizarCarritoUI(), mostrarToast()
 
-document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
-  const token = localStorage.getItem('accessToken');
-  if (!token) {
-    mostrarToast?.("No estás autenticado. Inicia sesión", "error");
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 5000);
-    return;
-  }
-  
-  const usuario = parseJwt(token);
-  if (!usuario) {
-    mostrarToast?.("Token inválido, inicia sesión de nuevo", "error");
-    setTimeout(() => {
-      window.location.href = "/login";
-    }, 5000);
-    return;
-  }
 
-  // Aquí puedes usar usuario para lo que necesites en agregar al carrito
-  // Por ejemplo: console.log("Usuario:", usuario);
-});
 
 document.getElementById("btn-encargar").addEventListener("click", () => {
   if (!window.carrito || carrito.length === 0) {

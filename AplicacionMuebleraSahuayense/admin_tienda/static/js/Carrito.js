@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const data = await res.json();
-        mostrarToast("❌ Error al actualizar cantidad: " + (data.detail || JSON.stringify(data)), "error");
+        mostrarToast("Carrito vacio: " + (data.detail || JSON.stringify(data)), "info");
         return;
       }
 
@@ -465,7 +465,28 @@ const hash = window.location.hash;
       return;
     }
     agregarAlCarritoAPI(window.producto, 1);
+     const token = localStorage.getItem('accessToken');
+  if (!token) {
+    mostrarToast?.("No estás autenticado. Inicia sesión", "error");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 5000);
+    return;
+  }
+  
+  const usuario = parseJwt(token);
+  if (!usuario) {
+    mostrarToast?.("Token inválido, inicia sesión de nuevo", "error");
+    setTimeout(() => {
+      window.location.href = "/login";
+    }, 5000);
+    return;
+  }
+
   });
+
+
+
   validarTokenYUsuario();
 });
 
