@@ -76,8 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const btnCarrito = document.querySelector(".btn-carrito");
+
+ const btnCarrito = document.querySelector(".btn-carrito");
   const carrito = document.getElementById("carrito");
 
   if (!btnCarrito || !carrito) return;
@@ -85,8 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
   btnCarrito.addEventListener("click", () => {
     carrito.style.display = carrito.style.display === "block" ? "none" : "block";
   });
-});
-
 /*************************************************************/
                   /* Validacion del Token */
 /*************************************************************/
