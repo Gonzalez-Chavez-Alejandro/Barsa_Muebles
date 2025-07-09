@@ -1,5 +1,5 @@
 let usuarioActual = null;
-let usernameOriginal = data.username;  // <-- Aquí guardamos username para enviar luego
+let usernameOriginal = null;  // <-- Aquí guardamos username para enviar luego
 
 // Carga datos del usuario desde la API y guarda en usuarioActual
 async function cargarUsuarioActual() {
@@ -545,7 +545,7 @@ formulario.addEventListener('submit', async (e) => {
     const datosUsuario = {
       
 
-      username: usernameOriginal,
+      username: usuario.data.username,
 
       last_name: nombreInput.value.trim(),
       
