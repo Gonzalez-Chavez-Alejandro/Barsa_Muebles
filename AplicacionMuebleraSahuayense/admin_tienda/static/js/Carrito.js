@@ -459,33 +459,32 @@ const hash = window.location.hash;
   }
 }
 
-  document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
-    if (!window.producto?.id) {
-      mostrarToast("Producto no cargado aún.", "warning");
-      return;
-    }
-    agregarAlCarritoAPI(window.producto, 1);
-     const token = localStorage.getItem('accessToken');
+  document.getElementById("agregar-carrito-detalle")?.addEventListener("click", async () => {
+  const token = localStorage.getItem("accessToken");
   if (!token) {
-    mostrarToast?.("No estás autenticado. Inicia sesión", "error");
+    mostrarToast("No estás autenticado. Inicia sesión", "error");
     setTimeout(() => {
       window.location.href = "/login";
     }, 5000);
     return;
   }
-  
+
   const usuario = parseJwt(token);
   if (!usuario) {
-    mostrarToast?.("Token inválido, inicia sesión de nuevo", "error");
+    mostrarToast("Token inválido, inicia sesión de nuevo", "error");
     setTimeout(() => {
       window.location.href = "/login";
     }, 5000);
     return;
   }
 
-  });
+  if (!window.producto?.id) {
+    mostrarToast("Producto no cargado aún.", "warning");
+    return;
+  }
 
-
+  await agregarAlCarritoAPI(window.producto, 1);
+});
 
   validarTokenYUsuario();
 });
