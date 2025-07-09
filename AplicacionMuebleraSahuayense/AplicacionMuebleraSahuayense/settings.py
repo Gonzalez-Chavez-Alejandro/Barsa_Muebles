@@ -2,16 +2,13 @@ from datetime import timedelta
 from pathlib import Path
 import cloudinary
 from decouple import config
-from decouple import config, Csv
+
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Seguridad
 SECRET_KEY = config('SECRET_KEY')
-
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost', cast=Csv())
-
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 import os
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
@@ -87,7 +84,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
-STATIC_ROOT = BASE_DIR / 'static'
+
 
 ROOT_URLCONF = 'AplicacionMuebleraSahuayense.urls'
 
@@ -139,7 +136,11 @@ USE_I18N = True
 USE_TZ = True
 
 # Archivos estáticos
-STATIC_URL = config('STATIC_URL', default='static/')
+# Archivos estáticos
+STATIC_URL = config('STATIC_URL', default='/static/')
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # ID automático
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
