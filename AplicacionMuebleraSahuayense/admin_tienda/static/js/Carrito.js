@@ -369,7 +369,27 @@ document.addEventListener("DOMContentLoaded", () => {
     await procesarEncargo();
   });
 
+  
+  validarTokenYUsuario();
+});
 
+
+document.addEventListener("DOMContentLoaded", function () {
+  const hash = window.location.hash;
+
+  if (hash === "#mi-perfil") {
+    if (typeof mostrarSeccion === "function") {
+      mostrarSeccion("mi-perfil");
+    }
+  }
+});
+document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
+    if (!window.producto?.id) {
+      mostrarToast("Producto no cargado aún.", "warning");
+      return;
+    }
+    agregarAlCarritoAPI(window.producto, 1);
+  });
 
   async function agregarAlCarritoAPI(producto, cantidad) {
     if (!token) return;
@@ -439,16 +459,3 @@ document.addEventListener("DOMContentLoaded", () => {
       mostrarToast("Ocurrió un error al agregar el producto.", "error");
     }
   }
-  validarTokenYUsuario();
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-  const hash = window.location.hash;
-
-  if (hash === "#mi-perfil") {
-    if (typeof mostrarSeccion === "function") {
-      mostrarSeccion("mi-perfil");
-    }
-  }
-});
