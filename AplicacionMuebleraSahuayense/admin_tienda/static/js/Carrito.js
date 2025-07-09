@@ -369,13 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     await procesarEncargo();
   });
 
-  document.getElementById("agregar-carrito-detalle")?.addEventListener("click", () => {
-    if (!window.producto?.id) {
-      mostrarToast("Producto no cargado aún.", "warning");
-      return;
-    }
-    agregarAlCarritoAPI(window.producto, 1);
-  });
+
 
   async function agregarAlCarritoAPI(producto, cantidad) {
     if (!token) return;
