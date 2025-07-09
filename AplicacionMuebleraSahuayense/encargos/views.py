@@ -133,42 +133,42 @@ from .serializer import EncargoSerializer
 def actualizar_cantidad_producto_en_encargo(request, encargo_id):
     try:
         encargo = Encargo.objects.get(id=encargo_id, usuario=request.user)
-    except Encargo.DoesNotExist:
-        return Response({"detail": "Encargo no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+        producto_id = request.data.get('producto_id')
+        nueva_cantidad = request.data.get('cantidad')
 
-    producto_id = request.data.get('producto_id')
-    nueva_cantidad = request.data.get('cantidad')
+        if producto_id is None or nueva_cantidad is None:
+            return Response({"detail": "producto_id y cantidad son requeridos"}, status=status.HTTP_400_BAD_REQUEST)
 
-    if producto_id is None or nueva_cantidad is None:
-        return Response({"detail": "producto_id y cantidad son requeridos"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            nueva_cantidad = int(nueva_cantidad)
+            if nueva_cantidad < 0:
+                raise ValueError
+        except ValueError:
+            return Response({"detail": "Cantidad inválida"}, status=status.HTTP_400_BAD_REQUEST)
 
-    try:
-        nueva_cantidad = int(nueva_cantidad)
-        if nueva_cantidad < 0:
-            raise ValueError
-    except ValueError:
-        return Response({"detail": "Cantidad inválida"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            producto_encargado = ProductoEncargado.objects.get(encargo=encargo, producto_id=producto_id)
+        except ProductoEncargado.DoesNotExist:
+            return Response({"detail": "Producto no encontrado en el encargo"}, status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        producto_encargado = ProductoEncargado.objects.get(encargo=encargo, producto_id=producto_id)
-    except ProductoEncargado.DoesNotExist:
-        return Response({"detail": "Producto no encontrado en el encargo"}, status=status.HTTP_404_NOT_FOUND)
+        if nueva_cantidad == 0:
+            producto_encargado.delete()
+        else:
+            producto_encargado.cantidad = nueva_cantidad
+            producto_encargado.save()
 
-    if nueva_cantidad == 0:
-        # Eliminar el producto del encargo
-        producto_encargado.delete()
-    else:
-        # Actualizar cantidad
-        producto_encargado.cantidad = nueva_cantidad
-        producto_encargado.save()
+        # Recalcular total
+        total = sum(p.cantidad * p.precio_unitario for p in encargo.productos_encargados.all())
+        encargo.total = total
+        encargo.save()
 
-    # Recalcular total del encargo
-    total = sum(p.cantidad * p.precio_unitario for p in encargo.productos_encargados.all())
-    encargo.total = total
-    encargo.save()
+        serializer = EncargoSerializer(encargo)
+        return Response(serializer.data)
+    
+    except Exception as e:
+        print("⚠️ Error en actualizar cantidad:", e)
+        return Response({"detail": str(e)}, status=500)
 
-    serializer = EncargoSerializer(encargo)
-    return Response(serializer.data)
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
