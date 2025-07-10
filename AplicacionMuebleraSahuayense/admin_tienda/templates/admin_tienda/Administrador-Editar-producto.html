@@ -32,8 +32,25 @@
       </div>
     </div>
   </header>
+<style>
+.advertencia-encargos {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+</style>
 
   <section class="form-card">
+    {% if tiene_encargos %}
+      <div class="advertencia-encargos">
+        ⚠️ <strong>Advertencia:</strong> Este producto ya está en uno o más encargos. Cambiar nombre, precio o descuento modificará los encargos ya realizados, 
+        se le recomienda crear un producto nuevo con la misma informacion.
+      </div>
+    {% endif %}
+
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
 

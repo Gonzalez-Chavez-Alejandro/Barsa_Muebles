@@ -21,11 +21,15 @@ from productos.models import Productos
 from categorias.models import Categorias
 from django.contrib import messages
 from cloudinary.uploader import upload
+from encargos.models import ProductoEncargado  # IMPORTANTE
 import json
 
 def administrador_editar_producto(request, id):
     producto = get_object_or_404(Productos, id=id)
     categorias = Categorias.objects.all()
+
+    # Verifica si el producto está en algún encargo
+    tiene_encargos = ProductoEncargado.objects.filter(producto=producto).exists()
 
     if request.method == 'POST':
         producto.nameFurniture = request.POST.get('nameFurniture', '')
@@ -60,8 +64,10 @@ def administrador_editar_producto(request, id):
 
     return render(request, 'admin_tienda/Administrador-Editar-producto.html', {
         'producto': producto,
-        'categorias': categorias
+        'categorias': categorias,
+        'tiene_encargos': tiene_encargos  # Pasamos la bandera al template
     })
+
 
 
 from rest_framework.permissions import IsAuthenticated

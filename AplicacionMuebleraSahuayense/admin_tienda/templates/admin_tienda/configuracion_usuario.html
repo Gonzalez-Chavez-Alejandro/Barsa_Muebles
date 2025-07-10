@@ -36,7 +36,7 @@
         <a href="#" onclick="mostrarSeccion('mis-encargos')"><i class="fas fa-box"></i>Mis Encargos</a>
 
     </nav>
-    
+
     <div class="main-content">
         <!-- Sección de Mis Encargos -->
         <section id="mis-encargos" class="seccion-contenido">
@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label>Nombre completo</label>
                             <input type="text" id="nombre" placeholder="Ej: Juan Pérez" title="Formato: Nombre Apellido"
-                                required autocomplete="off">
+                                required autocomplete="off" readonly><small style="color: #888;">Este campo no se puede editar.</small>
                             <span id="error-nombre" class="error-message"
                                 style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
                         </div>
@@ -105,10 +105,11 @@
 
                         <div class="form-group full-width">
                             <label>Correo electrónico</label>
-                            <input type="email" id="correo" placeholder="ejemplo@dominio.com" required
-                                autocomplete="new-email" readonly onfocus="this.removeAttribute('readonly')" rows="3">
-                            <span id="error-correo" class="error-message"
-                                style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
+                            <input type="email" id="correo" placeholder="ejemplo@dominio.com"
+                            required autocomplete="off" readonly style="background-color: #f5f5f5; cursor: not-allowed; color: #555;">
+                        <small style="color: #888;">Este campo no se puede editar.</small>
+                        <span id="error-correo" class="error-message"
+                            style="display:none; color: red; font-size: 0.9em; margin-top: 4px;"></span>
                         </div>
                         <style>
                             textarea {
