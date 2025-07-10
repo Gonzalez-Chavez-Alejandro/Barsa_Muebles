@@ -1,12 +1,25 @@
+// Referencia al input username
+const usernameInput = document.getElementById('username');
+
+// Listener para reemplazar espacios por guiones bajos en tiempo real
+usernameInput.addEventListener('input', () => {
+  usernameInput.value = usernameInput.value.replace(/\s+/g, '_');
+});
+
 document.getElementById("form-superuser").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   // Limpiar mensajes anteriores
   const fields = ["username", "email", "password", "ageUser", "phoneUser"];
   fields.forEach(field => {
-    document.getElementById(`error-${field}`).textContent = "";
+    const errorSpan = document.getElementById(`error-${field}`);
+    if (errorSpan) {
+      errorSpan.textContent = "";
+      errorSpan.style.display = "none";
+    }
   });
-  document.getElementById("successMsg").textContent = "";
+  const successMsg = document.getElementById("successMsg");
+  if (successMsg) successMsg.textContent = "";
 
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -15,7 +28,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
   }
 
   // Obtener datos
-  const username = document.getElementById("username").value.trim();
+  const username = usernameInput.value.trim();
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const ageUser = document.getElementById("ageUser").value.trim();
@@ -27,8 +40,10 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
   const mostrarError = (id, mensaje) => {
     const campo = document.getElementById(`error-${id}`);
-    campo.textContent = mensaje;
-    campo.style.display = 'block';
+    if (campo) {
+      campo.textContent = mensaje;
+      campo.style.display = 'block';
+    }
     valid = false;
   };
 
@@ -42,7 +57,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
   const edad = parseInt(ageUser);
   if (isNaN(edad) || edad < 1 || edad > 100) {
-    mostrarError("ageUser", "Edad debe ser un número positivo.");
+    mostrarError("ageUser", "Edad debe ser un número positivo entre 1 y 100.");
   }
 
   const telefonoRegex = /^\+?\d{10,20}$/;
@@ -55,7 +70,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
   const data = { username, email, password, ageUser, phoneUser };
 
   try {
-     mostrarSpinner();
+    mostrarSpinner();
     const res = await fetch("/api/crear-superuser/", {
       method: "POST",
       headers: {
@@ -67,7 +82,7 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
 
     const result = await res.json();
 
-    // Traducciones personalizadas
+    // Traducciones personalizadas de errores desde backend
     if (result.username?.includes("A user with that username already exists.")) {
       mostrarError("username", "Ya existe un usuario con ese nombre de usuario.");
     }
@@ -92,14 +107,16 @@ document.getElementById("form-superuser").addEventListener("submit", async (e) =
       return;
     }
 
-    // Todo OK
-    document.getElementById("successMsg").textContent = result.message || "¡Superusuario creado correctamente!";
+    // Éxito
+    if (successMsg) {
+      successMsg.textContent = result.message || "¡Superusuario creado correctamente!";
+    }
     document.getElementById("form-superuser").reset();
 
   } catch (error) {
     console.error("Error al enviar solicitud:", error);
     mostrarToast("Error de conexión. Intenta nuevamente.", "error");
-  }finally {
+  } finally {
     ocultarSpinner();
   }
 });
