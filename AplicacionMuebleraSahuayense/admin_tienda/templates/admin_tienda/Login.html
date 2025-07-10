@@ -11,53 +11,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic/webkit/OpenDyslexic.css" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="{% static 'Css/Principal.css' %}" />
-  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}" />
   <link rel="stylesheet" href="{% static 'Css/Header.css' %}" />
+  <link rel="stylesheet" href="{% static 'Css/Carrito.css' %}" />
   <link rel="stylesheet" href="{% static 'Css/Login.css' %}" />
   <link rel="stylesheet" href="{% static 'Css/foother.css' %}" />
-  <style>
-    .Home-Categorias {
-      background-color: #f8f9fa;
-    }
-
-    .modal.hidden {
-      display: none;
-    }
-
-    .modal {
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-      background: white;
-      max-width: 400px;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .close {
-      float: right;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .error-message {
-      color: red;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="{% static 'Css/login-styles-extras.css' %}" />
 </head>
-
 <body>
-
   {% include 'includes/header.html' %}
   {% include 'includes/spinner.html' %}
   <main>
@@ -123,106 +83,7 @@
       <button type="submit" class="submit-btn">Ingresar</button>
     </form>
   </div>
-<style>
-/* Estilos específicos para recuperación de contraseña */
-.recuperacion-password .modal-content {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
 
-.recuperacion-password .close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.recuperacion-password .input-group {
-  margin-bottom: 20px;
-}
-
-.recuperacion-password .input-field {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-}
-
-.recuperacion-password .btn-primary {
-  width: 100%;
-  padding: 12px;
-  background-color: #0066ff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.recuperacion-password .btn-primary:hover {
-  background-color: #0055dd;
-}
-
-.recuperacion-password .email-destino {
-  font-weight: bold;
-  color: #333;
-  margin: 10px 0 20px;
-  text-align: center;
-}
-
-.recuperacion-password .resend-container {
-  text-align: center;
-  margin: 15px 0;
-  color: #666;
-}
-
-.recuperacion-password .resend-container a {
-  color: #0066ff;
-  text-decoration: none;
-}
-
-.recuperacion-password .security-footer {
-  text-align: center;
-  margin-top: 20px;
-  color: #999;
-  font-size: 12px;
-}
-
-.recuperacion-password .error-message {
-  color: #ff3333;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.recuperacion-password .spinner {
-  border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  border-top: 2px solid white;
-  width: 16px;
-  height: 16px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.recuperacion-password .hidden {
-  display: none;
-}
-</style>
 
   <!-- Modal 1: Solicitar correo -->
   <div id="modal-solicitar-correo" class="modal hidden">
@@ -336,17 +197,10 @@
   <script src="{% static 'js/Header.js' %}"></script>
   <script src="{% static 'js/Admin-mostrarToast.js' %}"></script>
   <script src="{% static 'js/variables.js' %}"></script>
-  <script src="{% static 'js/Carrito.js' %}"></script>
   <script src="{% static 'js/Admin-Manda.js' %}"></script>
   <script src="{% static 'js/Login.js' %}"></script>
-<script src="{% static 'js/Header.js' %}"></script>
-<script src="{% static 'js/ojo.js' %}"></script>
- <script src="{% static 'js/foother.js' %}"></script>
-<script>
-
-</script>
-
-
+  <script src="{% static 'js/Carrito.js' %}"></script>
+  <script src="{% static 'js/ojo.js' %}"></script>
+  <script src="{% static 'js/foother.js' %}"></script>
 </body>
-
 </html>

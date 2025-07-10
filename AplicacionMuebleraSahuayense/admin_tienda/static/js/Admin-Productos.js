@@ -38,6 +38,7 @@ async function mostrarProductos() {
 }
 
 // Crear HTML del carrusel de imágenes
+
 function crearCarruselImagenes(urls, id) {
   if (!urls.length) {
     return `<img src="https://via.placeholder.com/80" alt="Sin imagen" width="80" height="80">`;
@@ -56,11 +57,12 @@ function crearCarruselImagenes(urls, id) {
       <button id="${prevId}" style="cursor:pointer;">◀</button>
       <img id="${imgId}" src="${primeraImagen}" width="80" height="80" 
            style="border:1px solid #ccc;" 
-           onerror="this.src='https://via.placeholder.com/80'">
+           onerror="this.onerror=null; this.src='https://via.placeholder.com/80'">
       <button id="${nextId}" style="cursor:pointer;">▶</button>
     </div>
   `;
 }
+
 
 function inicializarCarrusel(imagenes, imgId, prevBtnId, nextBtnId) {
   let index = 0;

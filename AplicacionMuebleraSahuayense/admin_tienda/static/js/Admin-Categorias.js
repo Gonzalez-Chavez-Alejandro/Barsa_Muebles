@@ -67,7 +67,7 @@ async function cargarCategorias() {
     mostrarToast('Error al cargar categorías: ' + error.message, 'error');
   }
 }
-
+const PLACEHOLDER_IMAGEN = getPlaceholderImage();
 // Mostrar categorías en la tabla
 function mostrarCategorias() {
   const tbody = document.getElementById("tablaCategorias");
@@ -97,30 +97,32 @@ function mostrarCategorias() {
   const categoriasPagina = categoriasFiltradas.slice(inicio, fin);
 
   categoriasPagina.forEach(categoria => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${categoria.id || 'N/A'}</td>
-      <td>${categoria.nombre}</td>
-      <td>${categoria.descripcion}</td>
-      <td>
-        <img src="${categoria.imagen || getPlaceholderImage()}" 
-             alt="${categoria.nombre}" 
-             width="80" 
-             style="border:1px solid #ccc;"
-             onerror="this.src='${getPlaceholderImage()}'">
-      </td>
-      <td class="acciones-categoria">
-        <button class="btn-admin-desing-edits btn-editar-categoria" 
-                onclick="editarCategoria('${categoria.nombre}')">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="btn-admin-desing-deletes-eliminar" onclick="abrirModalEliminarCategoria('${categoria.id}')">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
+  const imagenFinal = (categoria.imagen && categoria.imagen.trim() !== '') ? categoria.imagen : PLACEHOLDER_IMAGEN;
+
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${categoria.id || 'N/A'}</td>
+    <td>${categoria.nombre}</td>
+    <td>${categoria.descripcion}</td>
+    <td>
+      <img src="${imagenFinal}"
+           alt="${categoria.nombre}" 
+           width="80" 
+           style="border:1px solid #ccc;"
+           onerror="if(this.src !== '${PLACEHOLDER_IMAGEN}') this.src='${PLACEHOLDER_IMAGEN}';">
+    </td>
+    <td class="acciones-categoria">
+      <button class="btn-admin-desing-edits btn-editar-categoria" onclick="editarCategoria('${categoria.nombre}')">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button class="btn-admin-desing-deletes-eliminar" onclick="abrirModalEliminarCategoria('${categoria.id}')">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+
 
   document.getElementById("resultadosInfo").textContent =
     `Mostrando ${categoriasPagina.length} de ${totalCategorias} categorías`;
