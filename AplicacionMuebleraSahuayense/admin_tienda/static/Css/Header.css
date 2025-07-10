@@ -162,6 +162,21 @@ nav ul li a.contact:hover {
     border-right: 8px solid transparent;
     border-bottom: 10px solid white;
 }
+@media (max-width: 768px) {
+  .menu-usuario {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 280px;           /* Ancho fijo razonable */
+    max-width: 90vw;        /* Nunca mayor al 90% del ancho */
+    top: 60px;              /* Ajusta si hay separación con el ícono */
+  }
+
+  .menu-usuario::before {
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
 
 /* Botón de "Identificarse" */
 .btn-identificarse {
@@ -366,32 +381,35 @@ header {
     }
 
     .menu-usuario {
-        display: none;
-        position: absolute;
-        top: 52px;
-        right: -50px;
-        background-color: white;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        z-index: 100;
-        min-width: 250px;
-        padding: 15px;
-        text-align: center;
-    }
+    display: none;
+    position: absolute;
+    top: 52px;
+    right: 0; /* que esté alineado al botón o contenedor padre */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    min-width: 250px;
+    max-width: 90vw; /* evita que se desborde del viewport */
+    padding: 15px;
+    text-align: center;
+    box-sizing: border-box;
+    overflow-wrap: break-word; /* por si hay texto largo */
+}
 
-    .menu-usuario::before {
-        content: "";
-        position: absolute;
-        top: -10px;
-        right: 58px;
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-bottom: 10px solid white;
-        border-top: 2px solid #000;
-    }
+.menu-usuario::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    right: 51%; /* ajusta según el nuevo right */
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid white;
+}
+
 }
 
 /* Por defecto: ocultamos .Elements */
