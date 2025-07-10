@@ -2,6 +2,184 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.mail import send_mail
+from django.conf import settings
+from footer.models import FooterData
+
+User = get_user_model()
+
+def obtener_footer_data():
+    footer = FooterData.objects.order_by('-id').first()
+    if not footer:
+        return None
+
+    return {
+        "emails": footer.emails,
+        "phones": footer.phones,
+        "locations": footer.locations,
+        "socials": footer.socials,
+    }
+
+def enviar_correo_info_footers(usuario_email, usuario_nombre):
+    footer = obtener_footer_data()
+
+    emails = footer["emails"] if footer and footer["emails"] else ["No disponible"]
+    phones = footer["phones"] if footer and footer["phones"] else ["No disponible"]
+    locations = footer["locations"] if footer and footer["locations"] else ["No disponible"]
+    socials = footer["socials"] if footer and footer["socials"] else {}
+
+    socials_html = "<br>".join(
+        f'<strong>{key}:</strong> <a href="{val}" style="color:#3b82f6;text-decoration:none;">{val}</a>'
+        for key, val in socials.items()
+    ) if socials else "No disponibles"
+
+    mensaje_texto = f"""
+Hola {usuario_nombre},
+
+¡Bienvenido a Barsa Muebles!
+
+Gracias por registrarte con nosotros. A continuación, te compartimos nuestros datos de contacto por si necesitas ayuda o deseas realizar un pedido.
+
+⚠️ Aclaramos que desde la página NO se puede pagar. Además, si el producto tiene precio, debe confirmar que sea el actual, ya que esta es una página de encargos.
+
+📌 Puedes comunicarte por teléfono, Instagram o asistir a nuestras sucursales para una atención más personalizada.
+
+📞 Horario de atención:
+- Lunes a viernes: 9:00 a.m. – 6:00 p.m.
+- Domingo: 10:00 a.m. – 3:00 p.m.
+- Sábado: Cerrado
+
+📧 Correos:
+{chr(10).join(emails)}
+
+📞 Teléfonos:
+{chr(10).join(phones)}
+
+📍 Ubicaciones:
+{chr(10).join(locations)}
+
+🌐 Redes sociales:
+{chr(10).join(f"{k}: {v}" for k, v in socials.items()) if socials else 'No disponibles'}
+
+¡Gracias por unirte a nuestra comunidad!
+Distribuidora Mueblera Sahuayense - Barsa Muebles
+"""
+
+    mensaje_html = f"""
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {{
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 30px;
+    }}
+    .container {{
+      max-width: 600px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }}
+    h2 {{
+      color: #1f2937;
+    }}
+    p {{
+      line-height: 1.6;
+    }}
+    .alert {{
+      color: #dc2626;
+      font-weight: bold;
+      margin: 15px 0;
+    }}
+    .section-title {{
+      font-weight: bold;
+      color: #374151;
+      margin-top: 20px;
+    }}
+    .info-block {{
+      background: #f9fafb;
+      padding: 10px 15px;
+      border-left: 4px solid #3b82f6;
+      margin-bottom: 10px;
+    }}
+    .footer {{
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #666;
+      text-align: center;
+    }}
+    a {{
+      text-decoration: none;
+      color: #3b82f6;
+    }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>¡Bienvenido a Barsa Muebles, {usuario_nombre}!</h2>
+    <p>
+      Gracias por registrarte con nosotros. A continuación, te compartimos nuestros datos de contacto por si necesitas ayuda o deseas realizar un pedido.
+    </p>
+    <p class="alert">
+      ⚠️ Aclaramos que desde la página <strong>NO se puede pagar</strong>. Además, si el producto tiene precio, debe confirmar que sea el actual, ya que esta es una página de encargos y esta en face de pruebas.
+    </p>
+    <p><strong>📌 Puedes comunicarte por teléfono, Instagram o asistir a nuestras sucursales</strong> para una atención más personalizada.</p>
+
+    <div class="section-title">📞 Horario de atención:</div>
+    <div class="info-block">
+      Lunes a viernes: 9:00 a.m. – 6:00 p.m.<br>
+      Domingo: 10:00 a.m. – 3:00 p.m.<br>
+      Sábado: Cerrado
+    </div>
+
+    <div class="section-title">📧 Correos de contacto:</div>
+    <div class="info-block">
+      {"<br>".join(f'<a href="mailto:{email}">{email}</a>' for email in emails)}
+    </div>
+
+    <div class="section-title">📞 Teléfonos:</div>
+    <div class="info-block">
+      {"<br>".join(f'<a href="tel:{tel}">{tel}</a>' for tel in phones)}
+    </div>
+
+    <div class="section-title">📍 Ubicaciones:</div>
+    <div class="info-block">
+      {"<br>".join(locations)}
+    </div>
+
+    <div class="section-title">🌐 Redes sociales:</div>
+    <div class="info-block">
+      {socials_html}
+    </div>
+
+    <div class="footer">
+      Distribuidora Mueblera Sahuayense – Barsa Muebles
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+    send_mail(
+        subject="¡Bienvenido a Barsa Muebles!",
+        message=mensaje_texto,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[usuario_email],
+        html_message=mensaje_html,
+    )
+
+
+# Ahora tu serializer
+
+from rest_framework import serializers
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.validators import validate_email
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -42,12 +220,12 @@ class RegisterSerializer(serializers.ModelSerializer):
         username = base_username
         counter = 1
 
-        # Asegura un username único, aunque tengan el mismo last_name
+        # Asegura username único aunque haya repetidos
         while User.objects.filter(username=username).exists():
-            username = f"{base_username} {counter}"
+            username = f"{base_username}{counter}"
             counter += 1
 
-        return User.objects.create_user(
+        user = User.objects.create_user(
             username=username,
             last_name=last_name,
             email=validated_data['email'],
@@ -55,6 +233,11 @@ class RegisterSerializer(serializers.ModelSerializer):
             phoneUser=validated_data['phoneUser'],
             password=validated_data['password']
         )
+
+        # Envía correo de bienvenida después de crear el usuario
+        enviar_correo_info_footers(user.email, user.username)
+
+        return user
 
 
 
