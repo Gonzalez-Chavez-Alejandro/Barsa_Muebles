@@ -34,35 +34,7 @@ def enviar_correo_info_footers(usuario_email, usuario_nombre):
     ) if socials else "No disponibles"
 
     mensaje_texto = f"""
-Hola {usuario_nombre},
 
-¡Bienvenido a Barsa Muebles!
-
-Gracias por registrarte con nosotros. A continuación, te compartimos nuestros datos de contacto por si necesitas ayuda o deseas realizar un pedido.
-
-⚠️ Aclaramos que desde la página NO se puede pagar. Además, si el producto tiene precio, debe confirmar que sea el actual, ya que esta es una página de encargos.
-
-📌 Puedes comunicarte por teléfono, Instagram o asistir a nuestras sucursales para una atención más personalizada.
-
-📞 Horario de atención:
-- Lunes a viernes: 9:00 a.m. – 6:00 p.m.
-- Domingo: 10:00 a.m. – 3:00 p.m.
-- Sábado: Cerrado
-
-📧 Correos:
-{chr(10).join(emails)}
-
-📞 Teléfonos:
-{chr(10).join(phones)}
-
-📍 Ubicaciones:
-{chr(10).join(locations)}
-
-🌐 Redes sociales:
-{chr(10).join(f"{k}: {v}" for k, v in socials.items()) if socials else 'No disponibles'}
-
-¡Gracias por unirte a nuestra comunidad!
-Distribuidora Mueblera Sahuayense - Barsa Muebles
 """
 
     mensaje_html = f"""
@@ -236,6 +208,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         # Envía correo de bienvenida después de crear el usuario
         enviar_correo_info_footers(user.email, user.username)
+        # Añade esta línea justo antes del return
+        user._generated_username = username
 
         return user
 

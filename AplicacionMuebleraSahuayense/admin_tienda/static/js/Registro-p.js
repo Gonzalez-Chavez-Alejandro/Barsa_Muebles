@@ -107,8 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return res.json();
       })
       .then(data => {
-  // Ya sabes el username porque usaste last_name en create_user como username
-  const username = firstName.trim(); // O si en backend haces strip o reemplazo de espacios, hazlo igual aquí
+  const username = data.username; // O si en backend haces strip o reemplazo de espacios, hazlo igual aquí
   return fetch('/api/login/', {
     method: 'POST',
     headers: {
