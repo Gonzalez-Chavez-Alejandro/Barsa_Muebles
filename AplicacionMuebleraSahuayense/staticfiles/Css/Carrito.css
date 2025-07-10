@@ -363,13 +363,25 @@
 }
 
 .btn-primary {
-  background-color: #3498db;
-  color: white;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 2px solid #000000;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  background-color: #2980b9;
-  transform: scale(1.03);
+
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
 }
 
 /* Responsive */
