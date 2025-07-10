@@ -1,5 +1,8 @@
-from django.urls import path, include
 from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('autentication.urls')),
@@ -10,10 +13,7 @@ urlpatterns = [
     path('api/footer/', include('footer.urls')),
     path('catalogos/', include('catalogos.urls')),
     path('password_reset/', include('password_reset.urls')),
-
-
 ]
-from django.conf import settings
-from django.conf.urls.static import static
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

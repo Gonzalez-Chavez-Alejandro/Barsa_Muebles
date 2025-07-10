@@ -490,3 +490,13 @@ const hash = window.location.hash;
 });
 
 
+document.getElementById("vaciar-carrito").addEventListener("click", function () {
+  this.innerHTML = '<i class="fas fa-check-circle"></i> Vaciado';
+  this.disabled = true;
+
+  // Restaurar después de 2 segundos (opcional)
+  setTimeout(() => {
+    this.innerHTML = '<i class="fas fa-trash-alt"></i> Vaciar';
+    this.disabled = false;
+  }, 2000);
+});

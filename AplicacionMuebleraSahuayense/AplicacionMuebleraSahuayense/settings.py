@@ -1,7 +1,7 @@
 from datetime import timedelta
 from pathlib import Path
 import cloudinary
-from decouple import config
+from decouple import config, Csv
 
 # Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,10 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-import os
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost').split(',')
-
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 # Apps instaladas
 INSTALLED_APPS = [
@@ -41,7 +38,7 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'autentication.CustomUser'
 
-# Cloudinary
+# Cloudinary configuración
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': config('CLOUD_NAME'),
     'API_KEY': config('CLOUD_API_KEY'),
@@ -85,7 +82,6 @@ MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
-
 ROOT_URLCONF = 'AplicacionMuebleraSahuayense.urls'
 
 # Templates
@@ -105,21 +101,32 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'AplicacionMuebleraSahuayense.wsgi.application'
-from decouple import config
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  # motor MySQL
-        'NAME': config('DB_NAME'),       # coincide con .env
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
-        # Opcional: 'OPTIONS': {...} si necesitas configurar algo más
+
+# Base de datos
+USE_POSTGRES_LOCAL = config('USE_POSTGRES_LOCAL', default=False, cast=bool)
+
+if USE_POSTGRES_LOCAL:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
     }
-}
-
-
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default='3306'),
+        }
+    }
 
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
@@ -136,12 +143,16 @@ USE_I18N = True
 USE_TZ = True
 
 # Archivos estáticos
-# Archivos estáticos
 STATIC_URL = config('STATIC_URL', default='/static/')
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'admin_tienda' / 'static',
+]
+
 CSRF_TRUSTED_ORIGINS = [
-    "https://barsa-muebles.onrender.com"
+    "https://barsa-muebles.onrender.com",
 ]
 
 # ID automático
@@ -157,4 +168,5 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
