@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Verifica token (si aplica)
   const token = localStorage.getItem('accessToken');
-  console.log("token", token);
 
   // 2. Verifica hash en la URL (como #section-productos)
   const hash = window.location.hash;

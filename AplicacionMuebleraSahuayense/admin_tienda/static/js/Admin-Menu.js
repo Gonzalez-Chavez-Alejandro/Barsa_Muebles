@@ -17,15 +17,47 @@ botonCerrar.addEventListener("click", () => {
   menuLateral.classList.remove("mostrar-menu");
 });
 
-// Mostrar secciones y cerrar menú móvil
 function mostrarSeccion(idSeccion) {
   ocultarTodasLasSecciones();
+
   const seccionActiva = document.getElementById(idSeccion);
   if (seccionActiva) {
     seccionActiva.classList.add('activa');
   }
+
   menuLateral.classList.remove("mostrar-menu");
+
+  // ✅ Cargar datos específicos según la sección
+  switch (idSeccion) {
+    case 'categorias':
+      cargarCategorias();
+      break;
+
+    case 'usuarios':
+      cargarUsuarios();
+      break;
+
+    case 'section-productos':
+      cargarCategoriasProductos();
+      mostrarProductos();
+      break;
+
+    case 'catalogo':
+      cargarCatalogo();
+      break;
+
+    case 'usuarios-mandas':
+      cargarPedidosDesdeAPI();  // Aquí cargas los pedidos SOLO cuando muestras esa sección
+      
+      break;
+
+    case 'contactos':
+      // cargarContactos();
+      break;
+  }
 }
+
+
 
 // Mostrar la sección de inicio
 function mostrarInicio() {

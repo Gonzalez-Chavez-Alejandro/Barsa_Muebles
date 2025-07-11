@@ -395,11 +395,11 @@ document.getElementById('editarImagenArchivo').addEventListener('change', functi
 
 // Inicialización cuando el DOM está listo
 document.addEventListener("DOMContentLoaded", () => {
-  cargarCategorias();
+  //cargarCategorias();//
 
   // Asignar eventos
   document.getElementById('buscadorCategorias').addEventListener('input', filtrarCategorias);
-
+  
   document.getElementById('btnGuardarCategoria').addEventListener('click', guardarCategoria);
   document.getElementById('itemsPorPagina').addEventListener('change', cambiarItemsPorPagina);
 

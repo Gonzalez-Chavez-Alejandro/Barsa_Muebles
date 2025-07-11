@@ -14,8 +14,8 @@ const DEFAULTS = {
 
 const token = localStorage.getItem('accessToken');
 if (!token) {
-  mostrarToast("No estás autenticado. Inicia sesión primero.", "error");
   window.location.href = "/login";  // O redirige donde corresponda
+  mostrarToast("No estás autenticado. Inicia sesión primero.", "error");
 }
 
 // Correos dinámicos

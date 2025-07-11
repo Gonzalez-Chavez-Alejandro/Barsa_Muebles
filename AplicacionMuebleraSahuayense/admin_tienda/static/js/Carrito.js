@@ -462,10 +462,17 @@ const hash = window.location.hash;
   document.getElementById("agregar-carrito-detalle")?.addEventListener("click", async () => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
-    mostrarToast("No estás autenticado. Inicia sesión", "error");
-    setTimeout(() => {
+    sessionStorage.setItem("toastMessage", JSON.stringify({
+            mensaje: "No estás autenticado. Inicia sesión",
+            tipo: "info"
+          }));
+    window.location.href = "/login";
+
+     
+
+    /*setTimeout(() => {
       window.location.href = "/login";
-    }, 5000);
+    }, 5000);*/
     return;
   }
 

@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("pedidos-container");
     const inputBuscar = document.getElementById("um-input-buscar");
 
-    console.log("📦 DOMContentLoaded - Script iniciado");
-    await cargarPedidosDesdeAPI();
+   // console.log("📦 DOMContentLoaded - Script iniciado");
+   // await cargarPedidosDesdeAPI();
 
     async function cargarPedidosDesdeAPI() {
         try {
@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             container.innerHTML = `<p class="um-empty-state">❌ No se pudieron cargar los pedidos</p>`;
         }
     }
+    window.cargarPedidosDesdeAPI = cargarPedidosDesdeAPI;
 
     function crearPedidoHTML(pedido) {
         const nombreUsuario = pedido.usuario_nombre || 'Desconocido';

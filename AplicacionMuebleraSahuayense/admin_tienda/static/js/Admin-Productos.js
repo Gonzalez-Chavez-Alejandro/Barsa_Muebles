@@ -364,8 +364,8 @@ function cambiarCantidadProductos() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  mostrarProductos();
-  cargarCategoriasProductos();
+ // mostrarProductos();
+  //cargarCategoriasProductos();
 
   const filtroCategoriasViewEl = document.getElementById("filtroCategoriasView");
   if (filtroCategoriasViewEl) {

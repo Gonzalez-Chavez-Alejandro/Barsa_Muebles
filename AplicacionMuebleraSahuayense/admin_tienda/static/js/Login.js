@@ -258,3 +258,14 @@ async function cambiarPassword() {
     ocultarSpinner(button.id);
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const data = sessionStorage.getItem("toastMessage");
+  if (data) {
+    const { mensaje, tipo } = JSON.parse(data);
+    mostrarToast(mensaje, tipo);
+    sessionStorage.removeItem("toastMessage");
+  }else{
+    console.log("x");
+  }
+});

@@ -210,10 +210,6 @@
           <li class="submenu-item"><a href="#" onclick="mostrarSeccion('contactos')">Contactos</a></li>
         </ul>
       </li>
-
-      <li class="menu-item">
-        <button class="menu-button"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></button>
-      </li>
     </ul>
 
   </div>
@@ -392,22 +388,23 @@
 
 
 
-  <section id="catalogo" class="seccion">
-    <div class="admin-panel" id="adminPanel">
-      <h3><i class="fas fa-cog"></i> Administrar Catálogo</h3>
-      <div class="admin-form">
-        <input type="text" id="nuevoEnlace" class="admin-input" placeholder="Pega la URL del PDF">
-        <div class="button-group">
-          <button class="admin-btn" onclick="actualizarPDF()">
-            <i class="fas fa-sync-alt"></i> Actualizar
-          </button>
-          <button id="abrirCatalogoBtn" class="obrasa-button">
-            Ver Catálogo
+<section id="catalogo" class="seccion">
+  <div class="admin-panel" id="adminPanel">
+    <h3><i class="fas fa-cog"></i> Administrar Catálogo</h3>
+    <div class="admin-form">
+      <input type="text" id="nuevoEnlace" class="admin-input" placeholder="Pega la URL del PDF">
+      <div class="button-group">
+        <button class="admin-btn" onclick="actualizarPDF()">
+          <i class="fas fa-sync-alt"></i> Actualizar
         </button>
-        </div>
+        <button id="abrirCatalogoBtn" class="obrasa-button">
+          Ver Catálogo
+        </button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- ----------------------------------------------- -->
   <!-- Sección de Usuarios -->
@@ -1032,8 +1029,6 @@
           return response.json();
         })
         .then(userInfo => {
-          console.log('Usuario autenticado:', userInfo);
-
           if (!userInfo.is_superuser) {
             alert('Acceso denegado: no eres superusuario.');
             // Opcional: redirigir al usuario a una página de inicio general
@@ -1050,13 +1045,13 @@
         });
     }
   </script>
-  <script src="{% static 'js/Admin-Excel.js' %}"></script>
-  <script src="{% static 'js/variables.js' %}"></script>
   <script src="{% static 'js/Admin-Menu.js' %}"></script>
+  <script src="{% static 'js/variables.js' %}"></script> 
   <script src="{% static 'js/Admin-Table-users.js' %}"></script>
   <script src="{% static 'js/Ofertas.js' %}"></script>
   <script src="{% static 'js/Admin-Categorias.js' %}"></script>
   <script src="{% static 'js/Admin-Productos.js' %}"></script>
+  <script src="{% static 'js/Admin-Excel.js' %}"></script>
   <script src="{% static 'js/Admin-Home.js' %}"></script>
   <script src="{% static 'js/Admin-Contacto.js' %}"></script>
   <script src="{% static 'js/Admin-Usuarios-Manda.js' %}"></script>

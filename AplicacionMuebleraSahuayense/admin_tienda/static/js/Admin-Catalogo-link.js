@@ -110,5 +110,6 @@ function esURLValida(url) {
     }
   });
 
-  document.addEventListener('DOMContentLoaded', cargarDesdeAPI);
+  window.cargarCatalogo = cargarDesdeAPI;
+
 })();

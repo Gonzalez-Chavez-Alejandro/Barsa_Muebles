@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  cargarUsuarios();
+  
 
   document.getElementById("paginaAnterior")?.addEventListener("click", () => {
     if (paginaActual > 1) {
