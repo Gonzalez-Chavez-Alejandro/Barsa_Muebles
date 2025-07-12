@@ -67,26 +67,31 @@
     line-height: 1.4;
 }
 
-/* Botón */
+/* Botón más grande */
 .obrasa-button {
-    background-color: #8b7355;
-    /* Color tierra */
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: left;
-    display: inline-block;
+  background-color: #ffffff;
+  color: #2e2e2e;
+  font-size: 18px;             /* Más grande que 16px */
+  font-weight: 700;            /* Más grueso */
+  padding: 1rem 2rem;          /* Más alto y ancho */
+  border: 2px solid #6a5a45;
+  border-radius: 10px;         /* Ligeramente más redondo */
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .obrasa-button:hover {
-    background-color: #6a5a45;
-    transform: translateY(-2px);
+  background-color: #6a5a45;
+  color: #fff;
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 18px rgba(106, 90, 69, 0.45);
 }
+
+
 
 /* Responsive */
 @media (max-width: 768px) {
