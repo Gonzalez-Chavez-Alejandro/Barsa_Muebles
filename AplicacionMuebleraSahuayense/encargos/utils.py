@@ -93,6 +93,7 @@ def enviar_correo_a_empresa(usuario, pedido):
             <div><strong>📦Nuevo pedido #{pedido.id}</strong></div>
             <p><strong>👤 Cliente:</strong> {usuario.username}</p>
             <p><strong>📧 Email:</strong> {usuario.email}</p>
+            <p><strong>📞 Telefono:</strong> {usuario.phoneUser}</p>
             <p><strong>📍 Ubicación de entrega:</strong> {pedido.ubicacion_entrega}</p>
         </div>
 
