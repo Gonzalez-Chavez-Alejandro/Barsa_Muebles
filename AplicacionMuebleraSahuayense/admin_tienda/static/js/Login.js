@@ -9,7 +9,7 @@ loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorUsername.style.display = "none";
   errorPassword.style.display = "none";
-  mostrarSpinner("submit-btn");
+  mostrarSpinner();
 
   const loginData = {
     username: document.getElementById("email").value,
@@ -39,7 +39,7 @@ loginForm.addEventListener("submit", async (e) => {
         errorUsername.style.display = "block";
         errorUsername.textContent = msg;
       }
-      ocultarSpinner("submit-btn");
+      ocultarSpinner();
       return;
     }
 
