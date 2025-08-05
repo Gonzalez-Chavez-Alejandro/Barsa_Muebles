@@ -1,7 +1,7 @@
 const loginForm = document.getElementById("login-form");
 const errorUsername = document.getElementById("error-username");
 const errorPassword = document.getElementById("error-password");
-//const submit = document.getElementById("submit-btn");
+const submit = document.getElementById("submit-btn");
 
 
 // ------------- LOGIN NORMAL --------------
@@ -9,7 +9,8 @@ loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   errorUsername.style.display = "none";
   errorPassword.style.display = "none";
-  mostrarSpinner();
+  submit.style.background = "gray";
+  submit.textContent = "Ingresando...";
 
   const loginData = {
     username: document.getElementById("email").value,
@@ -39,7 +40,8 @@ loginForm.addEventListener("submit", async (e) => {
         errorUsername.style.display = "block";
         errorUsername.textContent = msg;
       }
-      ocultarSpinner();
+        submit.textContent = "Ingresar";
+        submit.style.background = "gray";
       return;
     }
 

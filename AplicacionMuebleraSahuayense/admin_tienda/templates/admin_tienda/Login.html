@@ -16,6 +16,16 @@
   <link rel="stylesheet" href="{% static 'Css/Login.css' %}" />
   <link rel="stylesheet" href="{% static 'Css/foother.css' %}" />
   <link rel="stylesheet" href="{% static 'Css/login-styles-extras.css' %}" />
+  <style>
+    .spinner {
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top: 2px solid white;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+}
+  </style>
 </head>
 <body>
   {% include 'includes/header.html' %}
