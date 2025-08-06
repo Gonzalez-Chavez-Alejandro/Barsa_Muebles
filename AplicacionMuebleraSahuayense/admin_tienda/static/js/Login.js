@@ -40,8 +40,8 @@ loginForm.addEventListener("submit", async (e) => {
         errorUsername.style.display = "block";
         errorUsername.textContent = msg;
       }
-        submit.textContent = "Ingresar";
-        submit.style.background = "gray";
+      submit.textContent = "Ingresar";
+      submit.style.background = "#4299e1";
       return;
     }
 
