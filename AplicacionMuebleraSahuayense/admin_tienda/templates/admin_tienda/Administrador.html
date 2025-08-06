@@ -1059,6 +1059,12 @@
   <script src="{% static 'js/Admin-registro-empledo.js' %}"></script>
   <script src="{% static 'js/ojo.js' %}"></script>
   <script src="{% static 'js/Admin-section-productos-editar.js' %}"></script>
-  
+  <script>
+  const input = document.getElementById("nombreEditar");
+
+  input.addEventListener("input", function () {
+    this.value = this.value.replace(/ /g, "_");
+  });
+</script>
 </body>
 </html>
